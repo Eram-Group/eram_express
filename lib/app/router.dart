@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/login_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
+import '../features/onboarding/presentation/views/onboarding.view.dart';
 import 'presentation/views/not_found.view.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -16,6 +17,8 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
   if (name == InitView.route) {
     page = const InitView();
+  } else if (name == OnboardingView.route) {
+    page = const OnboardingView();
   } else if (name == LoginView.route) {
     page = const LoginView();
   } else if (name == HomeView.route) {
