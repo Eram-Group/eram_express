@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class NavigationService {
+class NavigationService 
+{
   final GlobalKey<NavigatorState> _navigatorKey;
   NavigationService(this._navigatorKey);
-
   NavigatorState get navigator => _navigatorKey.currentState!;
   BuildContext get context => _navigatorKey.currentContext!;
 
