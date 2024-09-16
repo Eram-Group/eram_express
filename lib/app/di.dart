@@ -8,10 +8,9 @@ import '../features/authentication/logic/repositories/authentication_repository.
 import 'navigation.dart';
 
 final apiService = ApiService(dio: dio);
-final authenticationRepository =
-    AuthenticationRepository(apiService: apiService);
-final container = [
-  // Authentication
+final authenticationRepository =AuthenticationRepository(apiService: apiService);
+final container = 
+[
   BlocProvider(
     create: (context) => AuthenticationCubit(
       authenticationRepository: authenticationRepository,
@@ -24,5 +23,6 @@ final dio = Dio(
     baseUrl: 'https://api.example.com',
   ),
 );
+
 
 final navigationService = NavigationService(navigatorKey);

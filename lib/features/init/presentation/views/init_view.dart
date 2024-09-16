@@ -1,4 +1,8 @@
-import 'package:eram_express/features/onboarding/presentation/views/onboarding.view.dart';
+import 'package:eram_express/app/Sharded_preference_Keys.dart';
+import 'package:eram_express/core/Services/Shared_preference_service.dart';
+import 'package:eram_express/features/SplashView/splash_view.dart';
+
+import 'package:eram_express/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
@@ -26,8 +30,10 @@ class _InitViewState extends State<InitView> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      navigationService.clearStackAndNavigateTo(OnboardingView.route);
+    WidgetsBinding.instance.addPostFrameCallback((_) 
+    {
+      
+      navigationService.clearStackAndNavigateTo(SharedPreferenceService.getbool(PrefsKeys.firstOpen) ==false? Onboardingview.route: LoginView.route );
     });
   }
 }
