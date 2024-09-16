@@ -1,6 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:eram_express/app/Sharded_preference_Keys.dart';
 import 'package:eram_express/app/di.dart';
+import 'package:eram_express/app/presentation/AppColors.dart';
 import 'package:eram_express/core/Services/Shared_preference_service.dart';
 import 'package:eram_express/core/utils/responsive.dart';
 import 'package:eram_express/features/Common/widgets/CustomButton.dart';
@@ -8,6 +9,7 @@ import 'package:eram_express/features/authentication/presentation/views/login_vi
 import 'package:eram_express/features/onboarding/data/onboarding_model.dart';
 import 'package:eram_express/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OnBoarding_body extends StatelessWidget 
 {
@@ -43,9 +45,7 @@ class OnBoarding_body extends StatelessWidget
           visible: showSkipButton,
           child: Positioned(
               top: Responsive.getResponsiveFontSize(context, fontSize: 20),
-              right: Responsive.getResponsiveFontSize(
-                context,
-                fontSize: 10,
+              right: Responsive.getResponsiveFontSize(context,fontSize: 10,
               ),
               child: _buildSkipButton(context)),
         ),
@@ -109,10 +109,10 @@ Widget _buildOnboardingContent(
             Text(
               onboarding.title,
               style: TextStyle(
-                color: Color(0xFF3FAD79),
+                color:AppColor.secondaryColor,
                 fontSize:
                     Responsive.getResponsiveFontSize(context, fontSize: 24),
-                fontFamily: 'Outfit',
+                fontFamily: GoogleFonts.outfit().fontFamily,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -132,9 +132,9 @@ Widget _buildOnboardingContent(
                 style: TextStyle(
                   fontSize:
                       Responsive.getResponsiveFontSize(context, fontSize: 15),
-                  fontFamily: 'Outfit',
+                  fontFamily: GoogleFonts.outfit().fontFamily,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFFA7A9B7),
+                  color: AppColor.lightGrey,
                 ),
               ),
             ),
@@ -146,8 +146,8 @@ Widget _buildOnboardingContent(
                     Responsive.getResponsiveFontSize(context, fontSize: 12)),
                 activeSize: Size.square(
                     Responsive.getResponsiveFontSize(context, fontSize: 12)),
-                color: Color(0xffEBECF3),
-                activeColor: Color(0xff133BB7),
+                color: AppColor.dotColor,
+                activeColor:AppColor.dotactiveColor
               ),
             ),
             Padding(
