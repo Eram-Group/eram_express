@@ -35,7 +35,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
-  flutter_hooks: ^0.20.5
+  flutter_localizations:
+    sdk: flutter
+  freezed: ^2.5.7
   logger: ^2.4.0
 
 dev_dependencies:
@@ -55,6 +57,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/i18n/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
