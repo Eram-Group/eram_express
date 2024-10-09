@@ -1,5 +1,5 @@
-import 'package:eram_express_shared/data/models/country_model.dart';
+import 'package:eram_express_shared/domain/entites/country_entity.dart';
 
 abstract class ConfigurationsRepository {
-  Future<List<CountryModel>> getCountries();
+  Future<List<CountryEntity>> getCountries();
 }

@@ -28,15 +28,16 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  eram_express_shared:
-    path: ../eram_express_shared
-
+  cached_network_image: ^3.4.1
   cupertino_icons: ^1.0.6
   dio: ^5.7.0
   either_dart: ^1.0.0
   equatable: ^2.0.5
+  eram_express_shared:
+    path: ../eram_express_shared
   flutter:
     sdk: flutter
+  flutter_animate: ^4.5.0
   flutter_bloc: ^8.1.6
   flutter_localizations:
     sdk: flutter

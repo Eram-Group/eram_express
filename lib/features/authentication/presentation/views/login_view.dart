@@ -1,18 +1,25 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eram_express/app/di.dart';
+import 'package:eram_express/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../core/i18n/context_extension.dart';
 import '../../../common/presentation/widgets/clickable.dart';
+import '../../../common/presentation/widgets/skeleton.dart';
 import 'login_viewmodel.dart';
 
 class LoginView extends StatelessWidget {
   static const String route = '/login';
 
-  final LoginViewModel viewModel = LoginViewModel();
   LoginView({super.key});
+
+  final LoginViewModel viewModel = LoginViewModel(
+    configurationsRepository: configurationsRepository,
+  )..init();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,10 @@ class LoginView extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            child: _buildBottomSheet(context, child: _buildBody(context)),
+            child: _buildBottomSheet(
+              context,
+              child: _buildBody(context),
+            ),
           ),
         ],
       ),
@@ -89,43 +99,68 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildCountryCodeButton() {
-    return Clickable(
-      padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          bottomLeft: Radius.circular(12),
-        ),
-      ),
-      onTap: () {},
-      child: Row(
-        children: [
-          Container(
-            width: 20,
-            height: 20,
+    return BlocBuilder<LoginViewModel, LoginFormState>(
+      bloc: viewModel,
+      builder: (_, state) {
+        return Opacity(
+          opacity: viewModel.isCountryCodeButtonEnabled ? 1 : 0.5,
+          child: Clickable(
+            padding: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
-              color: Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
+              ),
+            ),
+            onTap: viewModel.isCountryCodeButtonEnabled
+                ? () => viewModel.countryCodeButtonOnClicked()
+                : null,
+            child: Row(
+              children: [
+                if (state.selectedCountry != null)
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          state.selectedCountry!.flag,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )
+                else
+                  const Skeleton(
+                    width: 24,
+                    height: 18,
+                    shape: BoxShape.circle,
+                  ),
+                const Gap(8),
+                if (state.selectedCountry != null)
+                  Text(
+                    state.selectedCountry!.phoneCode,
+                    style: const TextStyle(
+                      color: Color(0xFF191D31),
+                      fontFamily: 'Outfit',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 25.2 / 14,
+                    ),
+                    textAlign: TextAlign.left,
+                  )
+                else
+                  const Skeleton(width: 40, height: 16),
+                const Gap(8),
+                const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Color(0xFF64748B),
+                ),
+              ],
             ),
           ),
-          const Gap(8),
-          const Text(
-            '+966',
-            style: TextStyle(
-              color: Color(0xFF191D31),
-              fontFamily: 'Outfit',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              height: 25.2 / 14,
-            ),
-            textAlign: TextAlign.left,
-          ),
-          const Gap(8),
-          const Icon(
-            Icons.keyboard_arrow_down,
-            color: Color(0xFF64748B),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -168,27 +203,38 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildLoginButton(BuildContext context) {
-    return Clickable(
-      width: double.infinity,
-      height: 44,
-      decoration: BoxDecoration(
-        color: const Color(0xFF424BB3),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      splashColor: const Color(0xFF424BB3).withOpacity(0.5),
-      onTap: () => viewModel.loginButtonOnClicked(),
-      child: Center(
-        child: Text(
-          context.translate('login.login'),
-          style: const TextStyle(
-            color: Colors.white,
-            fontFamily: 'Outfit',
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            height: 19.2 / 16,
+    logger.debug('isLoginButtonEnabled: ${viewModel.isLoginButtonEnabled}');
+    return BlocBuilder<LoginViewModel, LoginFormState>(
+      bloc: viewModel,
+      builder: (_, state) {
+        return Opacity(
+          opacity: viewModel.isLoginButtonEnabled ? 1 : 0.5,
+          child: Clickable(
+            width: double.infinity,
+            height: 44,
+            decoration: BoxDecoration(
+              color: const Color(0xFF424BB3),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            splashColor: const Color(0xFF424BB3).withOpacity(0.5),
+            onTap: viewModel.isLoginButtonEnabled
+                ? () => viewModel.loginButtonOnClicked()
+                : null,
+            child: Center(
+              child: Text(
+                context.translate('login.login'),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Outfit',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  height: 19.2 / 16,
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -231,6 +277,11 @@ class LoginView extends StatelessWidget {
       bloc: viewModel,
       builder: (_, state) {
         return TextFormField(
+          keyboardType: TextInputType.phone,
+          inputFormatters: [
+            if (state.selectedCountry != null)
+              state.selectedCountry!.numberFormat
+          ],
           decoration: InputDecoration(
             hintText: context.translate('login.phoneNumberPlaceholder'),
             hintStyle: const TextStyle(

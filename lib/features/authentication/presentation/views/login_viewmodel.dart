@@ -1,48 +1,78 @@
 import 'package:equatable/equatable.dart';
-import 'package:eram_express/core/utils/logger.dart';
+import 'package:eram_express_shared/domain/entites/country_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../common/domain/repositories/configurations_repository.dart';
+
 class LoginFormState extends Equatable {
-  final bool isLoading;
+  final bool buttonLoading;
   final String phoneNumber;
+  final CountryEntity? selectedCountry;
 
-  LoginFormState({
-    required this.isLoading,
+  const LoginFormState({
+    required this.buttonLoading,
     required this.phoneNumber,
-  }) {
-    logger.debug('LoginFormState: $this');
-  }
+    this.selectedCountry,
+  });
 
-  factory LoginFormState.initial() =>
-      LoginFormState(isLoading: false, phoneNumber: '');
-
-  LoginFormState copyWith({
-    bool? isLoading,
-    String? phoneNumber,
-  }) {
-    return LoginFormState(
-      isLoading: isLoading ?? this.isLoading,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-    );
-  }
+  factory LoginFormState.initial() => const LoginFormState(
+        phoneNumber: '',
+        buttonLoading: false,
+      );
 
   @override
-  List<Object?> get props => [isLoading, phoneNumber];
+  List<Object?> get props => [
+        buttonLoading,
+        phoneNumber,
+        selectedCountry,
+      ];
+
+  LoginFormState copyWith({
+    bool? buttonLoading,
+    String? phoneNumber,
+    CountryEntity? selectedCountry,
+  }) {
+    return LoginFormState(
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      selectedCountry: selectedCountry ?? this.selectedCountry,
+      buttonLoading: buttonLoading ?? this.buttonLoading,
+    );
+  }
 }
 
 class LoginViewModel extends Cubit<LoginFormState> {
-  LoginViewModel() : super(LoginFormState.initial());
+  final ConfigurationsRepository configurationsRepository;
 
-  void phoneNumberChanged(String phoneNumber) {
-    emit(state.copyWith(phoneNumber: phoneNumber));
+  LoginViewModel({
+    required this.configurationsRepository,
+  }) : super(LoginFormState.initial());
+
+  Future<List<CountryEntity>> get countries async =>
+      await configurationsRepository.getCountries();
+
+  Future<void> init() async {
+    final countries = await configurationsRepository.getCountries();
+    emit(state.copyWith(selectedCountry: countries.first));
   }
 
+  bool get isLoginButtonEnabled =>
+      isCountryCodeButtonEnabled &&
+      state.phoneNumber.length == state.selectedCountry!.numberLength;
+
+  bool get isCountryCodeButtonEnabled => state.selectedCountry != null;
+
+  Future<void> countryCodeButtonOnClicked() async {}
+
   void loginButtonOnClicked() async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(buttonLoading: true));
 
     // TODO: Use authentication service to login
     await Future.delayed(const Duration(seconds: 2));
 
-    emit(state.copyWith(isLoading: false));
+    emit(state.copyWith(buttonLoading: false));
+  }
+
+  void phoneNumberChanged(String phoneNumber) {
+    emit(state.copyWith(phoneNumber: phoneNumber.replaceAll(' ', '')));
   }
 }
