@@ -28,6 +28,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  eram_express_shared:
+    path: ../eram_express_shared
+
   cupertino_icons: ^1.0.6
   dio: ^5.7.0
   either_dart: ^1.0.0
