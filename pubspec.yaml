@@ -28,6 +28,9 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  eram_express_shared:
+    path: ../eram_express_shared
+
   cupertino_icons: ^1.0.6
   dio: ^5.7.0
   either_dart: ^1.0.0
@@ -35,10 +38,16 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
-  flutter_hooks: ^0.20.5
+  flutter_localizations:
+    sdk: flutter
+  freezed: ^2.5.7
+  freezed_annotation: ^2.4.4
+  gap: ^3.0.1
+  json_serializable: ^6.8.0
   logger: ^2.4.0
 
 dev_dependencies:
+  build_runner: ^2.4.13
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
@@ -55,6 +64,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/i18n/
+    - assets/images/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

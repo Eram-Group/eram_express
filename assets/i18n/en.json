@@ -1,0 +1,9 @@
+{
+    "login": {
+        "heading": "Login",
+        "subheading": "Please enter your credentials to login.",
+        "phoneNumber": "Phone Number",
+        "phoneNumberPlaceholder": "Enter your phone number",
+        "login": "Login"
+    }
+}
