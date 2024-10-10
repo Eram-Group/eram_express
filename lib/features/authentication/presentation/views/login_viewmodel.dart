@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:eram_express_shared/domain/entites/country_entity.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/domain/repositories/configurations_repository.dart';
@@ -61,7 +62,30 @@ class LoginViewModel extends Cubit<LoginFormState> {
 
   bool get isCountryCodeButtonEnabled => state.selectedCountry != null;
 
-  Future<void> countryCodeButtonOnClicked() async {}
+  Future<void> countryCodeButtonOnClicked(BuildContext context) async {
+    final selection = await showModalBottomSheet<CountryEntity>(
+      context: context,
+      builder: (context) => FutureBuilder<List<CountryEntity>>(
+        future: countries,
+        builder: (context, snapshot) {
+          return ListView.builder(
+            itemCount: snapshot.data?.length,
+            itemBuilder: (context, index) {
+              final country = snapshot.data?[index];
+              return ListTile(
+                title: Text(country?.nameEn ?? ''),
+                onTap: () => Navigator.of(context).pop(country),
+              );
+            },
+          );
+        },
+      ),
+    );
+
+    if (selection != null) {
+      emit(state.copyWith(selectedCountry: selection));
+    }
+  }
 
   void loginButtonOnClicked() async {
     emit(state.copyWith(buttonLoading: true));

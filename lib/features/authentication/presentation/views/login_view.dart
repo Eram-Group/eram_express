@@ -1,13 +1,13 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eram_express/app/di.dart';
-import 'package:eram_express/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../app/di.dart';
 import '../../../../core/i18n/context_extension.dart';
+import '../../../../core/utils/logger.dart';
 import '../../../common/presentation/widgets/clickable.dart';
 import '../../../common/presentation/widgets/skeleton.dart';
 import 'login_viewmodel.dart';
@@ -15,11 +15,11 @@ import 'login_viewmodel.dart';
 class LoginView extends StatelessWidget {
   static const String route = '/login';
 
-  LoginView({super.key});
-
   final LoginViewModel viewModel = LoginViewModel(
     configurationsRepository: configurationsRepository,
   )..init();
+
+  LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget _buildCountryCodeButton() {
+  Widget _buildCountryCodeButton(BuildContext context) {
     return BlocBuilder<LoginViewModel, LoginFormState>(
       bloc: viewModel,
       builder: (_, state) {
@@ -113,7 +113,7 @@ class LoginView extends StatelessWidget {
               ),
             ),
             onTap: viewModel.isCountryCodeButtonEnabled
-                ? () => viewModel.countryCodeButtonOnClicked()
+                ? () => viewModel.countryCodeButtonOnClicked(context)
                 : null,
             child: Row(
               children: [
@@ -250,7 +250,7 @@ class LoginView extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _buildCountryCodeButton(),
+          _buildCountryCodeButton(context),
           _buildSeparator(),
           const Gap(7),
           Expanded(
