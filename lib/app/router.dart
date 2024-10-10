@@ -20,7 +20,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   } else if (name == OnboardingView.route) {
     page = const OnboardingView();
   } else if (name == LoginView.route) {
-    page = const LoginView();
+    page = LoginView();
   } else if (name == HomeView.route) {
     page = const HomeView();
   } else {

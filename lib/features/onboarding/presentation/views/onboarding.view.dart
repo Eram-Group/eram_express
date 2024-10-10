@@ -99,10 +99,4 @@ class OnboardingView extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildTabletView() {
-    return const Center(
-      child: Text('Tablet view'),
-    );
-  }
 }

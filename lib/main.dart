@@ -6,7 +6,7 @@ import 'app/di.dart';
 
 void main() => runApp(
       MultiBlocProvider(
-        providers: container,
+        providers: providers,
         child: const App(),
       ),
     );

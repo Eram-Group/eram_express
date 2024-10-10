@@ -1,4 +1,3 @@
-import 'package:eram_express/features/onboarding/presentation/views/onboarding.view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
@@ -27,7 +26,7 @@ class _InitViewState extends State<InitView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      navigationService.clearStackAndNavigateTo(OnboardingView.route);
+      navigationService.clearStackAndNavigateTo(LoginView.route);
     });
   }
 }
