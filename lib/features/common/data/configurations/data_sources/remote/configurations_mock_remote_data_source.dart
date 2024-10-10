@@ -1,13 +1,15 @@
+import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/data/models/country_model.dart';
 
+import '../../../../../../core/network/api_error.dart';
 import 'configurations_remote_data_source.dart';
 
 class ConfigurationsMockRemoteDataSource
     implements ConfigurationsRemoteDataSource {
   @override
-  Future<List<CountryModel>> getCountries() async {
+  Future<Either<ApiError, List<CountryModel>>> getCountries() async {
     await Future.delayed(const Duration(seconds: 2));
-    return [
+    return Right([
       CountryModel(
         code: 'SA',
         currency: 'SAR',
@@ -85,6 +87,6 @@ class ConfigurationsMockRemoteDataSource
         numberLength: 10,
         numberFormat: '000 000 0000',
       ),
-    ];
+    ]);
   }
 }

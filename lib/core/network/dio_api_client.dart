@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:eram_express/core/network/api_client.dart';
-import 'package:eram_express/core/network/api_endpoint.dart';
+import 'package:either_dart/either.dart';
 
+import 'api_client.dart';
+import 'api_endpoint.dart';
+import 'api_error.dart';
 import 'log_interceptor.dart';
 
 class DioApiClient implements ApiClient {
@@ -10,13 +12,11 @@ class DioApiClient implements ApiClient {
   DioApiClient({
     required Dio dio,
   }) : _dio = dio {
-    _dio.interceptors.add(
-      CustomLogInterceptor(),
-    );
+    _dio.interceptors.add(CustomLogInterceptor());
   }
 
   @override
-  Future request(ApiEndpoint endpoint) async {
+  Future<Either<ApiError, T>> request<T>(ApiEndpoint endpoint) async {
     try {
       final response = await _dio.request(
         endpoint.path,
@@ -28,9 +28,9 @@ class DioApiClient implements ApiClient {
         ),
       );
 
-      return await endpoint.handleResponse(response);
-    } catch (e) {
-      throw Exception(e);
+      return Right(await endpoint.handleResponse(response));
+    } on DioException catch (e) {
+      return Left(ApiError.fromJson(e.response?.data));
     }
   }
 }

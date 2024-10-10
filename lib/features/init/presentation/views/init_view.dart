@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
-import '../../../authentication/presentation/views/login_view.dart';
+import '../../../authentication/presentation/views/screens/login/login_view.dart';
 
 class InitView extends StatefulWidget {
   static const String route = '/';
@@ -26,7 +26,7 @@ class _InitViewState extends State<InitView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      navigationService.clearStackAndNavigateTo(LoginView.route);
+      mainNavigationService.clearStackAndNavigateTo(LoginView.route);
     });
   }
 }

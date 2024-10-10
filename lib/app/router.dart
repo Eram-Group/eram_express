@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../features/authentication/presentation/views/login_view.dart';
+import '../features/authentication/presentation/views/screens/login/login_view.dart';
+import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
 import '../features/onboarding/presentation/views/onboarding.view.dart';
@@ -21,6 +22,9 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = const OnboardingView();
   } else if (name == LoginView.route) {
     page = LoginView();
+  } else if (name == OtpView.route) {
+    final arguments = settings.arguments as OtpViewArguments;
+    page = OtpView(arguments);
   } else if (name == HomeView.route) {
     page = const HomeView();
   } else {

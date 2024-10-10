@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
-import '../../../authentication/presentation/views/login_view.dart';
+import '../../../authentication/presentation/views/screens/login/login_view.dart';
 
 class HomeView extends StatelessWidget {
   static const String route = '/home';
@@ -16,7 +16,7 @@ class HomeView extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => navigationService.to(LoginView.route),
+          onPressed: () => mainNavigationService.to(LoginView.route),
           child: const Text('Back to Login'),
         ),
       ),

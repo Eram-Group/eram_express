@@ -1,5 +1,7 @@
+import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/data/models/country_model.dart';
 
+import '../../../../../../core/network/api_error.dart';
 import '../../../../../../core/network/dio_api_client.dart';
 import 'configurations_api_endpoints.dart';
 import 'configurations_remote_data_source.dart';
@@ -11,6 +13,6 @@ class ConfigurationsApiRemoteDataSource
       : _dioClient = dioClient;
 
   @override
-  Future<List<CountryModel>> getCountries() async =>
+  Future<Either<ApiError, List<CountryModel>>> getCountries() async =>
       await _dioClient.request(getCountriesEndpoint.prepare());
 }

@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../app/di.dart';
-import '../../../../core/i18n/context_extension.dart';
-import '../../../../core/utils/logger.dart';
-import '../../../common/presentation/widgets/clickable.dart';
-import '../../../common/presentation/widgets/skeleton.dart';
-import 'login_viewmodel.dart';
+import '../../../../../../app/di.dart';
+import '../../../../../../core/i18n/context_extension.dart';
+import '../../../../../common/presentation/widgets/clickable.dart';
+import '../../../../../common/presentation/widgets/custom_button.dart';
+import '../../../../../common/presentation/widgets/skeleton.dart';
+import 'login_view_state.dart';
+import 'login_view_model.dart';
 
 class LoginView extends StatelessWidget {
   static const String route = '/login';
 
   final LoginViewModel viewModel = LoginViewModel(
     configurationsRepository: configurationsRepository,
+    authenticationService: authenticationService,
   )..init();
 
   LoginView({super.key});
@@ -99,11 +101,11 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildCountryCodeButton(BuildContext context) {
-    return BlocBuilder<LoginViewModel, LoginFormState>(
+    return BlocBuilder<LoginViewModel, LoginViewState>(
       bloc: viewModel,
       builder: (_, state) {
         return Opacity(
-          opacity: viewModel.isCountryCodeButtonEnabled ? 1 : 0.5,
+          opacity: state.countryCodeButtonEnabled ? 1 : 0.5,
           child: Clickable(
             padding: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
@@ -112,9 +114,7 @@ class LoginView extends StatelessWidget {
                 bottomLeft: Radius.circular(12),
               ),
             ),
-            onTap: viewModel.isCountryCodeButtonEnabled
-                ? () => viewModel.countryCodeButtonOnClicked(context)
-                : null,
+            onTap: viewModel.countryCodeButtonOnClicked(context),
             child: Row(
               children: [
                 if (state.selectedCountry != null)
@@ -203,38 +203,23 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildLoginButton(BuildContext context) {
-    logger.debug('isLoginButtonEnabled: ${viewModel.isLoginButtonEnabled}');
-    return BlocBuilder<LoginViewModel, LoginFormState>(
+    return BlocBuilder<LoginViewModel, LoginViewState>(
       bloc: viewModel,
-      builder: (_, state) {
-        return Opacity(
-          opacity: viewModel.isLoginButtonEnabled ? 1 : 0.5,
-          child: Clickable(
-            width: double.infinity,
-            height: 44,
-            decoration: BoxDecoration(
-              color: const Color(0xFF424BB3),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            splashColor: const Color(0xFF424BB3).withOpacity(0.5),
-            onTap: viewModel.isLoginButtonEnabled
-                ? () => viewModel.loginButtonOnClicked()
-                : null,
-            child: Center(
-              child: Text(
-                context.translate('login.login'),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Outfit',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  height: 19.2 / 16,
-                ),
-              ),
-            ),
+      builder: (_, state) => CustomButton(
+        enabled: state.loginButtonEnabled,
+        loading: state.loading,
+        onTap: viewModel.loginButtonOnClicked,
+        child: Text(
+          context.translate('login.login'),
+          style: const TextStyle(
+            color: Colors.white,
+            fontFamily: 'Outfit',
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            height: 19.2 / 16,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -273,10 +258,11 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildPhoneNumberTextField(BuildContext context) {
-    return BlocBuilder<LoginViewModel, LoginFormState>(
+    return BlocBuilder<LoginViewModel, LoginViewState>(
       bloc: viewModel,
       builder: (_, state) {
         return TextFormField(
+          enabled: state.phoneNumberFieldEnabled,
           keyboardType: TextInputType.phone,
           inputFormatters: [
             if (state.selectedCountry != null)

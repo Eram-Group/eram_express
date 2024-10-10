@@ -4,7 +4,7 @@ import 'package:eram_express_shared/data/models/country_model.dart';
 
 import '../../../../../../core/network/api_endpoint.dart';
 
-final getCountriesEndpoint = ApiEndpoint<List<CountryModel>>(
+final getCountriesEndpoint = ApiEndpoint(
   method: HttpMethod.get,
   path: "/countries",
   responseHandlers: {
