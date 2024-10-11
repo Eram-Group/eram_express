@@ -5,5 +5,15 @@
         "phoneNumber": "Phone Number",
         "phoneNumberPlaceholder": "Enter your phone number",
         "login": "Login"
+    },
+    "otp": {
+        "heading": "Verification Code",
+        "subheading": "We have sent the code verification to your number",
+        "otp": "OTP",
+        "otpPlaceholder": "Enter the OTP",
+        "verify": "Verify"
+    },
+    "menu": {
+        "logout": "Logout"
     }
 }

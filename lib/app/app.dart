@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/utils/responsive.dart';
 import '../features/init/presentation/views/init_view.dart';
 import 'navigation.dart';
+import 'presentation/theme.dart';
 import 'router.dart';
 
 class App extends StatelessWidget {
@@ -17,6 +18,7 @@ class App extends StatelessWidget {
     Responsive.init(context);
     return BlocBuilder<LocaleCubit, Locale>(
       builder: (_, Locale locale) => MaterialApp(
+        theme: theme,
         debugShowCheckedModeBanner: false,
         navigatorKey: navigatorKey,
         initialRoute: InitView.route,
