@@ -1,69 +1,56 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 
+enum HttpMethod { get, post, put, delete, patch }
+
 class ApiEndpoint {
-  final String uri;
-  final ApiMethod method;
+  final String path;
+  final HttpMethod method;
+  final Map<int, FutureOr Function(Response)> responseHandlers;
 
-  ApiEndpoint({
-    required this.uri,
-    required this.method,
-  });
+  final Map<String, dynamic>? _queryParameters;
+  final dynamic _body;
+  final Map<String, String>? _headers;
 
-  CallableApiEndpoint prepare(ApiEndpointInput? input) {
-    return CallableApiEndpoint(
-      uri: uri,
+  Map<String, dynamic>? get queryParameters => _queryParameters;
+  dynamic get body => _body;
+  Map<String, String>? get headers => _headers;
+
+  FutureOr handleResponse(Response response) async {
+    final handler = responseHandlers[response.statusCode];
+    if (handler != null) {
+      final result = await handler(response);
+      return result;
+    } else {
+      // Handle other status codes
+      throw Exception('Unhandled status code: ${response.statusCode}');
+    }
+  }
+
+  ApiEndpoint prepare({
+    Map<String, dynamic>? queryParameters,
+    dynamic body,
+    Map<String, String>? headers,
+  }) {
+    return ApiEndpoint(
+      path: path,
       method: method,
-      input: input,
+      responseHandlers: responseHandlers,
+      queryParameters: queryParameters,
+      body: body,
+      headers: headers,
     );
   }
-}
 
-class ApiEndpointInput {
-  late final Map<String, dynamic>? queryParameters;
-  late final Map<String, String>? headers;
-
-  /// Must have a `toJson` method
-  late final dynamic data;
-
-  ApiEndpointInput.multipart({
-    this.queryParameters,
-    EndpointRequest? data,
-    String? auth,
-  }) {
-    headers = {
-      'Content-Type': 'multipart/form-data',
-      if (auth != null) 'Authorization': 'Bearer $auth',
-    };
-    this.data = data == null ? null : FormData.fromMap(data.toJson());
-  }
-
-  ApiEndpointInput.rawJson({
-    this.queryParameters,
-    EndpointRequest? data,
-    String? auth,
-  }) {
-    headers = {
-      'Content-Type': 'application/json',
-      if (auth != null) 'Authorization': 'Bearer $auth',
-    };
-    this.data = data?.toJson();
-  }
-}
-
-enum ApiMethod { get, post, patch, put, delete }
-
-class CallableApiEndpoint {
-  final String uri;
-  final ApiMethod method;
-  final ApiEndpointInput? input;
-
-  CallableApiEndpoint({
-    required this.uri,
+  ApiEndpoint({
+    required this.path,
     required this.method,
-    this.input,
-  });
-}
-
-abstract class EndpointRequest {
-  Map<String, dynamic> toJson();
+    this.responseHandlers = const {},
+    Map<String, dynamic>? queryParameters,
+    dynamic body,
+    Map<String, String>? headers,
+  })  : _queryParameters = queryParameters,
+        _body = body,
+        _headers = headers;
 }

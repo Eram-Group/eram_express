@@ -6,7 +6,9 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../Common/presentation/utils/show_modal.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../../Common/presentation/widgets/customButton.dart';
-import '../../data/models/sizetrackModel.dart';
+import '../../data/models/cargo-subcategoryModel.dart';
+import '../../modals/pick_data-modal.dart';
+
 
 class HomeView extends StatelessWidget {
   static const String route = '/home';
@@ -109,7 +111,7 @@ Widget _builddataContainer(BuildContext context) {
                 )
               ],
             ),
-            _buildSelected(context),
+            _buildSelected(context ),
             _buildSelected(context),
             _buildSelected(context),
             const Gap(8),
@@ -127,17 +129,17 @@ Widget _builddataContainer(BuildContext context) {
   );
 }
 
-Widget _buildSelected(BuildContext context) {
+Widget _buildSelected(BuildContext context , /*void Function()? ontap */) 
+{
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 6),
     child: GestureDetector(
-        onTap: () {
-          showModalView(
+        onTap: (){showModalView(
             isScrollControlled: true,
             context: context,
-            builder: (context) => _buildPickDateBottomSheet(),
-          );
-        },
+            builder: (context) => PickDateBottomSheet(),
+          );},
+       
         child: Container(
           decoration: BoxDecoration(
               color: Colors.white,
@@ -169,23 +171,9 @@ Widget _buildSelected(BuildContext context) {
         )),
   );
 }
-
+/*
 Widget _buildSizetruckbottom() {
-  List<SizeTrackModel> dummySizeTrackList = [
-    SizeTrackModel(
-      image: 'Cargo',
-      sizeTruck: 'Large',
-    ),
-    SizeTrackModel(
-      image: 'Cargo',
-      sizeTruck: 'Medium',
-    ),
-    SizeTrackModel(
-      image: 'Cargo',
-      sizeTruck: 'Small',
-    ),
-  ];
-
+ 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -267,86 +255,4 @@ class clickbottomshteetItem extends StatelessWidget {
     );
   }
 }
-
-Widget _buildPickDateBottomSheet() {
-  DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-            child: Container(
-          width: 60,
-          height: 5,
-          decoration: BoxDecoration(
-              color: Color(0xffDFE2EB), borderRadius: BorderRadius.circular(2)),
-        )),
-        Text(
-          "Pick up date",
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-        ),
-        TableCalendar(
-          firstDay: DateTime.utc(2020, 1, 1),
-          lastDay: DateTime.utc(2030, 12, 31),
-          focusedDay: _focusedDay,
-          selectedDayPredicate: (day) {
-            return isSameDay(_selectedDay, day);
-          },
-
-        
-          enabledDayPredicate: (day) {
-            return day.isAfter(DateTime.now().subtract(Duration(days: 1)));
-          },
-          daysOfWeekStyle: DaysOfWeekStyle(
-            weekdayStyle: TextStyle(
-              color: AppColor.blacktext,
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-            ),
-            weekendStyle: TextStyle(
-              color: AppColor.blacktext,
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-            ),
-          ),
-          calendarStyle: CalendarStyle(
-            todayDecoration: BoxDecoration(
-              color: Colors.grey[300],
-              shape: BoxShape.circle,
-            ),
-            selectedDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: AppColor.secondaryColor,
-              shape: BoxShape.rectangle,
-            ),
-            weekendTextStyle: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          headerStyle: HeaderStyle(
-            formatButtonVisible: false,
-            titleCentered: true,
-            titleTextStyle: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const Gap(6),
-        CustomButton(
-          text: "Select date",
-          onPressed: () {
-            print("yalhwwwwwwwwwwy");
-          },
-          TextColor: Colors.black,
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        )
-      ],
-    ),
-  );
-}
+*/

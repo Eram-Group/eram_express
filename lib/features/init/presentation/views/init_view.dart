@@ -2,7 +2,7 @@ import 'package:eram_express/features/onboarding/presentation/views/onboarding.v
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
-import '../../../authentication/presentation/views/login_view.dart';
+
 import '../../../home/presentation/views/home_view.dart';
 
 class InitView extends StatefulWidget {
