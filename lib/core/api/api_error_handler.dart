@@ -1,4 +1,4 @@
-import 'package:eram_express/core/network/api_error.dart';
+import 'package:eram_express/core/api/api_error.dart';
 
 handleApiError(ApiError error) {
   return switch (error.type) {
