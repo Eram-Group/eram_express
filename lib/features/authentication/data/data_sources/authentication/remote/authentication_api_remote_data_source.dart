@@ -1,7 +1,6 @@
 import 'package:either_dart/either.dart';
-
-import '../../../../../../core/network/api_error.dart';
-import '../../../../../../core/network/dio_api_client.dart';
+import '../../../../../../core/api/api_error.dart';
+import '../../../../../../core/api/dio_api_client.dart';
 import '../../../../domain/objects/otp_verification_data.dart';
 import '../models/verify_otp_response_model.dart';
 import 'authentication_api_endpoints.dart';
@@ -15,7 +14,7 @@ class AuthenticationApiRemoteDataSource
       : _dioClient = dioClient;
 
   @override
-  sendOtp(String phoneNumber) async {
+  Future<Either<ApiError, Null>> sendOtp(String phoneNumber) async {
     return await _dioClient.request(
       sendOtpEndpoint.prepare(
         body: {

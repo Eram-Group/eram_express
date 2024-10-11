@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 
-import '../../../../../../core/network/api_error.dart';
+import '../../../../../../core/api/api_error.dart';
+
 import '../../../../domain/objects/otp_verification_data.dart';
 import '../models/verify_otp_response_model.dart';
 
