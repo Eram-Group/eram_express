@@ -1,10 +1,10 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/core/network/api_error.dart';
-import 'package:eram_express/features/authentication/data/data_sources/authentication/models/verify_otp_response_model.dart';
-import 'package:eram_express/features/authentication/domain/objects/otp_verification_data.dart';
 
+import '../../../../../../core/network/api_error.dart';
 import '../../../../../../core/network/dio_api_client.dart';
-import 'authentication_api_endpoint.dart';
+import '../../../../domain/objects/otp_verification_data.dart';
+import '../models/verify_otp_response_model.dart';
+import 'authentication_api_endpoints.dart';
 import 'authentication_remote_data_source.dart';
 
 class AuthenticationApiRemoteDataSource

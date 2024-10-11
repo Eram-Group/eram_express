@@ -30,7 +30,7 @@ class LoginViewModel extends Cubit<LoginViewState> {
           : () => _countryCodeButtonOnClicked(context);
 
   Future<void> init() async {
-    final countries = await _configurationsRepository.getCountries();
+    final countries = await _configurationsRepository.countries;
     countries.fold(
       (error) => emit(state.copyWith(countries: null)),
       (data) => emit(state.copyWith(
@@ -60,13 +60,13 @@ class LoginViewModel extends Cubit<LoginViewState> {
   }
 
   _loginButtonOnClicked() async {
-    emit(state.copyWith(loading: true));
+    emit(state.copyWith(sendingOtp: true));
 
     final phoneNumber = state.selectedCountry!.phoneCode + state.phoneNumber;
     await _authenticationService.sendOtp(
       phoneNumber: phoneNumber,
       onOtpSent: () {
-        emit(state.copyWith(loading: false));
+        emit(state.copyWith(sendingOtp: false));
         mainNavigationService.to(
           OtpView.route,
           OtpViewArguments(
@@ -76,9 +76,9 @@ class LoginViewModel extends Cubit<LoginViewState> {
           ),
         );
       },
-      onOtpFailed: () => emit(state.copyWith(loading: false)),
+      onOtpFailed: () => emit(state.copyWith(sendingOtp: false)),
     );
 
-    emit(state.copyWith(loading: false));
+    emit(state.copyWith(sendingOtp: false));
   }
 }

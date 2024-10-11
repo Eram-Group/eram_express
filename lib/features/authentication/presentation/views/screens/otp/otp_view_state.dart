@@ -11,5 +11,6 @@ abstract class OtpViewState with _$OtpViewState {
   }) = _OtpViewState;
 
   bool get verifyButtonLoading => loading;
-  bool get verifyButtonEnabled => otp.length == 4;
+  bool get verifyButtonEnabled => otp.length == 4 && !loading;
+  bool get pinEnabled => !loading;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
+import '../../../../core/i18n/context_extension.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
 
 class HomeView extends StatelessWidget {
@@ -16,8 +17,12 @@ class HomeView extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => mainNavigationService.to(LoginView.route),
-          child: const Text('Back to Login'),
+          onPressed: () => authenticationService.logout(
+            onLogout: () => mainNavigationService.clearStackAndNavigateTo(
+              LoginView.route,
+            ),
+          ),
+          child: Text(context.translate('menu.logout')),
         ),
       ),
     );

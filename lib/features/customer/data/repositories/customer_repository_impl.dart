@@ -5,18 +5,15 @@ import '../data_sources/remote/customer_remote_data_source.dart';
 
 class CustomerRepositoryImpl implements CustomerRepository {
   final CustomerRemoteDataSource _customerRemoteDataSource;
-  final TokensLocalDataSource _tokensLocalDataSource;
   CustomerRepositoryImpl({
     required CustomerRemoteDataSource remoteDataSource,
     required TokensLocalDataSource tokensLocalDataSource,
-  })  : _customerRemoteDataSource = remoteDataSource,
-        _tokensLocalDataSource = tokensLocalDataSource;
+  }) : _customerRemoteDataSource = remoteDataSource;
 
   @override
-  Future<CustomerEntity?> getAuthenticatedCustomer() async {
-    final accessToken = await _tokensLocalDataSource.accessToken;
-    if (accessToken == null) return null;
-
+  Future<CustomerEntity?> getAuthenticatedCustomer({
+    required String accessToken,
+  }) async {
     final response =
         await _customerRemoteDataSource.getAuthenticatedCustomer(accessToken);
 

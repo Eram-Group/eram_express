@@ -14,7 +14,8 @@ class ConfigurationsRepositoryImpl implements ConfigurationsRepository {
   }) : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<Either<ApiError, List<CountryEntity>>> getCountries() async {
+  Future<Either<ApiError, List<CountryEntity>>> get countries async {
+    if (_cachedCountries != null) return Right(_cachedCountries!);
     final response = await _remoteDataSource.getCountries();
 
     return await response.fold(

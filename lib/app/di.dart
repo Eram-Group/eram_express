@@ -22,8 +22,8 @@ final authenticationRemoteDataSource = AuthenticationApiRemoteDataSource(
 );
 
 final authenticationRepository = AuthenticationRepositoryImpl(
+  customerRepository: customerRepository,
   remoteDataSource: authenticationRemoteDataSource,
-  customerRemoteDataSource: customerRemoteDataSource,
   localDataSource: tokensLocalDataSource,
 );
 

@@ -12,5 +12,8 @@
         "otp": "OTP",
         "otpPlaceholder": "Enter the OTP",
         "verify": "Verify"
+    },
+    "menu": {
+        "logout": "Logout"
     }
 }

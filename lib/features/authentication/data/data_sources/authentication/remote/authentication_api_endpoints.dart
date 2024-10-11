@@ -14,5 +14,7 @@ final verifyOtpEndpoint = ApiEndpoint(
   method: HttpMethod.post,
   responseHandlers: {
     HttpStatus.ok: (response) => VerifyOtpResponseModel.fromJson(response.data),
+    HttpStatus.created: (response) =>
+        VerifyOtpResponseModel.fromJson(response.data),
   },
 );

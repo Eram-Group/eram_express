@@ -8,15 +8,15 @@ abstract class LoginViewState with _$LoginViewState {
   const LoginViewState._();
 
   factory LoginViewState({
-    @Default(false) bool loading,
+    @Default(false) bool sendingOtp,
     @Default('') String phoneNumber,
     CountryEntity? selectedCountry,
     List<CountryEntity>? countries,
   }) = _LoginViewState;
 
-  bool get phoneNumberFieldEnabled => selectedCountry != null && !loading;
+  bool get phoneNumberFieldEnabled => selectedCountry != null && !sendingOtp;
   bool get countryCodeButtonEnabled => selectedCountry != null;
-  bool get loginButtonLoading => loading;
+  bool get loginButtonLoading => sendingOtp;
   bool get loginButtonEnabled =>
       selectedCountry != null &&
       phoneNumber.length == selectedCountry!.numberLength;

@@ -19,9 +19,11 @@ class LoginView extends StatelessWidget {
   final LoginViewModel viewModel = LoginViewModel(
     configurationsRepository: configurationsRepository,
     authenticationService: authenticationService,
-  )..init();
+  );
 
-  LoginView({super.key});
+  LoginView({super.key}) {
+    viewModel.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +209,7 @@ class LoginView extends StatelessWidget {
       bloc: viewModel,
       builder: (_, state) => CustomButton(
         enabled: state.loginButtonEnabled,
-        loading: state.loading,
+        loading: state.sendingOtp,
         onTap: viewModel.loginButtonOnClicked,
         child: Text(
           context.translate('login.login'),

@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$LoginViewState {
-  bool get loading => throw _privateConstructorUsedError;
+  bool get sendingOtp => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
   CountryEntity? get selectedCountry => throw _privateConstructorUsedError;
   List<CountryEntity>? get countries => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $LoginViewStateCopyWith<$Res> {
       _$LoginViewStateCopyWithImpl<$Res, LoginViewState>;
   @useResult
   $Res call(
-      {bool loading,
+      {bool sendingOtp,
       String phoneNumber,
       CountryEntity? selectedCountry,
       List<CountryEntity>? countries});
@@ -56,15 +56,15 @@ class _$LoginViewStateCopyWithImpl<$Res, $Val extends LoginViewState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? loading = null,
+    Object? sendingOtp = null,
     Object? phoneNumber = null,
     Object? selectedCountry = freezed,
     Object? countries = freezed,
   }) {
     return _then(_value.copyWith(
-      loading: null == loading
-          ? _value.loading
-          : loading // ignore: cast_nullable_to_non_nullable
+      sendingOtp: null == sendingOtp
+          ? _value.sendingOtp
+          : sendingOtp // ignore: cast_nullable_to_non_nullable
               as bool,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
@@ -91,7 +91,7 @@ abstract class _$$LoginViewStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool loading,
+      {bool sendingOtp,
       String phoneNumber,
       CountryEntity? selectedCountry,
       List<CountryEntity>? countries});
@@ -110,15 +110,15 @@ class __$$LoginViewStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? loading = null,
+    Object? sendingOtp = null,
     Object? phoneNumber = null,
     Object? selectedCountry = freezed,
     Object? countries = freezed,
   }) {
     return _then(_$LoginViewStateImpl(
-      loading: null == loading
-          ? _value.loading
-          : loading // ignore: cast_nullable_to_non_nullable
+      sendingOtp: null == sendingOtp
+          ? _value.sendingOtp
+          : sendingOtp // ignore: cast_nullable_to_non_nullable
               as bool,
       phoneNumber: null == phoneNumber
           ? _value.phoneNumber
@@ -140,7 +140,7 @@ class __$$LoginViewStateImplCopyWithImpl<$Res>
 
 class _$LoginViewStateImpl extends _LoginViewState {
   _$LoginViewStateImpl(
-      {this.loading = false,
+      {this.sendingOtp = false,
       this.phoneNumber = '',
       this.selectedCountry,
       final List<CountryEntity>? countries})
@@ -149,7 +149,7 @@ class _$LoginViewStateImpl extends _LoginViewState {
 
   @override
   @JsonKey()
-  final bool loading;
+  final bool sendingOtp;
   @override
   @JsonKey()
   final String phoneNumber;
@@ -167,7 +167,7 @@ class _$LoginViewStateImpl extends _LoginViewState {
 
   @override
   String toString() {
-    return 'LoginViewState(loading: $loading, phoneNumber: $phoneNumber, selectedCountry: $selectedCountry, countries: $countries)';
+    return 'LoginViewState(sendingOtp: $sendingOtp, phoneNumber: $phoneNumber, selectedCountry: $selectedCountry, countries: $countries)';
   }
 
   @override
@@ -175,7 +175,8 @@ class _$LoginViewStateImpl extends _LoginViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoginViewStateImpl &&
-            (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.sendingOtp, sendingOtp) ||
+                other.sendingOtp == sendingOtp) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             (identical(other.selectedCountry, selectedCountry) ||
@@ -185,7 +186,7 @@ class _$LoginViewStateImpl extends _LoginViewState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, loading, phoneNumber,
+  int get hashCode => Object.hash(runtimeType, sendingOtp, phoneNumber,
       selectedCountry, const DeepCollectionEquality().hash(_countries));
 
   /// Create a copy of LoginViewState
@@ -200,14 +201,14 @@ class _$LoginViewStateImpl extends _LoginViewState {
 
 abstract class _LoginViewState extends LoginViewState {
   factory _LoginViewState(
-      {final bool loading,
+      {final bool sendingOtp,
       final String phoneNumber,
       final CountryEntity? selectedCountry,
       final List<CountryEntity>? countries}) = _$LoginViewStateImpl;
   _LoginViewState._() : super._();
 
   @override
-  bool get loading;
+  bool get sendingOtp;
   @override
   String get phoneNumber;
   @override

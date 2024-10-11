@@ -1,3 +1,4 @@
+import 'package:eram_express/core/utils/logger.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'secure_storage_keys.dart';
@@ -46,6 +47,7 @@ class TokensSecureStorageLocalDataSource implements TokensLocalDataSource {
 
   @override
   Future<void> saveTokens(String accessToken, String refreshToken) async {
+    logger.debug('Saving tokens');
     await Future.wait([
       saveAccessToken(accessToken),
       saveRefreshToken(refreshToken),

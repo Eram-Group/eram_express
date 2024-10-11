@@ -1,32 +1,54 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/core/app_error.dart';
-import 'package:eram_express/features/authentication/domain/objects/otp_verification_data.dart';
-import 'package:eram_express/features/customer/domain/entities/customer_entity.dart';
 
-import '../../../customer/data/data_sources/remote/customer_remote_data_source.dart';
+import '../../../../core/app_error.dart';
+import '../../../customer/domain/entities/customer_entity.dart';
+import '../../../customer/domain/repositories/customer_repository.dart';
+import '../../domain/objects/otp_verification_data.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../data_sources/authentication/remote/authentication_remote_data_source.dart';
 import '../data_sources/tokens/local/tokens_local_data_source.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
+  final CustomerRepository _customerRepository;
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final TokensLocalDataSource _tokensLocalDataSource;
 
-  bool _isAuthenticated;
+  CustomerEntity? _authenticatedCustomer;
 
   AuthenticationRepositoryImpl({
+    required CustomerRepository customerRepository,
     required AuthenticationRemoteDataSource remoteDataSource,
-    required CustomerRemoteDataSource customerRemoteDataSource,
     required TokensLocalDataSource localDataSource,
-  })  : _authenticationRemoteDataSource = remoteDataSource,
-        _tokensLocalDataSource = localDataSource,
-        _isAuthenticated = false;
+  })  : _customerRepository = customerRepository,
+        _authenticationRemoteDataSource = remoteDataSource,
+        _tokensLocalDataSource = localDataSource;
+
+  @override
+  Future<CustomerEntity?> get authenticatedCustomer async {
+    if (_authenticatedCustomer != null) return _authenticatedCustomer;
+
+    final accessToken = await _tokensLocalDataSource.accessToken;
+
+    if (accessToken == null) return null;
+
+    final customer = await _customerRepository.getAuthenticatedCustomer(
+      accessToken: accessToken,
+    );
+
+    if (customer != null) _authenticatedCustomer = customer;
+
+    return customer;
+  }
+
+  @override
+  Future<bool> get isAuthenticated async =>
+      (await authenticatedCustomer) != null;
 
   @override
   logout() async {
     try {
       await _tokensLocalDataSource.clearTokens();
-      _isAuthenticated = false;
+      _authenticatedCustomer = null;
       return const Right(null);
     } catch (e) {
       return Left(AppError('Failed to logout'));
@@ -53,15 +75,12 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           data.accessToken,
           data.refreshToken,
         );
-        _isAuthenticated = true;
-        return Right(CustomerEntity.fromModel(data.customer));
+
+        final customer = CustomerEntity.fromModel(data.customer);
+        _authenticatedCustomer = customer;
+
+        return Right(customer);
       },
     );
   }
-
-  @override
-  bool get isAuthenticated => _isAuthenticated;
-
-  @override
-  set isAuthenticated(bool value) => _isAuthenticated = value;
 }

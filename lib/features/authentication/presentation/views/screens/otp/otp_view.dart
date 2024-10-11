@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 
+import '../../../../../../app/di.dart';
 import '../../../../../../core/i18n/context_extension.dart';
 import '../../../../../common/presentation/widgets/clickable.dart';
 import '../../../../../common/presentation/widgets/custom_button.dart';
@@ -14,9 +15,12 @@ class OtpView extends StatelessWidget {
   static const String route = '/otp';
 
   final OtpViewArguments arguments;
-  final OtpViewModel viewModel = OtpViewModel();
+  final OtpViewModel viewModel =
+      OtpViewModel(authenticationService: authenticationService);
 
-  OtpView(this.arguments, {super.key});
+  OtpView(this.arguments, {super.key}) {
+    viewModel.init(phoneNumber: arguments.loginFormData.phoneNumber);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,24 +85,30 @@ class OtpView extends StatelessWidget {
   }
 
   Widget _buildPin() {
-    return Pinput(
-      onChanged: viewModel.onOtpChanged,
-      separatorBuilder: (index) => const Gap(21),
-      autofocus: true,
-      cursor: Container(
-        width: 1.5,
-        height: 22,
-        decoration: const BoxDecoration(
-          color: Color(0xFFFFC96E),
-        ),
-      ),
-      defaultPinTheme: _pinTheme(),
-      focusedPinTheme: _pinTheme().copyDecorationWith(
-        border: Border.all(
-          color: const Color(0xFF194595),
-          width: 1,
-        ),
-      ),
+    return BlocBuilder<OtpViewModel, OtpViewState>(
+      bloc: viewModel,
+      builder: (_, state) {
+        return Pinput(
+          enabled: state.pinEnabled,
+          onChanged: viewModel.onOtpChanged,
+          separatorBuilder: (index) => const Gap(21),
+          autofocus: true,
+          cursor: Container(
+            width: 1.5,
+            height: 22,
+            decoration: const BoxDecoration(
+              color: Color(0xFFFFC96E),
+            ),
+          ),
+          defaultPinTheme: _pinTheme(),
+          focusedPinTheme: _pinTheme().copyDecorationWith(
+            border: Border.all(
+              color: const Color(0xFF194595),
+              width: 1,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -126,7 +136,7 @@ class OtpView extends StatelessWidget {
             ),
           ),
           TextSpan(
-            text: arguments.loginFormData.phoneNumber,
+            text: viewModel.phoneNumber,
             style: const TextStyle(
               fontFamily: 'Outfit',
               fontSize: 14,
@@ -155,7 +165,8 @@ class OtpView extends StatelessWidget {
       builder: (_, state) {
         return CustomButton(
           enabled: state.verifyButtonEnabled,
-          loading: state.verifyButtonEnabled,
+          loading: state.verifyButtonLoading,
+          onTap: viewModel.verifyButtonOnClicked,
           child: Text(
             context.translate('otp.verify'),
             style: const TextStyle(
