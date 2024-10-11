@@ -22,7 +22,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   } else if (name == LoginView.route) {
     page = const LoginView();
   } else if (name == HomeView.route) {
-    page = const HomeView();
+    page = HomeView();
   } else {
     page = const NotFoundView();
   }

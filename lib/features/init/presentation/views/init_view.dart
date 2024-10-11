@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
 import '../../../authentication/presentation/views/login_view.dart';
+import '../../../home/presentation/views/home_view.dart';
 
 class InitView extends StatefulWidget {
   static const String route = '/';
@@ -27,7 +28,7 @@ class _InitViewState extends State<InitView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      navigationService.clearStackAndNavigateTo(OnboardingView.route);
+      navigationService.clearStackAndNavigateTo(HomeView.route);
     });
   }
 }
