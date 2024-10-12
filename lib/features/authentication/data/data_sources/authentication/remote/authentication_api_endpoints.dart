@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../../../../../core/network/api_endpoint.dart';
+import '../../../../../../core/api/api_endpoint.dart';
 import '../models/verify_otp_response_model.dart';
 
 final sendOtpEndpoint = ApiEndpoint(

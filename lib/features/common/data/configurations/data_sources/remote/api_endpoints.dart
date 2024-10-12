@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:eram_express_shared/data/models/country_model.dart';
 
-import '../../../../../../core/network/api_endpoint.dart';
+import '../../../../../../core/api/api_endpoint.dart';
 
 final getCountriesEndpoint = ApiEndpoint(
   method: HttpMethod.get,

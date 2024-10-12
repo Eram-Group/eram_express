@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/core/network/api_error.dart';
+import 'package:eram_express/core/api/api_error.dart';
 
-import '../../../../../core/network/dio_api_client.dart';
+import '../../../../../core/api/dio_api_client.dart';
 import '../../models/customer_model.dart';
 import 'customer_api_endpoints.dart';
 import 'customer_remote_data_source.dart';

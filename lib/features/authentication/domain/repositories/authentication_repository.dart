@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:either_dart/either.dart';
 
 import '../../../../core/app_error.dart';
-import '../../../../core/network/api_error.dart';
+import '../../../../core/api/api_error.dart';
 import '../../../customer/domain/entities/customer_entity.dart';
 import '../objects/otp_verification_data.dart';
 

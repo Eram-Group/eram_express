@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/core/network/api_error.dart';
+import 'package:eram_express/core/api/api_error.dart';
 
 import '../../models/customer_model.dart';
 
