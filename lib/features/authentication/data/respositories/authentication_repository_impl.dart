@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
+import 'package:eram_express_shared/core/app_error.dart';
 
-import '../../../../core/app_error.dart';
 import '../../../customer/domain/entities/customer_entity.dart';
 import '../../../customer/domain/repositories/customer_repository.dart';
 import '../../domain/objects/otp_verification_data.dart';

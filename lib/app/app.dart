@@ -1,9 +1,9 @@
-import 'package:eram_express/core/i18n/app_localizations_setup.dart';
 import 'package:eram_express/features/i18n/domain/locale_cubit.dart';
+import 'package:eram_express_shared/core/i18n/app_localizations_setup.dart';
+import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../core/utils/responsive.dart';
 import '../features/init/presentation/views/init_view.dart';
 import 'navigation.dart';
 import 'presentation/theme.dart';

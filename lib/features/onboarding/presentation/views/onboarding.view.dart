@@ -1,6 +1,5 @@
+import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/utils/responsive.dart';
 
 class OnboardingView extends StatelessWidget {
   static const route = '/onboarding';

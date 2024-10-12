@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eram_express/core/i18n/context_extension.dart';
-import 'package:eram_express/features/common/presentation/widgets/clickable.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/domain/entites/country_entity.dart';
+import 'package:eram_express_shared/presentation/utils/show_modal.dart';
+import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-
-import '../../../../common/presentation/utils/show_modal.dart';
 
 class SelectCountryModal extends StatelessWidget {
   final CountryEntity selectedCountry;
@@ -81,6 +80,9 @@ class SelectCountryModal extends StatelessWidget {
     );
   }
 
+  Future<CountryEntity?> show(BuildContext context) async =>
+      await showModal<CountryEntity>(context, (context) => this);
+
   Widget _buildCountryOption(
     BuildContext context,
     CountryEntity country,
@@ -146,7 +148,4 @@ class SelectCountryModal extends StatelessWidget {
       ),
     );
   }
-
-  Future<CountryEntity?> show(BuildContext context) async =>
-      await showModal<CountryEntity>(context, (context) => this);
 }

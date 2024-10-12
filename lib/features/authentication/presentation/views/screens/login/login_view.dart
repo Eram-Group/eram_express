@@ -1,15 +1,16 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/di.dart';
+import 'package:eram_express_shared/presentation/widgets/clickable.dart';
+import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
+import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../app/di.dart';
-import '../../../../../../core/i18n/context_extension.dart';
-import '../../../../../common/presentation/widgets/clickable.dart';
-import '../../../../../common/presentation/widgets/custom_button.dart';
-import '../../../../../common/presentation/widgets/skeleton.dart';
 import 'login_view_state.dart';
 import 'login_view_model.dart';
 

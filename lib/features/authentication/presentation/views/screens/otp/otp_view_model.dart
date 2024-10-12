@@ -1,7 +1,7 @@
-import 'package:eram_express/app/di.dart';
-import 'package:eram_express/features/home/presentation/views/home_view.dart';
+import 'package:eram_express_shared/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../home/presentation/views/home_view.dart';
 import '../../../../domain/objects/otp_verification_data.dart';
 import '../../../../domain/services/authentication_service.dart';
 import 'otp_view_state.dart';
@@ -15,13 +15,13 @@ class OtpViewModel extends Cubit<OtpViewState> {
   })  : _authenticationService = authenticationService,
         super(OtpViewState());
 
-  void init({required String phoneNumber}) => this.phoneNumber = phoneNumber;
-
   Function(String) get onOtpChanged =>
       (String otp) => emit(state.copyWith(otp: otp));
 
   Function()? get verifyButtonOnClicked =>
       !state.verifyButtonEnabled ? null : _verifyButtonOnClicked;
+
+  void init({required String phoneNumber}) => this.phoneNumber = phoneNumber;
 
   Future<void> _verifyButtonOnClicked() async {
     emit(state.copyWith(loading: true));

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../../customer/data/models/customer_model.dart';
+import '../../../customer/data/models/customer_model.dart';
 
 part 'verify_otp_response_model.freezed.dart';
 part 'verify_otp_response_model.g.dart';

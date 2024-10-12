@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:eram_express_shared/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

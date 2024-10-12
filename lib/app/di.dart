@@ -1,19 +1,14 @@
-import 'package:dio/dio.dart';
+import 'package:eram_express_shared/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../core/navigation_service.dart';
-import '../core/api/dio_api_client.dart';
 import '../features/authentication/data/data_sources/authentication/remote/authentication_api_remote_data_source.dart';
 import '../features/authentication/data/data_sources/tokens/local/tokens_secure_storage_local_data_source.dart';
 import '../features/authentication/data/respositories/authentication_repository_impl.dart';
 import '../features/authentication/domain/services/authentication_service.dart';
-import '../features/common/data/configurations/data_sources/remote/configurations_api_remote_data_source.dart';
-import '../features/common/data/configurations/repositories/configurations_repository_impl.dart';
 import '../features/customer/data/data_sources/remote/customer_api_remote_data_source.dart';
 import '../features/customer/data/repositories/customer_repository_impl.dart';
 import '../features/i18n/domain/locale_cubit.dart';
-import 'navigation.dart';
 
 const secureStorage = FlutterSecureStorage();
 
@@ -32,14 +27,6 @@ final authenticationService = AuthenticationService(
   customerRepository: customerRepository,
 );
 
-final configurationsRemoteDataSource = ConfigurationsApiRemoteDataSource(
-  dioClient: dioClient,
-);
-
-final configurationsRepository = ConfigurationsRepositoryImpl(
-  remoteDataSource: configurationsRemoteDataSource,
-);
-
 final customerRemoteDataSource = CustomerApiRemoteDataSource(
   dioClient: dioClient,
 );
@@ -49,21 +36,7 @@ final customerRepository = CustomerRepositoryImpl(
   tokensLocalDataSource: tokensLocalDataSource,
 );
 
-final dio = Dio(
-  BaseOptions(
-    baseUrl: 'https://prod.eramex.eramapps.com/api',
-  ),
-);
-
-final dioClient = DioApiClient(
-  dio: dio,
-);
-
 final localeCubit = LocaleCubit();
-
-final mainNavigationService = NavigationService(
-  navigatorKey,
-);
 
 final List<BlocProvider> providers = [
   BlocProvider<LocaleCubit>(

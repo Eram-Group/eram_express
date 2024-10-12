@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import '../../../../../core/api/api_endpoint.dart';
+import 'package:eram_express_shared/core/api/api_endpoint.dart';
+
 import '../../models/customer_model.dart';
 
 final getAuthenticatedCustomerEndpoint = ApiEndpoint(

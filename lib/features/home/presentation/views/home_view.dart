@@ -1,7 +1,8 @@
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/di.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
-import '../../../../core/i18n/context_extension.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
 
 class HomeView extends StatelessWidget {

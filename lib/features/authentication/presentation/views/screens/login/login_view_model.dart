@@ -1,8 +1,8 @@
+import 'package:eram_express_shared/di.dart';
+import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../app/di.dart';
-import '../../../../../common/domain/repositories/configurations_repository.dart';
 import '../../../../domain/objects/login_form_data.dart';
 import '../../../../domain/services/authentication_service.dart';
 import '../../modals/select_country_modal.dart';
