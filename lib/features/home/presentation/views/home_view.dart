@@ -22,7 +22,7 @@ class HomeView extends StatelessWidget {
               LoginView.route,
             ),
           ),
-          child: Text(context.translate('menu.logout')),
+          child: Text(context.t('menu.logout')),
         ),
       ),
     );
