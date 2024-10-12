@@ -10,7 +10,10 @@ import '../otp/otp_view.dart';
 import '../../modals/select_country_modal.dart';
 import 'login_view_state.dart';
 
-class LoginViewModel extends Cubit<LoginViewState> {
+class LoginViewModel extends Cubit<LoginViewState>     // question 
+                                            //عملت create 
+                                            //لل cubit ده فين
+{
   final ConfigurationsRepository _configurationsRepository;
   final AuthenticationService _authenticationService;
 

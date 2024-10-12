@@ -1,12 +1,15 @@
 import 'dart:io';
-import '../../../../core/network/api_endpiont.dart';
+import '../../../../core/api/api_endpoint.dart';
 import '../models/cargo-categoriesModel.dart';
 import '../models/cargo-subcategoryModel.dart';
 import '../models/goods-typeModel.dart';
 
 final cargoCategoriesEndpoint=ApiEndpoint(path: '/cargo-categories/',
  method: HttpMethod.get,
- responseHandlers: {HttpStatus.ok: (response)=>CargoCategoryModel.fromJson(response.data),},
+ responseHandlers: {HttpStatus.ok: (response)=> (response.data as List)
+        .map((item) => CargoCategoryModel.fromJson(item))
+        .toList(),
+  },
 );
 
 final cargoSubCategoriesEndpoint = ApiEndpoint(

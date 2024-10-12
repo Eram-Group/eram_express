@@ -36,7 +36,7 @@ final configurationsRemoteDataSource = ConfigurationsApiRemoteDataSource(
   dioClient: dioClient,
 );
 
-final configurationsRepository = ConfigurationsRepositoryImpl(
+final configurationsRepository = ConfigurationsRepositoryImpl(    // مش فاهمه ليه دول بيتعرفوا هنا
   remoteDataSource: configurationsRemoteDataSource,
 );
 

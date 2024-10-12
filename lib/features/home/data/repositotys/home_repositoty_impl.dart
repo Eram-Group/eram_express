@@ -1,0 +1,59 @@
+import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
+import 'package:eram_express/core/app_error.dart';
+import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
+import 'package:eram_express/features/home/data/models/cargo-subcategoryModel.dart';
+import 'package:eram_express/features/home/data/models/goods-typeModel.dart';
+import 'package:eram_express_shared/domain/entites/country_entity.dart';
+
+import '../../../../../core/api/api_error.dart';
+
+import '../../domain/repository/home_repository.dart';
+import '../data_sources/HomeData_remote_data_source.dart';
+
+class HomeRepositoryImpl implements HomeRepository {
+  final HomeDataRemoteDataSource  _remoteDataSource;
+  List<CargoCategoryModel>?cachedcargocategories;
+  //question
+  HomeRepositoryImpl({
+    required HomeDataRemoteDataSource remoteDataSource,   // هو مش المفروض يكون api remote?
+  }) : _remoteDataSource = remoteDataSource;
+
+  @override
+  Future<Either<ApiError, List<CargoCategoryModel>>> getCargoCategories() async {
+    if(cachedcargocategories!=null)  return Right(cachedcargocategories!);
+    final response = await  _remoteDataSource.getCargoCategories();
+    return await response.fold((error) async=>Left(error),
+    (data) async => Right(cachedcargocategories ?? []));
+  }
+
+    
+   
+  @override
+  Future<Either<ApiError, List<CargoSubCategoryModel>>> getSubCargoCategories() {
+    // TODO: implement getSubCargoCategories
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ApiError, List<GoodModel>>> getgoods() {
+    // TODO: implement getgoods
+    throw UnimplementedError();
+  }}
+
+
+ /*
+  @override
+  Future<Either<ApiError, List<CountryEntity>>> get countries async {
+    if (_cachedCountries != null) return Right(_cachedCountries!);
+    final response = await _remoteDataSource.getCountries();
+
+    return await response.fold(
+      (error) async => Left(error),
+      (data) async {
+        _cachedCountries = data.map((e) => CountryEntity.fromModel(e)).toList();
+        return Right(_cachedCountries ?? []);
+      },
+    );
+  }
+  */

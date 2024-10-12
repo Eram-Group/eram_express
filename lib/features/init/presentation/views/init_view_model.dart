@@ -14,7 +14,7 @@ class InitViewModel extends Cubit<bool> {
 
   Future<void> init() async {
     final isAuthenticated = await _authenticationRepository.isAuthenticated;
-    if (isAuthenticated) {
+    if (!isAuthenticated) { // ععكسناهم علشان عايزه الهوم
       emit(true);
       mainNavigationService.clearStackAndNavigateTo(HomeView.route);
     } else {

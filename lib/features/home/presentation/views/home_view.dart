@@ -6,9 +6,10 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../Common/presentation/utils/show_modal.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../../Common/presentation/widgets/customButton.dart';
+import '../../data/models/cargo-categoriesModel.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
+import '../../modals/cargo_categories-modal.dart';
 import '../../modals/pick_data-modal.dart';
-
 
 class HomeView extends StatelessWidget {
   static const String route = '/home';
@@ -111,7 +112,7 @@ Widget _builddataContainer(BuildContext context) {
                 )
               ],
             ),
-            _buildSelected(context ),
+            _buildSelected(context),
             _buildSelected(context),
             _buildSelected(context),
             const Gap(8),
@@ -129,17 +130,21 @@ Widget _builddataContainer(BuildContext context) {
   );
 }
 
-Widget _buildSelected(BuildContext context , /*void Function()? ontap */) 
-{
+Widget _buildSelected(
+  BuildContext context,
+  /*void Function()? ontap */
+) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 6),
     child: GestureDetector(
-        onTap: (){showModalView(
-            isScrollControlled: true,
+        onTap: () {
+          showModalView(
+            isScrollControlled: false,
             context: context,
-            builder: (context) => PickDateBottomSheet(),
-          );},
-       
+            builder: (context) => SelectCargoCategoryModal(),
+            //PickDateBottomSheet(),   //ونخلي دي بترو لحد ما اكيد هيبق ي في حل تاني
+          );
+        },
         child: Container(
           decoration: BoxDecoration(
               color: Colors.white,
@@ -171,88 +176,3 @@ Widget _buildSelected(BuildContext context , /*void Function()? ontap */)
         )),
   );
 }
-/*
-Widget _buildSizetruckbottom() {
- 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        "Choose the size of the truck",
-        style: TextStyle(
-          color: Color(0xff191D31),
-          fontWeight: FontWeight.w600,
-          fontSize: 18,
-          height: 23.4 / 20,
-        ),
-      ),
-      const Gap(12),
-      ...dummySizeTrackList.map((sizeTrack) {
-        return clickbottomshteetItem(
-          sizetrack: sizeTrack,
-        );
-      }).toList(),
-    ],
-  );
-}
-
-class clickbottomshteetItem extends StatelessWidget {
-  final bool isSelected;
-  final SizeTrackModel sizetrack;
-  const clickbottomshteetItem({
-    Key? key,
-    this.isSelected = false,
-    required this.sizetrack,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 8,
-      ),
-      child: InkWell(
-        onTap: () {},
-        child: Container(
-          decoration: ShapeDecoration(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: isSelected ? Colors.green : AppColor.bordercolor,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            color: Colors.white,
-          ),
-          child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Color(0xffF2F4F9),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: SvgIcon(asset: sizetrack.image),
-                    ),
-                  ),
-                  const Gap(8),
-                  Text(
-                    sizetrack.sizeTruck,
-                    style: TextStyle(
-                      color: AppColor.blacktext,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      height: 18.2 / 20,
-                    ),
-                  ),
-                ],
-              )),
-        ),
-      ),
-    );
-  }
-}
-*/
