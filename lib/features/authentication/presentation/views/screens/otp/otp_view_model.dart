@@ -1,4 +1,4 @@
-import 'package:eram_express_shared/di.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../home/presentation/views/home_view.dart';
@@ -18,12 +18,12 @@ class OtpViewModel extends Cubit<OtpViewState> {
   Function(String) get onOtpChanged =>
       (String otp) => emit(state.copyWith(otp: otp));
 
-  Function()? get verifyButtonOnClicked =>
-      !state.verifyButtonEnabled ? null : _verifyButtonOnClicked;
+  Function()? verifyButtonOnClicked(BuildContext context) =>
+      !state.verifyButtonEnabled ? null : () => _verifyButtonOnClicked(context);
 
   void init({required String phoneNumber}) => this.phoneNumber = phoneNumber;
 
-  Future<void> _verifyButtonOnClicked() async {
+  Future<void> _verifyButtonOnClicked(BuildContext context) async {
     emit(state.copyWith(loading: true));
 
     await _authenticationService.verifyOtp(
@@ -33,7 +33,10 @@ class OtpViewModel extends Cubit<OtpViewState> {
       ),
       onOtpVerified: () {
         emit(state.copyWith(loading: false));
-        mainNavigationService.clearStackAndNavigateTo(HomeView.route);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          HomeView.route,
+          (route) => false,
+        );
       },
       onOtpVerificationFailed: () {
         emit(state.copyWith(loading: false));

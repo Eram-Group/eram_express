@@ -211,7 +211,7 @@ class LoginView extends StatelessWidget {
       builder: (_, state) => CustomButton(
         enabled: state.loginButtonEnabled,
         loading: state.sendingOtp,
-        onTap: viewModel.loginButtonOnClicked,
+        onTap: viewModel.loginButtonOnClicked(context),
         child: Text(
           context.t('login.login'),
           style: const TextStyle(

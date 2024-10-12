@@ -166,7 +166,7 @@ class OtpView extends StatelessWidget {
         return CustomButton(
           enabled: state.verifyButtonEnabled,
           loading: state.verifyButtonLoading,
-          onTap: viewModel.verifyButtonOnClicked,
+          onTap: viewModel.verifyButtonOnClicked(context),
           child: Text(
             context.t('otp.verify'),
             style: const TextStyle(

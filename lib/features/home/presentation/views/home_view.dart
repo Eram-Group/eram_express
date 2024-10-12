@@ -1,5 +1,4 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/di.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
@@ -19,8 +18,9 @@ class HomeView extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () => authenticationService.logout(
-            onLogout: () => mainNavigationService.clearStackAndNavigateTo(
+            onLogout: () => Navigator.of(context).pushNamedAndRemoveUntil(
               LoginView.route,
+              (route) => false,
             ),
           ),
           child: Text(context.t('menu.logout')),

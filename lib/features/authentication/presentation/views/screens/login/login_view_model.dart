@@ -1,5 +1,6 @@
-import 'package:eram_express_shared/di.dart';
+import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
+import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,8 +21,8 @@ class LoginViewModel extends Cubit<LoginViewState> {
         _configurationsRepository = configurationsRepository,
         super(LoginViewState());
 
-  Function()? get loginButtonOnClicked =>
-      !state.loginButtonEnabled ? null : _loginButtonOnClicked;
+  Function()? loginButtonOnClicked(BuildContext context) =>
+      !state.loginButtonEnabled ? null : () => _loginButtonOnClicked(context);
 
   Function()? countryCodeButtonOnClicked(BuildContext context) =>
       !state.countryCodeButtonEnabled
@@ -61,7 +62,7 @@ class LoginViewModel extends Cubit<LoginViewState> {
     );
   }
 
-  _loginButtonOnClicked() async {
+  _loginButtonOnClicked(BuildContext context) async {
     emit(state.copyWith(sendingOtp: true));
 
     final phoneNumber = state.selectedCountry!.phoneCode + state.phoneNumber;
@@ -70,16 +71,19 @@ class LoginViewModel extends Cubit<LoginViewState> {
       phoneNumber: phoneNumber,
       onOtpSent: () {
         emit(state.copyWith(sendingOtp: false));
-        mainNavigationService.to(
+        Navigator.of(context).pushNamed(
           OtpView.route,
-          OtpViewArguments(
+          arguments: OtpViewArguments(
             loginFormData: LoginFormData(
               phoneNumber: phoneNumber,
             ),
           ),
         );
       },
-      onOtpFailed: () => emit(state.copyWith(sendingOtp: false)),
+      onOtpFailed: (ApiError error) {
+        emit(state.copyWith(sendingOtp: false));
+        ErrorModal.fromApiError(error).show(context);
+      },
     );
 
     emit(state.copyWith(sendingOtp: false));

@@ -1,5 +1,5 @@
-import 'package:eram_express_shared/di.dart';
 import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../authentication/domain/repositories/authentication_repository.dart';
@@ -24,13 +24,17 @@ class InitViewModel extends Cubit<bool> {
     ]);
 
     final isAuthenticated = results[1] as bool;
-
     if (isAuthenticated) {
       emit(true);
-      mainNavigationService.clearStackAndNavigateTo(HomeView.route);
-    } else {
-      emit(false);
-      mainNavigationService.clearStackAndNavigateTo(LoginView.route);
+      return;
     }
+
+    emit(false);
   }
+
+  void listener(BuildContext context, bool state) =>
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        state ? HomeView.route : LoginView.route,
+        (route) => false,
+      );
 }
