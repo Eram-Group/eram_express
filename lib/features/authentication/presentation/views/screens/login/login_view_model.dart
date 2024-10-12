@@ -1,4 +1,3 @@
-import 'package:eram_express_shared/domain/entites/country_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,8 +5,8 @@ import '../../../../../../app/di.dart';
 import '../../../../../common/domain/repositories/configurations_repository.dart';
 import '../../../../domain/objects/login_form_data.dart';
 import '../../../../domain/services/authentication_service.dart';
-import '../otp/otp_view.dart';
 import '../../modals/select_country_modal.dart';
+import '../otp/otp_view.dart';
 import 'login_view_state.dart';
 
 class LoginViewModel extends Cubit<LoginViewState> {
@@ -32,11 +31,12 @@ class LoginViewModel extends Cubit<LoginViewState> {
   Future<void> init() async {
     final countries = await _configurationsRepository.countries;
     countries.fold(
-      (error) => emit(state.copyWith(countries: null)),
-      (data) => emit(state.copyWith(
-        countries: data,
-        selectedCountry: data.first,
-      )),
+      (error) {},
+      (data) => emit(
+        state.copyWith(
+          selectedCountry: data.first,
+        ),
+      ),
     );
   }
 
@@ -45,24 +45,27 @@ class LoginViewModel extends Cubit<LoginViewState> {
   }
 
   Future<void> _countryCodeButtonOnClicked(BuildContext context) async {
-    if (state.countries == null) return init();
+    final countries = await _configurationsRepository.countries;
+    countries.fold(
+      (error) {},
+      (data) async {
+        final selection = await SelectCountryModal(
+          countries: data,
+          selectedCountry: state.selectedCountry!,
+        ).show(context);
 
-    final selection = await showModalBottomSheet<CountryEntity>(
-      context: context,
-      builder: (context) => SelectCountryModal(
-        countries: state.countries!,
-      ),
+        if (selection != null) {
+          emit(state.copyWith(selectedCountry: selection));
+        }
+      },
     );
-
-    if (selection != null) {
-      emit(state.copyWith(selectedCountry: selection));
-    }
   }
 
   _loginButtonOnClicked() async {
     emit(state.copyWith(sendingOtp: true));
 
     final phoneNumber = state.selectedCountry!.phoneCode + state.phoneNumber;
+
     await _authenticationService.sendOtp(
       phoneNumber: phoneNumber,
       onOtpSent: () {

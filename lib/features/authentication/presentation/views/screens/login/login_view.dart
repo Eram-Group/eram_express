@@ -192,7 +192,7 @@ class LoginView extends StatelessWidget {
 
   Widget _buildHeading(BuildContext context) {
     return Text(
-      context.translate('login.heading'),
+      context.t('login.heading'),
       style: const TextStyle(
         color: Color(0xFFFDBC58),
         fontFamily: 'Outfit',
@@ -212,7 +212,7 @@ class LoginView extends StatelessWidget {
         loading: state.sendingOtp,
         onTap: viewModel.loginButtonOnClicked,
         child: Text(
-          context.translate('login.login'),
+          context.t('login.login'),
           style: const TextStyle(
             color: Colors.white,
             fontFamily: 'Outfit',
@@ -252,7 +252,7 @@ class LoginView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildFieldTitle(title: context.translate('login.phoneNumber')),
+        _buildFieldTitle(title: context.t('login.phoneNumber')),
         const Gap(3),
         _buildPhoneNumberField(context),
       ],
@@ -268,10 +268,10 @@ class LoginView extends StatelessWidget {
           keyboardType: TextInputType.phone,
           inputFormatters: [
             if (state.selectedCountry != null)
-              state.selectedCountry!.numberFormat
+              state.selectedCountry!.numberFormatter,
           ],
           decoration: InputDecoration(
-            hintText: context.translate('login.phoneNumberPlaceholder'),
+            hintText: context.t('login.phoneNumberPlaceholder'),
             hintStyle: const TextStyle(
               color: Color(0xFFA7A9B7),
               fontFamily: 'Outfit',
@@ -298,7 +298,7 @@ class LoginView extends StatelessWidget {
 
   Widget _buildSubheading(BuildContext context) {
     return Text(
-      context.translate('login.subheading'),
+      context.t('login.subheading'),
       style: const TextStyle(
         color: Colors.white,
         fontFamily: 'Outfit',

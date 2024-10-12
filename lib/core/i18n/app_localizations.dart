@@ -56,12 +56,12 @@ class AppLocalizations {
     return true;
   }
 
+  String tt(String en, String ar) => locale.languageCode == 'ar' ? ar : en;
+
   // This method will be called from every widget which needs a localized text
-  String translate(String key) {
-    return _localizedStrings[key] != null
-        ? _localizedStrings[key].toString()
-        : _localizedStringsDefault[key] != null
-            ? _localizedStringsDefault[key].toString()
-            : key;
-  }
+  String t(String key) => _localizedStrings[key] != null
+      ? _localizedStrings[key].toString()
+      : _localizedStringsDefault[key] != null
+          ? _localizedStringsDefault[key].toString()
+          : key;
 }

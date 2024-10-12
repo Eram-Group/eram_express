@@ -70,7 +70,7 @@ class OtpView extends StatelessWidget {
     return Row(
       children: [
         Text(
-          context.translate('otp.heading'),
+          context.t('otp.heading'),
           style: const TextStyle(
             color: Color(0xFF3FAD79),
             fontFamily: 'Outfit',
@@ -117,7 +117,7 @@ class OtpView extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: context.translate('otp.subheading'),
+            text: context.t('otp.subheading'),
             style: const TextStyle(
               color: Color(0xFFA7A9B7),
               fontFamily: 'Outfit',
@@ -168,7 +168,7 @@ class OtpView extends StatelessWidget {
           loading: state.verifyButtonLoading,
           onTap: viewModel.verifyButtonOnClicked,
           child: Text(
-            context.translate('otp.verify'),
+            context.t('otp.verify'),
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'Outfit',

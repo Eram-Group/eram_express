@@ -19,7 +19,6 @@ mixin _$LoginViewState {
   bool get sendingOtp => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
   CountryEntity? get selectedCountry => throw _privateConstructorUsedError;
-  List<CountryEntity>? get countries => throw _privateConstructorUsedError;
 
   /// Create a copy of LoginViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -35,10 +34,9 @@ abstract class $LoginViewStateCopyWith<$Res> {
       _$LoginViewStateCopyWithImpl<$Res, LoginViewState>;
   @useResult
   $Res call(
-      {bool sendingOtp,
-      String phoneNumber,
-      CountryEntity? selectedCountry,
-      List<CountryEntity>? countries});
+      {bool sendingOtp, String phoneNumber, CountryEntity? selectedCountry});
+
+  $CountryEntityCopyWith<$Res>? get selectedCountry;
 }
 
 /// @nodoc
@@ -59,7 +57,6 @@ class _$LoginViewStateCopyWithImpl<$Res, $Val extends LoginViewState>
     Object? sendingOtp = null,
     Object? phoneNumber = null,
     Object? selectedCountry = freezed,
-    Object? countries = freezed,
   }) {
     return _then(_value.copyWith(
       sendingOtp: null == sendingOtp
@@ -74,11 +71,21 @@ class _$LoginViewStateCopyWithImpl<$Res, $Val extends LoginViewState>
           ? _value.selectedCountry
           : selectedCountry // ignore: cast_nullable_to_non_nullable
               as CountryEntity?,
-      countries: freezed == countries
-          ? _value.countries
-          : countries // ignore: cast_nullable_to_non_nullable
-              as List<CountryEntity>?,
     ) as $Val);
+  }
+
+  /// Create a copy of LoginViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CountryEntityCopyWith<$Res>? get selectedCountry {
+    if (_value.selectedCountry == null) {
+      return null;
+    }
+
+    return $CountryEntityCopyWith<$Res>(_value.selectedCountry!, (value) {
+      return _then(_value.copyWith(selectedCountry: value) as $Val);
+    });
   }
 }
 
@@ -91,10 +98,10 @@ abstract class _$$LoginViewStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool sendingOtp,
-      String phoneNumber,
-      CountryEntity? selectedCountry,
-      List<CountryEntity>? countries});
+      {bool sendingOtp, String phoneNumber, CountryEntity? selectedCountry});
+
+  @override
+  $CountryEntityCopyWith<$Res>? get selectedCountry;
 }
 
 /// @nodoc
@@ -113,7 +120,6 @@ class __$$LoginViewStateImplCopyWithImpl<$Res>
     Object? sendingOtp = null,
     Object? phoneNumber = null,
     Object? selectedCountry = freezed,
-    Object? countries = freezed,
   }) {
     return _then(_$LoginViewStateImpl(
       sendingOtp: null == sendingOtp
@@ -128,10 +134,6 @@ class __$$LoginViewStateImplCopyWithImpl<$Res>
           ? _value.selectedCountry
           : selectedCountry // ignore: cast_nullable_to_non_nullable
               as CountryEntity?,
-      countries: freezed == countries
-          ? _value._countries
-          : countries // ignore: cast_nullable_to_non_nullable
-              as List<CountryEntity>?,
     ));
   }
 }
@@ -140,12 +142,8 @@ class __$$LoginViewStateImplCopyWithImpl<$Res>
 
 class _$LoginViewStateImpl extends _LoginViewState {
   _$LoginViewStateImpl(
-      {this.sendingOtp = false,
-      this.phoneNumber = '',
-      this.selectedCountry,
-      final List<CountryEntity>? countries})
-      : _countries = countries,
-        super._();
+      {this.sendingOtp = false, this.phoneNumber = '', this.selectedCountry})
+      : super._();
 
   @override
   @JsonKey()
@@ -155,19 +153,10 @@ class _$LoginViewStateImpl extends _LoginViewState {
   final String phoneNumber;
   @override
   final CountryEntity? selectedCountry;
-  final List<CountryEntity>? _countries;
-  @override
-  List<CountryEntity>? get countries {
-    final value = _countries;
-    if (value == null) return null;
-    if (_countries is EqualUnmodifiableListView) return _countries;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
 
   @override
   String toString() {
-    return 'LoginViewState(sendingOtp: $sendingOtp, phoneNumber: $phoneNumber, selectedCountry: $selectedCountry, countries: $countries)';
+    return 'LoginViewState(sendingOtp: $sendingOtp, phoneNumber: $phoneNumber, selectedCountry: $selectedCountry)';
   }
 
   @override
@@ -180,14 +169,12 @@ class _$LoginViewStateImpl extends _LoginViewState {
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             (identical(other.selectedCountry, selectedCountry) ||
-                other.selectedCountry == selectedCountry) &&
-            const DeepCollectionEquality()
-                .equals(other._countries, _countries));
+                other.selectedCountry == selectedCountry));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, sendingOtp, phoneNumber,
-      selectedCountry, const DeepCollectionEquality().hash(_countries));
+  int get hashCode =>
+      Object.hash(runtimeType, sendingOtp, phoneNumber, selectedCountry);
 
   /// Create a copy of LoginViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -203,8 +190,7 @@ abstract class _LoginViewState extends LoginViewState {
   factory _LoginViewState(
       {final bool sendingOtp,
       final String phoneNumber,
-      final CountryEntity? selectedCountry,
-      final List<CountryEntity>? countries}) = _$LoginViewStateImpl;
+      final CountryEntity? selectedCountry}) = _$LoginViewStateImpl;
   _LoginViewState._() : super._();
 
   @override
@@ -213,8 +199,6 @@ abstract class _LoginViewState extends LoginViewState {
   String get phoneNumber;
   @override
   CountryEntity? get selectedCountry;
-  @override
-  List<CountryEntity>? get countries;
 
   /// Create a copy of LoginViewState
   /// with the given fields replaced by the non-null parameter values.
