@@ -16,8 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$OtpViewState {
+  int get canResendIn => throw _privateConstructorUsedError;
   String get otp => throw _privateConstructorUsedError;
-  bool get loading => throw _privateConstructorUsedError;
+  bool get verifyingOtp => throw _privateConstructorUsedError;
+  bool get resendingOtp => throw _privateConstructorUsedError;
 
   /// Create a copy of OtpViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +34,8 @@ abstract class $OtpViewStateCopyWith<$Res> {
           OtpViewState value, $Res Function(OtpViewState) then) =
       _$OtpViewStateCopyWithImpl<$Res, OtpViewState>;
   @useResult
-  $Res call({String otp, bool loading});
+  $Res call(
+      {int canResendIn, String otp, bool verifyingOtp, bool resendingOtp});
 }
 
 /// @nodoc
@@ -50,17 +53,27 @@ class _$OtpViewStateCopyWithImpl<$Res, $Val extends OtpViewState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? canResendIn = null,
     Object? otp = null,
-    Object? loading = null,
+    Object? verifyingOtp = null,
+    Object? resendingOtp = null,
   }) {
     return _then(_value.copyWith(
+      canResendIn: null == canResendIn
+          ? _value.canResendIn
+          : canResendIn // ignore: cast_nullable_to_non_nullable
+              as int,
       otp: null == otp
           ? _value.otp
           : otp // ignore: cast_nullable_to_non_nullable
               as String,
-      loading: null == loading
-          ? _value.loading
-          : loading // ignore: cast_nullable_to_non_nullable
+      verifyingOtp: null == verifyingOtp
+          ? _value.verifyingOtp
+          : verifyingOtp // ignore: cast_nullable_to_non_nullable
+              as bool,
+      resendingOtp: null == resendingOtp
+          ? _value.resendingOtp
+          : resendingOtp // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -74,7 +87,8 @@ abstract class _$$OtpViewStateImplCopyWith<$Res>
       __$$OtpViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String otp, bool loading});
+  $Res call(
+      {int canResendIn, String otp, bool verifyingOtp, bool resendingOtp});
 }
 
 /// @nodoc
@@ -90,17 +104,27 @@ class __$$OtpViewStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? canResendIn = null,
     Object? otp = null,
-    Object? loading = null,
+    Object? verifyingOtp = null,
+    Object? resendingOtp = null,
   }) {
     return _then(_$OtpViewStateImpl(
+      canResendIn: null == canResendIn
+          ? _value.canResendIn
+          : canResendIn // ignore: cast_nullable_to_non_nullable
+              as int,
       otp: null == otp
           ? _value.otp
           : otp // ignore: cast_nullable_to_non_nullable
               as String,
-      loading: null == loading
-          ? _value.loading
-          : loading // ignore: cast_nullable_to_non_nullable
+      verifyingOtp: null == verifyingOtp
+          ? _value.verifyingOtp
+          : verifyingOtp // ignore: cast_nullable_to_non_nullable
+              as bool,
+      resendingOtp: null == resendingOtp
+          ? _value.resendingOtp
+          : resendingOtp // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -109,18 +133,29 @@ class __$$OtpViewStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$OtpViewStateImpl extends _OtpViewState {
-  _$OtpViewStateImpl({this.otp = '', this.loading = false}) : super._();
+  _$OtpViewStateImpl(
+      {this.canResendIn = kResendOtpInterval,
+      this.otp = '',
+      this.verifyingOtp = false,
+      this.resendingOtp = false})
+      : super._();
 
+  @override
+  @JsonKey()
+  final int canResendIn;
   @override
   @JsonKey()
   final String otp;
   @override
   @JsonKey()
-  final bool loading;
+  final bool verifyingOtp;
+  @override
+  @JsonKey()
+  final bool resendingOtp;
 
   @override
   String toString() {
-    return 'OtpViewState(otp: $otp, loading: $loading)';
+    return 'OtpViewState(canResendIn: $canResendIn, otp: $otp, verifyingOtp: $verifyingOtp, resendingOtp: $resendingOtp)';
   }
 
   @override
@@ -128,12 +163,18 @@ class _$OtpViewStateImpl extends _OtpViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OtpViewStateImpl &&
+            (identical(other.canResendIn, canResendIn) ||
+                other.canResendIn == canResendIn) &&
             (identical(other.otp, otp) || other.otp == otp) &&
-            (identical(other.loading, loading) || other.loading == loading));
+            (identical(other.verifyingOtp, verifyingOtp) ||
+                other.verifyingOtp == verifyingOtp) &&
+            (identical(other.resendingOtp, resendingOtp) ||
+                other.resendingOtp == resendingOtp));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, otp, loading);
+  int get hashCode =>
+      Object.hash(runtimeType, canResendIn, otp, verifyingOtp, resendingOtp);
 
   /// Create a copy of OtpViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -145,14 +186,21 @@ class _$OtpViewStateImpl extends _OtpViewState {
 }
 
 abstract class _OtpViewState extends OtpViewState {
-  factory _OtpViewState({final String otp, final bool loading}) =
-      _$OtpViewStateImpl;
+  factory _OtpViewState(
+      {final int canResendIn,
+      final String otp,
+      final bool verifyingOtp,
+      final bool resendingOtp}) = _$OtpViewStateImpl;
   _OtpViewState._() : super._();
 
   @override
+  int get canResendIn;
+  @override
   String get otp;
   @override
-  bool get loading;
+  bool get verifyingOtp;
+  @override
+  bool get resendingOtp;
 
   /// Create a copy of OtpViewState
   /// with the given fields replaced by the non-null parameter values.

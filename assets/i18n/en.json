@@ -8,10 +8,14 @@
     },
     "otp": {
         "heading": "Verification Code",
-        "subheading": "We have sent the code verification to your number",
+        "subheading": "We have sent you a verification code on your phone number",
         "otp": "OTP",
         "otpPlaceholder": "Enter the OTP",
-        "verify": "Verify"
+        "verify": "Verify",
+        "resend": "Didn't receive the code? ",
+        "resendIn": "You can resend in",
+        "seconds": "seconds",
+        "resendNow": "Resend now"
     },
     "menu": {
         "logout": "Logout"

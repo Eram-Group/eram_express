@@ -147,11 +147,12 @@ class __$$VerifyOtpResponseModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$VerifyOtpResponseModelImpl implements _VerifyOtpResponseModel {
+class _$VerifyOtpResponseModelImpl extends _VerifyOtpResponseModel {
   _$VerifyOtpResponseModelImpl(
       {required this.accessToken,
       required this.refreshToken,
-      required this.customer});
+      required this.customer})
+      : super._();
 
   factory _$VerifyOtpResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$VerifyOtpResponseModelImplFromJson(json);
@@ -203,11 +204,12 @@ class _$VerifyOtpResponseModelImpl implements _VerifyOtpResponseModel {
   }
 }
 
-abstract class _VerifyOtpResponseModel implements VerifyOtpResponseModel {
+abstract class _VerifyOtpResponseModel extends VerifyOtpResponseModel {
   factory _VerifyOtpResponseModel(
       {required final String accessToken,
       required final String refreshToken,
       required final CustomerModel customer}) = _$VerifyOtpResponseModelImpl;
+  _VerifyOtpResponseModel._() : super._();
 
   factory _VerifyOtpResponseModel.fromJson(Map<String, dynamic> json) =
       _$VerifyOtpResponseModelImpl.fromJson;

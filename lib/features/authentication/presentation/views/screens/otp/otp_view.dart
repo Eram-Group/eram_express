@@ -1,6 +1,7 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -40,6 +41,8 @@ class OtpView extends StatelessWidget {
               _buildPin(),
               const Gap(30),
               _buildVerifyButton(context),
+              const Gap(30),
+              _buildResendOtp(context),
             ],
           ),
         ),
@@ -90,7 +93,7 @@ class OtpView extends StatelessWidget {
       builder: (_, state) {
         return Pinput(
           enabled: state.pinEnabled,
-          onChanged: viewModel.onOtpChanged,
+          onChanged: viewModel.onOtpChanged(),
           separatorBuilder: (index) => const Gap(21),
           autofocus: true,
           cursor: Container(
@@ -106,6 +109,55 @@ class OtpView extends StatelessWidget {
               color: const Color(0xFF194595),
               width: 1,
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildResendOtp(BuildContext context) {
+    return BlocBuilder<OtpViewModel, OtpViewState>(
+      bloc: viewModel,
+      builder: (_, state) {
+        return RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: context.t('otp.resend'),
+                style: const TextStyle(
+                  color: Color(0xFFA7A9B7),
+                  fontFamily: 'Outfit',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 1.8,
+                ),
+              ),
+              const TextSpan(
+                text: ' ',
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 1.8,
+                ),
+              ),
+              TextSpan(
+                text: !state.resendButtonEnabled && state.canResendIn > 0
+                    ? '${context.t('otp.resendIn')} ${state.canResendIn} ${context.t('otp.seconds')}'
+                    : context.t('otp.resendNow'),
+                style: TextStyle(
+                  fontFamily: 'Outfit',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  height: 1.8,
+                  color: const Color(0xFF194595).withOpacity(
+                    !state.resendButtonEnabled ? 0.5 : 1.0,
+                  ),
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = viewModel.resendOtpOnClicked(),
+              ),
+            ],
           ),
         );
       },
