@@ -8,7 +8,7 @@ import '../../data/models/goods-typeModel.dart';
 
 abstract class HomeRepository {
  
-  Future<Either<ApiError, List<CargoCategoryModel>>> getCargoCategories();  //مش لاقيه لازمه اني اعمل entity هنا
+  Future<Either<ApiError, List<CargoCategoryModel>>> getCargoCategories(); 
   Future<Either<ApiError, List<CargoSubCategoryModel>>> getSubCargoCategories();
   Future<Either<ApiError, List<GoodModel>>> getgoods();
 

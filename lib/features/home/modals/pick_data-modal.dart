@@ -1,10 +1,12 @@
+import 'package:eram_express/core/utils/logger.dart';
+import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:gap/gap.dart';
-
+import '../../../app/di.dart';
 import '../../../core/AppColors.dart';
-import '../../../core/navigation_service.dart';
-import '../../Common/presentation/widgets/customButton.dart'; // Assuming you use the gap package
+import '../../Common/presentation/widgets/customButton.dart';
 
 class PickDateBottomSheet extends StatefulWidget {
   const PickDateBottomSheet({super.key});
@@ -16,32 +18,22 @@ class PickDateBottomSheet extends StatefulWidget {
 class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  //final NavigationService navigationService = getIt<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+         
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Container(
-              width: 60,
-              height: 5,
-              decoration: BoxDecoration(
-                color: Color(0xffDFE2EB),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
+          const TopBottomModel(),
           const Text(
             "Pick up date",
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
           ),
-          const SizedBox(height: 10),
+          const Gap(10),
           TableCalendar(
             firstDay: DateTime.utc(2020, 1, 1),
             lastDay: DateTime.utc(2030, 12, 31),
@@ -73,16 +65,16 @@ class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
               ),
             ),
             calendarStyle: CalendarStyle(
-              defaultDecoration: BoxDecoration(
+              defaultDecoration: const BoxDecoration(
                 shape: BoxShape.rectangle,
               ),
-              weekendDecoration: BoxDecoration(
+              weekendDecoration: const BoxDecoration(
                 shape: BoxShape.rectangle,
               ),
-              disabledDecoration: BoxDecoration(
+              disabledDecoration: const BoxDecoration(
                 shape: BoxShape.rectangle,
               ),
-              outsideDecoration: BoxDecoration(
+              outsideDecoration: const BoxDecoration(
                 shape: BoxShape.rectangle,
               ),
               todayDecoration: BoxDecoration(
@@ -113,8 +105,9 @@ class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
           CustomButton(
             text: "Select date",
             onPressed: () {
-              print("Selected date: $_selectedDay");
-              Navigator.pop(context);
+              logger.debug("Selected date: $_selectedDay");
+              mainNavigationService
+                  .back(DateFormat('yyyy-MM-dd').format(_selectedDay));
             },
             TextColor: Colors.black,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),

@@ -10,9 +10,7 @@ import '../otp/otp_view.dart';
 import '../../modals/select_country_modal.dart';
 import 'login_view_state.dart';
 
-class LoginViewModel extends Cubit<LoginViewState>     // question 
-                                            //عملت create 
-                                            //لل cubit ده فين
+class LoginViewModel extends Cubit<LoginViewState>     
 {
   final ConfigurationsRepository _configurationsRepository;
   final AuthenticationService _authenticationService;
@@ -32,34 +30,42 @@ class LoginViewModel extends Cubit<LoginViewState>     // question
           ? null
           : () => _countryCodeButtonOnClicked(context);
 
-  Future<void> init() async {
+
+  Future<void> init() async
+   {
     final countries = await _configurationsRepository.countries;
     countries.fold(
-      (error) => emit(state.copyWith(countries: null)),
+      (error) {},
       (data) => emit(state.copyWith(
-        countries: data,
+        
         selectedCountry: data.first,
       )),
     );
-  }
+   }
 
   void phoneNumberChanged(String phoneNumber) {
     emit(state.copyWith(phoneNumber: phoneNumber.replaceAll(' ', '')));
   }
 
   Future<void> _countryCodeButtonOnClicked(BuildContext context) async {
-    if (state.countries == null) return init();
-
-    final selection = await showModalBottomSheet<CountryEntity>(
+    //if (state.countries == null) return init();
+     final countries = await _configurationsRepository.countries;
+    countries.fold(
+      (error) {},
+      (data) async {
+         final selection = await showModalBottomSheet<CountryEntity>(
       context: context,
       builder: (context) => SelectCountryModal(
-        countries: state.countries!,
+        countries: data,
       ),
     );
 
     if (selection != null) {
       emit(state.copyWith(selectedCountry: selection));
     }
+      }
+     );
+   
   }
 
   _loginButtonOnClicked() async {

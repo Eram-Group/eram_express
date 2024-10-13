@@ -13,7 +13,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final TokensLocalDataSource _tokensLocalDataSource;
 
-  CustomerEntity? _authenticatedCustomer;
+  CustomerEntity? _authenticatedCustomer; 
 
   AuthenticationRepositoryImpl({
     required CustomerRepository customerRepository,
@@ -24,7 +24,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         _tokensLocalDataSource = localDataSource;
 
   @override
-  Future<CustomerEntity?> get authenticatedCustomer async {
+  Future<CustomerEntity?> get authenticatedCustomer async 
+  {
     if (_authenticatedCustomer != null) return _authenticatedCustomer;
 
     final accessToken = await _tokensLocalDataSource.accessToken;

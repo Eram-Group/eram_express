@@ -19,7 +19,7 @@ class LoginView extends StatelessWidget {
   final LoginViewModel viewModel = LoginViewModel(
     configurationsRepository: configurationsRepository,
     authenticationService: authenticationService,
-  );
+  ); //بتعمل كريت هنا لاول مره
 
   LoginView({super.key}) {
     viewModel.init();

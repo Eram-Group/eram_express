@@ -4,21 +4,28 @@ import '../models/cargo-categoriesModel.dart';
 import '../models/cargo-subcategoryModel.dart';
 import '../models/goods-typeModel.dart';
 
-final cargoCategoriesEndpoint=ApiEndpoint(path: '/cargo-categories/',
- method: HttpMethod.get,
- responseHandlers: {HttpStatus.ok: (response)=> (response.data as List)
+final cargoCategoriesEndpoint = ApiEndpoint(
+  path: '/cargo-categories/',
+  method: HttpMethod.get,
+  responseHandlers: {
+    HttpStatus.ok: (response) => (response.data as List)
         .map((item) => CargoCategoryModel.fromJson(item))
         .toList(),
   },
 );
 
 final cargoSubCategoriesEndpoint = ApiEndpoint(
-  path: 'cargo-subcategories/',
+  path: '/cargo-subcategories/',
   method: HttpMethod.get,
   responseHandlers: {
-    HttpStatus.ok: (response) => CargoSubCategoryModel.fromJson(response.data),
+    HttpStatus.ok: (response) {
+      return (response.data as List)
+          .map((item) => CargoSubCategoryModel.fromJson(item))
+          .toList();
+    },
   },
 );
+
 final goodTypeEndpoint = ApiEndpoint(
   path: '/supported-goods-types/',
   method: HttpMethod.get,

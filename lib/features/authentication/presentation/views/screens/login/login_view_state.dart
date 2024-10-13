@@ -4,14 +4,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'login_view_state.freezed.dart';
 
 @freezed
-abstract class LoginViewState with _$LoginViewState {
+abstract class LoginViewState with _$LoginViewState 
+{
   const LoginViewState._();
 
   factory LoginViewState({
     @Default(false) bool sendingOtp,
     @Default('') String phoneNumber,
     CountryEntity? selectedCountry,
-    List<CountryEntity>? countries,
+    //List<CountryEntity>? countries,
   }) = _LoginViewState;
 
   bool get phoneNumberFieldEnabled => selectedCountry != null && !sendingOtp;

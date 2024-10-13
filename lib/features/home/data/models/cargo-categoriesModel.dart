@@ -8,7 +8,7 @@ class CargoCategoryModel
   CargoCategoryModel({
     required this.id,
     required this.nameAr,
-    required this.nameEn,            // هل في طريق لحوار ال localiztion هنا؟
+    required this.nameEn,           
     required this.image,
   });
 

@@ -1,10 +1,15 @@
+import '../../data/models/cargo-categoriesModel.dart';
+import '../../data/models/cargo-subcategoryModel.dart';
 
 class ShippingFormState {
   final String? pickup;
   final String? destination;
-  final String? loadType;
-  final String? truckSize;
-  final DateTime? pickupDate;
+  final CargoCategoryModel? loadType;
+  final CargoSubCategoryModel? truckSize;
+  final String? pickupDate;
+  final bool isLoading;
+  final List<CargoSubCategoryModel>? cargoSubCategories;
+  final List<CargoCategoryModel>? cargoCategories;
 
   ShippingFormState({
     this.pickup,
@@ -12,21 +17,29 @@ class ShippingFormState {
     this.loadType,
     this.truckSize,
     this.pickupDate,
+    this.isLoading = false,
+    this.cargoSubCategories,
+    this.cargoCategories,
   });
 
   ShippingFormState copyWith({
     String? pickup,
     String? destination,
-    String? loadType,
-    String? truckSize,
-    DateTime? pickupDate,
+    CargoCategoryModel? loadType,
+    CargoSubCategoryModel? truckSize,
+    String? pickupDate,
+    bool? isLoading,
+    List<CargoSubCategoryModel>? cargoSubCategories,
+    List<CargoCategoryModel>? cargoCategories,
   }) {
     return ShippingFormState(
-      pickup: pickup ?? this.pickup,
-      destination: destination ?? this.destination,
-      loadType: loadType ?? this.loadType,
-      truckSize: truckSize ?? this.truckSize,
-      pickupDate: pickupDate ?? this.pickupDate,
-    );
+        pickup: pickup ?? this.pickup,
+        destination: destination ?? this.destination,
+        loadType: loadType ?? this.loadType,
+        truckSize: truckSize ?? this.truckSize,
+        pickupDate: pickupDate ?? this.pickupDate,
+        isLoading: isLoading ?? this.isLoading,
+        cargoSubCategories: cargoSubCategories ?? this.cargoSubCategories,
+        cargoCategories: cargoCategories ?? this.cargoCategories);
   }
 }
