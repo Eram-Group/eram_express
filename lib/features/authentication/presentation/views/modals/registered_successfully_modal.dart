@@ -1,4 +1,3 @@
-import 'package:eram_express/features/home/presentation/views/home_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
