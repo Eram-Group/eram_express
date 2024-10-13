@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
+import '../../widgets/custom_modal.dart';
+
 class SelectCountryModal extends StatelessWidget {
   final CountryEntity selectedCountry;
   final List<CountryEntity> countries;
@@ -18,64 +20,43 @@ class SelectCountryModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                width: 60,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFDFE2EB),
-                  borderRadius: BorderRadius.circular(30),
-                ),
+    return CustomModal(
+      child: Expanded(
+        child: Column(
+          children: [
+            Text(
+              context.tt('Select Country', 'اختر الدولة'),
+              style: const TextStyle(
+                fontFamily: 'Outfit',
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                height: 1.3,
+                color: Color(0xFF191D31),
               ),
-            ],
-          ),
-          Text(
-            context.tt('Select Country', 'اختر الدولة'),
-            style: const TextStyle(
-              fontFamily: 'Outfit',
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-              height: 1.3,
-              color: Color(0xFF191D31),
             ),
-          ),
-          const Gap(20),
-          Expanded(
-            child: SingleChildScrollView(
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    for (final country in countries)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: _buildCountryOption(
-                          context,
-                          country,
-                          country == selectedCountry,
+            const Gap(20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      for (final country in countries)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: _buildCountryOption(
+                            context,
+                            country,
+                            country == selectedCountry,
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

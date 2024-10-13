@@ -17,6 +17,13 @@
         "seconds": "seconds",
         "resendNow": "Resend now"
     },
+    "completeProfile": {
+        "heading": "Complete Profile",
+        "subheading": "Please complete your profile to continue",
+        "fullNameLabel": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "save": "Save"
+    },
     "menu": {
         "logout": "Logout"
     }

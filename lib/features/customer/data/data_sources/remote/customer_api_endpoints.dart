@@ -11,3 +11,11 @@ final getAuthenticatedCustomerEndpoint = ApiEndpoint(
     HttpStatus.ok: (response) => CustomerModel.fromJson(response.data),
   },
 );
+
+final updateProfileEndpoint = ApiEndpoint(
+  path: '/customer/me/',
+  method: HttpMethod.patch,
+  responseHandlers: {
+    HttpStatus.ok: (response) => CustomerModel.fromJson(response.data),
+  },
+);

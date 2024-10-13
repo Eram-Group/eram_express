@@ -46,6 +46,7 @@ dependencies:
   freezed: ^2.5.7
   freezed_annotation: ^2.4.4
   gap: ^3.0.1
+  image_picker: ^1.1.2
   json_serializable: ^6.8.0
   logger: ^2.4.0
   pinput: ^5.0.0
@@ -71,6 +72,7 @@ flutter:
     - assets/i18n/
     - assets/images/
     - assets/icons/
+    - assets/illustrations/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
@@ -80,6 +82,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: iconsax
+      fonts:
+        - asset: fonts/iconsax.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

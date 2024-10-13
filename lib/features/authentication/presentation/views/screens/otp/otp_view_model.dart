@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:eram_express/features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
+import 'package:eram_express_shared/core/api/api_error.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,15 +56,28 @@ class OtpViewModel extends Cubit<OtpViewState> {
         phoneNumber: _phoneNumber,
         otp: state.otp,
       ),
-      onOtpVerified: () {
+      onOtpVerified: (bool newCustomer) {
         emit(state.copyWith(verifyingOtp: false));
+
+        if (newCustomer) {
+          logger.debug('New customer');
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            CompleteProfileView.route,
+            (route) => false,
+          );
+          return;
+        }
+
+        logger.debug('Existing customer');
         Navigator.of(context).pushNamedAndRemoveUntil(
           HomeView.route,
           (route) => false,
         );
       },
-      onOtpVerificationFailed: () {
+      onOtpVerificationFailed: (ApiError error) {
         emit(state.copyWith(verifyingOtp: false));
+
+        ErrorModal.fromApiError(error).show(context);
       },
     );
   }

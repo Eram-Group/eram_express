@@ -8,6 +8,7 @@ import '../features/authentication/data/respositories/authentication_repository_
 import '../features/authentication/domain/services/authentication_service.dart';
 import '../features/customer/data/data_sources/remote/customer_api_remote_data_source.dart';
 import '../features/customer/data/repositories/customer_repository_impl.dart';
+import '../features/customer/domain/services/customer_service.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 
 const secureStorage = FlutterSecureStorage();
@@ -16,10 +17,15 @@ final authenticationRemoteDataSource = AuthenticationApiRemoteDataSource(
   dioClient: dioClient,
 );
 
+final customerService = CustomerService(
+  customerRepository: customerRepository,
+  authenticationRepository: authenticationRepository,
+);
+
 final authenticationRepository = AuthenticationRepositoryImpl(
   customerRepository: customerRepository,
-  remoteDataSource: authenticationRemoteDataSource,
-  localDataSource: tokensLocalDataSource,
+  authenticationRemoteDataSource: authenticationRemoteDataSource,
+  tokensLocalDataSource: tokensLocalDataSource,
 );
 
 final authenticationService = AuthenticationService(

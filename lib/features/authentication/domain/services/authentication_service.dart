@@ -30,14 +30,14 @@ class AuthenticationService {
 
   Future<void> verifyOtp({
     required OtpVerificationData data,
-    void Function()? onOtpVerified,
-    void Function()? onOtpVerificationFailed,
+    void Function(bool)? onOtpVerified,
+    void Function(ApiError)? onOtpVerificationFailed,
   }) async {
     final response = await _authenticationRepository.verifyOtp(data);
 
     response.fold(
-      (error) => onOtpVerificationFailed?.call(),
-      (data) => onOtpVerified?.call(),
+      (error) => onOtpVerificationFailed?.call(error),
+      (data) => onOtpVerified?.call(data.isNewCustomer),
     );
   }
 
