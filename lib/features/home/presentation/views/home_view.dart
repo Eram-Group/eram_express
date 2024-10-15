@@ -151,9 +151,18 @@ class HomeView extends StatelessWidget {
                     label: state.pickupDate ?? "pick up date",
                     iconName: 'calendar',
                   ),
+                  _buildSelected(
+                    onTap: () => viewModel.GoodsOnClicked(context),
+                    context: context,
+                    label: state.selectgood?.nameAr ?? "Select Goods",
+                    iconName: 'calendar',
+                  ),
                   const Gap(8),
                   CustomButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      print(state.selectgood?.nameEn);  //مش بيحصل ليها emit
+                      print(state.truckSize?.nameAr);
+                    },
                     text: "Check Rates",
                     backgroundColor: AppColor.primaryColor,
                     TextColor: Colors.white,

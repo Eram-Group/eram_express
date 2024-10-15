@@ -15,6 +15,8 @@ class HomeRepositoryImpl implements HomeRepository {
   final HomeDataRemoteDataSource _remoteDataSource;
   List<CargoCategoryModel>? cachedcargocategories;
   List<CargoSubCategoryModel>? cachedCargoSubCategory;
+  List<GoodModel>? cachedgoods;
+
   HomeRepositoryImpl({
     required HomeDataRemoteDataSource remoteDataSource,
   }) : _remoteDataSource = remoteDataSource;
@@ -33,41 +35,29 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<Either<ApiError, List<CargoSubCategoryModel>>>
       getSubCargoCategories() async {
-    if (cachedCargoSubCategory != null) 
-    {
+    if (cachedCargoSubCategory != null) {
       return Right(cachedCargoSubCategory!);
     }
     final response = await _remoteDataSource.getSubCargoCategories();
     return response.fold(
-      (error) => Left(error), 
+      (error) => Left(error),
       (data) {
-        cachedCargoSubCategory = data; 
+        cachedCargoSubCategory = data;
         return Right(cachedCargoSubCategory!);
       },
     );
-    }
-
+  }
 
   @override
-  Future<Either<ApiError, List<GoodModel>>> getgoods() {
-    // TODO: implement getgoods
-    throw UnimplementedError();
+  Future<Either<ApiError, List<GoodModel>>> getgoods() async {
+    if (cachedgoods != null) {
+      return Right(cachedgoods!);
+    }
+    final response = await _remoteDataSource.getgoods();
+    return await response.fold((error) async => Left(error), (data) async 
+    {
+      cachedgoods = data;
+      return Right(cachedgoods!);
+    });
   }
 }
-
-
- /*
-  @override
-  Future<Either<ApiError, List<CountryEntity>>> get countries async {
-    if (_cachedCountries != null) return Right(_cachedCountries!);
-    final response = await _remoteDataSource.getCountries();
-
-    return await response.fold(
-      (error) async => Left(error),
-      (data) async {
-        _cachedCountries = data.map((e) => CountryEntity.fromModel(e)).toList();
-        return Right(_cachedCountries ?? []);
-      },
-    );
-  }
-  */

@@ -13,7 +13,6 @@ class GoodModel {
     required this.createdAt,
   });
 
-  // Factory constructor to create an instance from JSON
   factory GoodModel.fromJson(Map<String, dynamic> json) {
     return GoodModel(
       id: json['id'],

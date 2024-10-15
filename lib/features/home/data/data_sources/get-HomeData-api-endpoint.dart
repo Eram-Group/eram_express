@@ -30,6 +30,9 @@ final goodTypeEndpoint = ApiEndpoint(
   path: '/supported-goods-types/',
   method: HttpMethod.get,
   responseHandlers: {
-    HttpStatus.ok: (response) => GoodModel.fromJson(response.data),
+    HttpStatus.ok: (response) => (response.data as List)
+        .map((item) => GoodModel.fromJson(item))
+        .toList(),
+    //GoodModel.fromJson(response.data),
   },
 );

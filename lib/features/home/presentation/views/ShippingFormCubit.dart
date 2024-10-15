@@ -3,9 +3,11 @@ import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
+import '../../data/models/goods-typeModel.dart';
 import '../../data/repositotys/home_repositoty_impl.dart';
 import '../../modals/cargo_categories-modal.dart';
 import '../../modals/cargo_subcategories-modal.dart';
+import '../../modals/goods-modal.dart';
 import '../../modals/pick_data-modal.dart';
 import 'ShippingFormState.dart';
 
@@ -89,10 +91,42 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
       emit(state.copyWith(truckSize: selection));
     }
   }
+
+  Future<void> GoodsOnClicked(BuildContext context) async {
+    emit(state.copyWith(
+      isLoading: true,
+    ));
+    _homerepo.getgoods().then((result) {
+      result.fold(
+        (error) {
+          emit(state.copyWith(
+            isLoading: false, /*errorMessage: "error "*/
+          )); //المفروض ابعت هنا error messgr
+        },
+        (data) {
+          emit(state.copyWith(
+            isLoading: false,
+            goods: data,
+          ));
+        },
+      );
+    });
+
+    final selection = await showModalBottomSheet<GoodModel>(
+      context: context,
+      builder: (context) => SelectGoodsModal(
+        cubit: this,
+      ),
+    );
+    
+    if (selection != null) {
+      emit(state.copyWith(selectgood: selection));
+    }
+  }
 }
 
 
-  /*
+  /*  
   Future<void> cargoCategoryOnClicked(BuildContext context) async {
     final CargoCategorys = await _homerepo.getCargoCategories();
     CargoCategorys.fold((error) {
