@@ -3,6 +3,8 @@
         android:label="eram_express"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyCEVJJtjBuZRe8G4BhuPUzp4HBWCdlpi8c"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

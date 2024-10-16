@@ -3,6 +3,7 @@ import '../features/authentication/presentation/views/screens/login/login_view.d
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
 import '../features/onboarding/presentation/views/onboarding.view.dart';
+import '../features/tempgooglemap.dart';
 import 'presentation/views/not_found.view.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -18,10 +19,12 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = InitView();
   } else if (name == OnboardingView.route) {
     page = const OnboardingView();
-} else if (name == LoginView.route) {
+  } else if (name == LoginView.route) {
     page = LoginView();
   } else if (name == HomeView.route) {
     page = HomeView();
+  } else if (name == GoogleMapScreen.route) {
+    page = GoogleMapScreen();
   } else {
     page = const NotFoundView();
   }

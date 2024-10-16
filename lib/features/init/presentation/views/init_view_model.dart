@@ -4,6 +4,7 @@ import '../../../../app/di.dart';
 import '../../../authentication/domain/repositories/authentication_repository.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
 import '../../../home/presentation/views/home_view.dart';
+import '../../../tempgooglemap.dart';
 
 class InitViewModel extends Cubit<bool> {
   final AuthenticationRepository _authenticationRepository;
@@ -17,9 +18,11 @@ class InitViewModel extends Cubit<bool> {
     if (!isAuthenticated) {
       // ععكسناهم علشان عايزه الهوم
       emit(true);
-      mainNavigationService.clearStackAndNavigateTo(HomeView.route);
+      // mainNavigationService.clearStackAndNavigateTo(HomeView.route);
+      mainNavigationService.clearStackAndNavigateTo(GoogleMapScreen.route);
     } else {
       emit(false);
+
       mainNavigationService.clearStackAndNavigateTo(LoginView.route);
     }
   }
