@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../app/iconsax_icons.dart';
-import '../../widgets/custom_modal.dart';
+import '../../../../../../app/iconsax_icons.dart';
+import '../../../widgets/custom_modal.dart';
 import 'image_picker_view_model.dart';
 
 class ImagePickerModal<ViewState> extends StatelessWidget {

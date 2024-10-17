@@ -1,6 +1,6 @@
-import 'package:eram_express/features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import 'package:flutter/material.dart';
 
+import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
 import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
 import '../features/home/presentation/views/home_view.dart';

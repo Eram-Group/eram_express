@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../customer/domain/objects/update_customer_form_data.dart';
 import '../../../../../customer/domain/services/customer_service.dart';
 import '../../../../../home/presentation/views/home_view.dart';
-import '../../modals/image_picker_modal.dart';
+import '../../modals/image_picker_modal/image_picker_modal.dart';
 import 'complete_profile_view_state.dart';
 
 class CompleteProfileViewModel extends Cubit<CompleteProfileViewState> {
