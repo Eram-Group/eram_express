@@ -59,20 +59,15 @@ class OtpViewModel extends Cubit<OtpViewState> {
       onOtpVerified: (bool newCustomer) {
         emit(state.copyWith(verifyingOtp: false));
 
-        if (newCustomer) {
-          logger.debug('New customer');
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            CompleteProfileView.route,
-            (route) => false,
-          );
-          return;
-        }
-
-        logger.debug('Existing customer');
         Navigator.of(context).pushNamedAndRemoveUntil(
           HomeView.route,
           (route) => false,
         );
+
+        if (newCustomer) {
+          logger.debug('New customer');
+          Navigator.of(context).pushNamed(CompleteProfileView.route);
+        }
       },
       onOtpVerificationFailed: (ApiError error) {
         emit(state.copyWith(verifyingOtp: false));

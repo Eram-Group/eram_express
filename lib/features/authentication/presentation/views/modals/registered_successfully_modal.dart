@@ -1,11 +1,10 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
+import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-
-import '../../widgets/custom_modal.dart';
 
 class RegisteredSuccessfullyModal extends StatelessWidget {
   const RegisteredSuccessfullyModal({super.key});

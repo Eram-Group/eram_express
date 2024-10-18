@@ -2,12 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/domain/entites/country_entity.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
+import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-
-import '../../widgets/custom_modal.dart';
 
 class SelectCountryModal extends StatelessWidget {
   final CountryEntity selectedCountry;
