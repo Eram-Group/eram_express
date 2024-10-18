@@ -76,10 +76,7 @@ class _SpinnerState extends State<Spinner> with SingleTickerProviderStateMixin {
           alignment: Alignment.center,
           transform: Matrix4.rotationY(
             _animationController.value * 2 * pi,
-          )..translate(
-              0.0,
-              sin(_animationController.value * 2 * pi) * 6,
-            ),
+          ),
           child: child,
         );
       },
