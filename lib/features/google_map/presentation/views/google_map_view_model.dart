@@ -3,6 +3,7 @@ import 'package:eram_express/features/google_map/data/models/placeModel.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'google_map_view_state.dart';
 
 class MarkerCubit extends Cubit<MarkerState> {
@@ -13,6 +14,7 @@ class MarkerCubit extends Cubit<MarkerState> {
   late BitmapDescriptor customIcon;
   late GoogleMapController _controller;
   final Set<Marker> mapMarkers = {};
+  late Location location;
   late String mapstyle = '';
   void intialmarker() async {
     customIcon = await BitmapDescriptor.asset(
@@ -22,11 +24,9 @@ class MarkerCubit extends Cubit<MarkerState> {
     addInitialMarker();
   }
 
-  void setmapstyle(BuildContext context) async 
-  {
+  void setmapstyle(BuildContext context) async {
     mapstyle = await DefaultAssetBundle.of(context)
         .loadString('assets/map_styles/silvermap.json');
-  
   }
 
   void addInitialMarker() {
@@ -66,5 +66,25 @@ class MarkerCubit extends Cubit<MarkerState> {
     );
 
     emit(MarkerComplete(place));
+  }
+
+  void checkAndRequestLocationService() async {
+    var isserviceEnabled = await location.serviceEnabled();
+    if (!isserviceEnabled) {
+      isserviceEnabled = await location.requestService();
+    }
+    if (!isserviceEnabled) {
+      // ممكن نعرض ايرور بار
+    }
+  }
+
+  void checkAndRequestLocationPermission() async {
+    var permisionstatus = await location.hasPermission();
+    if (permisionstatus == PermissionStatus.denied) {
+      permisionstatus = await location.requestPermission();
+    }
+    if (permisionstatus != PermissionStatus.granted) {
+      // show error barrrrrrrrrrrrrrrrrrrrrrrr
+    }
   }
 }
