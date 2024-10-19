@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:eram_express/features/google_map/domain/services/locationservice.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../core/api/dio_api_client.dart';
@@ -55,7 +56,8 @@ final customerRepository = CustomerRepositoryImpl(
  final HomeDataRemoteDataSource = HomeDataApiRemoteDataSource( dioClient: dioClient,);
 
 
-
+//GoogleMap
+final locationservice=Locationservice();
 
 
 final dio = Dio(

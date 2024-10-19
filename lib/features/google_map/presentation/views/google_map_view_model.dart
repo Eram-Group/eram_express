@@ -1,90 +1,82 @@
-import 'dart:ui';
+import 'package:eram_express/core/utils/logger.dart';
 import 'package:eram_express/features/google_map/data/models/placeModel.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import '../../domain/services/locationservice.dart';
 import 'google_map_view_state.dart';
 
 class MarkerCubit extends Cubit<MarkerState> {
-  MarkerCubit() : super(MarkerInitial()) {
-    intialmarker();
+  final Locationservice _locationService;
+
+  MarkerCubit({required Locationservice locationService})
+      : _locationService = locationService,
+        super(MarkerInitial()) {
+    loadcustomIcon();
+    setInitialCameraPosition();
+    setmylocation();
   }
 
   late BitmapDescriptor customIcon;
-  late GoogleMapController _controller;
+  GoogleMapController? _controller;
   final Set<Marker> mapMarkers = {};
-  late Location location;
   late String mapstyle = '';
-  void intialmarker() async {
+  late CameraPosition kInitialPosition;
+
+  void setInitialCameraPosition() {
+    kInitialPosition = const CameraPosition(
+      target: LatLng(0, 0),
+      zoom: 0,
+    );
+  }
+
+  void loadcustomIcon() async {
     customIcon = await BitmapDescriptor.asset(
       const ImageConfiguration(size: Size(150, 150)),
       'assets/icons/Destination.png',
     );
-    addInitialMarker();
   }
 
-  void setmapstyle(BuildContext context) async {
+  Future<void> setmapstyle(BuildContext context) async {
     mapstyle = await DefaultAssetBundle.of(context)
         .loadString('assets/map_styles/silvermap.json');
-  }
-
-  void addInitialMarker() {
-    PlaceModel place = PlaceModel(
-      id: 1,
-      name: 'My Place',
-      lat: 30.0383,
-      long: 31.2114,
-    );
-
-    mapMarkers.add(
-      Marker(
-        markerId: MarkerId(place.id.toString()),
-        position: LatLng(place.lat, place.long),
-        icon: customIcon,
-      ),
-    );
-
-    emit(MarkerComplete(place));
   }
 
   void setController(GoogleMapController controller) {
     _controller = controller;
   }
 
-  Future<void> selectPlace(PlaceModel place) async {
-    mapMarkers.add(
-      Marker(
-        markerId: MarkerId(place.id.toString()),
-        position: LatLng(place.lat, place.long),
-        //icon: customIcon,
-        infoWindow: InfoWindow(
-          title: 'My Marker',
-          snippet: 'Custom Marker',
-        ),
-      ),
+  void getRealtimeLocation() {
+    _locationService
+        .getRealtimeLocation()
+        .listen((LocationData currentLocation) {
+      logger.debug(
+          "Current Location: ${currentLocation.latitude}, ${currentLocation.longitude}");
+      updateMarkerAndCamera(currentLocation); // هنا بتحدّث المكان والكاميرا
+    });
+  }
+
+  void updateMarkerAndCamera(LocationData locationData) {
+    var updatedPosition =LatLng(locationData.latitude!, locationData.longitude!);
+    mapMarkers.removeWhere((marker) => marker.markerId.value == 'myLocation');
+
+    var myLocationMarker = Marker(
+      markerId: const MarkerId('myLocation'),
+      position: updatedPosition,
+      icon: customIcon,
     );
 
-    emit(MarkerComplete(place));
+    mapMarkers.add(myLocationMarker);
+
+    _controller?.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(target: updatedPosition, zoom: 15),
+    ));
+
+    emit(MarkerUpdated(mapMarkers));
   }
 
-  void checkAndRequestLocationService() async {
-    var isserviceEnabled = await location.serviceEnabled();
-    if (!isserviceEnabled) {
-      isserviceEnabled = await location.requestService();
-    }
-    if (!isserviceEnabled) {
-      // ممكن نعرض ايرور بار
-    }
-  }
-
-  void checkAndRequestLocationPermission() async {
-    var permisionstatus = await location.hasPermission();
-    if (permisionstatus == PermissionStatus.denied) {
-      permisionstatus = await location.requestPermission();
-    }
-    if (permisionstatus != PermissionStatus.granted) {
-      // show error barrrrrrrrrrrrrrrrrrrrrrrr
-    }
+  void setmylocation() async {
+   _locationService.setmylocation();
   }
 }
