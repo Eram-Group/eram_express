@@ -73,7 +73,7 @@ class OtpView extends StatelessWidget {
     return Row(
       children: [
         Text(
-          context.t('otp.heading'),
+          context.tt('Verify your phone number', 'تحقق من رقم هاتفك'),
           style: const TextStyle(
             color: Color(0xFF3FAD79),
             fontFamily: 'Outfit',
@@ -123,7 +123,8 @@ class OtpView extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: context.t('otp.resend'),
+                text:
+                    context.tt('Didn\'t receive the code?', 'لم تستلم الرمز؟'),
                 style: const TextStyle(
                   color: Color(0xFFA7A9B7),
                   fontFamily: 'Outfit',
@@ -143,8 +144,8 @@ class OtpView extends StatelessWidget {
               ),
               TextSpan(
                 text: !state.resendButtonEnabled && state.canResendIn > 0
-                    ? '${context.t('otp.resendIn')} ${state.canResendIn} ${context.t('otp.seconds')}'
-                    : context.t('otp.resendNow'),
+                    ? '${context.tt('Resend in', 'إعادة الإرسال في')} ${state.canResendIn} ${context.tt('seconds', 'ثواني')}'
+                    : context.tt('Resend', 'إعادة الإرسال'),
                 style: TextStyle(
                   fontFamily: 'Outfit',
                   fontSize: 14,
@@ -169,7 +170,10 @@ class OtpView extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: context.t('otp.subheading'),
+            text: context.tt(
+              'Enter the code sent to',
+              'أدخل الرمز المرسل إلى',
+            ),
             style: const TextStyle(
               color: Color(0xFFA7A9B7),
               fontFamily: 'Outfit',
@@ -220,7 +224,7 @@ class OtpView extends StatelessWidget {
           loading: state.verifyButtonLoading,
           onTap: viewModel.verifyButtonOnClicked(context),
           child: Text(
-            context.t('otp.verify'),
+            context.tt('Verify', 'تحقق'),
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'Outfit',

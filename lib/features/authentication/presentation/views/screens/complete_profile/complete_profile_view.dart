@@ -1,4 +1,3 @@
-import 'package:eram_express/app/iconsax_icons.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../app/di.dart';
+import '../../../../../../app/iconsax_icons.dart';
 import 'complete_profile_view_model.dart';
 import 'complete_profile_view_state.dart';
 
@@ -46,7 +46,7 @@ class CompleteProfileView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          context.t('completeProfile.fullNameLabel'),
+          context.tt('Full Name', 'الاسم الكامل'),
           style: const TextStyle(
             color: Color(0xFF191D31),
             fontFamily: 'Outfit',
@@ -62,7 +62,8 @@ class CompleteProfileView extends StatelessWidget {
             return TextField(
               onChanged: viewModel.onFullNameChanged(),
               decoration: InputDecoration(
-                hintText: context.t('completeProfile.fullNamePlaceholder'),
+                hintText:
+                    context.tt('Enter your full name', 'ادخل اسمك الكامل'),
                 hintStyle: const TextStyle(
                   color: Color(0xFFB0B0B0),
                   fontFamily: 'Outfit',
@@ -98,7 +99,7 @@ class CompleteProfileView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          context.t('completeProfile.heading'),
+          context.tt('Complete Profile', 'اكمل ملفك الشخصى'),
           style: const TextStyle(
             color: Color(0xFF3FAD79),
             fontFamily: 'Outfit',
@@ -199,7 +200,7 @@ class CompleteProfileView extends StatelessWidget {
           loading: state.saveButtonLoading,
           onTap: viewModel.saveButtonOnClicked(context),
           child: Text(
-            context.t('completeProfile.save'),
+            context.tt('Save', 'حفظ'),
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'Outfit',

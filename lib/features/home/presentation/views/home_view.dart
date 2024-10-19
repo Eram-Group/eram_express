@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/presentation/views/modals/image_picker_modal/image_picker_modal.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/di.dart';
@@ -23,13 +24,24 @@ class HomeView extends StatelessWidget {
             builder: (context, snapshot) {
               return Column(
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: snapshot.data?.image ?? '',
-                  ),
+                  if (snapshot.data != null &&
+                      snapshot.data!.image != null &&
+                      snapshot.data!.image!.isNotEmpty)
+                    CachedNetworkImage(imageUrl: snapshot.data!.image!),
                   Text(snapshot.data?.fullName ?? 'Anonymous'),
                 ],
               );
             },
+          ),
+          ElevatedButton(
+            onPressed: () =>
+                ImagePickerModal(onImagePicked: (_) {}).show(context),
+            child: Text(
+              context.tt(
+                'Pick image',
+                'اختر صورة',
+              ),
+            ),
           ),
           ElevatedButton(
             onPressed: () => authenticationService.logout(
@@ -38,7 +50,7 @@ class HomeView extends StatelessWidget {
                 (route) => false,
               ),
             ),
-            child: Text(context.t('menu.logout')),
+            child: Text(context.tt('Logout', 'تسجيل الخروج')),
           ),
         ],
       ),

@@ -193,7 +193,7 @@ class LoginView extends StatelessWidget {
 
   Widget _buildHeading(BuildContext context) {
     return Text(
-      context.t('login.heading'),
+      context.tt('Login', 'تسجيل الدخول'),
       style: const TextStyle(
         color: Color(0xFFFDBC58),
         fontFamily: 'Outfit',
@@ -213,7 +213,7 @@ class LoginView extends StatelessWidget {
         loading: state.sendingOtp,
         onTap: viewModel.loginButtonOnClicked(context),
         child: Text(
-          context.t('login.login'),
+          context.tt('Login', 'تسجيل الدخول'),
           style: const TextStyle(
             color: Colors.white,
             fontFamily: 'Outfit',
@@ -253,7 +253,7 @@ class LoginView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildFieldTitle(title: context.t('login.phoneNumber')),
+        _buildFieldTitle(title: context.tt('Phone Number', 'رقم الهاتف')),
         const Gap(3),
         _buildPhoneNumberField(context),
       ],
@@ -272,7 +272,10 @@ class LoginView extends StatelessWidget {
               state.selectedCountry!.numberFormatter,
           ],
           decoration: InputDecoration(
-            hintText: context.t('login.phoneNumberPlaceholder'),
+            hintText: context.tt(
+              'Enter your phone number',
+              'ادخل رقم هاتفك',
+            ),
             hintStyle: const TextStyle(
               color: Color(0xFFA7A9B7),
               fontFamily: 'Outfit',
@@ -299,7 +302,10 @@ class LoginView extends StatelessWidget {
 
   Widget _buildSubheading(BuildContext context) {
     return Text(
-      context.t('login.subheading'),
+      context.tt(
+        'Enter your phone number to receive a verification code',
+        'ادخل رقم هاتفك لتتلقى رمز التحقق',
+      ),
       style: const TextStyle(
         color: Colors.white,
         fontFamily: 'Outfit',
