@@ -6,8 +6,7 @@ import '../models/verify_otp_response_model.dart';
 import 'authentication_api_endpoints.dart';
 import 'authentication_remote_data_source.dart';
 
-class AuthenticationApiRemoteDataSource
-    implements AuthenticationRemoteDataSource {
+class AuthenticationApiRemoteDataSource implements AuthenticationRemoteDataSource {
   final DioApiClient _dioClient;
 
   AuthenticationApiRemoteDataSource({required DioApiClient dioClient})

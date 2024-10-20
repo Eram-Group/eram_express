@@ -266,10 +266,12 @@ class LoginView extends StatelessWidget {
         return TextFormField(
           enabled: state.phoneNumberFieldEnabled,
           keyboardType: TextInputType.phone,
+          /*
           inputFormatters: [
             if (state.selectedCountry != null)
               state.selectedCountry!.numberFormat
           ],
+          */
           decoration: InputDecoration(
             hintText: context.translate('login.phoneNumberPlaceholder'),
             hintStyle: const TextStyle(

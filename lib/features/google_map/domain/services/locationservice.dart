@@ -1,11 +1,23 @@
 import 'package:eram_express/core/utils/logger.dart';
+import 'package:eram_express/features/google_map/domain/repositories/google_map_reposirtoty.dart';
 import 'package:location/location.dart';
 
 class Locationservice 
 {
-  Location location=Location();
 
+  final GoogleMapRepository _googlemapRepository;
+  Locationservice({
+    required GoogleMapRepository googlemapRepository
+    
+  }) : _googlemapRepository = googlemapRepository;
+
+  Location location=Location();
   
+  
+ void getsearchresult(input)
+ {
+   _googlemapRepository.getPredictionPlaces(input);
+ }
   Future<bool> checkAndRequestLocationPermission() async // ده التاني
   {
     var permisionstatus = await location.hasPermission();

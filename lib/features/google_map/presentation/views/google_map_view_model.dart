@@ -76,7 +76,8 @@ class MarkerCubit extends Cubit<MarkerState> {
     emit(MarkerUpdated(mapMarkers));
   }
 
-  void setmylocation() async {
+  void setmylocation() async 
+  {
    _locationService.setmylocation();
   }
 }

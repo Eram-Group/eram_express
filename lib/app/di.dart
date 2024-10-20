@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:eram_express/features/google_map/data/data_sources/googlemap_remote_data_source.dart';
 import 'package:eram_express/features/google_map/domain/services/locationservice.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,6 +13,9 @@ import '../features/common/data/configurations/data_sources/remote/configuration
 import '../features/common/data/configurations/repositories/configurations_repository_impl.dart';
 import '../features/customer/data/data_sources/remote/customer_api_remote_data_source.dart';
 import '../features/customer/data/repositories/customer_repository_impl.dart';
+import '../features/google_map/data/data_sources/googlemap_ApiRemoteDataSource.dart';
+
+import '../features/google_map/data/repositories/google_map_repositiory.dart';
 import '../features/home/data/data_sources/HomeData-api_remote_data_source.dart';
 import '../features/home/data/repositotys/home_repositoty_impl.dart';
 import '../features/i18n/domain/locale_cubit.dart';
@@ -57,7 +61,14 @@ final customerRepository = CustomerRepositoryImpl(
 
 
 //GoogleMap
-final locationservice=Locationservice();
+
+final googleMapRemoteDataSource= GoogleMapApiRemoteDataSource();
+final googlemapRepository=GoogleMapRepositoryImpl(googlemapRemoteDataSource: googleMapRemoteDataSource);
+final locationservice = Locationservice(googlemapRepository: googlemapRepository);
+
+
+
+
 
 
 final dio = Dio(

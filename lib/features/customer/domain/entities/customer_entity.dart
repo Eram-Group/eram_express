@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:eram_express_shared/data/models/country_model.dart';
+import 'package:eram_express_shared/data/configurations/models/country_model.dart';
 
 import '../../../authentication/data/data_sources/authentication/models/wallet_model.dart';
 import '../../data/models/customer_model.dart';

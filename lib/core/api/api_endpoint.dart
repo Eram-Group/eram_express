@@ -4,11 +4,11 @@ import 'package:dio/dio.dart';
 
 enum HttpMethod { get, post, put, delete, patch }
 
-class ApiEndpoint {
+class ApiEndpoint
+ {
   final String path;
   final HttpMethod method;
   final Map<int, FutureOr Function(Response)> responseHandlers;
-
   final Map<String, dynamic>? _queryParameters;
   final dynamic _body;
   final Map<String, String>? _headers;

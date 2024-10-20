@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:eram_express_shared/data/models/country_model.dart';
+import 'package:eram_express_shared/data/configurations/models/country_model.dart';
 
 import '../../../../../../core/api/api_endpoint.dart';
 

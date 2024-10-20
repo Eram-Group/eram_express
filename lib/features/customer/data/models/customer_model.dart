@@ -1,4 +1,5 @@
-import 'package:eram_express_shared/data/models/country_model.dart';
+
+import 'package:eram_express_shared/data/configurations/models/country_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../authentication/data/data_sources/authentication/models/wallet_model.dart';
