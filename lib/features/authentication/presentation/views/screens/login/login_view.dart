@@ -1,15 +1,16 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/di.dart';
+import 'package:eram_express_shared/presentation/widgets/clickable.dart';
+import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
+import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../../app/di.dart';
-import '../../../../../../core/i18n/context_extension.dart';
-import '../../../../../common/presentation/widgets/clickable.dart';
-import '../../../../../common/presentation/widgets/custom_button.dart';
-import '../../../../../common/presentation/widgets/skeleton.dart';
 import 'login_view_state.dart';
 import 'login_view_model.dart';
 
@@ -192,7 +193,7 @@ class LoginView extends StatelessWidget {
 
   Widget _buildHeading(BuildContext context) {
     return Text(
-      context.translate('login.heading'),
+      context.tt('Login', 'تسجيل الدخول'),
       style: const TextStyle(
         color: Color(0xFFFDBC58),
         fontFamily: 'Outfit',
@@ -210,9 +211,9 @@ class LoginView extends StatelessWidget {
       builder: (_, state) => CustomButton(
         enabled: state.loginButtonEnabled,
         loading: state.sendingOtp,
-        onTap: viewModel.loginButtonOnClicked,
+        onTap: viewModel.loginButtonOnClicked(context),
         child: Text(
-          context.translate('login.login'),
+          context.tt('Login', 'تسجيل الدخول'),
           style: const TextStyle(
             color: Colors.white,
             fontFamily: 'Outfit',
@@ -252,7 +253,7 @@ class LoginView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildFieldTitle(title: context.translate('login.phoneNumber')),
+        _buildFieldTitle(title: context.tt('Phone Number', 'رقم الهاتف')),
         const Gap(3),
         _buildPhoneNumberField(context),
       ],
@@ -268,10 +269,13 @@ class LoginView extends StatelessWidget {
           keyboardType: TextInputType.phone,
           inputFormatters: [
             if (state.selectedCountry != null)
-              state.selectedCountry!.numberFormat
+              state.selectedCountry!.numberFormatter,
           ],
           decoration: InputDecoration(
-            hintText: context.translate('login.phoneNumberPlaceholder'),
+            hintText: context.tt(
+              'Enter your phone number',
+              'ادخل رقم هاتفك',
+            ),
             hintStyle: const TextStyle(
               color: Color(0xFFA7A9B7),
               fontFamily: 'Outfit',
@@ -298,7 +302,10 @@ class LoginView extends StatelessWidget {
 
   Widget _buildSubheading(BuildContext context) {
     return Text(
-      context.translate('login.subheading'),
+      context.tt(
+        'Enter your phone number to receive a verification code',
+        'ادخل رقم هاتفك لتتلقى رمز التحقق',
+      ),
       style: const TextStyle(
         color: Colors.white,
         fontFamily: 'Outfit',

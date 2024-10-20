@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import '../../../../../../core/api/api_endpoint.dart';
+import 'package:eram_express_shared/core/api/api_endpoint.dart';
 
-import '../models/verify_otp_response_model.dart';
+import '../../../../domain/objects/verify_otp_response_wrapper.dart';
+import '../../../models/verify_otp_response_model.dart';
 
 final sendOtpEndpoint = ApiEndpoint(
   path: '/user/send-otp/',
@@ -14,8 +15,13 @@ final verifyOtpEndpoint = ApiEndpoint(
   path: '/customer/authenticate/',
   method: HttpMethod.post,
   responseHandlers: {
-    HttpStatus.ok: (response) => VerifyOtpResponseModel.fromJson(response.data),
-    HttpStatus.created: (response) =>
-        VerifyOtpResponseModel.fromJson(response.data),
+    HttpStatus.ok: (response) => VerifyOtpResponseWrapper(
+          isNewCustomer: false,
+          response: VerifyOtpResponseModel.fromJson(response.data),
+        ),
+    HttpStatus.created: (response) => VerifyOtpResponseWrapper(
+          isNewCustomer: true,
+          response: VerifyOtpResponseModel.fromJson(response.data),
+        ),
   },
 );

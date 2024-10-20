@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
+import 'package:eram_express/features/authentication/domain/objects/verify_otp_response_wrapper.dart';
+import 'package:eram_express_shared/core/app_error.dart';
 
-import '../../../../core/app_error.dart';
 import '../../../customer/domain/entities/customer_entity.dart';
 import '../../../customer/domain/repositories/customer_repository.dart';
 import '../../domain/objects/otp_verification_data.dart';
@@ -17,23 +18,17 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   AuthenticationRepositoryImpl({
     required CustomerRepository customerRepository,
-    required AuthenticationRemoteDataSource remoteDataSource,
-    required TokensLocalDataSource localDataSource,
+    required AuthenticationRemoteDataSource authenticationRemoteDataSource,
+    required TokensLocalDataSource tokensLocalDataSource,
   })  : _customerRepository = customerRepository,
-        _authenticationRemoteDataSource = remoteDataSource,
-        _tokensLocalDataSource = localDataSource;
+        _authenticationRemoteDataSource = authenticationRemoteDataSource,
+        _tokensLocalDataSource = tokensLocalDataSource;
 
   @override
   Future<CustomerEntity?> get authenticatedCustomer async {
     if (_authenticatedCustomer != null) return _authenticatedCustomer;
 
-    final accessToken = await _tokensLocalDataSource.accessToken;
-
-    if (accessToken == null) return null;
-
-    final customer = await _customerRepository.getAuthenticatedCustomer(
-      accessToken: accessToken,
-    );
+    final customer = await _customerRepository.getAuthenticatedCustomer();
 
     if (customer != null) _authenticatedCustomer = customer;
 
@@ -51,7 +46,12 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       _authenticatedCustomer = null;
       return const Right(null);
     } catch (e) {
-      return Left(AppError('Failed to logout'));
+      return Left(
+        AppError(
+          title: 'Failed to logout',
+          message: e.toString(),
+        ),
+      );
     }
   }
 
@@ -71,16 +71,28 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return response.fold(
       (error) => Left(error),
       (data) async {
+        final response = data.response;
+
         await _tokensLocalDataSource.saveTokens(
-          data.accessToken,
-          data.refreshToken,
+          response.accessToken,
+          response.refreshToken,
         );
 
-        final customer = CustomerEntity.fromModel(data.customer);
+        final customer = CustomerEntity.fromModel(response.customer);
         _authenticatedCustomer = customer;
 
-        return Right(customer);
+        return Right(
+          VerifyOtpResponseWrapper(
+            isNewCustomer: data.isNewCustomer,
+            response: customer,
+          ),
+        );
       },
     );
+  }
+
+  @override
+  void updateAuthenticatedCustomer(CustomerEntity data) {
+    _authenticatedCustomer = data;
   }
 }
