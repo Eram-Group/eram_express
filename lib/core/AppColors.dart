@@ -14,4 +14,5 @@ class AppColor {
   static const Color dotColor = Color(0xffEBECF3);
   static const Color dotactiveColor = Color(0xff133BB7);
 
+
 }

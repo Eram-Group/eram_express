@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:eram_express/features/google_map/data/models/placeModel.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../data/models/addressmodels/place_details_model.dart';
 
 abstract class MarkerState extends Equatable {
   const MarkerState();
@@ -14,16 +15,12 @@ class Markerloading extends MarkerState {}
 class MarkerUpdated extends MarkerState  
 {
   final Set<Marker>markers;
-  MarkerUpdated(this.markers);
+  const MarkerUpdated(this.markers);
     @override
   List<Object> get props => [markers];
 
 }
 
-class CameraPositionUpdated extends MarkerState {
-  final CameraPosition position;
-  CameraPositionUpdated(this.position);
-}
 class MarkerComplete extends MarkerState {
   //final PlaceModel place;
 
@@ -31,4 +28,18 @@ class MarkerComplete extends MarkerState {
 
   @override
   List<Object> get props => [];
+}
+
+class PlaceDetailsloading extends MarkerState {}
+class PlaceDetailssuccess extends MarkerState 
+{
+  PlaceDetailsModel placedetails;
+  PlaceDetailssuccess(this.placedetails);
+
+}
+class PlaceDetailerror extends MarkerState {
+  String errormessege;
+  PlaceDetailerror(this.errormessege);
+
+
 }

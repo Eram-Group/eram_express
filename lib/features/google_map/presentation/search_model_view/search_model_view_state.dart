@@ -1,6 +1,6 @@
 
 import 'package:equatable/equatable.dart';
-import '../../data/models/place_autocomplete_model/prediction.dart';
+import '../../data/models/place_auto_complete_model.dart';
 
 sealed class SearchState extends Equatable 
 {
@@ -10,6 +10,7 @@ sealed class SearchState extends Equatable
 }
 
 class SearchStateEmpty extends SearchState {}
+class SearchStateintial extends SearchState {}
 class SearchStateLoading extends SearchState {}
 class SearchStateError extends SearchState 
 {
@@ -18,10 +19,10 @@ class SearchStateError extends SearchState
 }
 class SearchStateSuccess extends SearchState 
 {
-  const SearchStateSuccess(this.items);
-  final List<Prediction> items;
+  const SearchStateSuccess(this.recommendplaces);
+  final List<PlaceAutocompleteModel> recommendplaces;
   @override
-  List<Object> get props => [items];
+  List<Object> get props => [recommendplaces];
 }
 
 

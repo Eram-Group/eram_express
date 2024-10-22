@@ -35,6 +35,8 @@ abstract class $LoginViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool sendingOtp, String phoneNumber, CountryEntity? selectedCountry});
+
+  $CountryEntityCopyWith<$Res>? get selectedCountry;
 }
 
 /// @nodoc
@@ -71,6 +73,20 @@ class _$LoginViewStateCopyWithImpl<$Res, $Val extends LoginViewState>
               as CountryEntity?,
     ) as $Val);
   }
+
+  /// Create a copy of LoginViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CountryEntityCopyWith<$Res>? get selectedCountry {
+    if (_value.selectedCountry == null) {
+      return null;
+    }
+
+    return $CountryEntityCopyWith<$Res>(_value.selectedCountry!, (value) {
+      return _then(_value.copyWith(selectedCountry: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -83,6 +99,9 @@ abstract class _$$LoginViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool sendingOtp, String phoneNumber, CountryEntity? selectedCountry});
+
+  @override
+  $CountryEntityCopyWith<$Res>? get selectedCountry;
 }
 
 /// @nodoc

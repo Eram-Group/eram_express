@@ -1,23 +1,36 @@
+import 'package:either_dart/either.dart';
 import 'package:eram_express/core/utils/logger.dart';
 import 'package:eram_express/features/google_map/domain/repositories/google_map_reposirtoty.dart';
 import 'package:location/location.dart';
+import 'package:logger/logger.dart';
 
-class Locationservice 
-{
+import '../../data/models/addressmodels/place_details_model.dart';
+import '../../data/models/place_auto_complete_model.dart';
 
+class Locationservice {
   final GoogleMapRepository _googlemapRepository;
-  Locationservice({
-    required GoogleMapRepository googlemapRepository
-    
-  }) : _googlemapRepository = googlemapRepository;
+  Locationservice({required GoogleMapRepository googlemapRepository})
+      : _googlemapRepository = googlemapRepository;
 
-  Location location=Location();
+  Location location = Location();
+
+  Future<Either<String, List<PlaceAutocompleteModel>>> getsearchresult(
+      String input) async {
+    // Call the repository method and await the result
+    final result = await _googlemapRepository.getPredictionPlaces(input);
+
+    // Return the result
+    return result;
+  }
+
+    Future<Either<String, List<PlaceDetailsModel>>> getplacedetailsresult(String lat ,String long) async {
   
+    final result = await _googlemapRepository.getPlacedetails(lat, long);
+
+   
+    return result;
+  }
   
- void getsearchresult(input)
- {
-   _googlemapRepository.getPredictionPlaces(input);
- }
   Future<bool> checkAndRequestLocationPermission() async // ده التاني
   {
     var permisionstatus = await location.hasPermission();
@@ -33,6 +46,7 @@ class Locationservice
     }
     return true;
   }
+
   Future<bool> checkAndRequestLocationService() async //ده الاول
   {
     var isserviceEnabled = await location.serviceEnabled();
@@ -40,36 +54,43 @@ class Locationservice
       isserviceEnabled = await location.requestService();
     }
     if (!isserviceEnabled) {
-       return false;
-       }
-       return true;
+      return false;
+    }
+    return true;
   }
-   
-  void setmylocation() async // انا شاييفه دي اصلا تتنادي اول ما يفتح ال App
-  {
+
+  Future<LocationData?> setmylocation() async {
     await checkAndRequestLocationService();
+
     var hasPermission = await checkAndRequestLocationPermission();
-    if (hasPermission) 
-    {
-      getRealtimeLocation();
-    } else 
-    {
-      //TODO show error barrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+    if (hasPermission) {
+      try {
+        return await getCurrentLocation();
+      } catch (e) {
+        logger.debug("Error: $e");
+        return Future.error(e);
+      }
     }
   }
-  
+
   Stream<LocationData> getRealtimeLocation() {
     return location.onLocationChanged.map((LocationData currentLocation) {
+      /*
       logger.debug(
           "Current Location: ${currentLocation.latitude}, ${currentLocation.longitude}");
+          */
       return currentLocation;
     });
   }
 
- Future<LocationData> getcurrentLocation() async
- {
-     return await location.getLocation();
- }
+  Future<LocationData> getCurrentLocation() async {
+    try {
+      LocationData locationData = await location.getLocation();
 
-
+      return locationData;
+    } catch (e) {
+      logger.debug("Error: $e");
+      return Future.error(e);
+    }
+  }
 }

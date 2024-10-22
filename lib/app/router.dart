@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
+import '../features/google_map/presentation/search_model_view/search_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
 import '../features/onboarding/presentation/views/onboarding.view.dart';
@@ -25,6 +26,8 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = HomeView();
   } else if (name == GoogleMapScreen.route) {
     page = GoogleMapScreen();
+  } else if (name == SearchView.route) {
+    page = SearchView();
   } else {
     page = const NotFoundView();
   }
