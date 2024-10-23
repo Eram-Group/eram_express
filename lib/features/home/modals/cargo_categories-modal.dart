@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../core/AppColors.dart';
+import '../../../core/app_colors.dart';
 import '../../Common/presentation/widgets/clickablebottomSheetItem.dart';
 import '../data/models/cargo-categoriesModel.dart';
 import '../presentation/views/ShippingFormCubit.dart';

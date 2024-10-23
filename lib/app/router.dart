@@ -24,8 +24,8 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = LoginView();
   } else if (name == HomeView.route) {
     page = HomeView();
-  } else if (name == GoogleMapScreen.route) {
-    page = GoogleMapScreen();
+  } else if (name == GoogleMapView.route) {
+    page = GoogleMapView();
   } else if (name == SearchView.route) {
     page = SearchView();
   } else {

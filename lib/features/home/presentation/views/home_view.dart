@@ -1,8 +1,7 @@
-import 'package:eram_express/core/AppColors.dart';
+import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:gap/gap.dart';
 import '../../../../app/di.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
@@ -151,16 +150,18 @@ class HomeView extends StatelessWidget {
                     label: state.pickupDate ?? "pick up date",
                     iconName: 'calendar',
                   ),
+                  
                   _buildSelected(
                     onTap: () => viewModel.GoodsOnClicked(context),
                     context: context,
-                    label: state.selectgood?.nameAr ?? "Select Goods",
+                    label: state.selectgoods?[0].nameAr ?? "Select Goods",
                     iconName: 'calendar',
                   ),
+                  
                   const Gap(8),
                   CustomButton(
                     onPressed: () {
-                      print(state.selectgood?.nameEn);  //مش بيحصل ليها emit
+                  
                       print(state.truckSize?.nameAr);
                     },
                     text: "Check Rates",

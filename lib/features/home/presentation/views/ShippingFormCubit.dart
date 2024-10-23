@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
+
 import '../../data/repositotys/home_repositoty_impl.dart';
 import '../../modals/cargo_categories-modal.dart';
 import '../../modals/cargo_subcategories-modal.dart';
@@ -112,58 +113,31 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
       );
     });
 
-    final selection = await showModalBottomSheet<GoodModel>(
+    final selection = await showModalBottomSheet<List<GoodModel>>(
       context: context,
       builder: (context) => SelectGoodsModal(
         cubit: this,
       ),
     );
-    
+
     if (selection != null) {
-      emit(state.copyWith(selectgood: selection));
+      emit(state.copyWith(selectgoods: selection));
     }
   }
+
+  void toggleGoodSelection(GoodModel good) {
+    if (state.selectgoods == null) {
+      state.selectgoods = [];
+    }
+
+    if (state.selectgoods!.contains(good)) {
+      logger.debug("loll");
+      state.selectgoods!.remove(good);
+    } else {
+      logger.debug("messagellllllllll");
+      state.selectgoods!.add(good);
+    }
+
+    emit(state.copyWith(selectgoods: state.selectgoods));
+  }
 }
-
-
-  /*  
-  Future<void> cargoCategoryOnClicked(BuildContext context) async {
-    final CargoCategorys = await _homerepo.getCargoCategories();
-    CargoCategorys.fold((error) {
-      emit(ShippingFormErrorState(errorMessage: "error in build the cargo"));
-    }, (data) async {
-      final selection = await showModalBottomSheet(
-        context: context,
-        builder: (context) => SelectCargoCategoryModal(
-          cargocategories: data,
-          cubit: this,
-        ),
-      );
-      print(selection);
-      if (selection != null) {
-        emit(state.copyWith(loadType: selection));
-      }
-    });
-  }
-*/
-  /*
-  Future<void> cargosubCategoryOnClicked(BuildContext context) async {
-    final CargoCategorys = await _homerepo.getSubCargoCategories();
-    CargoCategorys.fold(
-        (error) => emit(
-            ShippingFormErrorState(errorMessage: "error in build the cargo")),
-        (data) async {
-      final selection = await showModalBottomSheet(
-        context: context,
-        builder: (context) => SelectSubCargoCategoryModal(
-          cargocategories: data,
-          cubit: this,
-        ),
-      );
-      print(selection);
-      if (selection != null) {
-        emit(state.copyWith(truckSize: selection));
-      }
-    });
-  }
-  */

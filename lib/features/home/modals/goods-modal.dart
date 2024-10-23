@@ -1,7 +1,9 @@
+import 'package:eram_express/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../core/AppColors.dart';
+import '../../../core/app_colors.dart';
+import '../../../core/app_text_style.dart';
 import '../../Common/presentation/widgets/clickablebottomSheetItem.dart';
 import '../presentation/views/ShippingFormCubit.dart';
 import '../presentation/views/ShippingFormState.dart';
@@ -23,13 +25,31 @@ class SelectGoodsModal extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const TopBottomModel(),
-            const Text(
-              "Select type of goods",
-              style: TextStyle(
-                color: Color(0xff191D31),
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                height: 23.4 / 20,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Select type of goods",
+                    style: AppTextStyles.headingStyle,
+                  ),
+                  TextButton(
+                    onPressed: () 
+                    {
+                      final selectedGoods = cubit.state.selectgoods;
+                      Navigator.of(context).pop(selectedGoods);
+                    },
+                    child: const Text(
+                      'Done',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const Gap(12),
@@ -46,14 +66,15 @@ class SelectGoodsModal extends StatelessWidget {
                       children: state.goods!.map((good) {
                         return BlocSelector<ShippingFormCubit,
                             ShippingFormState, bool>(
-                          selector: (state) => state.selectgood == good,
+                          selector: (state) {
+                            final selectedGoods = state.selectgoods ?? [];
+                            return selectedGoods.contains(good);
+                          },
                           builder: (context, isSelected) {
-                            return ClickBottomSheetItem(
-                              imageUrl: good.image,
+                            return ClickBottomSheetItem2(
                               isSelected: isSelected,
                               onTap: () {
-                                //cubit.setTruckSize(cargo);
-                                Navigator.of(context).pop(good);
+                                cubit.toggleGoodSelection(good);
                               },
                               content: Text(
                                 good.nameEn,
@@ -74,6 +95,81 @@ class SelectGoodsModal extends StatelessWidget {
               ),
             ),
           ],
+        ));
+  }
+}
+
+class ClickBottomSheetItem2 extends StatelessWidget {
+  final bool isSelected;
+  final VoidCallback onTap;
+  final Widget content;
+
+  const ClickBottomSheetItem2({
+    Key? key,
+    this.isSelected = false,
+    required this.onTap,
+    required this.content,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10,
+        ).copyWith(bottom: 0),
+        child: Container(
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: isSelected ? Colors.green : AppColor.bordercolor,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            color: Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  content,
+                  InkWell(
+                      onTap: onTap,
+                      child: isSelected
+                          ? Container(
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Colors.white, // Color of the inner hole
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Color(0xffA7A9B7),
+                                  width: 5,
+                                ),
+                              ),
+                            )),
+                ]),
+          ),
         ));
   }
 }

@@ -18,8 +18,8 @@ class InitViewModel extends Cubit<bool> {
     if (!isAuthenticated) {
       // ععكسناهم علشان عايزه الهوم
       emit(true);
-      // mainNavigationService.clearStackAndNavigateTo(HomeView.route);
-      mainNavigationService.clearStackAndNavigateTo(GoogleMapScreen.route);
+      mainNavigationService.clearStackAndNavigateTo(HomeView.route);
+      //mainNavigationService.clearStackAndNavigateTo(GoogleMapView.route);
     } else {
       emit(false);
 

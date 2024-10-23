@@ -1,5 +1,5 @@
 import 'package:eram_express/app/di.dart';
-import 'package:eram_express/core/AppColors.dart';
+import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/core/utils/responsive.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
 import 'package:eram_express/features/google_map/presentation/views/google_map_view_model.dart';
@@ -10,13 +10,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../core/utils/logger.dart';
 import 'google_map/presentation/views/google_map_view_state.dart';
 
-class GoogleMapScreen extends StatelessWidget {
+class GoogleMapView extends StatelessWidget {
   static const String route = '/google';
   final MarkerCubit markerCubit = MarkerCubit(
     locationService: locationservice,
   );
 
-  GoogleMapScreen({Key? key}) : super(key: key);
+  GoogleMapView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

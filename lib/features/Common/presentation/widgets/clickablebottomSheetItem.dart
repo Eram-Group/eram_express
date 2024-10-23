@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../../../../core/AppColors.dart';
+import '../../../../core/app_colors.dart';
 
 class ClickBottomSheetItem extends StatelessWidget {
   final bool isSelected;

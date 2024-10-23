@@ -8,7 +8,7 @@ class ShippingFormState {
   final CargoCategoryModel? loadType;
   final CargoSubCategoryModel? truckSize;
   final String? pickupDate;
-  final GoodModel? selectgood;
+  List<GoodModel>?selectgoods;
   final bool isLoading;
   final List<CargoSubCategoryModel>? cargoSubCategories;
   final List<CargoCategoryModel>? cargoCategories;
@@ -19,7 +19,7 @@ class ShippingFormState {
     this.loadType,
     this.truckSize,
     this.pickupDate,
-    this.selectgood,
+    this.selectgoods,
     this.isLoading = false,
     this.cargoSubCategories,
     this.cargoCategories,
@@ -31,7 +31,7 @@ class ShippingFormState {
     String? destination,
     CargoCategoryModel? loadType,
     CargoSubCategoryModel? truckSize,
-    GoodModel? selectgood,
+    List<GoodModel>? selectgoods,
     String? pickupDate,
     bool? isLoading,
     List<CargoSubCategoryModel>? cargoSubCategories,
@@ -43,7 +43,7 @@ class ShippingFormState {
       destination: destination ?? this.destination,
       loadType: loadType ?? this.loadType,
       truckSize: truckSize ?? this.truckSize,
-      selectgood: selectgood ?? this.selectgood,
+      selectgoods: selectgoods ?? this.selectgoods,
       pickupDate: pickupDate ?? this.pickupDate,
       isLoading: isLoading ?? this.isLoading,
       cargoSubCategories: cargoSubCategories ?? this.cargoSubCategories,

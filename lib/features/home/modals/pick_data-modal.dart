@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:gap/gap.dart';
 import '../../../app/di.dart';
-import '../../../core/AppColors.dart';
+import '../../../core/app_colors.dart';
 import '../../Common/presentation/widgets/customButton.dart';
 
 class PickDateBottomSheet extends StatefulWidget {
