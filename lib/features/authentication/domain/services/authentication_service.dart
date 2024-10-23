@@ -1,4 +1,5 @@
-import 'package:eram_express/core/utils/logger.dart';
+import 'package:eram_express_shared/core/api/api_error.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 
 import '../../../customer/domain/repositories/customer_repository.dart';
 import '../objects/otp_verification_data.dart';
@@ -18,25 +19,25 @@ class AuthenticationService {
   Future<void> sendOtp({
     required String phoneNumber,
     void Function()? onOtpSent,
-    void Function()? onOtpFailed,
+    void Function(ApiError)? onOtpFailed,
   }) async {
     final response = await _authenticationRepository.sendOtp(phoneNumber);
     response.fold(
-      (error) => onOtpFailed?.call(),
+      (error) => onOtpFailed?.call(error),
       (data) => onOtpSent?.call(),
     );
   }
 
   Future<void> verifyOtp({
     required OtpVerificationData data,
-    void Function()? onOtpVerified,
-    void Function()? onOtpVerificationFailed,
+    void Function(bool)? onOtpVerified,
+    void Function(ApiError)? onOtpVerificationFailed,
   }) async {
     final response = await _authenticationRepository.verifyOtp(data);
 
     response.fold(
-      (error) => onOtpVerificationFailed?.call(),
-      (data) => onOtpVerified?.call(),
+      (error) => onOtpVerificationFailed?.call(error),
+      (data) => onOtpVerified?.call(data.isNewCustomer),
     );
   }
 

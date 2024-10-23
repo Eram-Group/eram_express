@@ -1,7 +1,18 @@
+<<<<<<< HEAD
 import 'package:either_dart/either.dart';
 
 import '../../../../../core/api/api_error.dart';
 import '../../../../../core/api/dio_api_client.dart';
+=======
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
+import 'package:eram_express/features/customer/domain/objects/update_customer_form_data.dart';
+import 'package:eram_express_shared/core/api/api_error.dart';
+import 'package:eram_express_shared/core/api/dio_api_client.dart';
+
+>>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
 import '../../models/customer_model.dart';
 import 'customer_api_endpoints.dart';
 import 'customer_remote_data_source.dart';
@@ -19,7 +30,27 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
     return await _dioClient.request(
       getAuthenticatedCustomerEndpoint.prepare(
         headers: {
-          'Authorization': 'Bearer $accessToken',
+          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+        },
+      ),
+    );
+  }
+
+  @override
+  Future<Either<ApiError, CustomerModel>> updateProfile(
+    UpdateCustomerFormData data,
+    String accessToken,
+  ) async {
+    return await _dioClient.request(
+      updateProfileEndpoint.prepare(
+        body: FormData.fromMap({
+          'full_name': data.fullName,
+          if (data.profilePicture != null)
+            'image': MultipartFile.fromFileSync(data.profilePicture!.path),
+        }),
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+          HttpHeaders.contentTypeHeader: 'multipart/form-data',
         },
       ),
     );

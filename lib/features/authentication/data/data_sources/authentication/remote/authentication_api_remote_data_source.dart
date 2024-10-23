@@ -1,8 +1,15 @@
 import 'package:either_dart/either.dart';
+<<<<<<< HEAD
 import '../../../../../../core/api/api_error.dart';
 import '../../../../../../core/api/dio_api_client.dart';
+=======
+import 'package:eram_express/features/authentication/data/models/verify_otp_response_model.dart';
+import 'package:eram_express_shared/core/api/api_error.dart';
+import 'package:eram_express_shared/core/api/dio_api_client.dart';
+
+>>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
 import '../../../../domain/objects/otp_verification_data.dart';
-import '../models/verify_otp_response_model.dart';
+import '../../../../domain/objects/verify_otp_response_wrapper.dart';
 import 'authentication_api_endpoints.dart';
 import 'authentication_remote_data_source.dart';
 
@@ -24,8 +31,8 @@ class AuthenticationApiRemoteDataSource implements AuthenticationRemoteDataSourc
   }
 
   @override
-  Future<Either<ApiError, VerifyOtpResponseModel>> verifyOtp(
-      OtpVerificationData data) async {
+  Future<Either<ApiError, VerifyOtpResponseWrapper<VerifyOtpResponseModel>>>
+      verifyOtp(OtpVerificationData data) async {
     return await _dioClient.request(
       verifyOtpEndpoint.prepare(
         body: {

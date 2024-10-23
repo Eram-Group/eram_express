@@ -1,4 +1,4 @@
-import 'package:eram_express/core/utils/logger.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'secure_storage_keys.dart';

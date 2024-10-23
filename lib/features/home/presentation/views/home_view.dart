@@ -1,5 +1,4 @@
 import 'package:eram_express/core/app_colors.dart';
-import 'package:eram_express/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';

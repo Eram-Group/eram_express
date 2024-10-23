@@ -1,27 +1,29 @@
+<<<<<<< HEAD
 import 'package:equatable/equatable.dart';
 import 'package:eram_express_shared/data/configurations/models/country_model.dart';
+=======
+import 'package:eram_express_shared/domain/entites/country_entity.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+>>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
 
-import '../../../authentication/data/data_sources/authentication/models/wallet_model.dart';
 import '../../data/models/customer_model.dart';
+import 'wallet_entity.dart';
 
-class CustomerEntity extends Equatable {
-  final int id;
-  final String phoneNumber;
-  final String fullName;
-  final String? image;
-  final bool isActive;
-  final CountryModel country;
-  final WalletModel wallet;
+part 'customer_entity.freezed.dart';
 
-  const CustomerEntity({
-    required this.id,
-    required this.phoneNumber,
-    required this.fullName,
-    required this.image,
-    required this.isActive,
-    required this.country,
-    required this.wallet,
-  });
+@freezed
+abstract class CustomerEntity with _$CustomerEntity {
+  const CustomerEntity._();
+
+  factory CustomerEntity({
+    required int id,
+    required String phoneNumber,
+    required String fullName,
+    required String? image,
+    required bool isActive,
+    required CountryEntity country,
+    required WalletEntity wallet,
+  }) = _CustomerEntity;
 
   factory CustomerEntity.fromModel(CustomerModel model) {
     return CustomerEntity(
@@ -30,12 +32,8 @@ class CustomerEntity extends Equatable {
       fullName: model.fullName,
       image: model.image,
       isActive: model.isActive,
-      country: model.country,
-      wallet: model.wallet,
+      country: CountryEntity.fromModel(model.country),
+      wallet: WalletEntity.fromModel(model.wallet),
     );
   }
-
-  @override
-  List<Object?> get props =>
-      [id, phoneNumber, fullName, image, isActive, country, wallet];
 }

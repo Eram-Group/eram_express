@@ -1,6 +1,5 @@
+import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/utils/responsive.dart';
 
 class OnboardingView extends StatelessWidget {
   static const route = '/onboarding';
@@ -27,7 +26,7 @@ class OnboardingView extends StatelessWidget {
           top: -1 * stupidImageOffset,
           left: stupidImageOffset * -1,
           child: Image.asset(
-            'assets/onboarding.png',
+            'assets/images/onboarding.png',
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width + stupidImageOffset,
           ),

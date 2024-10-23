@@ -1,13 +1,13 @@
 import 'package:eram_express/app/di.dart';
 import 'package:eram_express/core/app_colors.dart';
-import 'package:eram_express/core/utils/responsive.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
 import 'package:eram_express/features/google_map/presentation/views/google_map_view_model.dart';
 import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../core/utils/logger.dart';
 import 'google_map/presentation/views/google_map_view_state.dart';
 
 class GoogleMapView extends StatelessWidget {
@@ -26,7 +26,6 @@ class GoogleMapView extends StatelessWidget {
             if (state is MarkerInitial) {
               return CircularProgressIndicator();
             }
-            //CameraPosition initialCameraPosition = markerCubit.kInitialPosition;
             logger.debug("GoogleMap is being rebuilt with state: $state");
             return SafeArea(
                 child: Scaffold(
