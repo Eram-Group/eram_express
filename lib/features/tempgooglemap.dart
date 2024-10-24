@@ -45,7 +45,7 @@ class GoogleMapView extends StatelessWidget {
                                 );
                           },
                           onCameraIdle: () {
-                            context.read<MarkerCubit>().printMarkers();
+                            //context.read<MarkerCubit>().printMarkers();
                           },
                           style: context.read<MarkerCubit>().mapstyle,
                           markers: context.read<MarkerCubit>().mapMarkers,

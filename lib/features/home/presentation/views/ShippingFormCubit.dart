@@ -1,8 +1,9 @@
-
 import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../i18n/domain/locale_cubit.dart';
+import '../../../tempgooglemap.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
 
@@ -122,7 +123,7 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     );
 
     if (selection != null) {
-      emit(state.copyWith(selectgoods: selection));
+      displayGoodstype(selection, context);
     }
   }
 
@@ -141,4 +142,21 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
 
     emit(state.copyWith(selectgoods: state.selectgoods));
   }
+
+  void displayGoodstype(List<GoodModel> selectiongoods, BuildContext context) {
+    //final currentLocale = context.watch<LocaleCubit>().state;
+    //logger.debug("state: ${currentLocale.languageCode}");
+    // currentLocale.languageCode == 'ar' ? good.nameAr :
+    String goodsNames =
+        selectiongoods.map((good) => good.nameEn).toList().join(', ');
+    logger.debug(goodsNames);
+    emit(state.copyWith(selectgoodsString: goodsNames));
+  }
+ Future<void> PickOnClicked(BuildContext context) async 
+ {
+          Navigator.of(context).pushNamed(GoogleMapView.route,);
+     
+  
+ }
+
 }

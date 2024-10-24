@@ -1,32 +1,23 @@
-<<<<<<< HEAD
+
 import 'package:dio/dio.dart';
-import 'package:eram_express/features/google_map/data/data_sources/googlemap_remote_data_source.dart';
-import 'package:eram_express/features/google_map/domain/services/locationservice.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../core/api/dio_api_client.dart';
-import '../core/navigation_service.dart';
-=======
+import 'package:eram_express_shared/core/api/dio_api_client.dart';
 import 'package:eram_express_shared/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
 import '../features/authentication/data/data_sources/authentication/remote/authentication_api_remote_data_source.dart';
 import '../features/authentication/data/data_sources/tokens/local/tokens_secure_storage_local_data_source.dart';
 import '../features/authentication/data/respositories/authentication_repository_impl.dart';
 import '../features/authentication/domain/services/authentication_service.dart';
 import '../features/customer/data/data_sources/remote/customer_api_remote_data_source.dart';
 import '../features/customer/data/repositories/customer_repository_impl.dart';
-<<<<<<< HEAD
-import '../features/google_map/data/data_sources/googlemap_ApiRemoteDataSource.dart';
+import '../features/customer/domain/services/customer_service.dart';
 
+import '../features/google_map/data/data_sources/googlemap_ApiRemoteDataSource.dart';
 import '../features/google_map/data/repositories/google_map_repositiory.dart';
+import '../features/google_map/domain/services/locationservice.dart';
 import '../features/home/data/data_sources/HomeData-api_remote_data_source.dart';
 import '../features/home/data/repositotys/home_repositoty_impl.dart';
-=======
-import '../features/customer/domain/services/customer_service.dart';
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
 import '../features/i18n/domain/locale_cubit.dart';
 
 const secureStorage = FlutterSecureStorage();
@@ -60,7 +51,7 @@ final customerRepository = CustomerRepositoryImpl(
   tokensLocalDataSource: tokensLocalDataSource,
 );
 
-<<<<<<< HEAD
+
  //Home
  final HomeRepository = HomeRepositoryImpl(remoteDataSource: HomeDataRemoteDataSource);
  final HomeDataRemoteDataSource = HomeDataApiRemoteDataSource( dioClient: dioClient,);
@@ -87,8 +78,7 @@ final dioClient = DioApiClient(
   dio: dio,
 );
 
-=======
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
+
 final localeCubit = LocaleCubit();
 
 final List<BlocProvider> providers = [

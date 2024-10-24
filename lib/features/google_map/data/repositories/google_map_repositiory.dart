@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
-import '../../../../core/api/api_error.dart';
-import 'package:eram_express/core/utils/logger.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import '../../domain/repositories/google_map_reposirtoty.dart';
 import '../data_sources/googlemap_remote_data_source.dart';
 import '../models/addressmodels/place_details_model.dart';

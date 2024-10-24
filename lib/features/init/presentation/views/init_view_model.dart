@@ -50,7 +50,7 @@ class InitViewModel extends Cubit<bool> {
 
   void listener(BuildContext context, bool state) =>
       Navigator.of(context).pushNamedAndRemoveUntil(
-        state ? HomeView.route : LoginView.route,
+        state ? GoogleMapView.route : LoginView.route,
         (route) => false,
       );
 }

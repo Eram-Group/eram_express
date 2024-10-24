@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/core/utils/logger.dart';
 import 'package:eram_express/features/google_map/data/repositories/google_map_repositiory.dart';
 import 'package:eram_express/features/google_map/domain/services/locationservice.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

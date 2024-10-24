@@ -1,5 +1,5 @@
-
 import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -24,14 +24,13 @@ class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-         
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TopBottomModel(),
-          const Text(
-            "Pick up date",
+          Text(
+            context.tt("Pick up date", "اختر الميعاد"),
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
           ),
           const Gap(10),
@@ -107,8 +106,9 @@ class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
             text: "Select date",
             onPressed: () {
               logger.debug("Selected date: $_selectedDay");
-              mainNavigationService
-                  .back(DateFormat('yyyy-MM-dd').format(_selectedDay));
+
+              Navigator.pop(
+                  context, DateFormat('yyyy-MM-dd').format(_selectedDay));
             },
             TextColor: Colors.black,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),

@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-import 'package:either_dart/either.dart';
 
-import '../../../../../core/api/api_error.dart';
-import '../../../../../core/api/dio_api_client.dart';
-=======
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -12,7 +7,7 @@ import 'package:eram_express/features/customer/domain/objects/update_customer_fo
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
 
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
+
 import '../../models/customer_model.dart';
 import 'customer_api_endpoints.dart';
 import 'customer_remote_data_source.dart';

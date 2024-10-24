@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:eram_express/core/utils/logger.dart';
 
 import '../../../customer/domain/repositories/customer_repository.dart';
 import '../repository/home_repository.dart';

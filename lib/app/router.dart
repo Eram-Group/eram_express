@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
 
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
+import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
 import '../features/google_map/presentation/search_model_view/search_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
 import '../features/onboarding/presentation/views/onboarding.view.dart';
 import '../features/tempgooglemap.dart';
 import 'presentation/views/not_found.view.dart';
-
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   Widget page;
 
@@ -27,14 +24,13 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = const OnboardingView();
   } else if (name == LoginView.route) {
     page = LoginView();
-<<<<<<< HEAD
-=======
+
   } else if (name == OtpView.route) {
     final arguments = settings.arguments as OtpViewArguments;
     page = OtpView(arguments);
   } else if (name == CompleteProfileView.route) {
     page = CompleteProfileView();
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
+
   } else if (name == HomeView.route) {
     page = HomeView();
   } else if (name == GoogleMapView.route) {

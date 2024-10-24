@@ -36,18 +36,13 @@ class LoginViewModel extends Cubit<LoginViewState>
     final countries = await _configurationsRepository.countries;
     countries.fold(
       (error) {},
-<<<<<<< HEAD
-      (data) => emit(state.copyWith(
-        
-        selectedCountry: data.first,
-      )),
-=======
+
       (data) => emit(
         state.copyWith(
           selectedCountry: data.first,
         ),
       ),
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
+
     );
    }
 
@@ -56,26 +51,7 @@ class LoginViewModel extends Cubit<LoginViewState>
   }
 
   Future<void> _countryCodeButtonOnClicked(BuildContext context) async {
-<<<<<<< HEAD
-    //if (state.countries == null) return init();
-     final countries = await _configurationsRepository.countries;
-    countries.fold(
-      (error) {},
-      (data) async {
-         final selection = await showModalBottomSheet<CountryEntity>(
-      context: context,
-      builder: (context) => SelectCountryModal(
-        countries: data,
-      ),
-    );
 
-    if (selection != null) {
-      emit(state.copyWith(selectedCountry: selection));
-    }
-      }
-     );
-   
-=======
     final countries = await _configurationsRepository.countries;
     countries.fold(
       (error) {},
@@ -90,7 +66,7 @@ class LoginViewModel extends Cubit<LoginViewState>
         }
       },
     );
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
+
   }
 
   _loginButtonOnClicked(BuildContext context) async {

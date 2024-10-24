@@ -1,4 +1,4 @@
-import 'package:eram_express/core/utils/responsive.dart';
+import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {

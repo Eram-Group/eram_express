@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:eram_express/core/utils/logger.dart';
+
 import '../../../../app/di.dart';
 
 import 'googlemap_remote_data_source.dart';

@@ -8,7 +8,8 @@ class ShippingFormState {
   final CargoCategoryModel? loadType;
   final CargoSubCategoryModel? truckSize;
   final String? pickupDate;
-  List<GoodModel>?selectgoods;
+  List<GoodModel>? selectgoods;
+  final String? selectgoodsString;
   final bool isLoading;
   final List<CargoSubCategoryModel>? cargoSubCategories;
   final List<CargoCategoryModel>? cargoCategories;
@@ -20,6 +21,7 @@ class ShippingFormState {
     this.truckSize,
     this.pickupDate,
     this.selectgoods,
+    this.selectgoodsString,
     this.isLoading = false,
     this.cargoSubCategories,
     this.cargoCategories,
@@ -32,6 +34,7 @@ class ShippingFormState {
     CargoCategoryModel? loadType,
     CargoSubCategoryModel? truckSize,
     List<GoodModel>? selectgoods,
+    String? selectgoodsString,
     String? pickupDate,
     bool? isLoading,
     List<CargoSubCategoryModel>? cargoSubCategories,
@@ -39,16 +42,16 @@ class ShippingFormState {
     List<GoodModel>? goods,
   }) {
     return ShippingFormState(
-      pickup: pickup ?? this.pickup,
-      destination: destination ?? this.destination,
-      loadType: loadType ?? this.loadType,
-      truckSize: truckSize ?? this.truckSize,
-      selectgoods: selectgoods ?? this.selectgoods,
-      pickupDate: pickupDate ?? this.pickupDate,
-      isLoading: isLoading ?? this.isLoading,
-      cargoSubCategories: cargoSubCategories ?? this.cargoSubCategories,
-      cargoCategories: cargoCategories ?? this.cargoCategories,
-      goods: goods ?? this.goods,
-    );
+        pickup: pickup ?? this.pickup,
+        destination: destination ?? this.destination,
+        loadType: loadType ?? this.loadType,
+        truckSize: truckSize ?? this.truckSize,
+        selectgoods: selectgoods ?? this.selectgoods,
+        pickupDate: pickupDate ?? this.pickupDate,
+        isLoading: isLoading ?? this.isLoading,
+        cargoSubCategories: cargoSubCategories ?? this.cargoSubCategories,
+        cargoCategories: cargoCategories ?? this.cargoCategories,
+        goods: goods ?? this.goods,
+        selectgoodsString: selectgoodsString ?? this.selectgoodsString);
   }
 }

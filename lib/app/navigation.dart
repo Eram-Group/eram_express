@@ -1,3 +1,8 @@
 import 'package:flutter/material.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
+
+ abstract class NavigationService 
+{
+   static final navigatorKey = GlobalKey<NavigatorState>();
+   static BuildContext get globalContext=> navigatorKey.currentContext!;
+}

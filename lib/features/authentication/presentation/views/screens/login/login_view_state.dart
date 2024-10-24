@@ -12,10 +12,8 @@ abstract class LoginViewState with _$LoginViewState
     @Default(false) bool sendingOtp,
     @Default('') String phoneNumber,
     CountryEntity? selectedCountry,
-<<<<<<< HEAD
-    //List<CountryEntity>? countries,
-=======
->>>>>>> ac9b3dfcd0ce0ee82fdedbbf6d9ba9892ea0b09c
+
+
   }) = _LoginViewState;
 
   bool get loginButtonLoading => sendingOtp;

@@ -1,3 +1,4 @@
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -24,8 +25,8 @@ class SelectCargoCategoryModal extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const TopBottomModel(),
-            const Text(
-              "Choose the size of the truck",
+             Text(
+              context.tt("Choose the size of the truck","اختر حجم الشاحنة"),
               style: TextStyle(
                 color: Color(0xff191D31),
                 fontWeight: FontWeight.w600,

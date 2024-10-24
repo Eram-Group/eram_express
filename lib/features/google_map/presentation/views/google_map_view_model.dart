@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/core/utils/logger.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

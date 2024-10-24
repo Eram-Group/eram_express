@@ -1,5 +1,7 @@
 import 'dart:io';
-import '../../../../core/api/api_endpoint.dart';
+
+import 'package:eram_express_shared/core/api/api_endpoint.dart';
+
 import '../models/cargo-categoriesModel.dart';
 import '../models/cargo-subcategoryModel.dart';
 import '../models/goods-typeModel.dart';

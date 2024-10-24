@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/core/utils/logger.dart';
+
 import 'package:eram_express/features/google_map/domain/repositories/google_map_reposirtoty.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:location/location.dart';
 import 'package:logger/logger.dart';
 

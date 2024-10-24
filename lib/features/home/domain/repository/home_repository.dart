@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:either_dart/either.dart';
-import '../../../../core/api/api_error.dart';
-import '../../../../core/app_error.dart';
+import 'package:eram_express_shared/core/api/api_error.dart';
+
 import '../../data/models/cargo-categoriesModel.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';

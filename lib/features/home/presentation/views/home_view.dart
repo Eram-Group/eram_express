@@ -1,4 +1,6 @@
 import 'package:eram_express/core/app_colors.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -23,13 +25,13 @@ class HomeView extends StatelessWidget {
         body: SafeArea(
             child: Stack(
       children: [
-        _buildHeader(),
+        _buildHeader(context),
         _builddataContainer(context),
       ],
     )));
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Container(
         width: Responsive.screenWidth,
         height: Responsive.screenHeight! * .3,
@@ -40,7 +42,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -51,7 +53,7 @@ class HomeView extends StatelessWidget {
                 const SizedBox(
                   width: 15,
                 ),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -64,7 +66,7 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Have a nice day !",
+                      context.tt("Have a nice day !", 'يوم سعيد'),
                       style: TextStyle(
                         fontFamily: 'Outfit',
                         color: Colors.white,
@@ -83,92 +85,110 @@ class HomeView extends StatelessWidget {
       bloc: viewModel,
       builder: (_, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 130)
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 130)
               .copyWith(bottom: 0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
+          child: Card(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    "Ship your goods with us",
-                    style: TextStyle(
-                      //fontFamily: 'Outfit',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 16), // استبدال Gap بـ SizedBox
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildSelected(
-                          onTap: () => viewModel.cargosubCategoryOnClicked(
-                              context), // هيبقي بدالها جوجل ماب
-                          context: context,
-                          label: state.truckSize?.nameAr ?? "Pick up",
-                          iconName: 'Pick_Up',
-                        ),
-                      ),
-                      const Gap(7),
-                      Expanded(
-                        child: _buildSelected(
-                          onTap: () => viewModel.cargosubCategoryOnClicked(
-                              context), // هيبقي بدالها جوجل ماب
-                          context: context,
-                          label: state.truckSize?.nameAr ?? "Destination",
-                          iconName: 'destination',
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  _buildSelected(
-                    onTap: () => viewModel.cargoCategoryOnClicked(context),
-                    context: context,
-                    label: state.loadType?.nameEn ?? "Select the load type",
-                    iconName: 'arrow-down',
-                  ),
-
-                  _buildSelected(
-                    onTap: () => viewModel.cargosubCategoryOnClicked(context),
-                    context: context,
-                    label: state.truckSize?.nameEn ??
-                        "Choose the size of the truck",
-                    iconName: 'sizeTrack',
-                  ),
-                  _buildSelected(
-                    onTap: () => viewModel.PickdateOnClicked(context),
-                    context: context,
-                    label: state.pickupDate ?? "pick up date",
-                    iconName: 'calendar',
-                  ),
-                  
-                  _buildSelected(
-                    onTap: () => viewModel.GoodsOnClicked(context),
-                    context: context,
-                    label: state.selectgoods?[0].nameAr ?? "Select Goods",
-                    iconName: 'calendar',
-                  ),
-                  
-                  const Gap(8),
-                  CustomButton(
-                    onPressed: () {
-                  
-                      print(state.truckSize?.nameAr);
-                    },
-                    text: "Check Rates",
-                    backgroundColor: AppColor.primaryColor,
-                    TextColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 15),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x1C000000), // Hex value for #0000001C
+                    offset: Offset(0, 4), // Equivalent to "0px 4px"
+                    blurRadius: 24, // Equivalent to "24px"
+                    spreadRadius: 0, // Equivalent to "0px"
                   ),
                 ],
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      context.tt("Ship your goods with us", "اشحن بضائعك معنا"),
+                      style: const TextStyle(
+                        fontFamily: 'Outfit',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Gap(16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildSelected(
+                            onTap: () => viewModel.PickOnClicked(context),
+                            context: context,
+                            label: state.truckSize?.nameAr ?? "Pick up",
+                            iconName: 'Pick_Up',
+                          ),
+                        ),
+                        const Gap(7),
+                        Expanded(
+                          child: _buildSelected(
+                            onTap: () =>
+                                viewModel.cargosubCategoryOnClicked(context),
+                            context: context,
+                            label: state.truckSize?.nameAr ?? "Destination",
+                            iconName: 'destination',
+                          ),
+                        ),
+                      ],
+                    ),
+                    _buildSelected(
+                      onTap: () => viewModel.cargoCategoryOnClicked(context),
+                      context: context,
+                      label: context.tt(
+                          state.loadType?.nameEn ?? "Select the load type",
+                          state.loadType?.nameAr ?? "اختر نوع الحمولة"),
+                      iconName: 'arrow-down',
+                    ),
+                    _buildSelected(
+                      onTap: () => viewModel.cargosubCategoryOnClicked(context),
+                      context: context,
+                      label: context.tt(
+                          state.truckSize?.nameEn ??
+                              "Choose the size of the truck",
+                          state.truckSize?.nameAr ?? "اختر حجم الشاحنة"),
+                      iconName: 'sizeTrack',
+                    ),
+                    _buildSelected(
+                      onTap: () => viewModel.PickdateOnClicked(context),
+                      context: context,
+                      label: context.tt(
+                        state.pickupDate ?? "pick up date",
+                        state.pickupDate ?? "اختر التاريخ",
+                      ),
+                      iconName: 'calendar',
+                    ),
+                    _buildSelected(
+                      onTap: () => viewModel.GoodsOnClicked(context),
+                      context: context,
+                      label: context.tt(
+                        state.selectgoodsString ?? "Select Goods",
+                        state.selectgoodsString ?? "اختر نوع البضائع",
+                      ),
+                      iconName: 'calendar',
+                    ),
+                    const Gap(8),
+                    CustomButton(
+                      onPressed: () {
+                        print(state.truckSize?.nameAr);
+                      },
+                      text: "Check Rates",
+                      backgroundColor: AppColor.primaryColor,
+                      TextColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -201,14 +221,17 @@ class HomeView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      color: AppColor
-                          .ligthText, //افتكري غيري اللون  لو كان خلاص اختار
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      height: 25.2 / 20,
+                  Expanded(
+                    child: Text(
+                      label,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: AppColor
+                            .ligthText, //افتكري غيري اللون  لو كان خلاص اختار
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        height: 25.2 / 20,
+                      ),
                     ),
                   ),
                   SvgIcon(
