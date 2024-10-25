@@ -125,18 +125,19 @@ class HomeView extends StatelessWidget {
                         Expanded(
                           child: _buildSelected(
                             onTap: () => viewModel.PickOnClicked(context),
+                            selectedValue: state.pickup?.address ?? " ",
                             context: context,
-                            label: state.truckSize?.nameAr ?? "Pick up",
+                            label: state.pickup?.address ?? "Pick up",
                             iconName: 'Pick_Up',
                           ),
                         ),
                         const Gap(7),
                         Expanded(
                           child: _buildSelected(
-                            onTap: () =>
-                                viewModel.cargosubCategoryOnClicked(context),
+                            onTap: () => viewModel.DestinationClicked(context),
                             context: context,
-                            label: state.truckSize?.nameAr ?? "Destination",
+                            selectedValue: state.destination?.address ?? " ",
+                            label: state.destination?.address ?? "Destination",
                             iconName: 'destination',
                           ),
                         ),
@@ -144,6 +145,8 @@ class HomeView extends StatelessWidget {
                     ),
                     _buildSelected(
                       onTap: () => viewModel.cargoCategoryOnClicked(context),
+                      selectedValue: context.tt(state.loadType?.nameEn ?? " ",
+                          state.loadType?.nameAr ?? " "),
                       context: context,
                       label: context.tt(
                           state.loadType?.nameEn ?? "Select the load type",
@@ -153,15 +156,19 @@ class HomeView extends StatelessWidget {
                     _buildSelected(
                       onTap: () => viewModel.cargosubCategoryOnClicked(context),
                       context: context,
-                      label: context.tt(
-                          state.truckSize?.nameEn ??
-                              "Choose the size of the truck",
-                          state.truckSize?.nameAr ?? "اختر حجم الشاحنة"),
+                      selectedValue: context.tt(state.truckSize?.nameEn ?? " ",
+                          state.truckSize?.nameAr ?? " "),
+                      label: context.tt(state.truckSize?.nameEn ?? " ",
+                          state.truckSize?.nameAr ?? " "),
                       iconName: 'sizeTrack',
                     ),
                     _buildSelected(
                       onTap: () => viewModel.PickdateOnClicked(context),
                       context: context,
+                      selectedValue: context.tt(
+                        state.pickupDate ?? " ",
+                        state.pickupDate ?? " ",
+                      ),
                       label: context.tt(
                         state.pickupDate ?? "pick up date",
                         state.pickupDate ?? "اختر التاريخ",
@@ -171,6 +178,10 @@ class HomeView extends StatelessWidget {
                     _buildSelected(
                       onTap: () => viewModel.GoodsOnClicked(context),
                       context: context,
+                      selectedValue: context.tt(
+                        state.selectgoodsString ?? " ",
+                        state.selectgoodsString ?? " ",
+                      ),
                       label: context.tt(
                         state.selectgoodsString ?? "Select Goods",
                         state.selectgoodsString ?? "اختر نوع البضائع",
@@ -202,7 +213,11 @@ class HomeView extends StatelessWidget {
     required BuildContext context,
     required String label,
     required String iconName,
+    required String? selectedValue,
   }) {
+    Color textColor = selectedValue != null && selectedValue != " "
+        ? Colors.black
+        : AppColor.ligthText;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: GestureDetector(
@@ -226,8 +241,7 @@ class HomeView extends StatelessWidget {
                       label,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: AppColor
-                            .ligthText, //افتكري غيري اللون  لو كان خلاص اختار
+                        color: textColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         height: 25.2 / 20,

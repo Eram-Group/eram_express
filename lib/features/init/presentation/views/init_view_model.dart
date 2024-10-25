@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../authentication/domain/repositories/authentication_repository.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
 import '../../../home/presentation/views/home_view.dart';
-import '../../../tempgooglemap.dart';
+import '../../../google_map/presentation/google_map_view.dart';
 
 class InitViewModel extends Cubit<bool> {
   final AuthenticationRepository _authenticationRepository;
@@ -19,20 +19,6 @@ class InitViewModel extends Cubit<bool> {
         super(false);
 
   Future<void> init() async {
-    /*
-<<<<<<< HEAD
-    final isAuthenticated = await _authenticationRepository.isAuthenticated;
-    if (!isAuthenticated) {
-      // ععكسناهم علشان عايزه الهوم
-      emit(true);
-      mainNavigationService.clearStackAndNavigateTo(HomeView.route);
-      //mainNavigationService.clearStackAndNavigateTo(GoogleMapView.route);
-    } else {
-      emit(false);
-
-      mainNavigationService.clearStackAndNavigateTo(LoginView.route);
-=======
-*/
     final results = await Future.wait([
       _configurationsRepository.countries,
       _authenticationRepository.isAuthenticated,
@@ -42,7 +28,6 @@ class InitViewModel extends Cubit<bool> {
     if (isAuthenticated) {
       emit(true);
       return;
-
     }
 
     emit(false);
@@ -50,7 +35,7 @@ class InitViewModel extends Cubit<bool> {
 
   void listener(BuildContext context, bool state) =>
       Navigator.of(context).pushNamedAndRemoveUntil(
-        state ? GoogleMapView.route : LoginView.route,
+        state ? HomeView.route : LoginView.route,
         (route) => false,
       );
 }

@@ -3,10 +3,11 @@ import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../i18n/domain/locale_cubit.dart';
-import '../../../tempgooglemap.dart';
+import '../../../google_map/presentation/google_map_view.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
 
+import '../../data/models/picking_locationModel.dart';
 import '../../data/repositotys/home_repositoty_impl.dart';
 import '../../modals/cargo_categories-modal.dart';
 import '../../modals/cargo_subcategories-modal.dart';
@@ -152,11 +153,22 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     logger.debug(goodsNames);
     emit(state.copyWith(selectgoodsString: goodsNames));
   }
- Future<void> PickOnClicked(BuildContext context) async 
- {
-          Navigator.of(context).pushNamed(GoogleMapView.route,);
-     
-  
- }
 
+  Future<void> PickOnClicked(BuildContext context) async {
+    final result = await Navigator.of(context).pushNamed(
+      GoogleMapView.route,
+    );
+    if (result is PickingLocationModel) {
+      emit(state.copyWith(pickup: result));
+    }
+  }
+
+  Future<void> DestinationClicked(BuildContext context) async {
+    final result = await Navigator.of(context).pushNamed(
+      GoogleMapView.route,
+    );
+    if (result is PickingLocationModel) {
+      emit(state.copyWith(destination: result));
+    }
+  }
 }

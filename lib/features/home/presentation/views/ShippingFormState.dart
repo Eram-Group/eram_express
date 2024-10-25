@@ -1,10 +1,12 @@
+import 'package:eram_express/features/home/data/models/picking_locationModel.dart';
+
 import '../../data/models/cargo-categoriesModel.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
 
 class ShippingFormState {
-  final String? pickup;
-  final String? destination;
+  final PickingLocationModel? pickup;
+  final PickingLocationModel? destination;
   final CargoCategoryModel? loadType;
   final CargoSubCategoryModel? truckSize;
   final String? pickupDate;
@@ -29,8 +31,8 @@ class ShippingFormState {
   });
 
   ShippingFormState copyWith({
-    String? pickup,
-    String? destination,
+    final PickingLocationModel? pickup,
+    final PickingLocationModel? destination,
     CargoCategoryModel? loadType,
     CargoSubCategoryModel? truckSize,
     List<GoodModel>? selectgoods,

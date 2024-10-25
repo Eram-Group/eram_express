@@ -24,14 +24,14 @@ class Locationservice {
     return result;
   }
 
-    Future<Either<String, List<PlaceDetailsModel>>> getplacedetailsresult(String lat ,String long) async {
-  
+  Future<Either<String, List<PlaceDetailsModel>>> getplacedetailsresult(
+      String lat, String long) async {
     final result = await _googlemapRepository.getPlacedetails(lat, long);
 
    
     return result;
   }
-  
+
   Future<bool> checkAndRequestLocationPermission() async // ده التاني
   {
     var permisionstatus = await location.hasPermission();

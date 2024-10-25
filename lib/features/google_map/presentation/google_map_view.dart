@@ -1,0 +1,240 @@
+import 'dart:ui';
+import 'package:eram_express/app/di.dart';
+import 'package:eram_express/core/app_colors.dart';
+import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
+import 'package:eram_express/features/google_map/presentation/views/google_map_view_model.dart';
+import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/core/utils/responsive.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../Common/presentation/widgets/customButton.dart';
+import '../../home/data/models/picking_locationModel.dart';
+import 'views/google_map_view_state.dart';
+import 'package:provider/provider.dart';
+import 'views/place_details_view/place_details_view_model.dart';
+import 'views/place_details_view/place_details_view_state.dart';
+
+class GoogleMapView extends StatelessWidget {
+  static const String route = '/google';
+
+  const GoogleMapView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (_) =>
+              PlaceDetailsViewModel(locationService: locationservice),
+        ),
+        BlocProvider(
+          create: (context) {
+            final placeDetailsViewModel = context.read<PlaceDetailsViewModel>();
+            return MarkerCubit(
+              locationService: locationservice,
+              placeDetailsViewModel: placeDetailsViewModel,
+            )..getCurrentLocation();
+          },
+        ),
+      ],
+      child: BlocBuilder<MarkerCubit, MarkerState>(
+        builder: (context, state) {
+          logger.debug("GoogleMap is being rebuilt with state: $state");
+          return SafeArea(
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: Stack(
+                children: [
+                  GoogleMap(
+                    onMapCreated: (controller) async {
+                      context.read<MarkerCubit>().setController(controller);
+                      context.read<MarkerCubit>().setmapstyle(context);
+                    },
+                    onCameraMove: (CameraPosition position) {
+                      context
+                          .read<MarkerCubit>()
+                          .updateMarkerAndCamera(position);
+                    },
+                    onCameraIdle: () {
+                      context.read<MarkerCubit>().getplacedetails();
+                    },
+                    style: context.read<MarkerCubit>().mapstyle,
+                    initialCameraPosition:
+                        context.read<MarkerCubit>().kInitialPosition,
+                  ),
+                  Center(
+                    child: _buildMarker(),
+                  ),
+                  _buildAddressContainer(),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildAddressContainer() {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: BlocBuilder<PlaceDetailsViewModel, PlaceDetailsViewState>(
+        builder: (context, state) {
+          {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              //height: Responsive.screenHeight! * .25,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const TopBottomModel(),
+                    state is PlaceDetailerror
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(Icons.error),
+                              Text(state.errormessege),
+                            ],
+                          )
+                        : Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const SvgIcon(asset: 'record-circle'),
+                              SizedBox(
+                                width: Responsive.getResponsiveFontSize(context,
+                                    fontSize: 20),
+                              ),
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    context.tt(
+                                        'Pick up location', "موقع الاستلام"),
+                                    style: TextStyle(
+                                      fontSize:
+                                          Responsive.getResponsiveFontSize(
+                                              context,
+                                              fontSize: 16),
+                                      height: 25.2 /
+                                          Responsive.getResponsiveFontSize(
+                                              context,
+                                              fontSize: 16),
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColor.lightGrey,
+                                    ),
+                                  ),
+                                  state is PlaceDetailssuccess
+                                      ? Text(
+                                          state.placedetails.formattedAddress,
+                                          style: TextStyle(
+                                            fontSize: Responsive
+                                                .getResponsiveFontSize(context,
+                                                    fontSize: 14),
+                                            height: 18.2 /
+                                                Responsive
+                                                    .getResponsiveFontSize(
+                                                        context,
+                                                        fontSize: 14),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        )
+                                      : Container(
+                                          width: 70,
+                                          height: 10,
+                                          color: Colors.grey,
+                                        ),
+                                ],
+                              )),
+                            ],
+                          ),
+                    //TOdO change it  with shared eram
+                    const Gap(30),
+                    CustomButton(
+                        padding: const EdgeInsets.all(15),
+                        text: context.tt("Select location", "حدد الموقع"),
+                        onPressed: () {
+                          PickingLocationModel picking_location =
+                              PickingLocationModel(
+                                  point: Point(
+                                      longitude: context
+                                          .read<MarkerCubit>()
+                                          .mapMarkers
+                                          .first
+                                          .position
+                                          .longitude,
+                                      latitude: context
+                                          .read<MarkerCubit>()
+                                          .mapMarkers
+                                          .first
+                                          .position
+                                          .latitude),
+                                  address: state is PlaceDetailssuccess
+                                      ? state.placedetails.formattedAddress
+                                      : " don't know");
+                          Navigator.of(context).pop(picking_location);
+                        })
+                  ],
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildMarker() {
+    return const SvgIcon(
+      asset: "marker",
+      size: 150,
+    );
+  }
+}
+
+class SearchButton extends StatelessWidget {
+  const SearchButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to the search screen
+        Navigator.pushNamed(
+            context, '/search'); // Adjust the route name if necessary
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.transparent),
+        ),
+        child: const Text(
+          "Search here", // Hint text
+          style: TextStyle(
+            color: Colors.grey, // You can customize the text color
+          ),
+        ),
+      ),
+    );
+  }
+}
