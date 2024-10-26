@@ -10,7 +10,7 @@ import '../data_sources/remote/customer_remote_data_source.dart';
 class CustomerRepositoryImpl implements CustomerRepository {
   final CustomerRemoteDataSource _customerRemoteDataSource;
   final TokensLocalDataSource _tokensLocalDataSource;
-
+  // ToDo cached customerrrr
   CustomerRepositoryImpl({
     required CustomerRemoteDataSource remoteDataSource,
     required TokensLocalDataSource tokensLocalDataSource,
@@ -22,8 +22,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
     final accessToken = await _tokensLocalDataSource.accessToken;
     if (accessToken == null) return null;
 
-    final response =
-        await _customerRemoteDataSource.getAuthenticatedCustomer(accessToken);
+    final response = await _customerRemoteDataSource.getAuthenticatedCustomer(accessToken);
 
     return response.fold(
       (error) => null,

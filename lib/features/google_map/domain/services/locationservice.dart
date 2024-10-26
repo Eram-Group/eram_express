@@ -10,16 +10,19 @@ import '../../data/models/place_auto_complete_model.dart';
 
 class Locationservice {
   final GoogleMapRepository _googlemapRepository;
+  // user repooo
   Locationservice({required GoogleMapRepository googlemapRepository})
       : _googlemapRepository = googlemapRepository;
 
   Location location = Location();
 
   Future<Either<String, List<PlaceAutocompleteModel>>> getsearchresult(String input,String sessiontoken) async {
-    
+      
     final result = await _googlemapRepository.getPredictionPlaces(input , sessiontoken);
     return result;
   }
+
+
 
   Future<Either<String, List<PlaceDetailsModel>>> getplacedetailsresult(
       String lat, String long) async {
