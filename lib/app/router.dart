@@ -1,3 +1,4 @@
+import 'package:eram_express/features/profile/presentation/views/profile_view.dart';
 import 'package:flutter/material.dart';
 
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
@@ -28,9 +29,17 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = OtpView(arguments);
   } else if (name == CompleteProfileView.route) {
     page = CompleteProfileView();
-  } else if (name == HomeView.route) {
+  } 
+  else if (name == HomeView.route) 
+  {
     page = const HomeView();
-  } else {
+  } 
+  else if (name == ProfileView.route)
+   {
+    page = ProfileView();
+  } 
+  else 
+  {
     page = const NotFoundView();
   }
 
