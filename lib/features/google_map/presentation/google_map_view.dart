@@ -18,11 +18,18 @@ import 'package:provider/provider.dart';
 import 'views/place_details_view/place_details_view_model.dart';
 import 'views/place_details_view/place_details_view_state.dart';
 
+class GoogleMapViewArguments {
+  final Point? initialAddress;
+
+  const GoogleMapViewArguments({
+    this.initialAddress,
+  });
+}
+
 class GoogleMapView extends StatelessWidget {
   static const String route = '/google';
-
-  const GoogleMapView({Key? key}) : super(key: key);
-
+  final GoogleMapViewArguments? googleMapViewArguments;
+  const GoogleMapView({super.key, this.googleMapViewArguments});
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -37,7 +44,7 @@ class GoogleMapView extends StatelessWidget {
             return MarkerCubit(
               locationService: locationservice,
               placeDetailsViewModel: placeDetailsViewModel,
-            )..getCurrentLocation();
+            )..setInitialCameraPostion(googleMapViewArguments?.initialAddress);
           },
         ),
       ],
@@ -66,9 +73,21 @@ class GoogleMapView extends StatelessWidget {
                     initialCameraPosition:
                         context.read<MarkerCubit>().kInitialPosition,
                   ),
-                  Center(
-                    child: _buildMarker(),
-                  ),
+                  if (context.read<MarkerCubit>().isLoading)
+                    Container(
+                      color: Colors.white.withOpacity(0.6),
+                      child: Center(
+                        child: Text(
+                          "جاري تحميل الموقع...",
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  if (!context.read<MarkerCubit>().isLoading)
+                    Center(
+                      child: _buildMarker(),
+                    ),
+                  SearchButton(),
                   _buildAddressContainer(),
                 ],
               ),
@@ -189,7 +208,7 @@ class GoogleMapView extends StatelessWidget {
                                           .latitude),
                                   address: state is PlaceDetailssuccess
                                       ? state.placedetails.formattedAddress
-                                      : " don't know");
+                                      : "....");
                           Navigator.of(context).pop(picking_location);
                         })
                   ],

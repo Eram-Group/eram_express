@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:either_dart/either.dart';
 import 'package:eram_express/features/google_map/data/repositories/google_map_repositiory.dart';
 import 'package:eram_express/features/google_map/domain/services/locationservice.dart';
@@ -5,25 +7,37 @@ import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 import 'search_model_view_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   final Locationservice _locationservice;
   final TextEditingController searchController = TextEditingController();
-
+  String? sessiontoken;
+  Timer? debounce;
   SearchCubit({required Locationservice locationservice})
       : _locationservice = locationservice,
         super(SearchStateintial()) {
     searchController.addListener(() {
-      updateSearchQuery(searchController.text);
+      if(debounce?.isActive ?? false)
+      {
+        debounce?.cancel();
+      }
+      debounce = Timer(const Duration(milliseconds: 500), () {
+        sessiontoken ??= const Uuid() .v4(); 
+        //ToDo
+        // نهايه السيشن لما ادوس واروح للي هختاره لسه معملتهاش
+        updateSearchQuery(searchController.text);
+      });
     });
   }
 
   void updateSearchQuery(String query) {
     //emit(SearchStateLoading());
     logger.debug(query);
+
     if (query.isNotEmpty && query.trim().isNotEmpty) {
-      final result = _locationservice.getsearchresult(query);
+      final result = _locationservice.getsearchresult(query, sessiontoken!);
       result.fold((errorMessage) {
         emit(SearchStateError("faild to get places"));
       }, (placelist) {
@@ -32,11 +46,9 @@ class SearchCubit extends Cubit<SearchState> {
         }
         emit(SearchStateSuccess(placelist));
       });
-    } 
-    else
-     {
+    } else {
       emit(SearchStateintial());
-     }
+    }
   }
 
   @override

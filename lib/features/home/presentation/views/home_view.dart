@@ -124,7 +124,7 @@ class HomeView extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _buildSelected(
-                            onTap: () => viewModel.PickOnClicked(context),
+                            onTap: () => viewModel.PickClicked(context),
                             selectedValue: state.pickup?.address ?? " ",
                             context: context,
                             label: state.pickup?.address ?? "Pick up",
@@ -134,7 +134,7 @@ class HomeView extends StatelessWidget {
                         const Gap(7),
                         Expanded(
                           child: _buildSelected(
-                            onTap: () => viewModel.DestinationClicked(context),
+                            onTap: () => viewModel.destinationClicked(context),
                             context: context,
                             selectedValue: state.destination?.address ?? " ",
                             label: state.destination?.address ?? "Destination",
@@ -158,8 +158,10 @@ class HomeView extends StatelessWidget {
                       context: context,
                       selectedValue: context.tt(state.truckSize?.nameEn ?? " ",
                           state.truckSize?.nameAr ?? " "),
-                      label: context.tt(state.truckSize?.nameEn ?? " ",
-                          state.truckSize?.nameAr ?? " "),
+                      label: context.tt(
+                          state.truckSize?.nameEn ??
+                              "Choose the size of the truck ",
+                          state.truckSize?.nameAr ?? "اختر حجم حمولتك "),
                       iconName: 'sizeTrack',
                     ),
                     _buildSelected(

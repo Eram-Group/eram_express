@@ -15,12 +15,9 @@ class Locationservice {
 
   Location location = Location();
 
-  Future<Either<String, List<PlaceAutocompleteModel>>> getsearchresult(
-      String input) async {
-    // Call the repository method and await the result
-    final result = await _googlemapRepository.getPredictionPlaces(input);
-
-    // Return the result
+  Future<Either<String, List<PlaceAutocompleteModel>>> getsearchresult(String input,String sessiontoken) async {
+    
+    final result = await _googlemapRepository.getPredictionPlaces(input , sessiontoken);
     return result;
   }
 

@@ -12,12 +12,12 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
       {required GoogleMapRemoteDataSource googlemapRemoteDataSource})
       : _googlemapRemoteDataSource = googlemapRemoteDataSource;
   @override
-  Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces( String input) async {
+  Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces( String input ,String sessiontoken) async {
     try {
-      final result =  await _googlemapRemoteDataSource.getPredictionPlaces(input);
+      final result =  await _googlemapRemoteDataSource.getPredictionPlaces(input, sessiontoken);
 
       if (result.statusCode == 200) {
-         //logger.debug("Request successful");
+         //logger.debug("Request successful")
         //logger.debug("state: ${result.data}");
         
         List<PlaceAutocompleteModel> predictionModels =

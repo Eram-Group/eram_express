@@ -14,7 +14,8 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
   final name = settings.name;
 
-  if (name == null) {
+  if (name == null)
+   {
     return null;
   }
 
@@ -33,9 +34,12 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
   } else if (name == HomeView.route) {
     page = HomeView();
-  } else if (name == GoogleMapView.route) {
-    page = GoogleMapView();
-  } else if (name == SearchView.route) {
+  } else if (name == GoogleMapView.route)
+ {
+     final arguments = settings.arguments as GoogleMapViewArguments?;
+    page = GoogleMapView(googleMapViewArguments: arguments,);
+  } 
+  else if (name == SearchView.route) {
     page = SearchView();
   } else {
     page = const NotFoundView();

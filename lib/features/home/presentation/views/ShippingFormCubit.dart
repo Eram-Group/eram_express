@@ -154,21 +154,21 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     emit(state.copyWith(selectgoodsString: goodsNames));
   }
 
-  Future<void> PickOnClicked(BuildContext context) async {
-    final result = await Navigator.of(context).pushNamed(
-      GoogleMapView.route,
-    );
+  Future<void> PickClicked(BuildContext context) async {
+    //logger.debug(state.pickup!.point.latitude.toString());
+    final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
+        arguments: GoogleMapViewArguments(initialAddress: state.pickup?.point));
     if (result is PickingLocationModel) {
       emit(state.copyWith(pickup: result));
     }
   }
 
-  Future<void> DestinationClicked(BuildContext context) async {
-    final result = await Navigator.of(context).pushNamed(
-      GoogleMapView.route,
-    );
+  Future<void> destinationClicked(BuildContext context) async {
+    final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
+        arguments:
+            GoogleMapViewArguments(initialAddress: state.destination?.point));
     if (result is PickingLocationModel) {
-      emit(state.copyWith(destination: result));
+      emit(state.copyWith(pickup: result));
     }
   }
 }

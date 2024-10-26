@@ -11,11 +11,14 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
   String apiKey = 'AIzaSyBjgqhScxJNS9pvwKyDNEdvjW-RKpIP5uM';
 
   @override
-  Future<dynamic> getPredictionPlaces(String input) async {
+  Future<dynamic> getPredictionPlaces(String input, String sessiontoken) async {
     Response response =
         await dio.get(url + "place/autocomplete/json", queryParameters: {
       'input': input,
       'key': apiKey,
+      'sessiontoken': sessiontoken,
+      //ToDO
+      //'components': 'country:eg',
     });
     return response;
   }
@@ -25,6 +28,8 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     Response response = await dio.get(url + "geocode/json", queryParameters: {
       'latlng': input,
       'key': apiKey,
+      //TODO
+      //'language': 'ar',
     });
     return response;
   }
