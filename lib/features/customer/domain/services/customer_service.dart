@@ -16,7 +16,8 @@ class CustomerService {
   })  : _customerRepository = customerRepository,
         _authenticationRepository = authenticationRepository;
 
-  Future<Either<ApiError, CustomerEntity>> updateProfile({
+  Future<Either<ApiError, CustomerEntity>> updateProfile(
+    {
     required UpdateCustomerFormData data,
   }) async {
     final response = await _customerRepository.updateProfile(data);

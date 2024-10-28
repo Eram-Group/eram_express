@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../authentication/domain/repositories/authentication_repository.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
 import '../../../home/presentation/views/home_view.dart';
-import '../../../profile/presentation/views/profile_view.dart';
+import '../../../profile/presentation/views/profile_presentation/profile_view.dart';
 
 class InitViewModel extends Cubit<bool> {
   final AuthenticationRepository _authenticationRepository;

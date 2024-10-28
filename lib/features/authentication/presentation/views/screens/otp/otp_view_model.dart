@@ -23,7 +23,8 @@ class OtpViewModel extends Cubit<OtpViewState> {
 
   String get phoneNumber => _phoneNumber;
 
-  void init({required String phoneNumber}) {
+  void init({required String phoneNumber}) 
+  {
     _phoneNumber = phoneNumber;
     _startResendOtpTimer();
   }
@@ -35,7 +36,8 @@ class OtpViewModel extends Cubit<OtpViewState> {
       (timer) {
         if (state.canResendIn == 0) {
           timer.cancel();
-        } else {
+        } else
+         {
           emit(state.copyWith(canResendIn: state.canResendIn - 1));
         }
       },
@@ -67,7 +69,7 @@ class OtpViewModel extends Cubit<OtpViewState> {
         if (newCustomer) {
           logger.debug('New customer');
           Navigator.of(context).pushNamed(CompleteProfileView.route);
-        }
+                        }
       },
       onOtpVerificationFailed: (ApiError error) {
         emit(state.copyWith(verifyingOtp: false));

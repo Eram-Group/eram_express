@@ -29,7 +29,8 @@ class CompleteProfileViewModel extends Cubit<CompleteProfileViewState> {
   void Function()? saveButtonOnClicked(BuildContext context) =>
       state.saveButtonEnabled ? () => _saveButtonOnClicked(context) : null;
 
-  void _onFullNameChanged(String fullName) {
+  void _onFullNameChanged(String fullName)
+   {
     emit(state.copyWith(fullName: fullName));
   }
 

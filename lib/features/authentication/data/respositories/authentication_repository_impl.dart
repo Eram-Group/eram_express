@@ -1,6 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:eram_express/features/authentication/domain/objects/verify_otp_response_wrapper.dart';
 import 'package:eram_express_shared/core/app_error.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:logger/logger.dart';
 
 import '../../../customer/domain/entities/customer_entity.dart';
 import '../../../customer/domain/repositories/customer_repository.dart';
@@ -93,6 +95,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   void updateAuthenticatedCustomer(CustomerEntity data) {
+    logger.debug(_authenticatedCustomer!.fullName);
     _authenticatedCustomer = data;
   }
 }

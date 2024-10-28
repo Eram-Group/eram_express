@@ -47,8 +47,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
       );
     }
 
-    final updatedCustomer =
-        await _customerRemoteDataSource.updateProfile(data, accessToken);
+    final updatedCustomer = await _customerRemoteDataSource.updateProfile(data, accessToken);
 
     return updatedCustomer.fold(
       (error) => Left(error),

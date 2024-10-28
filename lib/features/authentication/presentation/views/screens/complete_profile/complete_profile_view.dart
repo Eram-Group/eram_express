@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../../../app/di.dart';
 import '../../../../../../app/iconsax_icons.dart';
+import '../../../../../Common/widgets/custom_text_field.dart';
 import 'complete_profile_view_model.dart';
 import 'complete_profile_view_state.dart';
 
@@ -17,7 +18,7 @@ class CompleteProfileView extends StatelessWidget {
       CompleteProfileViewModel(customerService: customerService);
 
   CompleteProfileView({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +60,20 @@ class CompleteProfileView extends StatelessWidget {
         BlocBuilder<CompleteProfileViewModel, CompleteProfileViewState>(
           bloc: viewModel,
           builder: (context, state) {
-            return TextField(
+            return CustomTextField(
+              hintText: context.tt('Enter your full name', 'ادخل اسمك الكامل'),
+              onChanged: (string) {
+                viewModel.onFullNameChanged();
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+/*
+TextFormField(
               onChanged: viewModel.onFullNameChanged(),
               decoration: InputDecoration(
                 hintText:
@@ -79,12 +93,6 @@ class CompleteProfileView extends StatelessWidget {
                 ),
               ),
             );
-          },
-        ),
-      ],
-    );
-  }
-
   InputBorder _textFieldBorder({
     Color color = const Color(0xFFF3F3F3),
   }) {
@@ -93,7 +101,7 @@ class CompleteProfileView extends StatelessWidget {
       borderSide: BorderSide(color: color),
     );
   }
-
+*/
   Widget _buildHeading(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

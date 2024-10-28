@@ -1,8 +1,9 @@
-import 'package:eram_express/features/profile/data/models/class_option_Model.dart';
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/menu_option_entity.dart';
+
 class listtitleCard extends StatelessWidget {
-  MenuOptionModel menuOption;
+  MenuOptionEntity menuOption;
   listtitleCard({required this.menuOption});
 
   @override
@@ -11,7 +12,7 @@ class listtitleCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: InkWell(
         onTap: () {
-          print("we hope it");
+          menuOption.onTap();
         },
         child: Container(
           height: 55,
@@ -28,7 +29,7 @@ class listtitleCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              //menuOption.icon,
+              menuOption.icon,
               SizedBox(
                 width: 10,
               ),

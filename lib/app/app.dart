@@ -20,7 +20,7 @@ class App extends StatelessWidget {
       builder: (_, Locale locale) => MaterialApp(
         theme: theme,
         debugShowCheckedModeBanner: false,
-        navigatorKey: navigatorKey,
+        navigatorKey: NavigationService.navigatorKey,
         initialRoute: InitView.route,
         onGenerateRoute: onGenerateRoute,
         supportedLocales: AppLocalizationsSetup.supportedLocales,

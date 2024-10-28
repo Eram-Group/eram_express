@@ -1,3 +1,6 @@
+import 'package:eram_express/features/profile/data/data_sources/profile_api_remote_data_source.dart';
+import 'package:eram_express/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:eram_express/features/profile/domain/repositories/profile_repository.dart';
 import 'package:eram_express_shared/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -41,6 +44,13 @@ final customerRepository = CustomerRepositoryImpl(
   remoteDataSource: customerRemoteDataSource,
   tokensLocalDataSource: tokensLocalDataSource,
 );
+
+//profile
+final profileRemoteDataSource = ProfileApiRemoteDataSource(
+  dioClient: dioClient,
+);
+final profileRepository =
+    ProfileRepositoryImpl(profileRemoteDataSource: profileRemoteDataSource);
 
 final localeCubit = LocaleCubit();
 
