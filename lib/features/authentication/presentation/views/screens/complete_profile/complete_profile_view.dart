@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +22,7 @@ class CompleteProfileView extends StatelessWidget {
       CompleteProfileViewModel(customerService: customerService);
 
   CompleteProfileView({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,10 +65,9 @@ class CompleteProfileView extends StatelessWidget {
           bloc: viewModel,
           builder: (context, state) {
             return CustomTextField(
+              onChanged: viewModel.onFullNameChanged(),
               hintText: context.tt('Enter your full name', 'ادخل اسمك الكامل'),
-              onChanged: (string) {
-                viewModel.onFullNameChanged();
-              },
+              isEnabled: !state.saving,
             );
           },
         ),
@@ -72,27 +75,6 @@ class CompleteProfileView extends StatelessWidget {
     );
   }
 
-/*
-TextFormField(
-              onChanged: viewModel.onFullNameChanged(),
-              decoration: InputDecoration(
-                hintText:
-                    context.tt('Enter your full name', 'ادخل اسمك الكامل'),
-                hintStyle: const TextStyle(
-                  color: Color(0xFFB0B0B0),
-                  fontFamily: 'Outfit',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  height: 1.8,
-                ),
-                enabled: !state.saving,
-                border: _textFieldBorder(),
-                enabledBorder: _textFieldBorder(),
-                focusedBorder: _textFieldBorder(
-                  color: const Color(0xFF194595),
-                ),
-              ),
-            );
   InputBorder _textFieldBorder({
     Color color = const Color(0xFFF3F3F3),
   }) {
@@ -101,7 +83,7 @@ TextFormField(
       borderSide: BorderSide(color: color),
     );
   }
-*/
+
   Widget _buildHeading(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,7 +124,13 @@ TextFormField(
     return BlocBuilder<CompleteProfileViewModel, CompleteProfileViewState>(
       bloc: viewModel,
       builder: (context, state) {
-        return Stack(
+        return ProfilePictureWidget(
+          profilePictureFile: state.profilePicture,
+          onProfilePictureClick: viewModel.profilePictureOnClicked(context),
+          saveButtonLoading: state.saveButtonLoading,
+        );
+        /*
+        Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
@@ -195,6 +183,7 @@ TextFormField(
             )
           ],
         );
+      */
       },
     );
   }
@@ -219,6 +208,91 @@ TextFormField(
           ),
         );
       },
+    );
+  }
+}
+
+class ProfilePictureWidget extends StatelessWidget {
+  final File? profilePictureFile;
+  final String? profilePictureUrl;
+  final bool saveButtonLoading;
+  final void Function()? onProfilePictureClick;
+
+  const ProfilePictureWidget({
+    Key? key,
+    this.profilePictureFile,
+    this.profilePictureUrl,
+    required this.saveButtonLoading,
+    required this.onProfilePictureClick,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: 89,
+          height: 89,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFFEEF1F8),
+          ),
+          child: profilePictureFile != null
+              ? ClipOval(
+                  child: Image.file(
+                    profilePictureFile!,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : profilePictureUrl != null
+                  ? ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: profilePictureUrl!,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/user.svg',
+                          ),
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/user.svg',
+                      ),
+                    ),
+        ),
+        Positioned(
+          bottom: -10,
+          right: -10,
+          child: Clickable(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: saveButtonLoading
+                  ? const Color.fromARGB(255, 105, 129, 176)
+                  : const Color(0xFF194595),
+              border: Border.all(
+                color: Colors.white,
+                width: 1.5,
+              ),
+            ),
+            onTap: onProfilePictureClick,
+            child: Center(
+              child: Icon(
+                Iconsax.camera,
+                color: saveButtonLoading
+                    ? Colors.white.withOpacity(0.5)
+                    : Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

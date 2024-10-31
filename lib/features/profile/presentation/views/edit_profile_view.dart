@@ -10,6 +10,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../app/navigation.dart';
 import '../../../Common/widgets/custom_text_field.dart';
+import '../../../authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import 'edit_profile_view_model.dart';
 import 'edit_profile_view_state.dart';
 import 'profile_presentation/profile_view_model.dart';
@@ -30,6 +31,19 @@ class EditProfileView extends StatelessWidget {
   EditProfileView(this.arguments, {super.key}) {
     viewmodel.setInitialValues(arguments);
   }
+
+  Widget _buildProfilePicture(BuildContext context) {
+    return BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+        bloc: viewmodel,
+        builder: (context, state) {
+          return ProfilePictureWidget(
+            profilePictureUrl: state.profilePicture,
+            onProfilePictureClick: viewmodel.profilePictureOnClicked(context),
+            saveButtonLoading: state.saving,
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +63,10 @@ class EditProfileView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Center(
+              child: _buildProfilePicture(context),
+            ),
+            const Gap(30),
             _buildTitleField(
               context.tt('full name', 'الاسم بالكامل'),
             ),
@@ -61,10 +79,10 @@ class EditProfileView extends StatelessWidget {
                     onChanged: (string) {
                       viewmodel.onFullNameChanged(string);
                     },
-
-                    //initialValue: state.fullName,
+                    initialValue: state.fullName,
                   );
                 }),
+            const Gap(30),
             _buildTitleField(context.tt('Phone Number', 'رقم التليفون')),
             BlocBuilder<EditProfileViewModel, EditProfileViewState>(
                 bloc: viewmodel,
@@ -104,46 +122,18 @@ class EditProfileView extends StatelessWidget {
   }
 }
 
-/*
-Widget _buildFullNameField(BuildContext context, String title) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        title,
-        style: const TextStyle(
-          color: Color(0xFF191D31),
-          fontFamily: 'Outfit',
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-          height: 1.3,
-        ),
-      ),
-      Gap(3),
-      /*
-      BlocBuilder<CompleteProfileViewModel, CompleteProfileViewState>(
-        bloc: viewModel,
-        builder:
-         (context, state) {
-         */
-      CustomTextField(
-        hintText: NavigationService.globalContext
-            .tt('Enter your full name', 'ادخل اسمك الكامل'),
-        onChanged: (string) {},
-      ),
-    ],
-  );
-}
-*/
 Widget _buildTitleField(String title) {
-  return Text(
-    title,
-    style: const TextStyle(
-      color: Color(0xFF191D31),
-      fontFamily: 'Outfit',
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
-      height: 1.3,
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Text(
+      title,
+      style: const TextStyle(
+        color: Color(0xFF191D31),
+        fontFamily: 'Outfit',
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        height: 1.3,
+      ),
     ),
   );
 }

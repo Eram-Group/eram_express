@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
-
 //temp to use anaother way instead of statfulll
 class CustomTextField extends StatefulWidget {
   final String? hintText;
-  final Function(String) onChanged;
+  final void Function(String)? onChanged;
   final bool isEnabled;
   final bool isSaving;
   final String? initialValue;
@@ -25,11 +23,10 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  late TextEditingController _controller; 
+  late TextEditingController _controller;
   @override
   void initState() {
     super.initState();
-   
     _controller = TextEditingController(text: widget.initialValue);
   }
 
@@ -42,9 +39,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _controller, 
+      controller: _controller,
       onChanged: (value) {
-        widget.onChanged(value);
+        widget.onChanged!(value);
       },
       decoration: InputDecoration(
         hintText: widget.hintText,
@@ -62,14 +59,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
           color: const Color(0xFF194595),
         ),
         suffix: _controller.text.isNotEmpty
-            ? SvgPicture.asset(
-                'assets/icons/tick-circle.svg') 
+            ? SvgPicture.asset('assets/icons/tick-circle.svg')
             : null,
+      ),
+      style: TextStyle(
+        color: Color(0xff191D31),
+        fontFamily: 'Outfit',
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        height: 1.8,
       ),
     );
   }
 
-  
   InputBorder _textFieldBorder({Color color = Colors.grey}) {
     return OutlineInputBorder(
       borderSide: BorderSide(color: color, width: 1.0),

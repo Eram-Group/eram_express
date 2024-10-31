@@ -4,7 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'login_view_state.freezed.dart';
 
 @freezed
-abstract class LoginViewState with _$LoginViewState {
+abstract class LoginViewState with _$LoginViewState
+ {
   const LoginViewState._();
 
   factory LoginViewState({
