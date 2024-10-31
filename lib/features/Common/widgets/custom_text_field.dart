@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class CustomTextField extends StatelessWidget {
+
+
+//temp to use anaother way instead of statfulll
+class CustomTextField extends StatefulWidget {
   final String? hintText;
   final Function(String) onChanged;
-  final String? initialValue;
   final bool isEnabled;
   final bool isSaving;
+  final String? initialValue;
+
   const CustomTextField({
     Key? key,
     this.hintText,
@@ -16,12 +21,33 @@ class CustomTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  late TextEditingController _controller; 
+  @override
+  void initState() {
+    super.initState();
+   
+    _controller = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onChanged: onChanged,
-      initialValue: initialValue,
+      controller: _controller, 
+      onChanged: (value) {
+        widget.onChanged(value);
+      },
       decoration: InputDecoration(
-        hintText: hintText,
+        hintText: widget.hintText,
         hintStyle: const TextStyle(
           color: Color(0xFFB0B0B0),
           fontFamily: 'Outfit',
@@ -29,22 +55,25 @@ class CustomTextField extends StatelessWidget {
           fontWeight: FontWeight.w400,
           height: 1.8,
         ),
-        enabled: isEnabled && !isSaving,
+        enabled: widget.isEnabled && !widget.isSaving,
         border: _textFieldBorder(),
         enabledBorder: _textFieldBorder(),
         focusedBorder: _textFieldBorder(
           color: const Color(0xFF194595),
         ),
+        suffix: _controller.text.isNotEmpty
+            ? SvgPicture.asset(
+                'assets/icons/tick-circle.svg') 
+            : null,
       ),
     );
   }
 
-  InputBorder _textFieldBorder({
-    Color color = const Color(0xFFF3F3F3),
-  }) {
+  
+  InputBorder _textFieldBorder({Color color = Colors.grey}) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: color),
+      borderSide: BorderSide(color: color, width: 1.0),
+      borderRadius: BorderRadius.circular(8.0),
     );
   }
 }

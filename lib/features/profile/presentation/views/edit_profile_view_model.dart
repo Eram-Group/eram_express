@@ -11,14 +11,17 @@ import 'edit_profile_view_state.dart';
 
 class EditProfileViewModel extends Cubit<EditProfileViewState> {
   final CustomerService _customerService;
-
+  String username = ""; 
+  //TODo image
   EditProfileViewModel({required CustomerService customerService})
       : _customerService = customerService,
-        super(EditProfileViewState()) {
-    //saveCustomerData();
+        super(EditProfileViewState()) 
+    {
+      
   }
 
   void setInitialValues(EditProfileViewArguments arguments) {
+    username=arguments.currentCustomer.fullName;
     emit(state.copyWith(
       fullName: arguments.currentCustomer.fullName,
       phoneNumber: arguments.currentCustomer.phoneNumber,
@@ -30,16 +33,19 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
     emit(state.copyWith(fullName: fullName));
   }
 
-  Future<void> saveButtonOnClicked(BuildContext context) async 
- {
-    emit(state.copyWith(saving: false));
+  bool enabledbutton()
+  {
+     return state.fullName!= username ? true: false;
+  }
+  Future<void> saveButtonOnClicked(BuildContext context) async {
+    
     final response = await _customerService.updateProfile(
       data: UpdateCustomerFormData(
         fullName: state.fullName,
         //profilePicture: state.profilePicture.
       ),
     );
-       emit(state.copyWith(saving: true));
+    
     response.fold(
       (error) => ErrorModal.fromApiError(error).show(context),
       (data) async {

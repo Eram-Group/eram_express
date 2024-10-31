@@ -61,7 +61,8 @@ class EditProfileView extends StatelessWidget {
                     onChanged: (string) {
                       viewmodel.onFullNameChanged(string);
                     },
-                    initialValue: state.fullName,
+
+                    //initialValue: state.fullName,
                   );
                 }),
             _buildTitleField(context.tt('Phone Number', 'رقم التليفون')),
@@ -79,10 +80,9 @@ class EditProfileView extends StatelessWidget {
                 bloc: viewmodel,
                 builder: (context, state) {
                   return CustomButton(
-                    loading: state.saving,
+                    enabled: viewmodel.enabledbutton(),
                     onTap: () {
                       logger.debug(viewmodel.state.fullName!);
-
                       viewmodel.saveButtonOnClicked(context);
                     },
                     child: Text(
@@ -147,188 +147,3 @@ Widget _buildTitleField(String title) {
     ),
   );
 }
-
-/*
-class ImageView extends StatelessWidget {
-  final String? imageFile;
-  const ImageView({this.imageFile});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => ImagePickerCubit(),
-        child: BlocBuilder<ImagePickerCubit, ImagePickerState>(
-            builder: (context, state) {
-          if (state is ImagePickerLoaded) {
-            return Stack(children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: FileImage(File(state.imagePath)),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: _buildIconCamera(context),
-              )
-            ]);
-          } else if (state is ImagePickerError) {
-            return Text(state.errormessege,
-                style: TextStyle(color: Colors.red));
-          } else {
-            return Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.red,
-                      width: 1.5,
-                    ),
-                    color: Colors.red,
-                  ),
-                  width: 100,
-                  height: 100,
-                  child: Icon(
-                    Icons.person,
-                    size: 100 / 2,
-                    color: Colors.black,
-                  ),
-                ),
-                Positioned(
-                  bottom: -10,
-                  right: -10,
-                  child: _buildIconCamera(context),
-                )
-              ],
-            );
-          }
-        }));
-  }
-}
-
-Widget _buildField({
-  required BuildContext context,
-  required String label,
-  String? hintText,
-  required String initialValue,
-  void Function(String)? onChanged,
-}) {
-  return Padding(
-    padding: customPadding(context, vertical: 10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: ShapeDecoration(shape: roundedRectangleBorder()),
-          child: TextFormField(
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                borderSide: BorderSide.none,
-              ),
-              hintStyle: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: Colors.black, fontSize: 15),
-              hintText: hintText,
-              //suffix:
-            ),
-            initialValue: initialValue,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.w400,
-                ),
-            onChanged: onChanged,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-/*
-Widget _buildIconCamera(BuildContext context) {
-  return GestureDetector(
-    onTap: () {
-      print("helllllllllllllllllllllllllllllllllllll");
-      //context.read<ImagePickerCubit>().pickImageFromCamera();
-      CustomBottomSheet.show(context);
-    },
-    child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white, width: 1.5),
-          color: AppColor.primaryColor,
-        ),
-        child: Padding(
-          padding: customPadding(context, all: 8),
-          child: Center(child: Image.asset("assets/camera.png")),
-        )),
-  );
-}
-
-class CustomBottomSheet extends StatelessWidget {
-  CustomBottomSheet({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            Text(
-              "Choose Profile Photo",
-              style: TextStyle(fontSize: 17),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ListTile(
-                    title: Text("Camera"),
-                    leading: Icon(Icons.camera),
-                    onTap: () {
-                      Navigator.of(context).pop(); // Close the bottom sheet
-                      context.read<ImagePickerCubit>().pickImageFromCamera();
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: Text("Gallery"),
-                    leading: Icon(Icons.photo_library),
-                    onTap: () {
-                      Navigator.of(context).pop(); // Close the bottom sheet
-                      context.read<ImagePickerCubit>().pickImageFromGallaty();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static Future<void> show(BuildContext context) async {
-    return await showModalBottomSheet<void>(
-      backgroundColor: Colors.white,
-      context: context,
-      isScrollControlled: true,
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
-        maxWidth: MediaQuery.of(context).size.width,
-      ),
-      builder: (context) => CustomBottomSheet(),
-    );
-  }
-}
-*/
-*/
