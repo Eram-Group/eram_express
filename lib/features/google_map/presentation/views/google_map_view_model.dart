@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:uuid/uuid.dart';
 import '../../domain/services/locationservice.dart';
 import 'google_map_view_state.dart';
 import 'place_details_view/place_details_view_model.dart';
@@ -13,7 +12,7 @@ class MarkerCubit extends Cubit<MarkerState> {
   final Locationservice _locationService;
   final PlaceDetailsViewModel _placeDetailsViewModel;
   MarkerCubit({
-    required Locationservice locationService,
+    required locationService,
     required PlaceDetailsViewModel placeDetailsViewModel,
   })  : _locationService = locationService,
         _placeDetailsViewModel = placeDetailsViewModel,
@@ -28,17 +27,29 @@ class MarkerCubit extends Cubit<MarkerState> {
 
   void setInitialCameraPostion(Point? initialAddress) {
     if (initialAddress != null) {
+      logger.debug("enter in intial");
       kInitialPosition = CameraPosition(
         target: LatLng(initialAddress.latitude, initialAddress.longitude),
         zoom: 15,
       );
       updateMarkerAndCamera(kInitialPosition);
     } else {
-      kInitialPosition = const CameraPosition(
-        target: LatLng(0, 0),
-        zoom: 15,
-      );
-      getCurrentLocation();
+      if (_locationService?.currentLocation != null) {
+        logger.debug("enter in current");
+        kInitialPosition = CameraPosition(
+          target: LatLng(_locationService.currentLocation!.point.latitude,
+              _locationService.currentLocation!.point.longitude),
+          zoom: 15,
+        );
+        updateMarkerAndCamera(kInitialPosition);
+      } else {
+        logger.debug("enter in intial camerAAA");
+        kInitialPosition = const CameraPosition(
+          target: LatLng(0, 0),
+          zoom: 15,
+        );
+        getCurrentLocation();
+      }
     }
     isLoading = false;
   }
@@ -60,10 +71,9 @@ class MarkerCubit extends Cubit<MarkerState> {
   void setController(GoogleMapController controller) {
     _controller = controller;
   }
- 
 
-  void getCurrentLocation() async {
-    //سجليه في حته علشان ال destination
+  void getCurrentLocation() async 
+  {
     LocationData? location = await _locationService.getCurrentLocation();
     kInitialPosition = CameraPosition(
       target: LatLng(location!.latitude!, location.longitude!),

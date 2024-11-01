@@ -11,7 +11,8 @@ import '../../../../domain/services/authentication_service.dart';
 import 'otp_view_state.dart';
 
 
-class OtpViewModel extends Cubit<OtpViewState> {
+class OtpViewModel extends Cubit<OtpViewState>
+ {
   final AuthenticationService _authenticationService;
   late final String _phoneNumber;
 

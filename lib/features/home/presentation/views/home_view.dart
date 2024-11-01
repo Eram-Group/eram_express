@@ -15,6 +15,7 @@ class HomeView extends StatelessWidget {
   static const String route = '/home';
   final ShippingFormCubit viewModel = ShippingFormCubit(
     homerepo: HomeRepository,
+    bookingService: bookingService,
   );
 
   HomeView({super.key});
@@ -129,6 +130,11 @@ class HomeView extends StatelessWidget {
                             context: context,
                             label: state.pickup?.address ?? "Pick up",
                             iconName: 'Pick_Up',
+                            filled: state.filled
+                                ? state.pickup?.address == null
+                                    ? true
+                                    : false
+                                : state.filled,
                           ),
                         ),
                         const Gap(7),
@@ -139,6 +145,11 @@ class HomeView extends StatelessWidget {
                             selectedValue: state.destination?.address ?? " ",
                             label: state.destination?.address ?? "Destination",
                             iconName: 'destination',
+                            filled: state.filled
+                                ? state.destination?.address == null
+                                    ? true
+                                    : false
+                                : state.filled,
                           ),
                         ),
                       ],
@@ -152,6 +163,14 @@ class HomeView extends StatelessWidget {
                           state.loadType?.nameEn ?? "Select the load type",
                           state.loadType?.nameAr ?? "اختر نوع الحمولة"),
                       iconName: 'arrow-down',
+                      // ده الحل لان context مش بتققبل   string?
+                      filled: state.filled
+                          ? context.tt(state.loadType?.nameEn ?? " ",
+                                      state.loadType?.nameAr ?? " ") ==
+                                  " "
+                              ? true
+                              : false
+                          : state.filled,
                     ),
                     _buildSelected(
                       onTap: () => viewModel.cargosubCategoryOnClicked(context),
@@ -163,37 +182,60 @@ class HomeView extends StatelessWidget {
                               "Choose the size of the truck ",
                           state.truckSize?.nameAr ?? "اختر حجم حمولتك "),
                       iconName: 'sizeTrack',
+                      filled: state.filled
+                          ? context.tt(state.loadType?.nameEn ?? " ",
+                                      state.loadType?.nameAr ?? " ") ==
+                                  " "
+                              ? true
+                              : false
+                          : state.filled,
                     ),
                     _buildSelected(
-                      onTap: () => viewModel.PickdateOnClicked(context),
-                      context: context,
-                      selectedValue: context.tt(
-                        state.pickupDate ?? " ",
-                        state.pickupDate ?? " ",
-                      ),
-                      label: context.tt(
-                        state.pickupDate ?? "pick up date",
-                        state.pickupDate ?? "اختر التاريخ",
-                      ),
-                      iconName: 'calendar',
-                    ),
+                        onTap: () => viewModel.PickdateOnClicked(context),
+                        context: context,
+                        selectedValue: context.tt(
+                          state.pickupDate ?? " ",
+                          state.pickupDate ?? " ",
+                        ),
+                        label: context.tt(
+                          state.pickupDate ?? "pick up date",
+                          state.pickupDate ?? "اختر التاريخ",
+                        ),
+                        iconName: 'calendar',
+                        filled: state.filled
+                            ? context.tt(
+                                      state.pickupDate ?? " ",
+                                      state.pickupDate ?? " ",
+                                    ) ==
+                                    " "
+                                ? true
+                                : false
+                            : state.filled),
                     _buildSelected(
-                      onTap: () => viewModel.GoodsOnClicked(context),
-                      context: context,
-                      selectedValue: context.tt(
-                        state.selectgoodsString ?? " ",
-                        state.selectgoodsString ?? " ",
-                      ),
-                      label: context.tt(
-                        state.selectgoodsString ?? "Select Goods",
-                        state.selectgoodsString ?? "اختر نوع البضائع",
-                      ),
-                      iconName: 'calendar',
-                    ),
+                        onTap: () => viewModel.GoodsOnClicked(context),
+                        context: context,
+                        selectedValue: context.tt(
+                          state.selectgoodsString ?? " ",
+                          state.selectgoodsString ?? " ",
+                        ),
+                        label: context.tt(
+                          state.selectgoodsString ?? "Select Goods",
+                          state.selectgoodsString ?? "اختر نوع البضائع",
+                        ),
+                        iconName: 'calendar',
+                        filled: state.filled
+                            ? context.tt(
+                                      state.pickupDate ?? " ",
+                                      state.pickupDate ?? " ",
+                                    ) ==
+                                    " "
+                                ? true
+                                : false
+                            : state.filled),
                     const Gap(8),
                     CustomButton(
                       onPressed: () {
-                        print(state.truckSize?.nameAr);
+                        viewModel.createRequestlbuttonclick();
                       },
                       text: "Check Rates",
                       backgroundColor: AppColor.primaryColor,
@@ -216,48 +258,61 @@ class HomeView extends StatelessWidget {
     required String label,
     required String iconName,
     required String? selectedValue,
+    required bool filled,
   }) {
     Color textColor = selectedValue != null && selectedValue != " "
         ? Colors.black
         : AppColor.ligthText;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: GestureDetector(
-          onTap: () async {
-            await onTap();
-          },
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColor.bordercolor,
-                )),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      label,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: textColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        height: 25.2 / 20,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+              onTap: () async {
+                await onTap();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: filled ? Colors.red : AppColor.bordercolor,
+                    )),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          label,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            height: 25.2 / 20,
+                          ),
+                        ),
                       ),
-                    ),
+                      SvgIcon(
+                        asset: iconName,
+                        size: 20,
+                      ),
+                    ],
                   ),
-                  SvgIcon(
-                    asset: iconName,
-                    size: 20,
-                  ),
-                ],
-              ),
-            ),
-          )),
+                ),
+              )),
+          filled
+              ? Text(context.tt(
+                  " * this field required",
+                  "الخانة مطلوبة",
+                ))
+              : const SizedBox.shrink()
+        ],
+      ),
     );
   }
 }

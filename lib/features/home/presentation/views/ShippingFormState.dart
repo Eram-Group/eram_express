@@ -16,6 +16,7 @@ class ShippingFormState {
   final List<CargoSubCategoryModel>? cargoSubCategories;
   final List<CargoCategoryModel>? cargoCategories;
   final List<GoodModel>? goods;
+  final bool filled;
   ShippingFormState({
     this.pickup,
     this.destination,
@@ -28,6 +29,7 @@ class ShippingFormState {
     this.cargoSubCategories,
     this.cargoCategories,
     this.goods,
+    this.filled = false,
   });
 
   ShippingFormState copyWith({
@@ -42,6 +44,7 @@ class ShippingFormState {
     List<CargoSubCategoryModel>? cargoSubCategories,
     List<CargoCategoryModel>? cargoCategories,
     List<GoodModel>? goods,
+    bool? filled,
   }) {
     return ShippingFormState(
         pickup: pickup ?? this.pickup,
@@ -54,6 +57,7 @@ class ShippingFormState {
         cargoSubCategories: cargoSubCategories ?? this.cargoSubCategories,
         cargoCategories: cargoCategories ?? this.cargoCategories,
         goods: goods ?? this.goods,
+        filled: filled ?? this.filled,
         selectgoodsString: selectgoodsString ?? this.selectgoodsString);
   }
 }

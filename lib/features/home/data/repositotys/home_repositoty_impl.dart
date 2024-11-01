@@ -15,7 +15,6 @@ class HomeRepositoryImpl implements HomeRepository {
   List<CargoCategoryModel>? cachedcargocategories;
   List<CargoSubCategoryModel>? cachedCargoSubCategory;
   List<GoodModel>? cachedgoods;
-
   HomeRepositoryImpl({
     required HomeDataRemoteDataSource remoteDataSource,
   }) : _remoteDataSource = remoteDataSource;

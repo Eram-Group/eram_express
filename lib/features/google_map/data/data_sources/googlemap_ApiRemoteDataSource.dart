@@ -11,15 +11,13 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
   String apiKey = 'AIzaSyBjgqhScxJNS9pvwKyDNEdvjW-RKpIP5uM';
 
   @override
-  Future<dynamic> getPredictionPlaces(String input, String sessiontoken) async {
+  Future<dynamic> getPredictionPlaces(String input, String sessiontoken ,String country) async {
     Response response =
         await dio.get(url + "place/autocomplete/json", queryParameters: {
       'input': input,
       'key': apiKey,
       'sessiontoken': sessiontoken,
-
-      //ToDO
-      //'components': 'country:eg',
+      'components':  'country:$country',
     });
     return response;
   }

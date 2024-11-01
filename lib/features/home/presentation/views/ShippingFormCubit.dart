@@ -1,4 +1,7 @@
+import 'package:eram_express/features/booking/domain/services/booking_service.dart';
+import 'package:eram_express/features/customer/domain/services/customer_service.dart';
 import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
+import 'package:eram_express/features/home/domain/objects/booking_request_form_data.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,10 +20,15 @@ import 'ShippingFormState.dart';
 
 class ShippingFormCubit extends Cubit<ShippingFormState> {
   final HomeRepositoryImpl _homerepo;
+  final BookingService _bookingService;
 
-  ShippingFormCubit({required HomeRepositoryImpl homerepo})
-      : _homerepo = homerepo,
+  ShippingFormCubit({
+    required HomeRepositoryImpl homerepo,
+    required BookingService bookingService,
+  })  : _homerepo = homerepo,
+        _bookingService = bookingService,
         super(ShippingFormState());
+
   Future<void> cargoCategoryOnClicked(BuildContext context) async {
     emit(state.copyWith(
       isLoading: true,
@@ -50,7 +58,7 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     );
 
     if (selection != null) {
-      emit(state.copyWith(loadType: selection));
+      emit(state.copyWith(loadType: selection, filled: false));
     }
   }
 
@@ -61,7 +69,7 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
         builder: (context) => PickDateBottomSheet());
     logger.debug(selection);
     if (selection != null) {
-      emit(state.copyWith(pickupDate: selection));
+      emit(state.copyWith(pickupDate: selection, filled: false));
     }
   }
 
@@ -92,7 +100,7 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
       ),
     );
     if (selection != null) {
-      emit(state.copyWith(truckSize: selection));
+      emit(state.copyWith(truckSize: selection, filled: false));
     }
   }
 
@@ -151,15 +159,14 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     String goodsNames =
         selectiongoods.map((good) => good.nameEn).toList().join(', ');
     logger.debug(goodsNames);
-    emit(state.copyWith(selectgoodsString: goodsNames));
+    emit(state.copyWith(selectgoodsString: goodsNames, filled: false));
   }
 
   Future<void> PickClicked(BuildContext context) async {
-    //logger.debug(state.pickup!.point.latitude.toString());
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
         arguments: GoogleMapViewArguments(initialAddress: state.pickup?.point));
     if (result is PickingLocationModel) {
-      emit(state.copyWith(pickup: result));
+      emit(state.copyWith(pickup: result, filled: false));
     }
   }
 
@@ -168,7 +175,32 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
         arguments:
             GoogleMapViewArguments(initialAddress: state.destination?.point));
     if (result is PickingLocationModel) {
-      emit(state.copyWith(pickup: result));
+      emit(state.copyWith(destination: result, filled: false));
     }
   }
+
+  void createRequestlbuttonclick() {
+    if (state.selectgoodsString == null ||
+        state.truckSize == null ||
+        state.pickupDate == null ||
+        state.pickup == null ||
+        state.loadType == null ||
+        state.destination == null) {
+      logger.debug("clickkk done");
+      emit(state.copyWith(filled: true));
+    } else 
+    {
+    List<int> goodids = [];  
+            state.selectgoods?.forEach((good) {
+    goodids.add(good.id);  
+});
+
+    BookingRequestFormData formData=BookingRequestFormData(cargoVehicleSubcategoryId: state.truckSize?.id, goodIds:goodids, bookingDate: state.pickupDate!, pickup:state.pickup!, destination: state.destination!);
+    final result= _bookingService.bookingRequest(formData);
+    }
+  }
+
+
+
+
 }
