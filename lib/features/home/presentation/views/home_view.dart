@@ -23,14 +23,21 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
             child: Stack(
-      children: [
-        _buildHeader(context),
-        _builddataContainer(context),
-      ],
-    )));
+          children: [
+            _buildHeader(context),
+            _builddataContainer(context),
+          ],
+        )));
   }
+
+/*
+لما نعمل merge 
+هستخدم 
+profile viewmodel
+*/
 
   Widget _buildHeader(BuildContext context) {
     return Container(

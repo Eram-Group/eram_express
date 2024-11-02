@@ -33,9 +33,16 @@ class Locationservice {
     final result = await _googlemapRepository.getPredictionPlaces(input, sessiontoken,user!.country.code);
     return result;
   }
+
   Future<Either<String, List<PlaceDetailsModel>>> getplacedetailsresult(
       String lat, String long) async {
     final result = await _googlemapRepository.getPlacedetails(lat, long);
+
+    return result;
+  }
+  Future<Either<String, PlaceDetailsModel>> getlonglatresult(
+      String address) async {
+    final result = await _googlemapRepository.getlonglatplace(address);
 
     return result;
   }

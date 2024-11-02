@@ -237,8 +237,7 @@ class SearchButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Navigate to the search screen
-        Navigator.pushNamed(
-            context, '/search'); // Adjust the route name if necessary
+        context.read<MarkerCubit>().searchButtonClick();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

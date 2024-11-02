@@ -174,7 +174,8 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
         arguments:
             GoogleMapViewArguments(initialAddress: state.destination?.point));
-    if (result is PickingLocationModel) {
+    if (result is PickingLocationModel) 
+    {
       emit(state.copyWith(destination: result, filled: false));
     }
   }

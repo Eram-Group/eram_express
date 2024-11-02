@@ -12,9 +12,11 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
       {required GoogleMapRemoteDataSource googlemapRemoteDataSource})
       : _googlemapRemoteDataSource = googlemapRemoteDataSource;
   @override
-  Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces(String input ,String sessiontoken,String Counrty) async {
+  Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces(
+      String input, String sessiontoken, String Counrty) async {
     try {
-      final result =  await _googlemapRemoteDataSource.getPredictionPlaces(input, sessiontoken,Counrty);
+      final result = await _googlemapRemoteDataSource.getPredictionPlaces(
+          input, sessiontoken, Counrty);
 
       if (result.statusCode == 200) {
         List<PlaceAutocompleteModel> predictionModels =
@@ -22,34 +24,45 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
                 .map((item) => PlaceAutocompleteModel.fromjson(item))
                 .toList();
         return Right(predictionModels);
-      } else
-      {
+      } else {
         logger.error("Error fetching predictions: ${result.statusMessage}");
         return Left("Error in prediction: ${result.statusMessage}");
       }
-    } catch (error) 
-    {
+    } catch (error) {
       logger.error("Exception fetching predictions: ${error.toString()}");
       return Left("Exception in prediction: ${error.toString()}");
     }
   }
 
-  Future<Either<String, List<PlaceDetailsModel>>> getPlacedetails(String lat ,String long) async
-  {
-    final result=await _googlemapRemoteDataSource.getPlacedetails(lat, long);
-    if(result.statusCode == 200)
-    {
-        logger.debug("Request successful");
-          List<PlaceDetailsModel> placedetatilslist =
+  @override
+  Future<Either<String, List<PlaceDetailsModel>>> getPlacedetails(
+      String lat, String long) async {
+    final result = await _googlemapRemoteDataSource.getPlacedetails(lat, long);
+    if (result.statusCode == 200) {
+      logger.debug("Request successful");
+      List<PlaceDetailsModel> placedetatilslist =
           (result.data['results'] as List)
               .map((item) => PlaceDetailsModel.fromJson(item))
               .toList();
-        return Right(placedetatilslist);
+      return Right(placedetatilslist);
+    } else {
+      logger.error("Error fetching predictions: ${result.statusMessage}");
+      return Left("Error in prediction: ${result.statusMessage}");
     }
-    else
-      {
-        logger.error("Error fetching predictions: ${result.statusMessage}");
-        return Left("Error in prediction: ${result.statusMessage}");
-      }
-    } 
   }
+
+  Future<Either<String, PlaceDetailsModel>> getlonglatplace(
+      String address) async {
+    final result = await _googlemapRemoteDataSource.getlonglatplace(address);
+    if (result.statusCode == 200) {
+      List<PlaceDetailsModel> placedetatilslist =
+          (result.data['results'] as List)
+              .map((item) => PlaceDetailsModel.fromJson(item))
+              .toList();
+      return Right(placedetatilslist[0]);
+    } else {
+      logger.error("Error fetching predictions: ${result.statusMessage}");
+      return Left("Error in prediction: ${result.statusMessage}");
+    }
+  }
+}

@@ -6,5 +6,5 @@ abstract class GoogleMapRepository
 {
   Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces(String input,String sessiontoken,String country);
   Future<Either<String, List<PlaceDetailsModel>>> getPlacedetails(String lat ,String long);
-  
+  Future<Either<String, PlaceDetailsModel>> getlonglatplace(String address);
 }

@@ -1,3 +1,5 @@
+import 'package:eram_express/app/navigation.dart';
+import 'package:eram_express/features/google_map/presentation/search_model_view/search_view.dart';
 import 'package:eram_express/features/home/data/models/picking_locationModel.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/widgets.dart';
@@ -72,8 +74,7 @@ class MarkerCubit extends Cubit<MarkerState> {
     _controller = controller;
   }
 
-  void getCurrentLocation() async 
-  {
+  void getCurrentLocation() async {
     LocationData? location = await _locationService.getCurrentLocation();
     kInitialPosition = CameraPosition(
       target: LatLng(location!.latitude!, location.longitude!),
@@ -104,5 +105,15 @@ class MarkerCubit extends Cubit<MarkerState> {
       CameraPosition(target: locationData.target, zoom: 15),
     ));
     emit(MarkerUpdated(Set.from(mapMarkers)));
+  }
+
+  void searchButtonClick() async {
+    final result = await Navigator.pushNamed(
+        NavigationService.globalContext, SearchView.route);
+    if (result is LatLng) {
+      logger.debug(result.latitude.toString());
+      CameraPosition temp = CameraPosition(target: result);
+      updateMarkerAndCamera(temp, moveCamera: true);
+    }
   }
 }

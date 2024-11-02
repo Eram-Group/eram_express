@@ -18,10 +18,23 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
       'key': apiKey,
       'sessiontoken': sessiontoken,
       'components':  'country:$country',
+       //TODO
+      //'language': 'ar',
+      
     });
     return response;
   }
-
+ 
+  Future<dynamic> getlonglatplace(String address) async {
+    
+    Response response = await dio.get(url + "geocode/json", queryParameters: {
+      'address': address,
+      'key': apiKey,
+      //TODO
+      //'language': 'ar',
+    });
+    return response;
+  }
   Future<dynamic> getPlacedetails(String lat, String long) async {
     String input = lat + "," + long;
     Response response = await dio.get(url +"geocode/json", queryParameters: {

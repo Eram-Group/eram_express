@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 class PlaceAutocompleteModel extends Equatable {
   final String description;
   final String placeId;
-
+  
   const PlaceAutocompleteModel({required this.description, required this.placeId});
 
   factory PlaceAutocompleteModel.fromjson(Map<String, dynamic> data) {
