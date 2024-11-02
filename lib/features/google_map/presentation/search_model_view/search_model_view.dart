@@ -73,13 +73,8 @@ class SearchCubit extends Cubit<SearchState> {
     return super.close();
   }
 }
-/*
-المشكله انه بيوديه علي اسكرين جديده 
-لا المفروض لما يدوس يرجع لاسكرين الي قبلهااا لكن بالداتا الجديده 
 
 
 
 
 
-
-*/

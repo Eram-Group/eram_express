@@ -12,15 +12,33 @@ class PlaceDetailsViewModel extends Cubit<PlaceDetailsViewState> {
   })  : _locationService = locationService,
         super(PlaceDetailsloading()) {}
 
-  void getplacedetails(String lat, String long) {
+ bool matching =true;
+ Future<bool> getplacedetails(String lat, String long) async {
     emit(PlaceDetailsloading());
-    final result = _locationService.getplacedetailsresult(lat, long);
-    result.fold((errorMessage) {
-     
-      emit(PlaceDetailerror("faild to get places"));
-    }, (placedetails) {
-      logger.debug("State placeeeeeeee: ${placedetails[0].formattedAddress}");
-      emit(PlaceDetailssuccess(placedetails[0]));
+
+    // Await the result of the asynchronous call to get placedetails
+    final result = await _locationService.getplacedetailsresult(lat, long);
+
+    return result.fold((errorMessage) {
+      emit(PlaceDetailerror(
+          "failed to get places")); // Corrected "faild" to "failed"
+      return false; // Return false in case of error
+    }, (placedetails) async {
+       bool matching = await countryMatch(placedetails[0]
+          .CounrtyCode); 
+      logger.debug("State placeeeeeeee: ${placedetails[0].CounrtyCode}");
+      logger.debug("State placeeeeeeee2: $matching");
+      matching?
+      emit(PlaceDetailssuccess(placedetails[0])):emit(PlaceDetaisOutsideboundries());
+      return matching; 
     });
+  }
+
+  Future<bool> countryMatch(String? CounrtyCode) async {
+    String UserCounrtyCode = await _locationService.getCustomerCountry();
+    if (CounrtyCode == UserCounrtyCode)
+      return true;
+    else
+      return false;
   }
 }

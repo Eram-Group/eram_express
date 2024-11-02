@@ -26,29 +26,26 @@ class MarkerCubit extends Cubit<MarkerState> {
   late String mapstyle = '';
   late CameraPosition kInitialPosition;
   bool isLoading = true;
-
+  bool matching = true;
   void setInitialCameraPostion(Point? initialAddress) {
     if (initialAddress != null) {
-      logger.debug("enter in intial");
       kInitialPosition = CameraPosition(
         target: LatLng(initialAddress.latitude, initialAddress.longitude),
-        zoom: 15,
+        zoom: 8,
       );
       updateMarkerAndCamera(kInitialPosition);
     } else {
       if (_locationService?.currentLocation != null) {
-        logger.debug("enter in current");
         kInitialPosition = CameraPosition(
           target: LatLng(_locationService.currentLocation!.point.latitude,
               _locationService.currentLocation!.point.longitude),
-          zoom: 15,
+          zoom: 8,
         );
         updateMarkerAndCamera(kInitialPosition);
       } else {
-        logger.debug("enter in intial camerAAA");
         kInitialPosition = const CameraPosition(
           target: LatLng(0, 0),
-          zoom: 15,
+          zoom: 8,
         );
         getCurrentLocation();
       }
@@ -60,7 +57,8 @@ class MarkerCubit extends Cubit<MarkerState> {
   // كل ما بيدخل الصفحه بيرجع يجيب ال details ده عادي؟
   void getplacedetails() async {
     logger.debug("get details for mark ${mapMarkers.first.position.latitude}");
-    _placeDetailsViewModel.getplacedetails(
+
+    matching = await _placeDetailsViewModel.getplacedetails(
         mapMarkers.first.position.latitude.toString(),
         mapMarkers.first.position.longitude.toString());
   }
@@ -78,7 +76,7 @@ class MarkerCubit extends Cubit<MarkerState> {
     LocationData? location = await _locationService.getCurrentLocation();
     kInitialPosition = CameraPosition(
       target: LatLng(location!.latitude!, location.longitude!),
-      zoom: 15,
+      zoom: 8,
     );
 
     updateMarkerAndCamera(kInitialPosition!, moveCamera: true);
@@ -102,7 +100,7 @@ class MarkerCubit extends Cubit<MarkerState> {
 
   void ChangeCameraPosition(CameraPosition locationData) {
     _controller?.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(target: locationData.target, zoom: 15),
+      CameraPosition(target: locationData.target, zoom: 8),
     ));
     emit(MarkerUpdated(Set.from(mapMarkers)));
   }

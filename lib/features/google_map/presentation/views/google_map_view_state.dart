@@ -14,17 +14,14 @@ class Markerloading extends MarkerState {}
 
 class MarkerUpdated extends MarkerState {
   final Set<Marker> markers;
-  const MarkerUpdated(this.markers);
-  @override
-  List<Object> get props => [markers];
-}
+  final bool inside;
 
-class MarkerComplete extends MarkerState {
-  //final PlaceModel place;
-
-  const MarkerComplete();
+  const MarkerUpdated(this.markers,
+      {this.inside = true}); // Use named parameter for clarity
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [markers, inside];
 }
+
+
 

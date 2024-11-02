@@ -89,15 +89,6 @@ class Locationservice {
     }
   }
 
-  Stream<LocationData> getRealtimeLocation() {
-    return location.onLocationChanged.map((LocationData currentLocation) {
-      /*
-      logger.debug(
-          "Current Location: ${currentLocation.latitude}, ${currentLocation.longitude}");
-          */
-      return currentLocation;
-    });
-  }
 
   Future<LocationData> getCurrentLocation() async {
     try {
@@ -116,5 +107,11 @@ class Locationservice {
       logger.error("Error: $e");
       return Future.error(e);
     }
+  }
+
+   Future<String> getCustomerCountry() async
+  {
+     CustomerEntity? user= await _authenticationRepository.authenticatedCustomer;
+     return user!.country.code!;
   }
 }

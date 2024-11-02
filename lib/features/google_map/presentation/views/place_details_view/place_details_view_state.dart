@@ -17,7 +17,10 @@ class PlaceDetailssuccess extends PlaceDetailsViewState {
   @override
   List<Object> get props => [placedetails];
 }
-
+class PlaceDetaisOutsideboundries extends PlaceDetailsViewState
+{
+     List<Object> get props => [];
+}
 class PlaceDetailerror extends PlaceDetailsViewState {
   String errormessege;
   PlaceDetailerror(this.errormessege);

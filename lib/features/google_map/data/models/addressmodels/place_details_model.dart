@@ -8,12 +8,15 @@ class PlaceDetailsModel {
   List<AddressComponent> addressComponents;
   double? long;
   double? lat;
-  PlaceDetailsModel(
-      {required this.placeId,
-      required this.formattedAddress,
-      required this.addressComponents,
-      this.lat,
-      this.long});
+  String? CounrtyCode;
+  PlaceDetailsModel({
+    required this.placeId,
+    required this.formattedAddress,
+    required this.addressComponents,
+    this.lat,
+    this.long,
+    this.CounrtyCode,
+  });
 
   factory PlaceDetailsModel.fromJson(Map<String, dynamic> json) {
     var componentsFromJson = json['address_components'] as List;
@@ -27,6 +30,27 @@ class PlaceDetailsModel {
       addressComponents: addressComponentsList,
       lat: json["geometry"]["location"]["lat"],
       long: json["geometry"]["location"]["lng"],
+      CounrtyCode: getCountryCode(json),
     );
+  }
+}
+
+String? getCountryCode(Map<String, dynamic> json) {
+  var country = json['address_components']?.firstWhere(
+    (component) {
+      if (component['types'] is List) {
+        return (component['types'] as List).contains('country');
+          }
+      return false;
+    },
+    orElse: () => null, // إذا لم نجد أي عنصر، نعيد null
+  );
+
+ 
+  if (country != null) {
+    String countryCode = country['short_name'];
+    return countryCode;
+  } else {
+    return null; 
   }
 }

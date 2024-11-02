@@ -69,26 +69,37 @@ class GoogleMapView extends StatelessWidget {
                     onCameraIdle: () {
                       context.read<MarkerCubit>().getplacedetails();
                     },
-                    style: context.read<MarkerCubit>().mapstyle,
+                    //style: context.read<MarkerCubit>().mapstyle,
                     initialCameraPosition:
                         context.read<MarkerCubit>().kInitialPosition,
+                    /*
+                    scrollGesturesEnabled: false, // منع التحريك العمودي والأفقي
+                    zoomGesturesEnabled: false, // منع التكبير والتصغير
+                    rotateGesturesEnabled: false, // منع التدوير
+                    tiltGesturesEnabled: false,
+                    */
                   ),
-                  if (context.read<MarkerCubit>().isLoading)
-                    Container(
-                      color: Colors.white.withOpacity(0.6),
-                      child: Center(
-                        child: Text(
-                          "جاري تحميل الموقع...",
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        ),
-                      ),
-                    ),
                   if (!context.read<MarkerCubit>().isLoading)
                     Center(
                       child: _buildMarker(),
                     ),
-                  SearchButton(),
+                  const SearchButton(),
                   _buildAddressContainer(),
+                  /*
+                  if (!context
+                      .read<MarkerCubit>()
+                      .matching) // تحقق من قيمة inside
+                    Positioned.fill(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                            sigmaX: 5.0, sigmaY: 5.0), // تعيين مستوى الضبابية
+                        child: Container(
+                          color: Colors.black
+                              .withOpacity(0.5), // لون الطبقة مع الشفافية
+                        ),
+                      ),
+                    ),
+                    */
                 ],
               ),
             ),
@@ -105,117 +116,127 @@ class GoogleMapView extends StatelessWidget {
       right: 0,
       child: BlocBuilder<PlaceDetailsViewModel, PlaceDetailsViewState>(
         builder: (context, state) {
-          {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
+          return Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
               ),
-              //height: Responsive.screenHeight! * .25,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const TopBottomModel(),
-                    state is PlaceDetailerror
-                        ? Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(Icons.error),
-                              Text(state.errormessege),
-                            ],
-                          )
-                        : Row(
+            ),
+            //height: Responsive.screenHeight! * .25,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const TopBottomModel(),
+                  if (state is PlaceDetailerror)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.error),
+                        Text(state.errormessege),
+                      ],
+                    )
+                  else if (state is PlaceDetaisOutsideboundries)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.error),
+                        const Text("Outside the borders of the country"),
+                      ],
+                    )
+                  else
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SvgIcon(asset: 'record-circle'),
+                        SizedBox(
+                          width: Responsive.getResponsiveFontSize(context,
+                              fontSize: 20),
+                        ),
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const SvgIcon(asset: 'record-circle'),
-                              SizedBox(
-                                width: Responsive.getResponsiveFontSize(context,
-                                    fontSize: 20),
+                              Text(
+                                context.tt('Pick up location', "موقع الاستلام"),
+                                style: TextStyle(
+                                  fontSize: Responsive.getResponsiveFontSize(
+                                      context,
+                                      fontSize: 16),
+                                  height: 25.2 /
+                                      Responsive.getResponsiveFontSize(context,
+                                          fontSize: 16),
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColor.lightGrey,
+                                ),
                               ),
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
+                              if (state is PlaceDetailssuccess)
+                                Column(children: [
                                   Text(
-                                    context.tt(
-                                        'Pick up location', "موقع الاستلام"),
+                                    state.placedetails.formattedAddress,
                                     style: TextStyle(
                                       fontSize:
                                           Responsive.getResponsiveFontSize(
                                               context,
-                                              fontSize: 16),
-                                      height: 25.2 /
+                                              fontSize: 14),
+                                      height: 18.2 /
                                           Responsive.getResponsiveFontSize(
                                               context,
-                                              fontSize: 16),
-                                      fontWeight: FontWeight.w400,
-                                      color: AppColor.lightGrey,
+                                              fontSize: 14),
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  state is PlaceDetailssuccess
-                                      ? Text(
-                                          state.placedetails.formattedAddress,
-                                          style: TextStyle(
-                                            fontSize: Responsive
-                                                .getResponsiveFontSize(context,
-                                                    fontSize: 14),
-                                            height: 18.2 /
-                                                Responsive
-                                                    .getResponsiveFontSize(
-                                                        context,
-                                                        fontSize: 14),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        )
-                                      : Container(
-                                          width: 70,
-                                          height: 10,
-                                          color: Colors.grey,
-                                        ),
-                                ],
-                              )),
+                                  const Gap(30),
+                                  CustomButton(
+                                    padding: const EdgeInsets.all(15),
+                                    text: context.tt(
+                                        "Select location", "حدد الموقع"),
+                                    onPressed: () {
+                                      PickingLocationModel pickingLocation =
+                                          PickingLocationModel(
+                                              point: Point(
+                                                longitude: context
+                                                    .read<MarkerCubit>()
+                                                    .mapMarkers
+                                                    .first
+                                                    .position
+                                                    .longitude,
+                                                latitude: context
+                                                    .read<MarkerCubit>()
+                                                    .mapMarkers
+                                                    .first
+                                                    .position
+                                                    .latitude,
+                                              ),
+                                              address: state.placedetails
+                                                  .formattedAddress);
+                                      Navigator.of(context).pop(
+                                          pickingLocation); // Pop the current route and return the picking location
+                                    },
+                                  ),
+                                ])
+                              else // Loading placeholder
+                                Container(
+                                  width: 70,
+                                  height: 10,
+                                  color: Colors.grey, // Loading
+                                ),
+                              const Gap(30),
                             ],
                           ),
-                    //TOdO change it  with shared eram
-                    const Gap(30),
-                    CustomButton(
-                        padding: const EdgeInsets.all(15),
-                        text: context.tt("Select location", "حدد الموقع"),
-                        onPressed: () {
-                          PickingLocationModel picking_location =
-                              PickingLocationModel(
-                                  point: Point(
-                                      longitude: context
-                                          .read<MarkerCubit>()
-                                          .mapMarkers
-                                          .first
-                                          .position
-                                          .longitude,
-                                      latitude: context
-                                          .read<MarkerCubit>()
-                                          .mapMarkers
-                                          .first
-                                          .position
-                                          .latitude),
-                                  address: state is PlaceDetailssuccess
-                                      ? state.placedetails.formattedAddress
-                                      : "....");
-                          Navigator.of(context).pop(picking_location);
-                        })
-                  ],
-                ),
+                        ),
+                      ],
+                    ),
+                ],
               ),
-            );
-          }
+            ),
+          );
         },
       ),
     );
