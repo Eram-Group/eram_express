@@ -1,4 +1,5 @@
 import 'package:eram_express/core/app_colors.dart';
+import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class HomeView extends StatelessWidget {
   static const String route = '/home';
   final ShippingFormCubit viewModel = ShippingFormCubit(
     homerepo: HomeRepository,
-    bookingService: bookingService,
+    createBookingRequestUsecase: CreateBookingRequestUsecase(bookingRepository: bookingRepository)
   );
 
   HomeView({super.key});

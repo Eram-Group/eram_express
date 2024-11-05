@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:eram_express/app/di.dart';
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
+import 'package:eram_express/features/google_map/domain/usecases/get_current_location_usecase.dart';
+import 'package:eram_express/features/google_map/domain/usecases/get_place_details_usaecase.dart';
 import 'package:eram_express/features/google_map/presentation/views/google_map_view_model.dart';
 import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
@@ -35,14 +37,18 @@ class GoogleMapView extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider(
-          create: (_) =>
-              PlaceDetailsViewModel(locationService: locationservice),
+          create: (_) => PlaceDetailsViewModel(
+              getPlaceDetailsUsaecase: GetPlaceDetailsUsaecase(
+                  authenticationRepository: authenticationRepository,
+                  googleMapRepository: googlemapRepository)),
         ),
         BlocProvider(
           create: (context) {
             final placeDetailsViewModel = context.read<PlaceDetailsViewModel>();
             return MarkerCubit(
               locationService: locationservice,
+              getCurrentLocationUsecase:
+                  GetCurrentLocationUsecase(locationservice: locationservice),
               placeDetailsViewModel: placeDetailsViewModel,
             )..setInitialCameraPostion(googleMapViewArguments?.initialAddress);
           },
@@ -72,12 +78,6 @@ class GoogleMapView extends StatelessWidget {
                     //style: context.read<MarkerCubit>().mapstyle,
                     initialCameraPosition:
                         context.read<MarkerCubit>().kInitialPosition,
-                    /*
-                    scrollGesturesEnabled: false, // منع التحريك العمودي والأفقي
-                    zoomGesturesEnabled: false, // منع التكبير والتصغير
-                    rotateGesturesEnabled: false, // منع التدوير
-                    tiltGesturesEnabled: false,
-                    */
                   ),
                   if (!context.read<MarkerCubit>().isLoading)
                     Center(
@@ -85,21 +85,6 @@ class GoogleMapView extends StatelessWidget {
                     ),
                   const SearchButton(),
                   _buildAddressContainer(),
-                  /*
-                  if (!context
-                      .read<MarkerCubit>()
-                      .matching) // تحقق من قيمة inside
-                    Positioned.fill(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                            sigmaX: 5.0, sigmaY: 5.0), // تعيين مستوى الضبابية
-                        child: Container(
-                          color: Colors.black
-                              .withOpacity(0.5), // لون الطبقة مع الشفافية
-                        ),
-                      ),
-                    ),
-                    */
                 ],
               ),
             ),
@@ -124,7 +109,6 @@ class GoogleMapView extends StatelessWidget {
                 topRight: Radius.circular(30),
               ),
             ),
-            //height: Responsive.screenHeight! * .25,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: Column(
@@ -257,20 +241,25 @@ class SearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to the search screen
         context.read<MarkerCubit>().searchButtonClick();
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.transparent),
-        ),
-        child: const Text(
-          "Search here", // Hint text
-          style: TextStyle(
-            color: Colors.grey, // You can customize the text color
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5)
+            .copyWith(bottom: 0),
+        child: Container(
+          width: Responsive.screenWidth,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(color: Colors.transparent),
+          ),
+          child: Text(
+            context.tt("Search here", "البحث هنا "),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 18,
+            ),
           ),
         ),
       ),

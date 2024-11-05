@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
 import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
+import '../features/booking/presentation/temp_offers_view.dart';
 import '../features/google_map/presentation/search_model_view/search_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
@@ -34,14 +35,22 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
   } else if (name == HomeView.route) {
     page = HomeView();
-  } else if (name == GoogleMapView.route)
+  } 
+  else if (name == GoogleMapView.route)
  {
      final arguments = settings.arguments as GoogleMapViewArguments?;
     page = GoogleMapView(googleMapViewArguments: arguments,);
   } 
-  else if (name == SearchView.route) {
-    page = SearchView();
-  } else {
+  else if (name == SearchView.route) 
+  {
+    page = const SearchView();
+  } 
+   else if (name == offersView.route) 
+   {
+    page = const offersView();
+   } 
+  else 
+  {
     page = const NotFoundView();
   }
 

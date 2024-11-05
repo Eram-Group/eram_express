@@ -4,6 +4,8 @@ import 'package:either_dart/either.dart';
 import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/google_map/data/repositories/google_map_repositiory.dart';
 import 'package:eram_express/features/google_map/domain/services/locationservice.dart';
+import 'package:eram_express/features/google_map/domain/usecases/get_longlat_place_usecase.dart';
+import 'package:eram_express/features/google_map/domain/usecases/get_search_result_usecase.dart';
 import 'package:eram_express/features/home/data/models/picking_locationModel.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +17,19 @@ import '../google_map_view.dart';
 import 'search_model_view_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  final Locationservice _locationservice;
+  final GetSearchResultUsecase  _getSearchResultUsecase;
+  final GetLonglatPlaceUsecase _getLonglatPlaceUsecase;
+  //final Locationservice _locationservice;
   final TextEditingController searchController = TextEditingController();
   String? sessiontoken;
   Timer? debounce;
-  SearchCubit({required Locationservice locationservice})
-      : _locationservice = locationservice,
+
+   SearchCubit({required  GetSearchResultUsecase  getSearchResultUsecase,
+   required GetLonglatPlaceUsecase getLonglatPlaceUsecase
+   
+   })
+      :_getSearchResultUsecase = getSearchResultUsecase,
+      _getLonglatPlaceUsecase=getLonglatPlaceUsecase,
         super(SearchStateintial()) {
     searchController.addListener(() {
       if (debounce?.isActive ?? false) {
@@ -28,8 +37,7 @@ class SearchCubit extends Cubit<SearchState> {
       }
       debounce = Timer(const Duration(milliseconds: 500), () {
         sessiontoken ??= const Uuid().v4();
-        //ToDo
-        // نهايه السيشن لما ادوس واروح للي هختاره لسه معملتهاش
+
         updateSearchQuery(searchController.text);
       });
     });
@@ -40,7 +48,7 @@ class SearchCubit extends Cubit<SearchState> {
     logger.debug(query);
 
     if (query.isNotEmpty && query.trim().isNotEmpty) {
-      final result = _locationservice.getsearchresult(query, sessiontoken!);
+      final result = _getSearchResultUsecase.execute(query, sessiontoken!);
       result.fold((errorMessage) {
         emit(SearchStateError("faild to get places"));
       }, (placelist) {
@@ -55,7 +63,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void getlonglat(String address) {
-    final result = _locationservice.getlonglatresult(address);
+    final result = _getLonglatPlaceUsecase.execute(address);
 
     result.fold(
         (error) => emit(SearchStateError("faild to get places")),

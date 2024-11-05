@@ -1,13 +1,16 @@
+import 'package:eram_express/features/authentication/presentation/views/modals/registered_successfully_modal.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../app/di.dart';
 import '../../data/models/place_auto_complete_model.dart';
+import '../../domain/usecases/get_longlat_place_usecase.dart';
+import '../../domain/usecases/get_search_result_usecase.dart';
 import 'search_model_view.dart';
 import 'search_model_view_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchView extends StatelessWidget {
   static const String route = '/search';
@@ -18,37 +21,48 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SearchCubit(
-          locationservice:
-              locationservice), // Assuming locationservice is defined somewhere
-
+          getLonglatPlaceUsecase:
+              GetLonglatPlaceUsecase(googleMapRepository: googlemapRepository),
+          getSearchResultUsecase: GetSearchResultUsecase(
+              googleMapRepository: googlemapRepository,
+              authenticationRepository: authenticationRepository)),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Search View'), // Added an AppBar for better UI
-        ),
-        body: Column(
-          children: [
-            const SearchButton(),
-            BlocBuilder<SearchCubit, SearchState>(
-              builder: (context, state) {
-                if (state is SearchStateError) {
-                  return Center(child: Text("Error occurred"));
-                } else if (state is SearchStateLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is SearchStateEmpty) {
-                  return const Center(child: Text("empty state"));
-                } else if (state is SearchStateSuccess) 
-                {
-                  if (state.recommendplaces.length == 0) {
-                    return const Center(child: Text("No result Found"));
-                  }
-                    else {
-                    return _builddisplayresult(state.recommendplaces);
-                  }
-                }
-                return const SizedBox.shrink(); // defualt emptyscreen
-              },
+          title: const Text(
+            'Search View',
+            style: TextStyle(
+              fontFamily: "outfit",
             ),
-          ],
+          ),
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          child: Column(
+            children: [
+              const SearchButton(),
+              BlocBuilder<SearchCubit, SearchState>(
+                builder: (context, state) {
+                  if (state is SearchStateError) {
+                    return Center(child: Text("Error occurred"));
+                  } else if (state is SearchStateLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is SearchStateEmpty) {
+                    return const Center(child: Text("empty state"));
+                  } else if (state is SearchStateSuccess) {
+                    if (state.recommendplaces.length == 0) {
+                      return const Center(child: Text("No result Found"));
+                    } else {
+                      return _builddisplayresult(state.recommendplaces);
+                    }
+                  }
+                  return const SizedBox.shrink(); // defualt emptyscreen
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -57,44 +71,55 @@ class SearchView extends StatelessWidget {
 
 Widget _builddisplayresult(List<PlaceAutocompleteModel> recommendplaces) {
   return Expanded(
-      child: ListView.builder(
-    itemCount: recommendplaces.length,
-    itemBuilder: (context, index) {
-      final place = recommendplaces[index];
+      child: Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: ListView.builder(
+      itemCount: recommendplaces.length,
+      itemBuilder: (context, index) {
+        final place = recommendplaces[index];
 
-      return GestureDetector(
-        onTap: () {
-          context.read<SearchCubit>().getlonglat(place.description);
-        },
-        child: _buildsearchcontainer(place.description),
-      );
-    },
+        return GestureDetector(
+          onTap: () {
+            context.read<SearchCubit>().getlonglat(place.description);
+          },
+          child: _buildsearchcontainer(place.description),
+        );
+      },
+    ),
   ));
 }
 
 Widget _buildsearchcontainer(String place) {
   return Container(
-    padding: EdgeInsets.all(16.0), // Add padding
-    margin: EdgeInsets.symmetric(vertical: 8.0), // Add vertical margin
-    decoration: BoxDecoration(
-      color: Colors.white, // Background color
-      borderRadius: BorderRadius.circular(12.0), // Rounded corners
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black26, // Shadow color
-          blurRadius: 6.0, // Shadow blur radius
-          offset: Offset(0, 2), // Shadow offset
-        ),
-      ],
-    ),
-    child: Text(
-      place,
-      style: TextStyle(
-        fontSize: 16.0,
-        color: Colors.black,
+      padding: EdgeInsets.all(16.0),
+      margin: EdgeInsets.symmetric(vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 6.0,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
-    ),
-  );
+      child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(Icons.location_on),
+            Gap(5),
+            Expanded(
+                child: Text(
+              place,
+              style: TextStyle(
+                fontFamily: "outfit",
+                fontSize: 16.0,
+                color: Colors.black,
+              ),
+            )),
+          ]));
 }
 
 class SearchButton extends StatelessWidget {
@@ -109,28 +134,22 @@ class SearchButton extends StatelessWidget {
         TextField(
           controller: searchCubit.searchController,
           decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-            hintText: "Search here",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
+            hintText: context.tt("Search... ", " .. البحث"),
             fillColor: Colors.white,
             filled: true,
+            border: customOutlineInputBorder,
+            focusedBorder: customOutlineInputBorder,
           ),
-          onSubmitted: (value) {
-            print('Searching for: $value');
-          },
-        ),
+          onSubmitted: (value) {},
+        )
       ],
     );
   }
 }
 
-// steps for create searchinggggggggggg
-/*
-1-text field  (this input  send to api)
-2-listen to input to when input change we change input 
-3-search place
-4-display result
-*/
+const OutlineInputBorder customOutlineInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.all(Radius.circular(20)),
+  borderSide: BorderSide(color: Colors.grey),
+);

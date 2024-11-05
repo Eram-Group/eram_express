@@ -14,14 +14,20 @@ class Markerloading extends MarkerState {}
 
 class MarkerUpdated extends MarkerState {
   final Set<Marker> markers;
-  final bool inside;
-
-  const MarkerUpdated(this.markers,
-      {this.inside = true}); // Use named parameter for clarity
-
+ 
+  const MarkerUpdated(this.markers,); 
   @override
-  List<Object> get props => [markers, inside];
+  List<Object> get props => [markers];
 }
+class MarkerError extends MarkerState 
+{
+  final String errormessege;
+ const MarkerError(this.errormessege);
+  List<Object> get props => [errormessege];
+
+
+}
+
 
 
 

@@ -14,41 +14,11 @@ import '../../data/models/addressmodels/place_details_model.dart';
 import '../../data/models/place_auto_complete_model.dart';
 
 class Locationservice {
-  final GoogleMapRepository _googlemapRepository;
-  final AuthenticationRepository _authenticationRepository ;
-
-  Locationservice({
-    required GoogleMapRepository googleMapRepository,
-    required AuthenticationRepository authenticationRepository 
-  }) : _googlemapRepository = googleMapRepository,
-  _authenticationRepository  = authenticationRepository;
-
+  Locationservice();
   PickingLocationModel? currentLocation;
   Location location = Location();
 
-  Future<Either<String, List<PlaceAutocompleteModel>>> getsearchresult(
-      String input, String sessiontoken) async 
-      {
-       CustomerEntity? user= await _authenticationRepository.authenticatedCustomer;
-    final result = await _googlemapRepository.getPredictionPlaces(input, sessiontoken,user!.country.code);
-    return result;
-  }
-
-  Future<Either<String, List<PlaceDetailsModel>>> getplacedetailsresult(
-      String lat, String long) async {
-    final result = await _googlemapRepository.getPlacedetails(lat, long);
-
-    return result;
-  }
-  Future<Either<String, PlaceDetailsModel>> getlonglatresult(
-      String address) async {
-    final result = await _googlemapRepository.getlonglatplace(address);
-
-    return result;
-  }
-
-  Future<bool> checkAndRequestLocationPermission() async // ده التاني
-  {
+  Future<bool> checkAndRequestLocationPermission() async {
     var permisionstatus = await location.hasPermission();
     if (permisionstatus == PermissionStatus.deniedForever) {
       return false;
@@ -81,37 +51,12 @@ class Locationservice {
     var hasPermission = await checkAndRequestLocationPermission();
     if (hasPermission) {
       try {
-        return await getCurrentLocation();
-      } catch (e) {
+       
+      } 
+      catch (e) {
         logger.debug("Error: $e");
         return Future.error(e);
       }
     }
-  }
-
-
-  Future<LocationData> getCurrentLocation() async {
-    try {
-      LocationData locationData = await location.getLocation();
-      currentLocation = PickingLocationModel(
-        point: Point(
-            longitude: locationData.longitude!,
-            latitude: locationData.latitude!),
-        address: "hellllp",
-      );
-      logger.debug(
-          "enter and get the currentlocation ${currentLocation?.point.latitude}");
-      return locationData;
-    } catch (e) {
-      logger.error("enter and get the currentlocation");
-      logger.error("Error: $e");
-      return Future.error(e);
-    }
-  }
-
-   Future<String> getCustomerCountry() async
-  {
-     CustomerEntity? user= await _authenticationRepository.authenticatedCustomer;
-     return user!.country.code!;
   }
 }

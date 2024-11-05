@@ -66,10 +66,7 @@ final HomeDataRemoteDataSource = HomeDataApiRemoteDataSource(
 final googleMapRemoteDataSource = GoogleMapApiRemoteDataSource();
 final googlemapRepository = GoogleMapRepositoryImpl(
     googlemapRemoteDataSource: googleMapRemoteDataSource);
-final locationservice = Locationservice(
-  googleMapRepository: googlemapRepository,
-  authenticationRepository: authenticationRepository,
-);
+final locationservice = Locationservice();
 
 //Booking
 
@@ -79,7 +76,6 @@ final bookingRemoteDataSource = BookingApiRemoteDataSource(
 final bookingRepository = BookingRepositoryImpl(
     bookingRemoteDataSource: bookingRemoteDataSource,
     tokensLocalDataSource: tokensLocalDataSource);
-final bookingService = BookingService(bookingRepository: bookingRepository);
 
 final dio = Dio(
   BaseOptions(

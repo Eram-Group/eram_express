@@ -1,4 +1,5 @@
 import 'package:eram_express/features/booking/domain/services/booking_service.dart';
+import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
 import 'package:eram_express/features/customer/domain/services/customer_service.dart';
 import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
 import 'package:eram_express/features/home/domain/objects/booking_request_form_data.dart';
@@ -20,13 +21,12 @@ import 'ShippingFormState.dart';
 
 class ShippingFormCubit extends Cubit<ShippingFormState> {
   final HomeRepositoryImpl _homerepo;
-  final BookingService _bookingService;
-
+  final CreateBookingRequestUsecase _createBookingRequestUsecase;
   ShippingFormCubit({
     required HomeRepositoryImpl homerepo,
-    required BookingService bookingService,
+    required CreateBookingRequestUsecase createBookingRequestUsecase,
   })  : _homerepo = homerepo,
-        _bookingService = bookingService,
+        _createBookingRequestUsecase = createBookingRequestUsecase,
         super(ShippingFormState());
 
   Future<void> cargoCategoryOnClicked(BuildContext context) async {
@@ -174,8 +174,7 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
         arguments:
             GoogleMapViewArguments(initialAddress: state.destination?.point));
-    if (result is PickingLocationModel) 
-    {
+    if (result is PickingLocationModel) {
       emit(state.copyWith(destination: result, filled: false));
     }
   }
@@ -189,19 +188,19 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
         state.destination == null) {
       logger.debug("clickkk done");
       emit(state.copyWith(filled: true));
-    } else 
-    {
-    List<int> goodids = [];  
-            state.selectgoods?.forEach((good) {
-    goodids.add(good.id);  
-});
+    } else {
+      List<int> goodids = [];
+      state.selectgoods?.forEach((good) {
+        goodids.add(good.id);
+      });
 
-    BookingRequestFormData formData=BookingRequestFormData(cargoVehicleSubcategoryId: state.truckSize?.id, goodIds:goodids, bookingDate: state.pickupDate!, pickup:state.pickup!, destination: state.destination!);
-    final result= _bookingService.bookingRequest(formData);
+      BookingRequestFormData formData = BookingRequestFormData(
+          cargoVehicleSubcategoryId: state.truckSize?.id,
+          goodIds: goodids,
+          bookingDate: state.pickupDate!,
+          pickup: state.pickup!,
+          destination: state.destination!);
+      final result = _createBookingRequestUsecase.execute(formData);
     }
   }
-
-
-
-
 }
