@@ -1,33 +1,48 @@
 import 'package:equatable/equatable.dart';
+import 'package:eram_express/features/google_map/domain/Entities/address_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-abstract class MarkerState extends Equatable {
-  const MarkerState();
+import '../../data/models/addressmodels/place_details_model.dart';
 
+abstract class GoogleMapViewState extends Equatable {
+  const GoogleMapViewState();
   @override
   List<Object> get props => [];
 }
 
-class MarkerInitial extends MarkerState {}
+class GoogleMapViewStateInitial extends GoogleMapViewState {}
 
-class Markerloading extends MarkerState {}
+class GoogleMapViewStateloading extends GoogleMapViewState {}
 
-class MarkerUpdated extends MarkerState {
+class GoogleMapViewStateUpdated extends GoogleMapViewState {
   final Set<Marker> markers;
- 
-  const MarkerUpdated(this.markers,); 
+  const GoogleMapViewStateUpdated(
+    this.markers,
+  );
   @override
   List<Object> get props => [markers];
 }
-class MarkerError extends MarkerState 
-{
+
+class GoogleMapViewStateError extends GoogleMapViewState {
   final String errormessege;
- const MarkerError(this.errormessege);
+  const GoogleMapViewStateError(this.errormessege);
   List<Object> get props => [errormessege];
-
-
 }
 
+class PlaceDetailsLoadingState extends GoogleMapViewState {
+  List<Object> get props => [];
+}
 
+class PlaceDetailsLoaded extends GoogleMapViewState {
+  final AddressEntity placeDetails;
+  PlaceDetailsLoaded(this.placeDetails);
+  @override
+  List<Object> get props => [placeDetails];
+}
 
-
+class PlaceDetailsError extends GoogleMapViewState {
+  final String errorMessage;
+  PlaceDetailsError(this.errorMessage);
+  @override
+  List<Object> get props => [errorMessage];
+}

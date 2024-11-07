@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:eram_express/features/google_map/domain/Entities/address_entity.dart';
 
 import '../../../authentication/domain/repositories/authentication_repository.dart';
 import '../../../customer/domain/entities/customer_entity.dart';
@@ -15,19 +16,20 @@ class GetPlaceDetailsUsaecase {
   })  : _googlemapRepository = googleMapRepository,
         _authenticationRepository = authenticationRepository;
 
-  Future<Either<String, List<PlaceDetailsModel>>> execute(
+  Future<Either<String, AddressEntity>> execute(
       String lat, String long) async {
     final result = await _googlemapRepository.getPlacedetails(lat, long);
 
     return await result.fold(
       (error) => Left("Network error"), 
       (data) async {
-        CustomerEntity? user =
-            await _authenticationRepository.authenticatedCustomer;
+        CustomerEntity? user = await _authenticationRepository.authenticatedCustomer;
 
-        if (user != null && user.country.code == data[0].CounrtyCode) {
+        if (user != null && user.country.code == data.countryCode) 
+        {
           return Right(data);
-        } else {
+        }
+         else {
           return Left("Out of service area"); 
         }
       },

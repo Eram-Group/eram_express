@@ -25,7 +25,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     return response;
   }
  
-  Future<dynamic> getlonglatplace(String address) async {
+  Future<dynamic> getCoordinatesForAddress(String address) async {
     
     Response response = await dio.get(url + "geocode/json", queryParameters: {
       'address': address,

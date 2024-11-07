@@ -7,7 +7,7 @@ import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../i18n/domain/locale_cubit.dart';
-import '../../../google_map/presentation/google_map_view.dart';
+import '../../../google_map/presentation/views/google_map_view.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
 

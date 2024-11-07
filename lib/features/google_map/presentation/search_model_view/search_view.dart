@@ -1,3 +1,5 @@
+import 'package:eram_express/core/app_colors.dart';
+import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
 import 'package:eram_express/features/authentication/presentation/views/modals/registered_successfully_modal.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
@@ -7,25 +9,22 @@ import 'package:gap/gap.dart';
 
 import '../../../../app/di.dart';
 import '../../data/models/place_auto_complete_model.dart';
-import '../../domain/usecases/get_longlat_place_usecase.dart';
+import '../../domain/usecases/get_Coordinates_address_usecase.dart';
 import '../../domain/usecases/get_search_result_usecase.dart';
 import 'search_model_view.dart';
 import 'search_model_view_state.dart';
+import 'widgets/search_text_field.dart';
 
 class SearchView extends StatelessWidget {
   static const String route = '/search';
-
   const SearchView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchCubit(
-          getLonglatPlaceUsecase:
-              GetLonglatPlaceUsecase(googleMapRepository: googlemapRepository),
-          getSearchResultUsecase: GetSearchResultUsecase(
-              googleMapRepository: googlemapRepository,
-              authenticationRepository: authenticationRepository)),
+      create: (_) => SearchViewController(
+          getLonglatPlaceUsecase: GetCoordinatesForAddresseUsecase(googleMapRepository: googlemapRepository),
+          getSearchResultUsecase: GetSearchResultUsecase(googleMapRepository: googlemapRepository,authenticationRepository: authenticationRepository)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -42,21 +41,15 @@ class SearchView extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const SearchButton(),
-              BlocBuilder<SearchCubit, SearchState>(
+              const SearchTextField(),
+              BlocBuilder<SearchViewController, SearchState>(
                 builder: (context, state) {
                   if (state is SearchStateError) {
-                    return Center(child: Text("Error occurred"));
-                  } else if (state is SearchStateLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return  const Center(child: Text("Error occurred"));
                   } else if (state is SearchStateEmpty) {
-                    return const Center(child: Text("empty state"));
+                    return _buildEmptystate(context);
                   } else if (state is SearchStateSuccess) {
-                    if (state.recommendplaces.length == 0) {
-                      return const Center(child: Text("No result Found"));
-                    } else {
-                      return _builddisplayresult(state.recommendplaces);
-                    }
+                    return _builddisplayresult(state.recommendplaces);
                   }
                   return const SizedBox.shrink(); // defualt emptyscreen
                 },
@@ -69,6 +62,36 @@ class SearchView extends StatelessWidget {
   }
 }
 
+Widget _buildEmptystate(BuildContext context) {
+  return Expanded(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SvgIcon(asset: "no_result", size: 200),
+        const Gap(2),
+        Text(
+          context.tt("No Result found", "لم يتم العثور على نتائج"),
+          style: TextStyle(
+            fontFamily: "outfit",
+            fontSize: 16,
+            color: AppColor.blacktext,
+          ),
+        ),
+        const Gap(2),
+        Text(
+          context.tt("Please choose another location", "يرجى اختيار موقع آخر"),
+          style: const TextStyle(
+            fontFamily: "outfit",
+            fontSize: 16,
+            color: AppColor.lightGrey,
+          ),
+        )
+      ],
+    ),
+  );
+}
+
 Widget _builddisplayresult(List<PlaceAutocompleteModel> recommendplaces) {
   return Expanded(
       child: Padding(
@@ -76,27 +99,26 @@ Widget _builddisplayresult(List<PlaceAutocompleteModel> recommendplaces) {
     child: ListView.builder(
       itemCount: recommendplaces.length,
       itemBuilder: (context, index) {
-        final place = recommendplaces[index];
-
         return GestureDetector(
-          onTap: () {
-            context.read<SearchCubit>().getlonglat(place.description);
+          onTap: ()
+           {
+            context.read<SearchViewController>().getCoordinatesForAddress(recommendplaces[index].description);
           },
-          child: _buildsearchcontainer(place.description),
+          child: _buildSearchItemCard(recommendplaces[index].description),
         );
       },
     ),
   ));
 }
 
-Widget _buildsearchcontainer(String place) {
+Widget _buildSearchItemCard(String place) {
   return Container(
-      padding: EdgeInsets.all(16.0),
-      margin: EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 6.0,
@@ -108,12 +130,12 @@ Widget _buildsearchcontainer(String place) {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.location_on),
-            Gap(5),
+            const Icon(Icons.location_on),
+            const Gap(5),
             Expanded(
                 child: Text(
               place,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: "outfit",
                 fontSize: 16.0,
                 color: Colors.black,
@@ -121,35 +143,3 @@ Widget _buildsearchcontainer(String place) {
             )),
           ]));
 }
-
-class SearchButton extends StatelessWidget {
-  const SearchButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final searchCubit = context.read<SearchCubit>();
-
-    return Column(
-      children: [
-        TextField(
-          controller: searchCubit.searchController,
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-            hintText: context.tt("Search... ", " .. البحث"),
-            fillColor: Colors.white,
-            filled: true,
-            border: customOutlineInputBorder,
-            focusedBorder: customOutlineInputBorder,
-          ),
-          onSubmitted: (value) {},
-        )
-      ],
-    );
-  }
-}
-
-const OutlineInputBorder customOutlineInputBorder = OutlineInputBorder(
-  borderRadius: BorderRadius.all(Radius.circular(20)),
-  borderSide: BorderSide(color: Colors.grey),
-);
