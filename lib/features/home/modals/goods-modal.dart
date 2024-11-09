@@ -10,7 +10,7 @@ import '../presentation/views/ShippingFormState.dart';
 import '../presentation/widgets/top_bottom_model.dart';
 
 class SelectGoodsModal extends StatelessWidget {
-  final ShippingFormCubit cubit;
+  final HomeViewController cubit;
   const SelectGoodsModal({
     required this.cubit,
     super.key,
@@ -36,7 +36,7 @@ class SelectGoodsModal extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      final selectedGoods = cubit.state.selectgoods;
+                      final selectedGoods = cubit.state.selectGoods;
                       Navigator.of(context).pop(selectedGoods);
                     },
                     child: const Text(
@@ -53,7 +53,7 @@ class SelectGoodsModal extends StatelessWidget {
             ),
             const Gap(12),
             Expanded(
-              child: BlocBuilder<ShippingFormCubit, ShippingFormState>(
+              child: BlocBuilder<HomeViewController, HomeViewState>(
                 builder: (context, state) {
                   if (state.isLoading) {
                     return EmptyLoadingWidget();
@@ -63,10 +63,10 @@ class SelectGoodsModal extends StatelessWidget {
                     return SingleChildScrollView(
                         child: Column(
                       children: state.goods!.map((good) {
-                        return BlocSelector<ShippingFormCubit,
-                            ShippingFormState, bool>(
+                        return BlocSelector<HomeViewController,
+                           HomeViewState, bool>(
                           selector: (state) {
-                            final selectedGoods = state.selectgoods ?? [];
+                            final selectedGoods = state.selectGoods ?? [];
                             return selectedGoods.contains(good);
                           },
                           builder: (context, isSelected) {

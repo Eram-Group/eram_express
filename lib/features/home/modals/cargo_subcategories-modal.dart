@@ -13,7 +13,7 @@ import '../presentation/views/ShippingFormState.dart';
 import '../presentation/widgets/top_bottom_model.dart';
 
 class SelectSubCargoCategoryModal extends StatelessWidget {
-  final ShippingFormCubit cubit;
+  final HomeViewController cubit;
   const SelectSubCargoCategoryModal({
     Key? key,
     required this.cubit,
@@ -36,7 +36,7 @@ class SelectSubCargoCategoryModal extends StatelessWidget {
               ),
               const Gap(12),
               Expanded(
-                child: BlocBuilder<ShippingFormCubit, ShippingFormState>(
+                child: BlocBuilder<HomeViewController, HomeViewState>(
                   builder: (context, state) {
                     if (state.isLoading) {
                       return EmptyLoadingWidget();
@@ -47,12 +47,12 @@ class SelectSubCargoCategoryModal extends StatelessWidget {
                       return SingleChildScrollView(
                           child: Column(
                         children: state.cargoSubCategories!.map((cargo) {
-                          return BlocSelector<ShippingFormCubit,
-                              ShippingFormState, bool>(
+                          return BlocSelector<HomeViewController,
+                              HomeViewState, bool>(
                             selector: (state) => state.truckSize == cargo,
                             builder: (context, isSelected) {
                               return ClickBottomSheetItem(
-                                  imageUrl: cargo.image,
+                                  imageUrl: cargo.imageUrl,
                                   isSelected: isSelected,
                                   onTap: () {
                                     Navigator.of(context).pop(cargo);

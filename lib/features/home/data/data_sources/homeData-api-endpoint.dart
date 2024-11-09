@@ -35,6 +35,5 @@ final goodTypeEndpoint = ApiEndpoint(
     HttpStatus.ok: (response) => (response.data as List)
         .map((item) => GoodModel.fromJson(item))
         .toList(),
-    //GoodModel.fromJson(response.data),
   },
 );

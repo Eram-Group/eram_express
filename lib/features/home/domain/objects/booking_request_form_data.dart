@@ -1,12 +1,13 @@
 import 'dart:io';
-import '../../data/models/picking_locationModel.dart';
+import '../../presentation/viewsmodel/picking_location_view_model.dart';
 
 class BookingRequestFormData {
+  // هل ممكن احولها لل entity علشان احنا domain
   final int? cargoVehicleSubcategoryId;
   final List<int> goodIds;
   final String bookingDate;
-  final PickingLocationModel pickup;
-  final PickingLocationModel destination;
+  final PickingLocationViewModel pickup;
+  final PickingLocationViewModel destination;
 
   BookingRequestFormData({
     required this.cargoVehicleSubcategoryId,

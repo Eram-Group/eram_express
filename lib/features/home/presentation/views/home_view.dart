@@ -1,5 +1,6 @@
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
+import 'package:eram_express/features/booking/domain/usecases/get_biddings_usecase.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -9,28 +10,48 @@ import '../../../../app/di.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../../Common/presentation/widgets/customButton.dart';
 
+import '../../../booking/domain/usecases/get_booking_request_usecase.dart';
+import '../../../booking/presentation/views/booking_request_view_controller.dart';
+import '../../../booking/presentation/views/booking_request_view_state.dart';
+import '../../../booking/presentation/widgets/booking_request_card.dart';
 import 'ShippingFormCubit.dart';
 import 'ShippingFormState.dart';
 
 class HomeView extends StatelessWidget {
   static const String route = '/home';
-  final ShippingFormCubit viewModel = ShippingFormCubit(
-    homerepo: HomeRepository,
-    createBookingRequestUsecase: CreateBookingRequestUsecase(bookingRepository: bookingRepository)
-  );
+  final HomeViewController viewModel = HomeViewController(
+      homerepo: HomeRepository,
+      createBookingRequestUsecase:
+          CreateBookingRequestUsecase(bookingRepository: bookingRepository));
+  final BookingRequestViewController bookingRequestViewModel =
+      BookingRequestViewController(
+          bookingRepository: bookingRepository,
+          getBiddingsUsecase:
+              GetBiddingsUsecase(bookingRepository: bookingRepository),
+          getBookingRequestUsecase:
+              GetBookingRequestUsecase(bookingRepository: bookingRepository));
 
   HomeView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-            child: Stack(
-          children: [
-            _buildHeader(context),
-            _builddataContainer(context),
-          ],
+            child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    _buildHeader(context),
+                    _builddataContainer(context),
+                  ],
+                ),
+                _buildBookingRequest(),
+              ],
+            ),
+          ),
         )));
   }
 
@@ -43,7 +64,7 @@ profile viewmodel
   Widget _buildHeader(BuildContext context) {
     return Container(
         width: Responsive.screenWidth,
-        height: Responsive.screenHeight! * .3,
+        height: Responsive.screenHeight! * .32,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/image/homePic.jpg'),
@@ -90,7 +111,7 @@ profile viewmodel
   }
 
   Widget _builddataContainer(BuildContext context) {
-    return BlocBuilder<ShippingFormCubit, ShippingFormState>(
+    return BlocBuilder<HomeViewController, HomeViewState>(
       bloc: viewModel,
       builder: (_, state) {
         return Padding(
@@ -223,12 +244,12 @@ profile viewmodel
                         onTap: () => viewModel.GoodsOnClicked(context),
                         context: context,
                         selectedValue: context.tt(
-                          state.selectgoodsString ?? " ",
-                          state.selectgoodsString ?? " ",
+                          state.selectGoodsString ?? " ",
+                          state.selectGoodsString ?? " ",
                         ),
                         label: context.tt(
-                          state.selectgoodsString ?? "Select Goods",
-                          state.selectgoodsString ?? "اختر نوع البضائع",
+                          state.selectGoodsString ?? "Select Goods",
+                          state.selectGoodsString ?? "اختر نوع البضائع",
                         ),
                         iconName: 'calendar',
                         filled: state.filled
@@ -321,6 +342,27 @@ profile viewmodel
               : const SizedBox.shrink()
         ],
       ),
+    );
+  }
+
+  Widget _buildBookingRequest() {
+    return BlocBuilder<BookingRequestViewController, BookingRequestViewState>(
+      bloc: bookingRequestViewModel,
+      builder: (_, state) {
+        if (state is BookingRequestViewSuccessState) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: state.bookingRequests
+                  .map((item) => BookingRequestCard(bookingRequest: item))
+                  .toList(),
+            ),
+          );
+        } else if (state is BookingRequestViewErrorState) {
+          return Text("Error in loading");
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 }

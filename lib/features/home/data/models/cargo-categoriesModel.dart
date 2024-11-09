@@ -1,3 +1,5 @@
+import '../../domain/entities/cargo_categories_entity.dart';
+
 class CargoCategoryModel
 {
   final int id;
@@ -20,5 +22,12 @@ class CargoCategoryModel
       image: json['image'],
     );
   }
-
+  CargoCategoryEntity toEntity() {
+    return CargoCategoryEntity(
+      id: this.id,
+      nameAr: this.nameAr,
+      nameEn: this.nameEn,
+      image: this.image,
+    );
+  }
 }

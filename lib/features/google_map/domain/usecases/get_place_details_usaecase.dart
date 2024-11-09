@@ -25,7 +25,7 @@ class GetPlaceDetailsUsaecase {
       (data) async {
         CustomerEntity? user = await _authenticationRepository.authenticatedCustomer;
 
-        if (user != null && user.country.code == data.countryCode) 
+        if (user != null && user.country.code == data.countryCode ) 
         {
           return Right(data);
         }

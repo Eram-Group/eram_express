@@ -1,16 +1,18 @@
+import '../../domain/entities/goods_entity.dart';
+
 class GoodModel {
   final int id;
   final String nameAr;
   final String nameEn;
   final String image;
-  final DateTime createdAt;
+
 
   GoodModel({
     required this.id,
     required this.nameAr,
     required this.nameEn,
     required this.image,
-    required this.createdAt,
+
   });
 
   factory GoodModel.fromJson(Map<String, dynamic> json) {
@@ -19,7 +21,16 @@ class GoodModel {
       nameAr: json['name_ar'],
       nameEn: json['name_en'],
       image: json['image'],
-      createdAt: DateTime.parse(json['created_at']),
+   
     );
   }
+  GoodEntity toEntity() {
+    return GoodEntity(
+      id: this.id,
+      nameAr: this.nameAr,
+      nameEn: this.nameEn,
+      image: this.image,
+    );
+  }
+
 }

@@ -6,8 +6,8 @@ import 'package:eram_express_shared/core/api/api_endpoint.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
 
-import 'HomeData_remote_data_source.dart';
-import 'get-HomeData-api-endpoint.dart';
+import 'homeData_remote_data_source.dart';
+import 'HomeData-api-endpoint.dart';
 
 class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource 
 {

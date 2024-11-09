@@ -1,56 +1,51 @@
-import 'package:eram_express/features/booking/domain/services/booking_service.dart';
 import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
-import 'package:eram_express/features/customer/domain/services/customer_service.dart';
+
 import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
 import 'package:eram_express/features/home/domain/objects/booking_request_form_data.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../i18n/domain/locale_cubit.dart';
 import '../../../google_map/presentation/views/google_map_view.dart';
-import '../../data/models/cargo-subcategoryModel.dart';
-import '../../data/models/goods-typeModel.dart';
-
-import '../../data/models/picking_locationModel.dart';
 import '../../data/repositotys/home_repositoty_impl.dart';
 import '../../modals/cargo_categories-modal.dart';
 import '../../modals/cargo_subcategories-modal.dart';
 import '../../modals/goods-modal.dart';
 import '../../modals/pick_data-modal.dart';
+import '../viewsmodel/cargo_categories_viewmodel.dart';
+import '../viewsmodel/cargo_sub_category_view_model.dart';
+import '../viewsmodel/good_view_model.dart';
+import '../viewsmodel/picking_location_view_model.dart';
 import 'ShippingFormState.dart';
 
-class ShippingFormCubit extends Cubit<ShippingFormState> {
-  final HomeRepositoryImpl _homerepo;
+class HomeViewController extends Cubit<HomeViewState> {
+  final HomeRepositoryImpl _homerepo; //TODo convert it to Usecases
   final CreateBookingRequestUsecase _createBookingRequestUsecase;
-  ShippingFormCubit({
+  HomeViewController({
     required HomeRepositoryImpl homerepo,
     required CreateBookingRequestUsecase createBookingRequestUsecase,
   })  : _homerepo = homerepo,
         _createBookingRequestUsecase = createBookingRequestUsecase,
-        super(ShippingFormState());
+        super(HomeViewState());
 
-  Future<void> cargoCategoryOnClicked(BuildContext context) async {
-    emit(state.copyWith(
-      isLoading: true,
-    ));
-
-    _homerepo.getCargoCategories().then((result) {
+  Future<void> cargoCategoryOnClicked(BuildContext context) async
+   {
+    emit(state.copyWith( isLoading: true,));
+    _homerepo.getCargoCategories().then((result)
+     {
       result.fold(
         (error) {
-          emit(state.copyWith(
-            isLoading: false, /*//errorMessage: "error ", */
-          ));
+          emit(state.copyWith( isLoading: false, errorMessage: "Failed to get data"));
         },
         (data) {
           emit(state.copyWith(
             isLoading: false,
-            cargoCategories: data,
+            cargoCategories: data.map((item)=>CargoCategoryViewModel.fromEntity(item)).toList(),
           ));
         },
       );
     });
 
-    final selection = await showModalBottomSheet<CargoCategoryModel>(
+    final selection = await showModalBottomSheet<CargoCategoryViewModel>(
       context: context,
       builder: (context) => SelectCargoCategoryModal(
         cubit: this,
@@ -87,13 +82,15 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
         (data) {
           emit(state.copyWith(
             isLoading: false,
-            cargoSubCategories: data,
+            cargoSubCategories: data
+                .map((item) => CargoSubCategoryViewModel.fromEntity(item))
+                .toList(),
           ));
         },
       );
     });
 
-    final selection = await showModalBottomSheet<CargoSubCategoryModel>(
+    final selection = await showModalBottomSheet<CargoSubCategoryViewModel>(
       context: context,
       builder: (context) => SelectSubCargoCategoryModal(
         cubit: this,
@@ -108,7 +105,7 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     emit(state.copyWith(
       isLoading: true,
     ));
-    _homerepo.getgoods().then((result) {
+    _homerepo.getGoods().then((result) {
       result.fold(
         (error) {
           emit(state.copyWith(
@@ -118,13 +115,13 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
         (data) {
           emit(state.copyWith(
             isLoading: false,
-            goods: data,
+            goods: data.map((item)=>GoodViewModel.fromEntity(item)).toList(),
           ));
         },
       );
     });
 
-    final selection = await showModalBottomSheet<List<GoodModel>>(
+    final selection = await showModalBottomSheet<List<GoodViewModel>>(
       context: context,
       builder: (context) => SelectGoodsModal(
         cubit: this,
@@ -136,61 +133,36 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
     }
   }
 
-  void toggleGoodSelection(GoodModel good) {
-    if (state.selectgoods == null) {
-      state.selectgoods = [];
-    }
-
-    if (state.selectgoods!.contains(good)) {
-      logger.debug("loll");
-      state.selectgoods!.remove(good);
-    } else {
-      logger.debug("messagellllllllll");
-      state.selectgoods!.add(good);
-    }
-
-    emit(state.copyWith(selectgoods: state.selectgoods));
-  }
-
-  void displayGoodstype(List<GoodModel> selectiongoods, BuildContext context) {
-    //final currentLocale = context.watch<LocaleCubit>().state;
-    //logger.debug("state: ${currentLocale.languageCode}");
-    // currentLocale.languageCode == 'ar' ? good.nameAr :
-    String goodsNames =
-        selectiongoods.map((good) => good.nameEn).toList().join(', ');
-    logger.debug(goodsNames);
-    emit(state.copyWith(selectgoodsString: goodsNames, filled: false));
-  }
-
   Future<void> PickClicked(BuildContext context) async {
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
         arguments: GoogleMapViewArguments(initialAddress: state.pickup?.point));
-    if (result is PickingLocationModel) {
+    if (result is PickingLocationViewModel) {
       emit(state.copyWith(pickup: result, filled: false));
     }
   }
 
   Future<void> destinationClicked(BuildContext context) async {
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
-        arguments:
-            GoogleMapViewArguments(initialAddress: state.destination?.point));
-    if (result is PickingLocationModel) {
+        arguments: GoogleMapViewArguments(initialAddress: state.destination?.point));
+    if (result is PickingLocationViewModel) {
       emit(state.copyWith(destination: result, filled: false));
     }
   }
 
   void createRequestlbuttonclick() {
-    if (state.selectgoodsString == null ||
+    // عملاها علشان اعمل validation
+    if (state.selectGoodsString == null ||
         state.truckSize == null ||
         state.pickupDate == null ||
         state.pickup == null ||
         state.loadType == null ||
         state.destination == null) {
-      logger.debug("clickkk done");
       emit(state.copyWith(filled: true));
-    } else {
+    } 
+    else 
+    {
       List<int> goodids = [];
-      state.selectgoods?.forEach((good) {
+      state.selectGoods?.forEach((good) {
         goodids.add(good.id);
       });
 
@@ -200,7 +172,27 @@ class ShippingFormCubit extends Cubit<ShippingFormState> {
           bookingDate: state.pickupDate!,
           pickup: state.pickup!,
           destination: state.destination!);
+
       final result = _createBookingRequestUsecase.execute(formData);
     }
   }
+  void displayGoodstype(
+      List<GoodViewModel> selectiongoods, BuildContext context) {
+    String goodsNames =
+        selectiongoods.map((good) => good.nameEn).toList().join(', ');
+    emit(state.copyWith(selectGoodsString: goodsNames, filled: false));
+  }
+  void toggleGoodSelection(GoodViewModel good) {
+    if (state.selectGoods == null) {
+      state.selectGoods = [];
+    }
+    if (state.selectGoods!.contains(good)) {
+      state.selectGoods!.remove(good);
+    } else {
+      state.selectGoods!.add(good);
+    }
+
+    emit(state.copyWith(selectGoods: state.selectGoods));
+  }
+
 }

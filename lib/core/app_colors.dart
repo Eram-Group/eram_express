@@ -16,4 +16,5 @@ class AppColor {
   static const Color dotactiveColor = Color(0xff133BB7);
   static const Color errorColor = Color(0xffDB3B2E);
   static const Color starcolor=Color(0xffFFC96E);
+  static const Color darkGrey=Color(0xff8C8E98);
 }

@@ -5,7 +5,8 @@ import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
 import 'package:eram_express/features/google_map/domain/usecases/get_current_location_usecase.dart';
 import 'package:eram_express/features/google_map/domain/usecases/get_place_details_usaecase.dart';
-import 'package:eram_express/features/google_map/presentation/views/google_map_view_model.dart';
+import 'package:eram_express/features/google_map/presentation/views/google_map_view_controller.dart';
+import 'package:eram_express/features/home/presentation/viewsmodel/picking_location_view_model.dart';
 import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
@@ -20,7 +21,7 @@ import 'google_map_view_state.dart';
 import 'package:provider/provider.dart';
 
 class GoogleMapViewArguments {
-  final Point? initialAddress;
+  final PointViewModel? initialAddress;
 
   const GoogleMapViewArguments({
     this.initialAddress,
@@ -47,10 +48,8 @@ class GoogleMapView extends StatelessWidget {
       child: BlocBuilder<GoogleMapViewController, GoogleMapViewState>(
         //علشان امنع ان مع كل حركه ترجع ت build
         buildWhen: (previous, current) {
-          return current is GoogleMapViewStateUpdated ||
-              current is GoogleMapViewStateloading;
+          return current is GoogleMapViewStateUpdated || current is GoogleMapViewStateloading;
         },
-
         builder: (context, state) {
           logger.debug("GoogleMap is being rebuilt with state: $state");
           return SafeArea(

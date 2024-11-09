@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/google_map/presentation/search_model_view/search_view.dart';
 import 'package:eram_express/features/home/data/models/picking_locationModel.dart';
+import 'package:eram_express/features/home/presentation/viewsmodel/picking_location_view_model.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
   late CameraPosition kInitialPosition;
   double kDefaultMapZoom = 15.0;
 
-  void setInitialCameraPostion(Point? initialAddress) {
+  void setInitialCameraPostion(PointViewModel? initialAddress) {
     if (initialAddress != null) {
       kInitialPosition = CameraPosition(
         target: LatLng(initialAddress.latitude, initialAddress.longitude),

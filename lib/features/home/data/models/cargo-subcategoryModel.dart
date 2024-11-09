@@ -1,23 +1,22 @@
+import '../../domain/entities/cargo_subcategory_entity.dart';
+
 class CargoSubCategoryModel {
   final int id;
-  final int category;
+  final int? category;
   final String nameAr;
   final String nameEn;
   final String capacity;
   final String image;
-  final DateTime createdAt;
 
- CargoSubCategoryModel({
+  CargoSubCategoryModel({
     required this.id,
     required this.category,
     required this.nameAr,
     required this.nameEn,
     required this.capacity,
     required this.image,
-    required this.createdAt,
   });
 
- 
   factory CargoSubCategoryModel.fromJson(Map<String, dynamic> json) {
     return CargoSubCategoryModel(
       id: json['id'],
@@ -26,7 +25,17 @@ class CargoSubCategoryModel {
       nameEn: json['name_en'],
       capacity: json['capacity'],
       image: json['image'],
-      createdAt: DateTime.parse(json['created_at']),
     );
   }
+  CargoSubCategoryEntity toEntity() {
+    return CargoSubCategoryEntity(
+      id: this.id,
+      category: this.category,
+      nameAr: this.nameAr,
+      nameEn: this.nameEn,
+      capacity: this.capacity,
+      image: this.image,
+    );
+  }
+
 }

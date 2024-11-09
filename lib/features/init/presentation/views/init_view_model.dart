@@ -23,6 +23,7 @@ class InitViewModel extends Cubit<bool> {
     final results = await Future.wait([
       _configurationsRepository.countries,
       _authenticationRepository.isAuthenticated,
+      
     ]);
 
     final isAuthenticated = results[1] as bool;

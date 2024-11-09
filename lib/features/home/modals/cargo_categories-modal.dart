@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+
 import '../../../core/app_colors.dart';
 import '../../Common/presentation/widgets/clickablebottomSheetItem.dart';
-import '../data/models/cargo-categoriesModel.dart';
 import '../presentation/views/ShippingFormCubit.dart';
 import '../presentation/views/ShippingFormState.dart';
 import '../presentation/widgets/top_bottom_model.dart';
 
 class SelectCargoCategoryModal extends StatelessWidget {
-  final ShippingFormCubit cubit;
+  final HomeViewController cubit;
   const SelectCargoCategoryModal({
     required this.cubit,
     super.key,
@@ -39,7 +39,7 @@ class SelectCargoCategoryModal extends StatelessWidget {
             ),
             const Gap(12),
             Expanded(
-              child: BlocBuilder<ShippingFormCubit, ShippingFormState>(
+              child: BlocBuilder<HomeViewController, HomeViewState>(
                 builder: (context, state) {
                   if (state.isLoading) {
                     return ListView.builder(
@@ -53,12 +53,12 @@ class SelectCargoCategoryModal extends StatelessWidget {
                     return SingleChildScrollView(
                         child: Column(
                       children: state.cargoCategories!.map((cargo) {
-                        return BlocSelector<ShippingFormCubit,
-                            ShippingFormState, bool>(
+                        return BlocSelector<HomeViewController,
+                            HomeViewState, bool>(
                           selector: (state) => state.loadType == cargo,
                           builder: (context, isSelected) {
                             return ClickBottomSheetItem(
-                              imageUrl: cargo.image,
+                              imageUrl: cargo.imageUrl,
                               isSelected: isSelected,
                               onTap: () {
                                 //cubit.setTruckSize(cargo);

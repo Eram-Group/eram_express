@@ -45,9 +45,10 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   {
     page = const SearchView();
   } 
-   else if (name == offersView.route) 
+   else if (name == OffersView.route) 
    {
-    page = const offersView();
+    final arguments=settings.arguments as OffersViewArguments;
+    page = OffersView(offersViewArguments: arguments,);
    } 
   else 
   {

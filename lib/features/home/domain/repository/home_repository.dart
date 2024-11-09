@@ -2,14 +2,15 @@ import 'dart:async';
 import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 
-import '../../data/models/cargo-categoriesModel.dart';
-import '../../data/models/cargo-subcategoryModel.dart';
-import '../../data/models/goods-typeModel.dart';
+import '../entities/cargo_categories_entity.dart';
+import '../entities/cargo_subcategory_entity.dart';
+import '../entities/goods_entity.dart';
+
 
 abstract class HomeRepository {
  
-  Future<Either<ApiError, List<CargoCategoryModel>>> getCargoCategories(); 
-  Future<Either<ApiError, List<CargoSubCategoryModel>>> getSubCargoCategories();
-  Future<Either<ApiError, List<GoodModel>>> getgoods();
+  Future<Either<ApiError, List<CargoCategoryEntity>>> getCargoCategories(); 
+  Future<Either<ApiError, List<CargoSubCategoryEntity>>> getSubCargoCategories();
+  Future<Either<ApiError, List<GoodEntity>>> getGoods();
 
 }

@@ -1,21 +1,40 @@
 import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
+import 'package:eram_express/features/booking/domain/Entities/bid_entity.dart';
+import 'package:eram_express/features/booking/domain/Entities/booking_request_entity.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 
 import 'package:eram_express_shared/core/utils/responsive.dart';
 
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../app/iconsax_icons.dart';
 import '../../accepet_order_modal.dart';
 import '../../authentication/presentation/views/modals/registered_successfully_modal.dart';
 import '../../cancel_order_modal.dart';
+import 'views/booking_request_view_controller.dart';
+import 'views/booking_request_view_state.dart';
+import 'widgets/custom_small_button.dart';
+import 'widgets/delivery_cost.dart';
+import 'widgets/header_booking_request_card.dart';
 
-class offersView extends StatelessWidget {
-  const offersView({super.key});
+class OffersViewArguments {
+  List<BidEntity> bidding; 
+  
+  OffersViewArguments({
+    required this.bidding,
+  });
+}
+
+class OffersView extends StatelessWidget {
+  
+  final OffersViewArguments offersViewArguments;
+  const OffersView({super.key, required this.offersViewArguments});
+
   static const String route = '/offers';
 
   @override
@@ -63,20 +82,21 @@ class offersView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
                   .copyWith(bottom: 0),
               child: Expanded(
-                child: Column(
-                  children: [
-                    _buildComingOrder(context),
-                    _buildOfferCard(context),
-                    _buildOfferCard(context),
-                    // إذا أردت إضافة المزيد من بطاقات العرض
-                    // _buildOfferCard(context),
-                    // _buildOfferCard(context),
-                  ],
+                child: BlocBuilder<BookingRequestViewController,
+                    BookingRequestViewState>(
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        _buildComingOrder(context),
+                        _buildBiddings(context, offersViewArguments.bidding)
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
             const Spacer(),
-            _buildcancelContainer(context), // زر الإلغاء سيكون دائمًا في الأسفل
+            _buildcancelContainer(context),
           ],
         ),
       ),
@@ -84,7 +104,18 @@ class offersView extends StatelessWidget {
   }
 }
 
-Widget _buildOfferCard(BuildContext context) {
+Widget _buildBiddings(BuildContext context, List<BidEntity> biddings) 
+{
+  return Column
+  (
+    children: biddings.map((item) => _buildOfferCard(context, item)).toList(),
+  );
+
+}
+
+
+
+Widget _buildOfferCard(BuildContext context, BidEntity item) {
   return Padding(
     padding: const EdgeInsets.only(top: 20),
     child: Container(
@@ -101,45 +132,16 @@ Widget _buildOfferCard(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(context),
-            const SizedBox(height: 10), // Changed Gap to SizedBox
+            HeaderBookingRequestCard(
+              bid: item,
+            ),
+            const Gap(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RichText(
-                  text: TextSpan(
-                    text: context.tt('Delivery cost', "تكلفة التوصيل"),
-                    style: TextStyle(
-                      fontFamily: "outfit",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                      height: 25.2 / 16,
-                      color: AppColor.lightGrey,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(text: "   "),
-                      TextSpan(
-                        text: "\$",
-                        style: TextStyle(
-                          fontFamily: "outfit",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          height: 1.2,
-                          color: AppColor.primaryColor,
-                        ),
-                      ),
-                      TextSpan(
-                        text: "3,382.00", // Use comma for thousands
-                        style: TextStyle(
-                          fontFamily: "outfit",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          height: 1.2,
-                          color: AppColor.primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
+                DeliveryCost(
+                  amount: item.amount,
+                  amountCurrency: item.amountCurrency,
                 ),
                 CustomSmallButton(text: context.tt("Accept", "قبول")),
               ],
@@ -149,114 +151,6 @@ Widget _buildOfferCard(BuildContext context) {
       ),
     ),
   );
-}
-
-Widget _buildRating(double averageRating) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      for (int i = 0; i < 5; i++)
-        Padding(
-          padding: EdgeInsets.all(0),
-          child: Icon(
-            i < averageRating ? Iconsax.star1 : Iconsax.star,
-            size: i < averageRating
-                ? 22
-                : 15, // حاسه الاحسن يبقي svg  علشان مقاسات
-            color: i < averageRating ? AppColor.starcolor : Colors.black,
-          ),
-        ),
-      const Gap(3),
-      Text(
-        averageRating.toString(),
-        style: TextStyle(
-          fontFamily: "outfit",
-          fontWeight: FontWeight.w400,
-          color: AppColor.lightGrey,
-          fontSize: Responsive.getResponsiveFontSize(
-              NavigationService.globalContext,
-              fontSize: 15),
-          height: 21.6 /
-              Responsive.getResponsiveFontSize(NavigationService.globalContext,
-                  fontSize: 15),
-        ),
-      ),
-    ],
-  );
-}
-
-Widget _buildHeader(BuildContext context) {
-  return Row(
-    children: [
-      CircleAvatar(
-        radius: 28,
-        backgroundImage: AssetImage("assets/images/profile.png"),
-      ),
-      Column(
-        children: [
-          Text(
-            "Muhammad Ali",
-            style: TextStyle(
-              fontFamily: "outfits",
-              color: AppColor.blacktext,
-              fontSize: Responsive.getResponsiveFontSize(context, fontSize: 17),
-              fontWeight: FontWeight.w500,
-              height: 18.2 /
-                  Responsive.getResponsiveFontSize(context, fontSize: 17),
-            ),
-          ),
-          const Gap(5),
-          _buildRating(4),
-        ],
-      ),
-    ],
-  );
-}
-
-class CustomSmallButton extends StatelessWidget {
-  final Color? color;
-  final String text;
-  final Color? colortext;
-  final Color? colorborder;
-  final EdgeInsetsGeometry? padding;
-  const CustomSmallButton({
-    this.color = AppColor.primaryColor,
-    required this.text,
-    this.colortext = Colors.white,
-    this.colorborder = AppColor.primaryColor,
-    this.padding = const EdgeInsets.all(10.0),
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        await AcceptOrderModal().show(context);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: colorborder ?? AppColor.bordercolor,
-            )),
-        padding: padding,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: colortext,
-            fontWeight: FontWeight.w500,
-            fontFamily: "outfit",
-            fontSize: Responsive.getResponsiveFontSize(context, fontSize: 16),
-            height:
-                20.8 / Responsive.getResponsiveFontSize(context, fontSize: 16),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 Widget _buildComingOrder(BuildContext context) {
