@@ -6,6 +6,8 @@ import '../../data/models/place_auto_complete_model.dart';
 abstract class GoogleMapRepository 
 {
   Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces(String input,String sessiontoken,String country);
-  Future<Either<String,AddressEntity>> getPlacedetails(String lat ,String long);
+  Future<Either<String,AddressEntity>> getPlaceDetails(String lat ,String long);
   Future<Either<String, PlaceDetailsModel>> getCoordinatesForAddress(String address);
+ 
+
 }

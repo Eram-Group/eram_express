@@ -57,6 +57,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
   }
 
   void getPlaceDetails() {
+    if (state is GoogleMapViewStateloading) return;
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       emit(PlaceDetailsLoadingState());

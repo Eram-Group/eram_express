@@ -8,31 +8,18 @@ import '../repositories/google_map_reposirtoty.dart';
 
 class GetPlaceDetailsUsaecase {
   final GoogleMapRepository _googlemapRepository;
-  final AuthenticationRepository _authenticationRepository;
 
   GetPlaceDetailsUsaecase({
     required AuthenticationRepository authenticationRepository,
     required GoogleMapRepository googleMapRepository,
-  })  : _googlemapRepository = googleMapRepository,
-        _authenticationRepository = authenticationRepository;
+  }) : _googlemapRepository = googleMapRepository;
 
-  Future<Either<String, AddressEntity>> execute(
-      String lat, String long) async {
-    final result = await _googlemapRepository.getPlacedetails(lat, long);
+  Future<Either<String, AddressEntity>> execute(String lat, String long) async {
+    final result = await _googlemapRepository.getPlaceDetails(lat, long);
 
     return await result.fold(
-      (error) => Left("Network error"), 
-      (data) async {
-        CustomerEntity? user = await _authenticationRepository.authenticatedCustomer;
-
-        if (user != null && user.country.code == data.countryCode ) 
-        {
-          return Right(data);
-        }
-         else {
-          return Left("Out of service area"); 
-        }
-      },
+      (error) => Left(error),
+      (data) => Right(data),
     );
   }
 }

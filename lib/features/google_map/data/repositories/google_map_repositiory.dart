@@ -1,6 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:eram_express/features/google_map/domain/Entities/address_entity.dart';
+import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
+import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
 import '../../domain/repositories/google_map_reposirtoty.dart';
 import '../data_sources/googlemap_remote_data_source.dart';
 import '../models/addressmodels/place_details_model.dart';
@@ -8,10 +10,13 @@ import '../models/place_auto_complete_model.dart';
 
 class GoogleMapRepositoryImpl extends GoogleMapRepository {
   final GoogleMapRemoteDataSource _googlemapRemoteDataSource;
-
+   final TokensLocalDataSource _tokensLocalDataSource;
   GoogleMapRepositoryImpl(
-      {required GoogleMapRemoteDataSource googlemapRemoteDataSource})
-      : _googlemapRemoteDataSource = googlemapRemoteDataSource;
+      {required GoogleMapRemoteDataSource googlemapRemoteDataSource,
+       required TokensLocalDataSource tokensLocalDataSource,
+       })
+      : _googlemapRemoteDataSource = googlemapRemoteDataSource,
+       _tokensLocalDataSource = tokensLocalDataSource;
   @override
   Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces(
       String input, String sessiontoken, String Counrty) async {
@@ -36,14 +41,22 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
   }
 
   @override
-  Future<Either<String, AddressEntity>> getPlacedetails(String lat, String long) async
+  Future<Either<String, AddressEntity>> getPlaceDetails(String lat, String long) async
   {
-    final result = await _googlemapRemoteDataSource.getPlacedetails(lat, long);
+     final accessToken = await _tokensLocalDataSource.accessToken;
+    if (accessToken == null) {
+      return Left("Error in Auntheriozation"); 
+    }
+    final result= _googlemapRemoteDataSource.validateLocation(accessToken,lat, long);
+    return result.fold((error)=>Left(error.errors[0].code),
+    (data) async
+    {
+    final result = await _googlemapRemoteDataSource.getPlaceDetails(lat, long);
     if (result.statusCode == 200) 
     {
       logger.debug("Request successful");
-      List<PlaceDetailsModel> placedetatilslist =(result.data['results'] as List).map((item) => PlaceDetailsModel.fromJson(item)).toList();
-      AddressEntity address= AddressEntity(address:placedetatilslist[0].formattedAddress,countryCode: placedetatilslist[0].countryCode! );
+      List<PlaceDetailsModel> placeDetatilsList =(result.data['results'] as List).map((item) => PlaceDetailsModel.fromJson(item)).toList();
+      AddressEntity address= AddressEntity(address:placeDetatilsList[0].formattedAddress,countryCode: placeDetatilsList[0].countryCode! );
       return Right(address);
     } 
     else 
@@ -52,6 +65,8 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
       return Left("Error in prediction: ${result.statusMessage}");
     }
   }
+    );
+    }
 
   Future<Either<String, PlaceDetailsModel>> getCoordinatesForAddress(
       String address) async {

@@ -66,8 +66,11 @@ final HomeDataRemoteDataSource = HomeDataApiRemoteDataSource(
 
 //GoogleMap
 
-final googleMapRemoteDataSource = GoogleMapApiRemoteDataSource();
+final googleMapRemoteDataSource = GoogleMapApiRemoteDataSource(
+  dioClient: dioClient,
+);
 final googlemapRepository = GoogleMapRepositoryImpl(
+    tokensLocalDataSource: tokensLocalDataSource,
     googlemapRemoteDataSource: googleMapRemoteDataSource);
 final locationservice = Locationservice();
 
@@ -95,10 +98,6 @@ final List<BlocProvider> providers = [
   BlocProvider<LocaleCubit>(
     create: (_) => localeCubit,
   ),
-
-  // bestoffers  عملت كده علشان هقراه في الهوم والصفحه كمان بتاعت 
-  //غلط؟
-
 ];
 
 final tokensLocalDataSource =
