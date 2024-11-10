@@ -7,14 +7,7 @@ import '../models/booking_request_model.dart';
 
 abstract class BookingRemoteDataSource 
  {
-  Future<Either<ApiError, Null>> bookingRequest(
-    BookingRequestFormData data,
-    String accessToken,
-  );
-  Future<Either<ApiError, List<BidModel>>> listBiddings(
-    int bookingRequest,
-    String accessToken,
-  );
+  Future<Either<ApiError, Null>> bookingRequest(BookingRequestFormData data, String accessToken,);
    Future<Either<ApiError, List<BookingRequestModel>>> listbBookingRequest(String accessToken,);
    Future<Either<ApiError,Null>>  acceptBidding(String accessToken ,int bidId);
  

@@ -19,8 +19,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
   String apiKey = 'AIzaSyBjgqhScxJNS9pvwKyDNEdvjW-RKpIP5uM';
 
   @override
-  Future<dynamic> getPredictionPlaces(
-      String input, String sessiontoken, String country) async {
+  Future<dynamic> getPredictionPlaces(String input, String sessiontoken, String country) async {
     Response response =
         await dio.get(url + "place/autocomplete/json", queryParameters: {
       'input': input,
@@ -54,19 +53,8 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     return response;
   }
 
-  Future<Either<ApiError, Null>> validateLocation(
-      String accessToken, String lat, String long) async {
-    /*
-    return await _dioClient.request(validPointEndpoint.prepare(headers: {
-      HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-    }, body: {
-      "point": {
-        "type": "Point",
-        "coordinates": [double.parse(long), double.parse(lat)]
-      }
-    }));
-  }
-  */
+  Future<Either<ApiError, Null>> validateLocation(String accessToken, String lat, String long) async 
+  {
     final response = await _dioClient.request(validPointEndpoint.prepare(headers: {
       HttpHeaders.authorizationHeader: 'Bearer $accessToken',
     }, body: {
@@ -80,7 +68,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     }));
 
     return response.fold(
-      (failure) => Left(failure),
+      (error) => Left(error),
       (success) => Right(null), 
     );
   }

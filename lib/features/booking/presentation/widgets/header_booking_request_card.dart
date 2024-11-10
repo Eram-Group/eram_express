@@ -1,16 +1,19 @@
 import 'package:eram_express/app/navigation.dart';
+import 'package:eram_express/common/viewmodels/provider_view_model.dart';
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/booking/domain/Entities/bid_entity.dart';
+import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../app/iconsax_icons.dart';
+import '../../../../common/viewmodels/rating_view_model.dart';
 
 class HeaderBookingRequestCard extends StatelessWidget {
-  final BidEntity bid;
-  const HeaderBookingRequestCard({super.key, required this.bid});
+  final ProviderViewModel provider;
+  const HeaderBookingRequestCard({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class HeaderBookingRequestCard extends StatelessWidget {
       Column(
         children: [
           Text(
-            bid.provider.fullName,
+            provider.fullName,
             style: TextStyle(
               fontFamily: "outfits",
               color: AppColor.blacktext,
@@ -34,14 +37,14 @@ class HeaderBookingRequestCard extends StatelessWidget {
           ),
           const Gap(5),
 
-          _buildRating(3), // مستنياها ترجع من ال api
+          _buildRating(provider.rating), // مستنياها ترجع من ال api
         ],
       ),
     ]);
   }
 }
 
-Widget _buildRating(double averageRating) {
+Widget _buildRating(RatingViewModel rating) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -49,16 +52,16 @@ Widget _buildRating(double averageRating) {
         Padding(
           padding: EdgeInsets.all(0),
           child: Icon(
-            i < averageRating ? Iconsax.star1 : Iconsax.star,
-            size: i < averageRating
+            i < rating.totalRatings ? Iconsax.star1 : Iconsax.star,
+            size: i < rating.totalRatings
                 ? 22
                 : 15, // حاسه الاحسن يبقي svg  علشان مقاسات
-            color: i < averageRating ? AppColor.starcolor : Colors.black,
+            color: i < rating.totalRatings ? AppColor.starcolor : Colors.black,
           ),
         ),
       const Gap(3),
       Text(
-        averageRating.toString(),
+        rating. averageRating.toString(),
         style: TextStyle(
           fontFamily: "outfit",
           fontWeight: FontWeight.w400,

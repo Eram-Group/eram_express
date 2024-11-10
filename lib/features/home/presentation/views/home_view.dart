@@ -26,8 +26,7 @@ class HomeView extends StatelessWidget {
   final BookingRequestViewController bookingRequestViewModel =
       BookingRequestViewController(
           bookingRepository: bookingRepository,
-          getBiddingsUsecase:
-              GetBiddingsUsecase(bookingRepository: bookingRepository),
+          //getBiddingsUsecase:GetBiddingsUsecase(bookingRepository: bookingRepository),
           getBookingRequestUsecase:
               GetBookingRequestUsecase(bookingRepository: bookingRepository));
 

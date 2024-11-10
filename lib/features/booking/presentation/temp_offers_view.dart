@@ -1,121 +1,110 @@
-import 'package:eram_express/app/navigation.dart';
-import 'package:eram_express/core/app_colors.dart';
-import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
-import 'package:eram_express/features/booking/domain/Entities/bid_entity.dart';
-import 'package:eram_express/features/booking/domain/Entities/booking_request_entity.dart';
+import 'package:eram_express/app/di.dart';
+import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-
 import 'package:eram_express_shared/core/utils/responsive.dart';
-
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
-import '../../../app/iconsax_icons.dart';
-import '../../accepet_order_modal.dart';
-import '../../authentication/presentation/views/modals/registered_successfully_modal.dart';
-import '../../cancel_order_modal.dart';
+import '../../../core/app_colors.dart';
+import '../../Common/presentation/widgets/SvgIcon.dart';
+import '../domain/usecases/get_booking_request_usecase.dart';
 import 'views/booking_request_view_controller.dart';
 import 'views/booking_request_view_state.dart';
 import 'widgets/custom_small_button.dart';
 import 'widgets/delivery_cost.dart';
 import 'widgets/header_booking_request_card.dart';
 
-class OffersViewArguments {
-  List<BidEntity> bidding; 
-  
-  OffersViewArguments({
-    required this.bidding,
-  });
-}
-
 class OffersView extends StatelessWidget {
-  
-  final OffersViewArguments offersViewArguments;
-  const OffersView({super.key, required this.offersViewArguments});
+  /*
+    الحل ده حلو اوي بس الفكره اني اتلغبطت وان مفروض لما يدوس يرجعله بس يرجعله بتاع ال request ده بس
+  */
+  final BookingRequestViewController bookingRequestViewModel =
+      BookingRequestViewController(
+          bookingRepository: bookingRepository,
+          getBookingRequestUsecase:
+              GetBookingRequestUsecase(bookingRepository: bookingRepository));
+  OffersView({
+    super.key,
+  });
 
   static const String route = '/offers';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          context.tt("best offers", "افضل العروض"),
-          style: TextStyle(
-            fontFamily: "outfit",
-            fontWeight: FontWeight.w500,
-            fontSize: Responsive.getResponsiveFontSize(context, fontSize: 20),
-            height:
-                20.8 / Responsive.getResponsiveFontSize(context, fontSize: 20),
-            color: AppColor.blacktext,
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(
+            context.tt("best offers", "افضل العروض"),
+            style: TextStyle(
+              fontFamily: "outfit",
+              fontWeight: FontWeight.w500,
+              fontSize: Responsive.getResponsiveFontSize(context, fontSize: 20),
+              height: 20.8 /
+                  Responsive.getResponsiveFontSize(context, fontSize: 20),
+              color: AppColor.blacktext,
+            ),
           ),
-        ),
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 7),
-          child: Container(
-            width: 30,
-            height: 30, // لإضافة شكل دائري للزر
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColor.bordercolor,
-                width: 1.5,
+          centerTitle: true,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 7),
+            child: Container(
+              width: 30,
+              height: 30, // لإضافة شكل دائري للزر
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColor.bordercolor,
+                  width: 1.5,
+                ),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
           ),
         ),
-      ),
-      body: SafeArea(
-        child: Column(
+        body: SafeArea(
+            child: Column(
           children: [
             SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
                   .copyWith(bottom: 0),
-              child: Expanded(
-                child: BlocBuilder<BookingRequestViewController,
-                    BookingRequestViewState>(
-                  builder: (context, state) {
+              child: BlocBuilder<BookingRequestViewController,
+                  BookingRequestViewState>(
+                bloc: bookingRequestViewModel,
+                builder: (_, state) {
+                  if (state is BookingRequestViewSuccessState) {
                     return Column(
                       children: [
                         _buildComingOrder(context),
-                        _buildBiddings(context, offersViewArguments.bidding)
+                        //_buildBiddings(context,state.bookingRequests. )
                       ],
                     );
-                  },
-                ),
+                  } else {
+                    return _buildEmptystate(context);
+                  }
+                },
               ),
             ),
             const Spacer(),
-            _buildcancelContainer(context),
+            _buildCancelContainer(context),
           ],
-        ),
-      ),
-    );
+        )));
   }
 }
 
-Widget _buildBiddings(BuildContext context, List<BidEntity> biddings) 
-{
-  return Column
-  (
+Widget _buildBiddings(BuildContext context, List<BidViewModel> biddings) {
+  return Column(
     children: biddings.map((item) => _buildOfferCard(context, item)).toList(),
   );
-
 }
 
-
-
-Widget _buildOfferCard(BuildContext context, BidEntity item) {
+Widget _buildOfferCard(BuildContext context, BidViewModel item) {
   return Padding(
     padding: const EdgeInsets.only(top: 20),
     child: Container(
@@ -132,9 +121,7 @@ Widget _buildOfferCard(BuildContext context, BidEntity item) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderBookingRequestCard(
-              bid: item,
-            ),
+            HeaderBookingRequestCard(provider: item.provider),
             const Gap(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,7 +173,7 @@ Widget _buildComingOrder(BuildContext context) {
   );
 }
 
-Widget _buildcancelContainer(BuildContext context) {
+Widget _buildCancelContainer(BuildContext context) {
   return Container(
       width: Responsive.screenWidth,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10)
@@ -230,6 +217,8 @@ Widget _buildcancelContainer(BuildContext context) {
 
 Widget _buildEmptystate(BuildContext context) {
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       const SvgIcon(
         asset: "Spinner-Two-Circles",

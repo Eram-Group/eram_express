@@ -47,8 +47,8 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   } 
    else if (name == OffersView.route) 
    {
-    final arguments=settings.arguments as OffersViewArguments;
-    page = OffersView(offersViewArguments: arguments,);
+   
+    page = OffersView();
    } 
   else 
   {

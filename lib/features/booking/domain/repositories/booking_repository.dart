@@ -10,8 +10,8 @@ import '../Entities/booking_request_entity.dart';
 abstract class BookingRepository 
 {
   Future<Either<ApiError, Null>> bookingRequest(BookingRequestFormData data);
-  Future<Either<ApiError, List<BidEntity>>> listBiddings(int bookingRequestId);
+  //Future<Either<ApiError, List<BidEntity>>> listBiddings(int bookingRequestId);
   Future<Either<ApiError, List<BookingRequestEntity>>> listBookingRequest();
   Future<Either<ApiError, Null>>acceptBidding(int bidId);
-  List<BookingRequestEntity>? get cachetbooking ;
+  List<BookingRequestEntity>? get cachetBooking ;
 }

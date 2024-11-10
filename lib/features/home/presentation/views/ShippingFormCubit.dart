@@ -136,7 +136,8 @@ class HomeViewController extends Cubit<HomeViewState> {
   Future<void> PickClicked(BuildContext context) async {
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
         arguments: GoogleMapViewArguments(initialAddress: state.pickup?.point));
-    if (result is PickingLocationViewModel) {
+    if (result is PickingLocationViewModel) 
+    {
       emit(state.copyWith(pickup: result, filled: false));
     }
   }

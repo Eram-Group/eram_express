@@ -1,17 +1,13 @@
-import 'package:eram_express/common/entities/provider_entity.dart';
 
-import '../../../customer/data/models/customer_model.dart';
-
-class BidEntity {
+class BidViewModel {
   final int id;
   final String status;
   final String amount;
   final String amountCurrency;
-  final ProviderEntity provider;
+  final  provider;
   final int bookingRequestId;
 
-  // Constructor
-  BidEntity({
+  BidViewModel({
     required this.id,
     required this.status,
     required this.amount,

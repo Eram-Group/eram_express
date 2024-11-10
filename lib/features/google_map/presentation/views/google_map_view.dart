@@ -191,9 +191,9 @@ class GoogleMapView extends StatelessWidget {
                                         text: context.tt(
                                             "Select location", "حدد الموقع"),
                                         onPressed: () {
-                                          PickingLocationModel pickingLocation =
-                                              PickingLocationModel(
-                                                  point: Point(
+                                          PickingLocationViewModel pickingLocation =
+                                              PickingLocationViewModel(
+                                                  point: PointViewModel(
                                                     longitude: context
                                                         .read<
                                                             GoogleMapViewController>()
@@ -209,14 +209,13 @@ class GoogleMapView extends StatelessWidget {
                                                         .position
                                                         .latitude,
                                                   ),
-                                                  address: state
-                                                      .placeDetails.address);
+                                                  address: state .placeDetails.address);
                                           Navigator.of(context).pop(
                                               pickingLocation); // Pop the current route and return the picking location
                                         },
                                       ),
                                     ])
-                                  else // Loading placeholder
+                                  else 
                                     Container(
                                       width: 70,
                                       height: 10,

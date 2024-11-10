@@ -1,15 +1,12 @@
 import 'package:eram_express/features/booking/domain/Entities/bid_entity.dart';
-
-import '../../../customer/data/models/customer_model.dart';
-import '../../../home/data/models/picking_locationModel.dart';
-import '../../data/models/booking_request_model.dart';
+import 'package:eram_express/features/home/domain/entities/picking_location_entity.dart';
 
 class BookingRequestEntity {
   final int id;
   final String status;
-  final DateTime bookingDate;
-  final PickingLocationModel pickingLocation;
-  final PickingLocationModel destinationLocation;
+  final String bookingDate;
+  final PickingLocationEntity pickingLocation;
+  final PickingLocationEntity destinationLocation;
   List<BidEntity> bids;
 
   BookingRequestEntity({
@@ -21,13 +18,5 @@ class BookingRequestEntity {
     List<BidEntity>? bids,
   }) : bids = bids ?? [];
 
-  factory BookingRequestEntity.fromModel(BookingRequestModel model) {
-    return BookingRequestEntity(
-      id: model.id,
-      status: model.status,
-      bookingDate: model.bookingDate,
-      pickingLocation: model.pickingLocation,
-      destinationLocation: model.destinationLocation,
-    );
-  }
+  
 }

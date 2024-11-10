@@ -1,6 +1,8 @@
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
 import 'package:eram_express/features/booking/data/models/booking_request_model.dart';
 import 'package:eram_express/features/booking/domain/Entities/booking_request_entity.dart';
+import 'package:eram_express/features/booking/presentation/views/viewsmodel/booking_request_view_model.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
@@ -15,16 +17,14 @@ import '../temp_offers_view.dart';
 import 'header_booking_request_card.dart';
 
 class BookingRequestCard extends StatelessWidget {
-  final BookingRequestEntity bookingRequest;
+  final BookingRequestViewModel bookingRequest;
   BookingRequestCard({super.key, required this.bookingRequest});
 
   @override
   Widget build(BuildContext context) {
     return Clickable(
         onTap: () async {
-          await Navigator.of(context).pushNamed(OffersView.route,
-              arguments: OffersViewArguments(bidding: bookingRequest.bids));
-
+          Navigator.pushNamed(context, OffersView.route);
           logger.debug("message");
         },
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -40,7 +40,7 @@ class BookingRequestCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //HeaderBookingRequestCard(bid: bookingRequest.bids[0],),
+            //HeaderBookingRequestCard(provider: bookingRequest.bids[0].provider,),
             const Gap(20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,12 +48,12 @@ class BookingRequestCard extends StatelessWidget {
                 const SvgIcon(asset: "darkCalendar", color: AppColor.darkGrey),
                 const Gap(20),
                 Text(
-                  "2024-11-14",
+                  bookingRequest.bookingDate,
                   style: AppTextStyles.smalltitle,
                 ),
               ],
             ),
-            _buildCard(),
+            _buildCard(context, bookingRequest),
           ],
         ));
   }
@@ -65,39 +65,41 @@ Widget _buildStatusRow(String icon, String title, String address) {
     children: [
       SvgIcon(asset: icon),
       const Gap(14),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: AppTextStyles.smalltitle),
-          Text(
-            address,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: "outfit",
-              color: AppColor.blacktext,
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: AppTextStyles.smalltitle),
+            Text(
+              address,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontFamily: "outfit",
+                color: AppColor.blacktext,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       )
     ],
   );
 }
 
-Widget _buildCard() {
+Widget _buildCard(BuildContext context, BookingRequestViewModel booking) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      _buildStatusRow(
-          "source", "Starting point", "1213 Washington Blvd, Belpre, O"),
+      _buildStatusRow("source", context.tt("Starting point", "نقطه البداية"),
+          booking.pickingLocation.address),
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: CustomPaint(
             size: Size(1, 20), // عرض الخط وارتفاعه
             painter: DottedLinePainter(),
           )),
-      _buildStatusRow(
-          "destinationn", "Starting point", "1213 Washington Blvd, Belpre, OH"),
+      _buildStatusRow("destinationn", context.tt("End point", "نقطه النهاية"),
+          booking.destinationLocation.address),
     ],
   );
 }
