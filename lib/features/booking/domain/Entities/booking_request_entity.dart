@@ -7,7 +7,7 @@ class BookingRequestEntity {
   final String bookingDate;
   final PickingLocationEntity pickingLocation;
   final PickingLocationEntity destinationLocation;
-  List<BidEntity> bids;
+  final List<BidEntity> bids;
 
   BookingRequestEntity({
     required this.id,
@@ -15,8 +15,6 @@ class BookingRequestEntity {
     required this.bookingDate,
     required this.pickingLocation,
     required this.destinationLocation,
-    List<BidEntity>? bids,
-  }) : bids = bids ?? [];
-
-  
+    required this.bids,
+  });
 }

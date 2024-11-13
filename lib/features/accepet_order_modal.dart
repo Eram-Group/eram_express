@@ -1,5 +1,6 @@
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/booking/presentation/temp_offers_view.dart';
+import 'package:eram_express/features/home/presentation/views/home_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
@@ -41,14 +42,19 @@ class AcceptOrderModal extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomSmallButton(
+                  onTap: () {},
                   text: context.tt("Go to your order", "اذهب إلى طلبك"),
                   padding: EdgeInsets.all(12),
                 ),
               ),
               const Gap(10),
               Expanded(
-                  child: CustomSmallButton(
-                padding: EdgeInsets.all(12),
+                child: CustomSmallButton(
+                onTap: () 
+                {
+                  Navigator.pushNamed(context, HomeView.route);
+                },
+                padding:const EdgeInsets.all(12),
                 text: context.tt("Go to Home", "الذهاب إلى الصفحة الرئيسية"),
                 colortext: AppColor.blacktext,
                 colorborder: AppColor.lightGrey,

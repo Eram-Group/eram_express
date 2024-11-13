@@ -24,7 +24,9 @@ class BookingRequestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Clickable(
         onTap: () async {
-          Navigator.pushNamed(context, OffersView.route);
+          Navigator.of(context).pushNamed(OffersView.route,
+              arguments:
+                  OfferViewArguments(bids: bookingRequest.bids));
           logger.debug("message");
         },
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),

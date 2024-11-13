@@ -6,7 +6,7 @@ import '../../domain/Entities/booking_request_entity.dart';
 
 class BookingRequestViewState  extends Equatable{
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props=>[];
 }
 class BookingRequestViewErrorState extends BookingRequestViewState {
   String errorMessage;
@@ -19,6 +19,7 @@ class BookingRequestViewSuccessState extends BookingRequestViewState {
   BookingRequestViewSuccessState(
     this.bookingRequests
   );
+  @override
    List<Object?> get props =>[bookingRequests];
 }
 class BookingRequestViewEmptyState extends BookingRequestViewState {
@@ -26,5 +27,8 @@ class BookingRequestViewEmptyState extends BookingRequestViewState {
   BookingRequestViewEmptyState();
 }
 
+class BiddingViewEmptyState extends BookingRequestViewState{}
+
+class biddingAcceptSucess extends BookingRequestViewState {}
 
 

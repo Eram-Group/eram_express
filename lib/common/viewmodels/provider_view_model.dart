@@ -15,6 +15,9 @@ class ProviderViewModel
 
   factory ProviderViewModel.fromEntity(ProviderEntity entity)
   {
-    return ProviderViewModel(fullName: entity.fullName,image: entity.image,rating:RatingViewModel.fromEntity(entity.rating));
+    return ProviderViewModel(
+    fullName: entity.fullName,
+    image: entity.image,
+    rating:RatingViewModel.fromEntity(entity.rating));
   }
 }

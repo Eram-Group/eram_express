@@ -1,5 +1,6 @@
 import 'package:eram_express/features/booking/data/models/bid_model.dart';
 import 'package:eram_express/features/booking/domain/Entities/booking_request_entity.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import '../../../customer/data/models/customer_model.dart';
 import '../../../home/data/models/cargo-subcategoryModel.dart';
 import '../../../home/data/models/goods-typeModel.dart';
@@ -62,8 +63,8 @@ class BookingRequestModel {
       status: this.status,
       bookingDate: this.bookingDate,
       pickingLocation: pickingLocation.toEntity(this.pickingLocation),
-      destinationLocation:
-          destinationLocation.toEntity(this.destinationLocation),
+      destinationLocation:destinationLocation.toEntity(this.destinationLocation),
+      bids: this.bids.map((bid) => bid.toEntity()).toList(),
     );
   }
 }

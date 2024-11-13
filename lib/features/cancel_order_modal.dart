@@ -41,6 +41,7 @@ class CancelOrderModal extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomSmallButton(
+                     onTap: () {},
                   text: context.tt("back", "العودة"),
                   padding: const EdgeInsets.all(12),
                 ),
@@ -48,6 +49,7 @@ class CancelOrderModal extends StatelessWidget {
               Gap(10),
               Expanded(
                   child: CustomSmallButton(
+                       onTap: () {},
                 padding: const EdgeInsets.all(12),
                 text: context.tt("Cancel Order", "إلغاء الطلب"),
                 colortext: Colors.red,

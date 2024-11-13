@@ -1,6 +1,8 @@
 import 'package:eram_express/app/di.dart';
+import 'package:eram_express/features/booking/domain/usecases/accept_bidding_usecase.dart';
 import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../../../core/app_colors.dart';
 import '../../Common/presentation/widgets/SvgIcon.dart';
+import '../../accepet_order_modal.dart';
 import '../domain/usecases/get_booking_request_usecase.dart';
 import 'views/booking_request_view_controller.dart';
 import 'views/booking_request_view_state.dart';
@@ -15,19 +18,28 @@ import 'widgets/custom_small_button.dart';
 import 'widgets/delivery_cost.dart';
 import 'widgets/header_booking_request_card.dart';
 
+class OfferViewArguments {
+  final List<BidViewModel> bids;
+  const OfferViewArguments({required this.bids});
+}
+
+/*
+
 class OffersView extends StatelessWidget {
   /*
+   
     الحل ده حلو اوي بس الفكره اني اتلغبطت وان مفروض لما يدوس يرجعله بس يرجعله بتاع ال request ده بس
+    هيبقي حلو في الصفحه بتاعت 
+    booking request
+  
   */
-  final BookingRequestViewController bookingRequestViewModel =
-      BookingRequestViewController(
-          bookingRepository: bookingRepository,
-          getBookingRequestUsecase:
-              GetBookingRequestUsecase(bookingRepository: bookingRepository));
-  OffersView({
-    super.key,
-  });
 
+  final BookingRequestViewController bookingRequestViewModel =BookingRequestViewController(
+                                                                            bookingRepository: bookingRepository,
+                                                                          getBookingRequestUsecase: GetBookingRequestUsecase(bookingRepository: bookingRepository));
+  
+  final OfferViewArguments  arguments;
+  OffersView({super.key,required this.arguments});
   static const String route = '/offers';
 
   @override
@@ -72,8 +84,7 @@ class OffersView extends StatelessWidget {
             child: Column(
           children: [
             SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
-                  .copyWith(bottom: 0),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10) .copyWith(bottom: 0),
               child: BlocBuilder<BookingRequestViewController,
                   BookingRequestViewState>(
                 bloc: bookingRequestViewModel,
@@ -82,10 +93,12 @@ class OffersView extends StatelessWidget {
                     return Column(
                       children: [
                         _buildComingOrder(context),
-                        //_buildBiddings(context,state.bookingRequests. )
+                        _buildBiddings(context,state.bookingRequests. )
                       ],
                     );
-                  } else {
+                  } 
+                  else 
+                  {
                     return _buildEmptystate(context);
                   }
                 },
@@ -97,47 +110,147 @@ class OffersView extends StatelessWidget {
         )));
   }
 }
+*/
 
-Widget _buildBiddings(BuildContext context, List<BidViewModel> biddings) {
-  return Column(
-    children: biddings.map((item) => _buildOfferCard(context, item)).toList(),
-  );
-}
+class OffersView extends StatelessWidget {
+  /*
+   
+    الحل ده حلو اوي بس الفكره اني اتلغبطت وان مفروض لما يدوس يرجعله بس يرجعله بتاع ال request ده بس
+    هيبقي حلو في الصفحه بتاعت 
+    booking request
+  
+  */
 
-Widget _buildOfferCard(BuildContext context, BidViewModel item) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 20),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor.bordercolor,
-          width: 1.5,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            HeaderBookingRequestCard(provider: item.provider),
-            const Gap(10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DeliveryCost(
-                  amount: item.amount,
-                  amountCurrency: item.amountCurrency,
-                ),
-                CustomSmallButton(text: context.tt("Accept", "قبول")),
-              ],
+  final BookingRequestViewController bookingRequestViewModel =
+      BookingRequestViewController(bookingRepository: bookingRepository,
+                                   acceptBiddingUsecase:AcceptBiddingUsecase(bookingRepository: bookingRepository),
+                                   getBookingRequestUsecase: GetBookingRequestUsecase(bookingRepository: bookingRepository));
+  final OfferViewArguments arguments;
+  OffersView({super.key, required this.arguments});
+  static const String route = '/offers';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(
+            context.tt("best offers", "افضل العروض"),
+            style: TextStyle(
+              fontFamily: "outfit",
+              fontWeight: FontWeight.w500,
+              fontSize: Responsive.getResponsiveFontSize(context, fontSize: 20),
+              height: 20.8 /
+                  Responsive.getResponsiveFontSize(context, fontSize: 20),
+              color: AppColor.blacktext,
             ),
-          ],
+          ),
+          centerTitle: true,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 7),
+            child: Container(
+              width: 30,
+              height: 30, // لإضافة شكل دائري للزر
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColor.bordercolor,
+                  width: 1.5,
+                ),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+        ),
+        body: SafeArea(
+  child: Column(
+    children: [
+      SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
+            .copyWith(bottom: 0),
+        child: BlocConsumer<BookingRequestViewController, BookingRequestViewState>(
+          bloc: bookingRequestViewModel,
+          listener: (context, state) {
+            // Add side effects here based on specific states if needed
+            if (state is biddingAcceptSucess) 
+            {
+               
+                const AcceptOrderModal().show(context);
+            }
+          },
+          builder: (context, state) 
+          {
+            return arguments.bids.isNotEmpty
+                ? Column(
+                    children: [
+                      _buildComingOrder(context),
+                      _buildBiddings(context, arguments.bids),
+                    ],
+                  )
+                : _buildEmptystate(context);
+          },
         ),
       ),
-    ),
-  );
+      const Spacer(),
+      _buildCancelContainer(context),
+    ],
+  ),
+));
+  }
+
+  Widget _buildOfferCard(BuildContext context, BidViewModel item) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: AppColor.bordercolor,
+            width: 1.5,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HeaderBookingRequestCard(provider: item.provider),
+              const Gap(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DeliveryCost(
+                    amount: item.amount,
+                    amountCurrency: item.amountCurrency,
+                  ),
+                  CustomSmallButton(
+                      text: context.tt(
+                        "Accept",
+                        "قبول",
+                      ),
+                      onTap: () {
+                        bookingRequestViewModel.acceptBidding(item);
+                      }),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBiddings(BuildContext context, List<BidViewModel> biddings) {
+    return Column(
+      children: biddings.map((item) => _buildOfferCard(context, item)).toList(),
+    );
+  }
 }
 
 Widget _buildComingOrder(BuildContext context) {

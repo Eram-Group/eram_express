@@ -1,4 +1,5 @@
 import 'package:eram_express/core/app_colors.dart';
+import 'package:eram_express/features/booking/domain/usecases/accept_bidding_usecase.dart';
 import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
 import 'package:eram_express/features/booking/domain/usecases/get_biddings_usecase.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
@@ -26,6 +27,7 @@ class HomeView extends StatelessWidget {
   final BookingRequestViewController bookingRequestViewModel =
       BookingRequestViewController(
           bookingRepository: bookingRepository,
+          acceptBiddingUsecase: AcceptBiddingUsecase(bookingRepository: bookingRepository),
           //getBiddingsUsecase:GetBiddingsUsecase(bookingRepository: bookingRepository),
           getBookingRequestUsecase:
               GetBookingRequestUsecase(bookingRepository: bookingRepository));

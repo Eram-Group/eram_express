@@ -10,21 +10,21 @@ class CustomSmallButton extends StatelessWidget {
   final Color? colortext;
   final Color? colorborder;
   final EdgeInsetsGeometry? padding;
+  final void Function() onTap;
   const CustomSmallButton({
     this.color = AppColor.primaryColor,
     required this.text,
     this.colortext = Colors.white,
     this.colorborder = AppColor.primaryColor,
     this.padding = const EdgeInsets.all(10.0),
+  required  this.onTap,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        //await AcceptOrderModal().show(context);
-      },
+      onTap:onTap,
       child: Container(
         decoration: BoxDecoration(
             color: color,

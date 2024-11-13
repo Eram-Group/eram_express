@@ -10,13 +10,13 @@ import '../features/init/presentation/views/init_view.dart';
 import '../features/onboarding/presentation/views/onboarding.view.dart';
 import '../features/google_map/presentation/views/google_map_view.dart';
 import 'presentation/views/not_found.view.dart';
+
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   Widget page;
 
   final name = settings.name;
 
-  if (name == null)
-   {
+  if (name == null) {
     return null;
   }
 
@@ -26,32 +26,26 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = const OnboardingView();
   } else if (name == LoginView.route) {
     page = LoginView();
-
   } else if (name == OtpView.route) {
     final arguments = settings.arguments as OtpViewArguments;
     page = OtpView(arguments);
   } else if (name == CompleteProfileView.route) {
     page = CompleteProfileView();
-
   } else if (name == HomeView.route) {
     page = HomeView();
-  } 
-  else if (name == GoogleMapView.route)
- {
-     final arguments = settings.arguments as GoogleMapViewArguments?;
-    page = GoogleMapView(googleMapViewArguments: arguments,);
-  } 
-  else if (name == SearchView.route) 
-  {
+  } else if (name == GoogleMapView.route) {
+    final arguments = settings.arguments as GoogleMapViewArguments?;
+    page = GoogleMapView(
+      googleMapViewArguments: arguments,
+    );
+  } else if (name == SearchView.route) {
     page = const SearchView();
-  } 
-   else if (name == OffersView.route) 
-   {
-   
-    page = OffersView();
-   } 
-  else 
-  {
+  } else if (name == OffersView.route) {
+    final arguments = settings.arguments as OfferViewArguments;
+    page = OffersView(
+      arguments: arguments,
+    );
+  } else {
     page = const NotFoundView();
   }
 

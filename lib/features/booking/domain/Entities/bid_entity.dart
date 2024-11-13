@@ -2,7 +2,8 @@ import 'package:eram_express/common/entities/provider_entity.dart';
 
 import '../../../customer/data/models/customer_model.dart';
 
-class BidEntity {
+class BidEntity 
+{
   final int id;
   final String status;
   final String amount;

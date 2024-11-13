@@ -24,11 +24,13 @@ class BookingRequestViewModel
 
   factory BookingRequestViewModel.fromEntity(BookingRequestEntity entity)
   {
-     return BookingRequestViewModel(id:entity.id,  
+     return BookingRequestViewModel(
+     id:entity.id,  
      status: entity.status, 
      bookingDate: entity.bookingDate, 
      pickingLocation:PickingLocationViewModel.fromEntity(entity.pickingLocation),
      destinationLocation: PickingLocationViewModel.fromEntity(entity.pickingLocation),
-     );
+     bids: entity.bids.map((e) => BidViewModel.fromEntity(e)).toList());
+     
   }
 }
