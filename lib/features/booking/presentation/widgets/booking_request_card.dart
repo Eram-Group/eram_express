@@ -18,17 +18,13 @@ import 'header_booking_request_card.dart';
 
 class BookingRequestCard extends StatelessWidget {
   final BookingRequestViewModel bookingRequest;
-  BookingRequestCard({super.key, required this.bookingRequest});
+  final void Function()? onTap;
+  BookingRequestCard({super.key, required this.bookingRequest ,required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Clickable(
-        onTap: () async {
-          Navigator.of(context).pushNamed(OffersView.route,
-              arguments:
-                  OfferViewArguments(bids: bookingRequest.bids));
-          logger.debug("message");
-        },
+        onTap: onTap,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         width: Responsive.screenWidth,
         decoration: BoxDecoration(

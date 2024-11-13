@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
 import 'package:eram_express/features/booking/presentation/views/viewsmodel/booking_request_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,14 @@ class BookingRequestViewEmptyState extends BookingRequestViewState {
 
 class BiddingViewEmptyState extends BookingRequestViewState{}
 
-class biddingAcceptSucess extends BookingRequestViewState {}
+class BiddingsViewLoadedState extends BookingRequestViewState {
+  List<BidViewModel> biddings;
+  BiddingsViewLoadedState(this.biddings);
+  @override
+  List<Object?> get props => [biddings];
+}
+
+
+//class biddingAcceptSucess extends BookingRequestViewState {}
 
 

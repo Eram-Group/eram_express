@@ -18,11 +18,6 @@ import 'widgets/custom_small_button.dart';
 import 'widgets/delivery_cost.dart';
 import 'widgets/header_booking_request_card.dart';
 
-class OfferViewArguments {
-  final List<BidViewModel> bids;
-  const OfferViewArguments({required this.bids});
-}
-
 /*
 
 class OffersView extends StatelessWidget {
@@ -112,6 +107,11 @@ class OffersView extends StatelessWidget {
 }
 */
 
+class OfferViewArguments {
+  final BookingRequestViewController cubit;
+  const OfferViewArguments({required this.cubit});
+}
+
 class OffersView extends StatelessWidget {
   /*
    
@@ -121,17 +121,30 @@ class OffersView extends StatelessWidget {
   
   */
 
+/*
   final BookingRequestViewController bookingRequestViewModel =
       BookingRequestViewController(bookingRepository: bookingRepository,
                                    acceptBiddingUsecase:AcceptBiddingUsecase(bookingRepository: bookingRepository),
                                    getBookingRequestUsecase: GetBookingRequestUsecase(bookingRepository: bookingRepository));
+ 
+ */
+
   final OfferViewArguments arguments;
   OffersView({super.key, required this.arguments});
   static const String route = '/offers';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  PopScope(
+    canPop: true, //When false, blocks the current route from being popped.
+    onPopInvoked: (didPop)
+     {
+       arguments.cubit.gotoHome();
+    
+    },
+    
+    child: 
+     Scaffold(
         appBar: AppBar(
           elevation: 0,
           title: Text(
@@ -161,6 +174,8 @@ class OffersView extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
+                  // Navigator.pop(context);
+                 arguments.cubit.gotoHome();
                   Navigator.pop(context);
                 },
               ),
@@ -168,39 +183,37 @@ class OffersView extends StatelessWidget {
           ),
         ),
         body: SafeArea(
-  child: Column(
-    children: [
-      SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
-            .copyWith(bottom: 0),
-        child: BlocConsumer<BookingRequestViewController, BookingRequestViewState>(
-          bloc: bookingRequestViewModel,
-          listener: (context, state) {
-            // Add side effects here based on specific states if needed
-            if (state is biddingAcceptSucess) 
-            {
-               
-                const AcceptOrderModal().show(context);
-            }
-          },
-          builder: (context, state) 
-          {
-            return arguments.bids.isNotEmpty
-                ? Column(
-                    children: [
-                      _buildComingOrder(context),
-                      _buildBiddings(context, arguments.bids),
-                    ],
-                  )
-                : _buildEmptystate(context);
-          },
-        ),
-      ),
-      const Spacer(),
-      _buildCancelContainer(context),
-    ],
-  ),
-));
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
+                        .copyWith(bottom: 0),
+                child: BlocConsumer<BookingRequestViewController,
+                    BookingRequestViewState>(
+                  bloc: arguments.cubit,
+                  listener: (context, state) {
+                    // Add side effects here based on specific states if needed
+                  },
+                  builder: (context, state) {
+                    if (state is BiddingsViewLoadedState) {
+                      return Column(
+                        children: [
+                          _buildComingOrder(context),
+                          _buildBiddings(context, state.biddings),
+                        ],
+                      );
+                    } else {
+                      return _buildEmptystate(context);
+                    }
+                  },
+                ),
+              ),
+              const Spacer(),
+              _buildCancelContainer(context),
+            ],
+          ),
+        )));
   }
 
   Widget _buildOfferCard(BuildContext context, BidViewModel item) {
@@ -235,7 +248,7 @@ class OffersView extends StatelessWidget {
                         "قبول",
                       ),
                       onTap: () {
-                        bookingRequestViewModel.acceptBidding(item);
+                        arguments.cubit.acceptBidding(item);
                       }),
                 ],
               ),

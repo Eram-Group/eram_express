@@ -11,6 +11,7 @@ class AcceptBiddingUsecase
 Future<Either<ApiError, Null>> execute(int bidId)
 {
   return  _bookingRepository.acceptBidding(bidId);
+  
 }
 
 }

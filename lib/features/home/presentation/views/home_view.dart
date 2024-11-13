@@ -3,6 +3,7 @@ import 'package:eram_express/features/booking/domain/usecases/accept_bidding_use
 import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
 import 'package:eram_express/features/booking/domain/usecases/get_biddings_usecase.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,10 +25,12 @@ class HomeView extends StatelessWidget {
       homerepo: HomeRepository,
       createBookingRequestUsecase:
           CreateBookingRequestUsecase(bookingRepository: bookingRepository));
+
   final BookingRequestViewController bookingRequestViewModel =
       BookingRequestViewController(
           bookingRepository: bookingRepository,
-          acceptBiddingUsecase: AcceptBiddingUsecase(bookingRepository: bookingRepository),
+          acceptBiddingUsecase:
+              AcceptBiddingUsecase(bookingRepository: bookingRepository),
           //getBiddingsUsecase:GetBiddingsUsecase(bookingRepository: bookingRepository),
           getBookingRequestUsecase:
               GetBookingRequestUsecase(bookingRepository: bookingRepository));
@@ -112,171 +115,216 @@ profile viewmodel
   }
 
   Widget _builddataContainer(BuildContext context) {
-    return BlocBuilder<HomeViewController, HomeViewState>(
-      bloc: viewModel,
-      builder: (_, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 130)
-              .copyWith(bottom: 0),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x1C000000), // Hex value for #0000001C
-                    offset: Offset(0, 4), // Equivalent to "0px 4px"
-                    blurRadius: 24, // Equivalent to "24px"
-                    spreadRadius: 0, // Equivalent to "0px"
+    logger.debug("rebuilddddddd");
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 130)
+          .copyWith(bottom: 0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x1C000000), // Hex value for #0000001C
+                offset: Offset(0, 4), // Equivalent to "0px 4px"
+                blurRadius: 24, // Equivalent to "24px"
+                spreadRadius: 0, // Equivalent to "0px"
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  context.tt("Ship your goods with us", "اشحن بضائعك معنا"),
+                  style: const TextStyle(
+                    fontFamily: 'Outfit',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      context.tt("Ship your goods with us", "اشحن بضائعك معنا"),
-                      style: const TextStyle(
-                        fontFamily: 'Outfit',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Gap(16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildSelected(
-                            onTap: () => viewModel.PickClicked(context),
-                            selectedValue: state.pickup?.address ?? " ",
-                            context: context,
-                            label: state.pickup?.address ?? "Pick up",
-                            iconName: 'Pick_Up',
-                            filled: state.filled
-                                ? state.pickup?.address == null
-                                    ? true
-                                    : false
-                                : state.filled,
-                          ),
-                        ),
-                        const Gap(7),
-                        Expanded(
-                          child: _buildSelected(
-                            onTap: () => viewModel.destinationClicked(context),
-                            context: context,
-                            selectedValue: state.destination?.address ?? " ",
-                            label: state.destination?.address ?? "Destination",
-                            iconName: 'destination',
-                            filled: state.filled
-                                ? state.destination?.address == null
-                                    ? true
-                                    : false
-                                : state.filled,
-                          ),
-                        ),
-                      ],
-                    ),
-                    _buildSelected(
-                      onTap: () => viewModel.cargoCategoryOnClicked(context),
-                      selectedValue: context.tt(state.loadType?.nameEn ?? " ",
-                          state.loadType?.nameAr ?? " "),
-                      context: context,
-                      label: context.tt(
-                          state.loadType?.nameEn ?? "Select the load type",
-                          state.loadType?.nameAr ?? "اختر نوع الحمولة"),
-                      iconName: 'arrow-down',
-                      // ده الحل لان context مش بتققبل   string?
-                      filled: state.filled
-                          ? context.tt(state.loadType?.nameEn ?? " ",
-                                      state.loadType?.nameAr ?? " ") ==
-                                  " "
-                              ? true
-                              : false
-                          : state.filled,
-                    ),
-                    _buildSelected(
-                      onTap: () => viewModel.cargosubCategoryOnClicked(context),
-                      context: context,
-                      selectedValue: context.tt(state.truckSize?.nameEn ?? " ",
-                          state.truckSize?.nameAr ?? " "),
-                      label: context.tt(
-                          state.truckSize?.nameEn ??
-                              "Choose the size of the truck ",
-                          state.truckSize?.nameAr ?? "اختر حجم حمولتك "),
-                      iconName: 'sizeTrack',
-                      filled: state.filled
-                          ? context.tt(state.loadType?.nameEn ?? " ",
-                                      state.loadType?.nameAr ?? " ") ==
-                                  " "
-                              ? true
-                              : false
-                          : state.filled,
-                    ),
-                    _buildSelected(
-                        onTap: () => viewModel.PickdateOnClicked(context),
-                        context: context,
-                        selectedValue: context.tt(
-                          state.pickupDate ?? " ",
-                          state.pickupDate ?? " ",
-                        ),
-                        label: context.tt(
-                          state.pickupDate ?? "pick up date",
-                          state.pickupDate ?? "اختر التاريخ",
-                        ),
-                        iconName: 'calendar',
-                        filled: state.filled
-                            ? context.tt(
-                                      state.pickupDate ?? " ",
-                                      state.pickupDate ?? " ",
-                                    ) ==
-                                    " "
-                                ? true
-                                : false
-                            : state.filled),
-                    _buildSelected(
-                        onTap: () => viewModel.GoodsOnClicked(context),
-                        context: context,
-                        selectedValue: context.tt(
-                          state.selectGoodsString ?? " ",
-                          state.selectGoodsString ?? " ",
-                        ),
-                        label: context.tt(
-                          state.selectGoodsString ?? "Select Goods",
-                          state.selectGoodsString ?? "اختر نوع البضائع",
-                        ),
-                        iconName: 'calendar',
-                        filled: state.filled
-                            ? context.tt(
-                                      state.pickupDate ?? " ",
-                                      state.pickupDate ?? " ",
-                                    ) ==
-                                    " "
-                                ? true
-                                : false
-                            : state.filled),
-                    const Gap(8),
-                    CustomButton(
-                      onPressed: () {
-                        viewModel.createRequestlbuttonclick();
-                      },
-                      text: "Check Rates",
-                      backgroundColor: AppColor.primaryColor,
-                      TextColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                  ],
                 ),
-              ),
+                const Gap(16),
+                _buildLocationRow(context),
+                _buildLoadTypeField(context),
+                _buildTruckSizeField(context),
+                _buildDateField(context),
+                _buildGoodsField(context),
+                const Gap(8),
+                const Gap(8),
+                CustomButton(
+                  onPressed: () {
+                    viewModel.createRequestlbuttonclick();
+                  },
+                  text: "Check Rates",
+                  backgroundColor: AppColor.primaryColor,
+                  TextColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
+              ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLocationRow(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: BlocBuilder<HomeViewController, HomeViewState>(
+            bloc: viewModel,
+            builder: (context, state) {
+              return _buildSelected(
+                onTap: () => viewModel.PickClicked(context),
+                selectedValue: state.pickup?.address ?? " ",
+                context: context,
+                label: state.pickup?.address ?? "Pick up",
+                iconName: 'Pick_Up',
+                filled: state.filled
+                    ? state.pickup?.address == null
+                        ? true
+                        : false
+                    : state.filled,
+              );
+            },
+          ),
+        ),
+        const Gap(7),
+        Expanded(
+          child: BlocBuilder<HomeViewController, HomeViewState>(
+            bloc: viewModel,
+            builder: (context, state) {
+              return _buildSelected(
+                onTap: () => viewModel.destinationClicked(context),
+                context: context,
+                selectedValue: state.destination?.address ?? " ",
+                label: state.destination?.address ?? "Destination",
+                iconName: 'destination',
+                filled: state.filled
+                    ? state.destination?.address == null
+                        ? true
+                        : false
+                    : state.filled,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadTypeField(BuildContext context) {
+    return BlocBuilder<HomeViewController, HomeViewState>(
+      bloc: viewModel,
+      builder: (context, state) {
+        return _buildSelected(
+          onTap: () => viewModel.cargoCategoryOnClicked(context),
+          selectedValue: context.tt(
+              state.loadType?.nameEn ?? " ", state.loadType?.nameAr ?? " "),
+          context: context,
+          label: context.tt(state.loadType?.nameEn ?? "Select the load type",
+              state.loadType?.nameAr ?? "اختر نوع الحمولة"),
+          iconName: 'arrow-down',
+          filled: state.filled
+              ? context.tt(state.loadType?.nameEn ?? " ",
+                          state.loadType?.nameAr ?? " ") ==
+                      " "
+                  ? true
+                  : false
+              : state.filled,
+        );
+      },
+    );
+  }
+
+  Widget _buildTruckSizeField(BuildContext context) {
+    return BlocBuilder<HomeViewController, HomeViewState>(
+      bloc: viewModel,
+      builder: (context, state) {
+        return _buildSelected(
+          onTap: () => viewModel.cargosubCategoryOnClicked(context),
+          context: context,
+          selectedValue: context.tt(
+              state.truckSize?.nameEn ?? " ", state.truckSize?.nameAr ?? " "),
+          label: context.tt(
+              state.truckSize?.nameEn ?? "Choose the size of the truck",
+              state.truckSize?.nameAr ?? "اختر حجم حمولتك"),
+          iconName: 'sizeTrack',
+          filled: state.filled
+              ? context.tt(state.loadType?.nameEn ?? " ",
+                          state.loadType?.nameAr ?? " ") ==
+                      " "
+                  ? true
+                  : false
+              : state.filled,
+        );
+      },
+    );
+  }
+
+  Widget _buildDateField(BuildContext context) {
+    return BlocBuilder<HomeViewController, HomeViewState>(
+      bloc: viewModel,
+      builder: (context, state) {
+        return _buildSelected(
+          onTap: () => viewModel.PickdateOnClicked(context),
+          context: context,
+          selectedValue: context.tt(
+            state.pickupDate ?? " ",
+            state.pickupDate ?? " ",
+          ),
+          label: context.tt(
+            state.pickupDate ?? "pick up date",
+            state.pickupDate ?? "اختر التاريخ",
+          ),
+          iconName: 'calendar',
+          filled: state.filled
+              ? context.tt(
+                        state.pickupDate ?? " ",
+                        state.pickupDate ?? " ",
+                      ) ==
+                      " "
+                  ? true
+                  : false
+              : state.filled,
+        );
+      },
+    );
+  }
+
+  Widget _buildGoodsField(BuildContext context) {
+    return BlocBuilder<HomeViewController, HomeViewState>(
+      bloc: viewModel,
+      builder: (context, state) {
+        return _buildSelected(
+          onTap: () => viewModel.GoodsOnClicked(context),
+          context: context,
+          selectedValue: context.tt(
+            state.selectGoodsString ?? " ",
+            state.selectGoodsString ?? " ",
+          ),
+          label: context.tt(
+            state.selectGoodsString ?? "Select Goods",
+            state.selectGoodsString ?? "اختر نوع البضائع",
+          ),
+          iconName: 'calendar',
+          filled: state.filled
+              ? context.tt(
+                        state.pickupDate ?? " ",
+                        state.pickupDate ?? " ",
+                      ) ==
+                      " "
+                  ? true
+                  : false
+              : state.filled,
         );
       },
     );
@@ -349,13 +397,19 @@ profile viewmodel
   Widget _buildBookingRequest() {
     return BlocBuilder<BookingRequestViewController, BookingRequestViewState>(
       bloc: bookingRequestViewModel,
-      builder: (_, state) {
+      builder: (context, state) {
         if (state is BookingRequestViewSuccessState) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: state.bookingRequests
-                  .map((item) => BookingRequestCard(bookingRequest: item))
+                  .map((item) => BookingRequestCard(
+                        bookingRequest: item,
+                        onTap: () {
+                          bookingRequestViewModel.setbiddingState(
+                              item.bids, context);
+                        },
+                      ))
                   .toList(),
             ),
           );

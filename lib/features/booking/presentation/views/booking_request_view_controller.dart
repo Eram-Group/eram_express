@@ -5,9 +5,12 @@ import 'package:eram_express/features/booking/domain/usecases/get_booking_reques
 import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
 import 'package:eram_express/features/booking/presentation/views/viewsmodel/booking_request_view_model.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../app/di.dart';
 import '../../../accepet_order_modal.dart';
 import '../../domain/usecases/accept_bidding_usecase.dart';
+import '../temp_offers_view.dart';
 import 'booking_request_view_state.dart';
 
 BookingRequestViewState getBookingRequestState(
@@ -59,13 +62,35 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
     });
   }
 
+  void gotoHome() {
+    emit(BookingRequestViewSuccessState(bookingRepository.cachetBooking!
+        .map((item) => BookingRequestViewModel.fromEntity(item))
+        .toList()));
+    //Navigator.pop(NavigationService.globalContext);
+  }
+
+  void setbiddingState(List<BidViewModel> biddings, BuildContext context) {
+    biddings.isEmpty
+        ? emit(BiddingViewEmptyState())
+        : emit(BiddingsViewLoadedState(biddings));
+    Navigator.of(context).pushNamed(OffersView.route,
+        arguments: OfferViewArguments(cubit: this));
+  }
+
   Future<void> acceptBidding(BidViewModel bid) async {
     final result = await _acceptBiddingUsecase.execute(bid.id);
     result.fold(
         (error) =>
             emit((BookingRequestViewErrorState("Error in acceptinggggg"))),
         (data) {
-      emit(biddingAcceptSucess());
+      emit(BiddingViewEmptyState());     // الحاله دي ممكن اوقات محتجهاش 
+      /*
+             قدامنا حل من 2 
+          1- يا نفصل ال accept وكده نعمل
+          2 controller
+
+
+      */
       removeAcceptingReqeust(bid.bookingRequestId);
     });
   }
@@ -73,7 +98,6 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
   void removeAcceptingReqeust(int RemovedId) {
     _bookingRepository.cachetBooking!
         .removeWhere((booking) => booking.id == RemovedId);
-    emit(BiddingViewEmptyState());
     emit(BookingRequestViewSuccessState(_bookingRepository.cachetBooking!
         .map((item) => BookingRequestViewModel.fromEntity(item))
         .toList()));
