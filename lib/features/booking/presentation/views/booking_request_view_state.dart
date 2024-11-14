@@ -5,39 +5,36 @@ import 'package:flutter/material.dart';
 
 import '../../domain/Entities/booking_request_entity.dart';
 
-class BookingRequestViewState  extends Equatable{
+class BookingRequestViewState extends Equatable {
   @override
-  List<Object?> get props=>[];
+  List<Object?> get props => [];
 }
+
 class BookingRequestViewErrorState extends BookingRequestViewState {
   String errorMessage;
   BookingRequestViewErrorState(this.errorMessage);
-
 }
 
 class BookingRequestViewSuccessState extends BookingRequestViewState {
-  List<BookingRequestViewModel> bookingRequests;
-  BookingRequestViewSuccessState(
-    this.bookingRequests
-  );
+  final List<BookingRequestViewModel> bookingRequests;
+
+  BookingRequestViewSuccessState(this.bookingRequests);
+
   @override
-   List<Object?> get props =>[bookingRequests];
+  List<Object?> get props => [bookingRequests.map((e) => e.id).toList()];
 }
+
 class BookingRequestViewEmptyState extends BookingRequestViewState {
-  
   BookingRequestViewEmptyState();
 }
 
-class BiddingViewEmptyState extends BookingRequestViewState{}
+class AcceptbookingRequest extends BookingRequestViewState
+{
 
-class BiddingsViewLoadedState extends BookingRequestViewState {
-  List<BidViewModel> biddings;
-  BiddingsViewLoadedState(this.biddings);
-  @override
-  List<Object?> get props => [biddings];
 }
+class RequestSuccessEmptyState extends BookingRequestViewState {}
 
 
-//class biddingAcceptSucess extends BookingRequestViewState {}
+
 
 

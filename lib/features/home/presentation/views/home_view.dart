@@ -13,6 +13,7 @@ import '../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../../Common/presentation/widgets/customButton.dart';
 
 import '../../../booking/domain/usecases/get_booking_request_usecase.dart';
+import '../../../booking/presentation/temp_offers_view.dart';
 import '../../../booking/presentation/views/booking_request_view_controller.dart';
 import '../../../booking/presentation/views/booking_request_view_state.dart';
 import '../../../booking/presentation/widgets/booking_request_card.dart';
@@ -38,8 +39,7 @@ class HomeView extends StatelessWidget {
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-    return 
-    Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
             child: SingleChildScrollView(
@@ -53,20 +53,16 @@ class HomeView extends StatelessWidget {
                     _builddataContainer(context),
                   ],
                 ),
-                  BlocListener<HomeViewController, HomeViewState>
-                  (
-                 bloc: viewModel,
-                  listener: (context, state)
-                   {
+                BlocListener<HomeViewController, HomeViewState>(
+                  bloc: viewModel,
+                  listener: (context, state) {
                     if (state is RequestCreateSuccess) {
-             
-                     bookingRequestViewModel.listBookingRequest();
+                      logger.debug(state.runtimeType.toString());
+                      bookingRequestViewModel.listBookingRequest();
                     }
-                  
                   },
-                  child: 
-                _buildBookingRequest(),
-                  ),
+                  child: _buildBookingRequest(),
+                ),
               ],
             ),
           ),
@@ -411,7 +407,15 @@ profile viewmodel
   Widget _buildBookingRequest() {
     return BlocBuilder<BookingRequestViewController, BookingRequestViewState>(
       bloc: bookingRequestViewModel,
+      buildWhen: (previous, current) {
+        // إضافة print للتأكد من أن buildWhen يتم استدعاؤه
+        print("BuildWhen called");
+        print("Previous: $previous");
+        print("Current: $current");
+        return previous != current;
+      },
       builder: (context, state) {
+      logger.debug("rebuild bokkkkkkkk");
         if (state is BookingRequestViewSuccessState) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -420,8 +424,12 @@ profile viewmodel
                   .map((item) => BookingRequestCard(
                         bookingRequest: item,
                         onTap: () {
+                          /*
                           bookingRequestViewModel.setbiddingState(
                               item.bids, context);
+                              */
+                          Navigator.of(context).pushNamed(OffersView.route,
+                              arguments: OfferViewArguments(bids: item.bids ,cubit: bookingRequestViewModel ));
                         },
                       ))
                   .toList(),

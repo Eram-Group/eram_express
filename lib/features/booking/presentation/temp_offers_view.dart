@@ -18,6 +18,12 @@ import 'widgets/custom_small_button.dart';
 import 'widgets/delivery_cost.dart';
 import 'widgets/header_booking_request_card.dart';
 
+class OfferViewArguments {
+   List<BidViewModel> bids;
+   final BookingRequestViewController cubit;
+  OfferViewArguments({required this.bids ,required this.cubit});
+}
+
 /*
 
 class OffersView extends StatelessWidget {
@@ -107,11 +113,6 @@ class OffersView extends StatelessWidget {
 }
 */
 
-class OfferViewArguments {
-  final BookingRequestViewController cubit;
-  const OfferViewArguments({required this.cubit});
-}
-
 class OffersView extends StatelessWidget {
   /*
    
@@ -121,30 +122,13 @@ class OffersView extends StatelessWidget {
   
   */
 
-/*
-  final BookingRequestViewController bookingRequestViewModel =
-      BookingRequestViewController(bookingRepository: bookingRepository,
-                                   acceptBiddingUsecase:AcceptBiddingUsecase(bookingRepository: bookingRepository),
-                                   getBookingRequestUsecase: GetBookingRequestUsecase(bookingRepository: bookingRepository));
- 
- */
-
   final OfferViewArguments arguments;
   OffersView({super.key, required this.arguments});
   static const String route = '/offers';
 
   @override
   Widget build(BuildContext context) {
-    return  PopScope(
-    canPop: true, //When false, blocks the current route from being popped.
-    onPopInvoked: (didPop)
-     {
-       arguments.cubit.gotoHome();
-    
-    },
-    
-    child: 
-     Scaffold(
+    return Scaffold(
         appBar: AppBar(
           elevation: 0,
           title: Text(
@@ -174,8 +158,6 @@ class OffersView extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  // Navigator.pop(context);
-                 arguments.cubit.gotoHome();
                   Navigator.pop(context);
                 },
               ),
@@ -192,20 +174,24 @@ class OffersView extends StatelessWidget {
                 child: BlocConsumer<BookingRequestViewController,
                     BookingRequestViewState>(
                   bloc: arguments.cubit,
-                  listener: (context, state) {
-                    // Add side effects here based on specific states if needed
+                  listener: (context, state)
+                  {
+                    if(state is AcceptbookingRequest )
+                    {
+                      logger.debug("enter if ");
+                     arguments.bids=[];
+                    }
                   },
                   builder: (context, state) {
-                    if (state is BiddingsViewLoadedState) {
-                      return Column(
-                        children: [
-                          _buildComingOrder(context),
-                          _buildBiddings(context, state.biddings),
-                        ],
-                      );
-                    } else {
-                      return _buildEmptystate(context);
-                    }
+                    logger.debug("enter if offfff");
+                    return arguments.bids.isNotEmpty
+                        ? Column(
+                            children: [
+                              _buildComingOrder(context),
+                              _buildBiddings(context, arguments.bids),
+                            ],
+                          )
+                        : _buildEmptystate(context);
                   },
                 ),
               ),
@@ -213,7 +199,7 @@ class OffersView extends StatelessWidget {
               _buildCancelContainer(context),
             ],
           ),
-        )));
+        ));
   }
 
   Widget _buildOfferCard(BuildContext context, BidViewModel item) {
@@ -248,7 +234,7 @@ class OffersView extends StatelessWidget {
                         "قبول",
                       ),
                       onTap: () {
-                        arguments.cubit.acceptBidding(item);
+                         arguments.cubit.acceptBidding(item);
                       }),
                 ],
               ),

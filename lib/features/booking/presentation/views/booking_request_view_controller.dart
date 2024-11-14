@@ -69,6 +69,7 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
     //Navigator.pop(NavigationService.globalContext);
   }
 
+/*
   void setbiddingState(List<BidViewModel> biddings, BuildContext context) {
     biddings.isEmpty
         ? emit(BiddingViewEmptyState())
@@ -76,6 +77,7 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
     Navigator.of(context).pushNamed(OffersView.route,
         arguments: OfferViewArguments(cubit: this));
   }
+*/
 
   Future<void> acceptBidding(BidViewModel bid) async {
     final result = await _acceptBiddingUsecase.execute(bid.id);
@@ -83,7 +85,7 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
         (error) =>
             emit((BookingRequestViewErrorState("Error in acceptinggggg"))),
         (data) {
-      emit(BiddingViewEmptyState()); // الحاله دي ممكن اوقات محتجهاش
+      //emit(BiddingViewEmptyState()); // الحاله دي ممكن اوقات محتجهاش
       /*
              قدامنا حل من 2 
           1- يا نفصل ال accept وكده نعمل
@@ -91,15 +93,31 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
 
 
       */
+      emit(AcceptbookingRequest());
       removeAcceptingReqeust(bid.bookingRequestId);
     });
   }
 
   void removeAcceptingReqeust(int RemovedId) {
+    // حفظ State القديمة للمقارنة
+    final oldState = state;
+
+    logger.debug("قبل الحذف: ${_bookingRepository.cachetBooking!.length}");
+
     _bookingRepository.cachetBooking!
         .removeWhere((booking) => booking.id == RemovedId);
-    emit(BookingRequestViewSuccessState(_bookingRepository.cachetBooking!
+
+    logger.debug("بعد الحذف: ${_bookingRepository.cachetBooking!.length}");
+
+    final newList = _bookingRepository.cachetBooking!
         .map((item) => BookingRequestViewModel.fromEntity(item))
-        .toList()));
+        .toList();
+
+    final newState = BookingRequestViewSuccessState(newList);
+
+    // مقارنة القديم بالجديد
+    logger.debug("هل State متساوية؟ ${oldState == newState}");
+
+    emit(newState);
   }
 }
