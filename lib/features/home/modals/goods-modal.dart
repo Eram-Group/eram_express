@@ -5,8 +5,8 @@ import 'package:gap/gap.dart';
 import '../../../core/app_colors.dart';
 import '../../../core/app_text_style.dart';
 import '../../Common/presentation/widgets/empty_state_widget.dart';
-import '../presentation/views/ShippingFormCubit.dart';
-import '../presentation/views/ShippingFormState.dart';
+import '../presentation/views/home_view_controller.dart';
+import '../presentation/views/home_view_state.dart';
 import '../presentation/widgets/top_bottom_model.dart';
 
 class SelectGoodsModal extends StatelessWidget {

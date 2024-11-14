@@ -66,7 +66,7 @@ class HomeViewState {
     );
   }
 }
- class RequestCreateError extends HomeViewState{}
+class RequestCreateError extends HomeViewState{}
 class RequestCreateSuccess extends HomeViewState {
   RequestCreateSuccess()
       : super(

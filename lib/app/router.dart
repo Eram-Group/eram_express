@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
 import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
-import '../features/booking/presentation/temp_offers_view.dart';
+import '../features/booking/presentation/views/offers_view.dart';
 import '../features/google_map/presentation/search_model_view/search_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';

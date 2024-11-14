@@ -13,7 +13,7 @@ import 'package:gap/gap.dart';
 import '../../../../common/widgets/dot_line.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/app_text_style.dart';
-import '../temp_offers_view.dart';
+import '../views/offers_view.dart';
 import 'header_booking_request_card.dart';
 
 class BookingRequestCard extends StatelessWidget {

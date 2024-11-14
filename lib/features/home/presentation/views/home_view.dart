@@ -1,7 +1,6 @@
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/booking/domain/usecases/accept_bidding_usecase.dart';
 import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
-import 'package:eram_express/features/booking/domain/usecases/get_biddings_usecase.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
@@ -9,32 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../../../../app/di.dart';
-import '../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../../Common/presentation/widgets/customButton.dart';
-
 import '../../../booking/domain/usecases/get_booking_request_usecase.dart';
-import '../../../booking/presentation/temp_offers_view.dart';
+import '../../../booking/presentation/views/offers_view.dart';
 import '../../../booking/presentation/views/booking_request_view_controller.dart';
 import '../../../booking/presentation/views/booking_request_view_state.dart';
 import '../../../booking/presentation/widgets/booking_request_card.dart';
-import 'ShippingFormCubit.dart';
-import 'ShippingFormState.dart';
+import '../widgets/selection-card.dart';
+import 'home_view_controller.dart';
+import 'home_view_state.dart';
 
 class HomeView extends StatelessWidget {
   static const String route = '/home';
-  final HomeViewController viewModel = HomeViewController(
+  final HomeViewController homeViewModel = HomeViewController(
       homerepo: HomeRepository,
       createBookingRequestUsecase:
           CreateBookingRequestUsecase(bookingRepository: bookingRepository));
 
-  final BookingRequestViewController bookingRequestViewModel =
-      BookingRequestViewController(
+  final BookingRequestViewController bookingRequestViewModel =BookingRequestViewController(
           bookingRepository: bookingRepository,
-          acceptBiddingUsecase:
-              AcceptBiddingUsecase(bookingRepository: bookingRepository),
-          //getBiddingsUsecase:GetBiddingsUsecase(bookingRepository: bookingRepository),
-          getBookingRequestUsecase:
-              GetBookingRequestUsecase(bookingRepository: bookingRepository));
+          acceptBiddingUsecase:AcceptBiddingUsecase(bookingRepository: bookingRepository),
+          getBookingRequestUsecase:GetBookingRequestUsecase(bookingRepository: bookingRepository));
 
   HomeView({super.key});
   @override
@@ -54,11 +48,15 @@ class HomeView extends StatelessWidget {
                   ],
                 ),
                 BlocListener<HomeViewController, HomeViewState>(
-                  bloc: viewModel,
+                  bloc: homeViewModel,
                   listener: (context, state) {
-                    if (state is RequestCreateSuccess) {
-                      logger.debug(state.runtimeType.toString());
+                    if (state is RequestCreateSuccess) 
+                    {
                       bookingRequestViewModel.listBookingRequest();
+                    }
+                    if( state is RequestCreateError)
+                    {
+                        
                     }
                   },
                   child: _buildBookingRequest(),
@@ -125,7 +123,7 @@ profile viewmodel
   }
 
   Widget _builddataContainer(BuildContext context) {
-    logger.debug("rebuilddddddd");
+    logger.debug(" rebuild data Conatiner");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 130)
           .copyWith(bottom: 0),
@@ -170,7 +168,7 @@ profile viewmodel
                 const Gap(8),
                 CustomButton(
                   onPressed: () {
-                    viewModel.createRequestlbuttonclick();
+                    homeViewModel.createRequestlbuttonclick();
                   },
                   text: "Check Rates",
                   backgroundColor: AppColor.primaryColor,
@@ -190,12 +188,11 @@ profile viewmodel
       children: [
         Expanded(
           child: BlocBuilder<HomeViewController, HomeViewState>(
-            bloc: viewModel,
+            bloc: homeViewModel,
             builder: (context, state) {
-              return _buildSelected(
-                onTap: () => viewModel.PickClicked(context),
+              return SelectionCard(
+                onTap: () => homeViewModel.PickClicked(context),
                 selectedValue: state.pickup?.address ?? " ",
-                context: context,
                 label: state.pickup?.address ?? "Pick up",
                 iconName: 'Pick_Up',
                 filled: state.filled
@@ -210,11 +207,11 @@ profile viewmodel
         const Gap(7),
         Expanded(
           child: BlocBuilder<HomeViewController, HomeViewState>(
-            bloc: viewModel,
+            bloc: homeViewModel,
             builder: (context, state) {
-              return _buildSelected(
-                onTap: () => viewModel.destinationClicked(context),
-                context: context,
+              return SelectionCard(
+                onTap: () => homeViewModel.destinationClicked(context),
+            
                 selectedValue: state.destination?.address ?? " ",
                 label: state.destination?.address ?? "Destination",
                 iconName: 'destination',
@@ -233,13 +230,13 @@ profile viewmodel
 
   Widget _buildLoadTypeField(BuildContext context) {
     return BlocBuilder<HomeViewController, HomeViewState>(
-      bloc: viewModel,
+      bloc: homeViewModel,
       builder: (context, state) {
-        return _buildSelected(
-          onTap: () => viewModel.cargoCategoryOnClicked(context),
+        return SelectionCard(
+          onTap: () => homeViewModel.cargoCategoryOnClicked(context),
           selectedValue: context.tt(
               state.loadType?.nameEn ?? " ", state.loadType?.nameAr ?? " "),
-          context: context,
+        
           label: context.tt(state.loadType?.nameEn ?? "Select the load type",
               state.loadType?.nameAr ?? "اختر نوع الحمولة"),
           iconName: 'arrow-down',
@@ -257,11 +254,10 @@ profile viewmodel
 
   Widget _buildTruckSizeField(BuildContext context) {
     return BlocBuilder<HomeViewController, HomeViewState>(
-      bloc: viewModel,
+      bloc: homeViewModel,
       builder: (context, state) {
-        return _buildSelected(
-          onTap: () => viewModel.cargosubCategoryOnClicked(context),
-          context: context,
+        return SelectionCard(
+          onTap: () => homeViewModel.cargosubCategoryOnClicked(context),
           selectedValue: context.tt(
               state.truckSize?.nameEn ?? " ", state.truckSize?.nameAr ?? " "),
           label: context.tt(
@@ -282,11 +278,10 @@ profile viewmodel
 
   Widget _buildDateField(BuildContext context) {
     return BlocBuilder<HomeViewController, HomeViewState>(
-      bloc: viewModel,
+      bloc: homeViewModel,
       builder: (context, state) {
-        return _buildSelected(
-          onTap: () => viewModel.PickdateOnClicked(context),
-          context: context,
+        return SelectionCard(
+          onTap: () => homeViewModel.PickdateOnClicked(context),
           selectedValue: context.tt(
             state.pickupDate ?? " ",
             state.pickupDate ?? " ",
@@ -312,11 +307,11 @@ profile viewmodel
 
   Widget _buildGoodsField(BuildContext context) {
     return BlocBuilder<HomeViewController, HomeViewState>(
-      bloc: viewModel,
+      bloc: homeViewModel,
       builder: (context, state) {
-        return _buildSelected(
-          onTap: () => viewModel.GoodsOnClicked(context),
-          context: context,
+        return SelectionCard(
+          onTap: () => homeViewModel.GoodsOnClicked(context),
+          
           selectedValue: context.tt(
             state.selectGoodsString ?? " ",
             state.selectGoodsString ?? " ",
@@ -340,83 +335,14 @@ profile viewmodel
     );
   }
 
-  Widget _buildSelected({
-    required Future<void> Function() onTap,
-    required BuildContext context,
-    required String label,
-    required String iconName,
-    required String? selectedValue,
-    required bool filled,
-  }) {
-    Color textColor = selectedValue != null && selectedValue != " "
-        ? Colors.black
-        : AppColor.ligthText;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-              onTap: () async {
-                await onTap();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: filled ? Colors.red : AppColor.bordercolor,
-                    )),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          label,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: textColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            height: 25.2 / 20,
-                          ),
-                        ),
-                      ),
-                      SvgIcon(
-                        asset: iconName,
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ),
-              )),
-          filled
-              ? Text(context.tt(
-                  " * this field required",
-                  "الخانة مطلوبة",
-                ))
-              : const SizedBox.shrink()
-        ],
-      ),
-    );
-  }
-
   Widget _buildBookingRequest() {
     return BlocBuilder<BookingRequestViewController, BookingRequestViewState>(
       bloc: bookingRequestViewModel,
       buildWhen: (previous, current) {
-        // إضافة print للتأكد من أن buildWhen يتم استدعاؤه
-        print("BuildWhen called");
-        print("Previous: $previous");
-        print("Current: $current");
-        return previous != current;
+        return !(current is AcceptbookingRequest);  //build any state else  this state
       },
       builder: (context, state) {
-      logger.debug("rebuild bokkkkkkkk");
-        if (state is BookingRequestViewSuccessState) {
+        if (state is BookingRequestSuccessViewState) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
@@ -424,22 +350,18 @@ profile viewmodel
                   .map((item) => BookingRequestCard(
                         bookingRequest: item,
                         onTap: () {
-                          /*
-                          bookingRequestViewModel.setbiddingState(
-                              item.bids, context);
-                              */
                           Navigator.of(context).pushNamed(OffersView.route,
-                          
-                              arguments: OfferViewArguments(bids: item.bids ,cubit: bookingRequestViewModel ));
+                              arguments: OfferViewArguments(
+                                  cubit: bookingRequestViewModel, id: item.id));
                         },
                       ))
                   .toList(),
             ),
           );
-        } else if (state is BookingRequestViewErrorState) {
-          return Text("Error in loading");
+        } else if (state is BookingRequesErrorViewState) {
+          return const  Text("Error in loading Booking request ");
         }
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       },
     );
   }

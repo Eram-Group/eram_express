@@ -1,4 +1,4 @@
-import 'package:eram_express/features/booking/presentation/temp_offers_view.dart';
+import 'package:eram_express/features/booking/presentation/views/offers_view.dart';
 import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

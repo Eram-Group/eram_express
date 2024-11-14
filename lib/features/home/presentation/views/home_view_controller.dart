@@ -1,6 +1,4 @@
 import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
-
-import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
 import 'package:eram_express/features/home/domain/objects/booking_request_form_data.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +13,7 @@ import '../viewsmodel/cargo_categories_viewmodel.dart';
 import '../viewsmodel/cargo_sub_category_view_model.dart';
 import '../viewsmodel/good_view_model.dart';
 import '../viewsmodel/picking_location_view_model.dart';
-import 'ShippingFormState.dart';
+import 'home_view_state.dart';
 
 class HomeViewController extends Cubit<HomeViewState> {
   final HomeRepositoryImpl _homerepo; //TODo convert it to Usecases
@@ -185,10 +183,9 @@ class HomeViewController extends Cubit<HomeViewState> {
         selectiongoods.map((good) => good.nameEn).toList().join(', ');
     emit(state.copyWith(selectGoodsString: goodsNames, filled: false));
   }
+ 
   void toggleGoodSelection(GoodViewModel good) {
-    if (state.selectGoods == null) {
-      state.selectGoods = [];
-    }
+    state.selectGoods ??= [];
     if (state.selectGoods!.contains(good)) {
       state.selectGoods!.remove(good);
     } else {

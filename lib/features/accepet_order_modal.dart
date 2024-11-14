@@ -1,6 +1,4 @@
 import 'package:eram_express/core/app_colors.dart';
-import 'package:eram_express/features/booking/presentation/temp_offers_view.dart';
-import 'package:eram_express/features/home/presentation/views/home_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
@@ -52,6 +50,7 @@ class AcceptOrderModal extends StatelessWidget {
                 child: CustomSmallButton(
                 onTap: () 
                 {
+                  Navigator.pop(context);
                   Navigator.pop(context);
                   //Navigator.pushNamed(context, HomeView.route);
                 },

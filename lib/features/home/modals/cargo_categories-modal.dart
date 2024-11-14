@@ -8,8 +8,8 @@ import 'package:gap/gap.dart';
 
 import '../../../core/app_colors.dart';
 import '../../Common/presentation/widgets/clickablebottomSheetItem.dart';
-import '../presentation/views/ShippingFormCubit.dart';
-import '../presentation/views/ShippingFormState.dart';
+import '../presentation/views/home_view_controller.dart';
+import '../presentation/views/home_view_state.dart';
 import '../presentation/widgets/top_bottom_model.dart';
 
 class SelectCargoCategoryModal extends StatelessWidget {

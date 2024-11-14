@@ -1,5 +1,5 @@
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
-import 'package:eram_express/features/booking/presentation/temp_offers_view.dart';
+import 'package:eram_express/features/booking/presentation/views/offers_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
