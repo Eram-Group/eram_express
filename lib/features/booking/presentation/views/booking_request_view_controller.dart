@@ -46,7 +46,7 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
   }
 
   Future<void> listBookingRequest() async {
-    if (state is BookingRequestViewSuccessState) return;
+    //if (state is BookingRequestViewSuccessState) return;
     final result = await _getBookingRequestUsecase.execute();
     result.fold(
         (error) =>
@@ -83,7 +83,7 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
         (error) =>
             emit((BookingRequestViewErrorState("Error in acceptinggggg"))),
         (data) {
-      emit(BiddingViewEmptyState());     // الحاله دي ممكن اوقات محتجهاش 
+      emit(BiddingViewEmptyState()); // الحاله دي ممكن اوقات محتجهاش
       /*
              قدامنا حل من 2 
           1- يا نفصل ال accept وكده نعمل

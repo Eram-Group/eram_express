@@ -38,7 +38,8 @@ class HomeView extends StatelessWidget {
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
             child: SingleChildScrollView(
@@ -52,7 +53,20 @@ class HomeView extends StatelessWidget {
                     _builddataContainer(context),
                   ],
                 ),
+                  BlocListener<HomeViewController, HomeViewState>
+                  (
+                 bloc: viewModel,
+                  listener: (context, state)
+                   {
+                    if (state is RequestCreateSuccess) {
+             
+                     bookingRequestViewModel.listBookingRequest();
+                    }
+                  
+                  },
+                  child: 
                 _buildBookingRequest(),
+                  ),
               ],
             ),
           ),

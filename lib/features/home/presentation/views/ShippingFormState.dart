@@ -17,7 +17,7 @@ class HomeViewState {
   final List<GoodViewModel>? goods;
   final bool filled;
   final String? errorMessage;
-
+  
   HomeViewState({
     this.pickup,
     this.destination,
@@ -65,4 +65,23 @@ class HomeViewState {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+}
+ class RequestCreateError extends HomeViewState{}
+class RequestCreateSuccess extends HomeViewState {
+  RequestCreateSuccess()
+      : super(
+          pickup: null,
+          destination: null,
+          loadType: null,
+          truckSize: null,
+          pickupDate: null,
+          selectGoods: null,
+          selectGoodsString: null,
+          isLoading: false,
+          cargoSubCategories: [],
+          cargoCategories: [],
+          goods: [],
+          filled: false,
+          errorMessage: null,
+        );
 }

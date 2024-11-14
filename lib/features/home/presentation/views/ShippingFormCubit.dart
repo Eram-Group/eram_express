@@ -150,7 +150,7 @@ class HomeViewController extends Cubit<HomeViewState> {
     }
   }
 
-  void createRequestlbuttonclick() {
+  Future<void> createRequestlbuttonclick() async {
     // عملاها علشان اعمل validation
     if (state.selectGoodsString == null ||
         state.truckSize == null ||
@@ -174,7 +174,9 @@ class HomeViewController extends Cubit<HomeViewState> {
           pickup: state.pickup!,
           destination: state.destination!);
 
-      final result = _createBookingRequestUsecase.execute(formData);
+      final result = await  _createBookingRequestUsecase.execute(formData);
+       result.fold((error)=> emit(RequestCreateError()),
+       (data)=>emit(RequestCreateSuccess()));
     }
   }
   void displayGoodstype(
