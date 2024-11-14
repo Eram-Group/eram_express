@@ -171,15 +171,18 @@ class OffersView extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
                         .copyWith(bottom: 0),
-                child: BlocConsumer<BookingRequestViewController,
+                child:
+
+                 BlocConsumer<BookingRequestViewController,
                     BookingRequestViewState>(
                   bloc: arguments.cubit,
                   listener: (context, state)
                   {
                     if(state is AcceptbookingRequest )
                     {
-                      logger.debug("enter if ");
+                    logger.debug("enter if ");
                      arguments.bids=[];
+                     AcceptOrderModal().show(context);
                     }
                   },
                   builder: (context, state) {

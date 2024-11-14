@@ -52,7 +52,8 @@ class AcceptOrderModal extends StatelessWidget {
                 child: CustomSmallButton(
                 onTap: () 
                 {
-                  Navigator.pushNamed(context, HomeView.route);
+                  Navigator.pop(context);
+                  //Navigator.pushNamed(context, HomeView.route);
                 },
                 padding:const EdgeInsets.all(12),
                 text: context.tt("Go to Home", "الذهاب إلى الصفحة الرئيسية"),

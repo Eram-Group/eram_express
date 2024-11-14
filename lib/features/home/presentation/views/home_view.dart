@@ -429,6 +429,7 @@ profile viewmodel
                               item.bids, context);
                               */
                           Navigator.of(context).pushNamed(OffersView.route,
+                          
                               arguments: OfferViewArguments(bids: item.bids ,cubit: bookingRequestViewModel ));
                         },
                       ))

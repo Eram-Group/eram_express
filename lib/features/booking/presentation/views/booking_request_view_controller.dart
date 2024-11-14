@@ -14,7 +14,8 @@ import '../temp_offers_view.dart';
 import 'booking_request_view_state.dart';
 
 BookingRequestViewState getBookingRequestState(
-    BookingRepository bookingRepository) {
+    BookingRepository bookingRepository) 
+    {
   return bookingRepository.cachetBooking == null
       ? BookingRequestViewState()
       : bookingRepository.cachetBooking!.isEmpty
@@ -46,7 +47,8 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
   }
 
   Future<void> listBookingRequest() async {
-    //if (state is BookingRequestViewSuccessState) return;
+
+    if (state is BookingRequestViewSuccessState) return;
     final result = await _getBookingRequestUsecase.execute();
     result.fold(
         (error) =>
