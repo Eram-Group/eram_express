@@ -42,19 +42,15 @@ class SelectCargoCategoryModal extends StatelessWidget {
               child: BlocBuilder<HomeViewController, HomeViewState>(
                 builder: (context, state) {
                   if (state.isLoading) {
-                    return ListView.builder(
-                        itemCount: 3,
-                        itemBuilder: (context, index) {
-                          return EmptyLoadingWidget();
-                        });
+                    return EmptyLoadingWidget();
                   } else if (state.cargoCategories == null) {
                     return const Center(child: Text('No categories available'));
                   } else {
                     return SingleChildScrollView(
                         child: Column(
                       children: state.cargoCategories!.map((cargo) {
-                        return BlocSelector<HomeViewController,
-                            HomeViewState, bool>(
+                        return BlocSelector<HomeViewController, HomeViewState,
+                            bool>(
                           selector: (state) => state.loadType == cargo,
                           builder: (context, isSelected) {
                             return ClickBottomSheetItem(
@@ -86,7 +82,6 @@ class SelectCargoCategoryModal extends StatelessWidget {
         ));
   }
 }
-
 
 class Skeleton extends StatefulWidget {
   final Widget child;

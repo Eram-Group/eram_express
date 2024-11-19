@@ -1,6 +1,8 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:gap/gap.dart';
 import '../../../core/app_colors.dart';
 import '../../../core/app_text_style.dart';
@@ -56,17 +58,21 @@ class SelectGoodsModal extends StatelessWidget {
               child: BlocBuilder<HomeViewController, HomeViewState>(
                 builder: (context, state) {
                   if (state.isLoading) {
-                    return EmptyLoadingWidget();
+                    return const EmptyLoadingWidget();
                   } else if (state.goods == null) {
                     return const Center(child: Text('No goods available'));
                   } else {
                     return SingleChildScrollView(
                         child: Column(
                       children: state.goods!.map((good) {
-                        return BlocSelector<HomeViewController,
-                           HomeViewState, bool>(
+                        return BlocSelector<HomeViewController, HomeViewState,
+                            bool>(
                           selector: (state) {
                             final selectedGoods = state.selectGoods ?? [];
+                            logger.debug(good.id.toString());
+                            logger.debug(selectedGoods.length.toString());
+                            logger
+                                .debug(selectedGoods.contains(good).toString());
                             return selectedGoods.contains(good);
                           },
                           builder: (context, isSelected) {

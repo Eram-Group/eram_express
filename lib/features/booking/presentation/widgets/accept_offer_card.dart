@@ -11,21 +11,23 @@ import 'header_booking_request_card.dart';
 
 class AcceptOfferCard extends StatelessWidget {
   final BidViewModel item;
+  final Color?backgroundColor;
   final Function() onAcceptBidding;
 
   const AcceptOfferCard({
     Key? key,
     required this.item,
     required this.onAcceptBidding,
+    this.backgroundColor= Colors.white,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: AppColor.bordercolor,

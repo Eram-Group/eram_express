@@ -66,7 +66,26 @@ class HomeViewState {
     );
   }
 }
-class RequestCreateError extends HomeViewState{}
+class RequestCreateError extends HomeViewState
+{
+  RequestCreateError():
+  super(
+          pickup: null,
+          destination: null,
+          loadType: null,
+          truckSize: null,
+          pickupDate: null,
+          selectGoods: null,
+          selectGoodsString: null,
+          isLoading: false,
+          cargoSubCategories: [],
+          cargoCategories: [],
+          goods: [],
+          filled: false,
+          errorMessage: null,
+        );
+
+}
 class RequestCreateSuccess extends HomeViewState {
   RequestCreateSuccess()
       : super(

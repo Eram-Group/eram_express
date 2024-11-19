@@ -48,7 +48,8 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
       return Left("Error in Auntheriozation"); 
     }
     final result= _googlemapRemoteDataSource.validateLocation(accessToken,lat, long);
-    return result.fold((error)=>Left(error.errors[0].code),
+    return result.fold((error)=>Left(error.errors[0].code),  
+    //
     (data) async
     {
     final result = await _googlemapRemoteDataSource.getPlaceDetails(lat, long);
@@ -68,8 +69,7 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
     );
     }
 
-  Future<Either<String, PlaceDetailsModel>> getCoordinatesForAddress(
-      String address) async {
+  Future<Either<String, PlaceDetailsModel>> getCoordinatesForAddress(String address) async {
     final result = await _googlemapRemoteDataSource.getCoordinatesForAddress(address);
     if (result.statusCode == 200) {
       List<PlaceDetailsModel> placedetatilslist =

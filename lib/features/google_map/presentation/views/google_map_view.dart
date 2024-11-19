@@ -6,6 +6,7 @@ import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
 import 'package:eram_express/features/google_map/domain/usecases/get_current_location_usecase.dart';
 import 'package:eram_express/features/google_map/domain/usecases/get_place_details_usaecase.dart';
 import 'package:eram_express/features/google_map/presentation/views/google_map_view_controller.dart';
+import 'package:eram_express/features/google_map/presentation/views/widgets/search_button.dart';
 import 'package:eram_express/features/home/presentation/viewsmodel/picking_location_view_model.dart';
 import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
@@ -48,7 +49,8 @@ class GoogleMapView extends StatelessWidget {
       child: BlocBuilder<GoogleMapViewController, GoogleMapViewState>(
         //علشان امنع ان مع كل حركه ترجع ت build
         buildWhen: (previous, current) {
-          return current is GoogleMapViewStateUpdated || current is GoogleMapViewStateloading;
+          return current is GoogleMapViewStateUpdated ||
+              current is GoogleMapViewStateloading;
         },
         builder: (context, state) {
           logger.debug("GoogleMap is being rebuilt with state: $state");
@@ -100,6 +102,7 @@ class GoogleMapView extends StatelessWidget {
       right: 0,
       child: BlocBuilder<GoogleMapViewController, GoogleMapViewState>(
         builder: (context, state) {
+          logger.debug(state.toString());
           return Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -191,7 +194,8 @@ class GoogleMapView extends StatelessWidget {
                                         text: context.tt(
                                             "Select location", "حدد الموقع"),
                                         onPressed: () {
-                                          PickingLocationViewModel pickingLocation =
+                                          PickingLocationViewModel
+                                              pickingLocation =
                                               PickingLocationViewModel(
                                                   point: PointViewModel(
                                                     longitude: context
@@ -209,13 +213,14 @@ class GoogleMapView extends StatelessWidget {
                                                         .position
                                                         .latitude,
                                                   ),
-                                                  address: state .placeDetails.address);
+                                                  address: state
+                                                      .placeDetails.address);
                                           Navigator.of(context).pop(
                                               pickingLocation); // Pop the current route and return the picking location
                                         },
                                       ),
                                     ])
-                                  else 
+                                  else
                                     Container(
                                       width: 70,
                                       height: 10,
@@ -242,39 +247,6 @@ class GoogleMapView extends StatelessWidget {
     return const SvgIcon(
       asset: "marker",
       size: 150,
-    );
-  }
-}
-
-class SearchButton extends StatelessWidget {
-  const SearchButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.read<GoogleMapViewController>().searchButtonClick();
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5)
-            .copyWith(bottom: 0),
-        child: Container(
-          width: Responsive.screenWidth,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.transparent),
-          ),
-          child: Text(
-            context.tt("Search here", "البحث هنا "),
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 18,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

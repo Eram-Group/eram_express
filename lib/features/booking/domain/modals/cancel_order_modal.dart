@@ -5,8 +5,8 @@ import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../core/app_text_style.dart';
-import 'booking/presentation/widgets/custom_small_button.dart';
+import '../../../../core/app_text_style.dart';
+import '../../presentation/widgets/custom_small_button.dart';
 
 class CancelOrderModal extends StatelessWidget {
   const CancelOrderModal({super.key});

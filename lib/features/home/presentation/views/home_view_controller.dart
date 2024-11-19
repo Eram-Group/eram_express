@@ -25,19 +25,20 @@ class HomeViewController extends Cubit<HomeViewState> {
         _createBookingRequestUsecase = createBookingRequestUsecase,
         super(HomeViewState());
 
-  Future<void> cargoCategoryOnClicked(BuildContext context) async
-   {
-    emit(state.copyWith( isLoading: true,));
-    _homerepo.getCargoCategories().then((result)
-     {
+  Future<void> cargoCategoryOnClicked(BuildContext context) async {
+    emit(state.copyWith(isLoading: true,));
+    _homerepo.getCargoCategories().then((result) {
       result.fold(
         (error) {
-          emit(state.copyWith( isLoading: false, errorMessage: "Failed to get data"));
+          emit(state.copyWith(
+              isLoading: false, errorMessage: "Failed to get data"));
         },
         (data) {
           emit(state.copyWith(
             isLoading: false,
-            cargoCategories: data.map((item)=>CargoCategoryViewModel.fromEntity(item)).toList(),
+            cargoCategories: data
+                .map((item) => CargoCategoryViewModel.fromEntity(item))
+                .toList(),
           ));
         },
       );
@@ -55,11 +56,11 @@ class HomeViewController extends Cubit<HomeViewState> {
     }
   }
 
-  Future<void> PickdateOnClicked(BuildContext context) async {
+  Future<void> pickdateOnClicked(BuildContext context) async {
     final selection = await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
-        builder: (context) => PickDateBottomSheet());
+        builder: (context) => const PickDateBottomSheet());
     logger.debug(selection);
     if (selection != null) {
       emit(state.copyWith(pickupDate: selection, filled: false));
@@ -99,10 +100,8 @@ class HomeViewController extends Cubit<HomeViewState> {
     }
   }
 
-  Future<void> GoodsOnClicked(BuildContext context) async {
-    emit(state.copyWith(
-      isLoading: true,
-    ));
+  Future<void> goodsOnClicked(BuildContext context) async {
+    emit(state.copyWith( isLoading: true,));
     _homerepo.getGoods().then((result) {
       result.fold(
         (error) {
@@ -113,7 +112,7 @@ class HomeViewController extends Cubit<HomeViewState> {
         (data) {
           emit(state.copyWith(
             isLoading: false,
-            goods: data.map((item)=>GoodViewModel.fromEntity(item)).toList(),
+            goods: data.map((item) => GoodViewModel.fromEntity(item)).toList(),
           ));
         },
       );
@@ -134,34 +133,36 @@ class HomeViewController extends Cubit<HomeViewState> {
   Future<void> PickClicked(BuildContext context) async {
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
         arguments: GoogleMapViewArguments(initialAddress: state.pickup?.point));
-    if (result is PickingLocationViewModel) 
-    {
+    if (result is PickingLocationViewModel) {
       emit(state.copyWith(pickup: result, filled: false));
     }
   }
 
   Future<void> destinationClicked(BuildContext context) async {
     final result = await Navigator.of(context).pushNamed(GoogleMapView.route,
-        arguments: GoogleMapViewArguments(initialAddress: state.destination?.point));
+        arguments:
+            GoogleMapViewArguments(initialAddress: state.destination?.point));
     if (result is PickingLocationViewModel) {
       emit(state.copyWith(destination: result, filled: false));
     }
   }
 
   Future<void> createRequestlbuttonclick() async {
-    // عملاها علشان اعمل validation
     if (state.selectGoodsString == null ||
         state.truckSize == null ||
         state.pickupDate == null ||
         state.pickup == null ||
         state.loadType == null ||
-        state.destination == null) {
+        state.destination == null) 
+        {
+          
       emit(state.copyWith(filled: true));
     } 
     else 
     {
       List<int> goodids = [];
-      state.selectGoods?.forEach((good) {
+      state.selectGoods?.forEach((good)
+       {
         goodids.add(good.id);
       });
 
@@ -172,27 +173,28 @@ class HomeViewController extends Cubit<HomeViewState> {
           pickup: state.pickup!,
           destination: state.destination!);
 
-      final result = await  _createBookingRequestUsecase.execute(formData);
-       result.fold((error)=> emit(RequestCreateError()),
-       (data)=>emit(RequestCreateSuccess()));
+      final result = await _createBookingRequestUsecase.execute(formData);
+      result.fold((error) => emit(RequestCreateError()),
+          (data) => emit(RequestCreateSuccess()));
     }
   }
-  void displayGoodstype(
-      List<GoodViewModel> selectiongoods, BuildContext context) {
-    String goodsNames =
-        selectiongoods.map((good) => good.nameEn).toList().join(', ');
+
+  void displayGoodstype(List<GoodViewModel> selectiongoods, BuildContext context) {
+    String goodsNames =  selectiongoods.map((good) => good.nameEn).toList().join(', ');
     emit(state.copyWith(selectGoodsString: goodsNames, filled: false));
   }
- 
+
   void toggleGoodSelection(GoodViewModel good) {
     state.selectGoods ??= [];
-    if (state.selectGoods!.contains(good)) {
+    if (state.selectGoods!.contains(good))
+     {
       state.selectGoods!.remove(good);
-    } else {
+    } 
+    else
+    {
       state.selectGoods!.add(good);
     }
 
     emit(state.copyWith(selectGoods: state.selectGoods));
   }
-
 }

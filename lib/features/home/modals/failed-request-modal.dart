@@ -4,12 +4,13 @@ import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../core/app_text_style.dart';
-import 'booking/presentation/widgets/custom_small_button.dart';
-import 'cancel_order_modal.dart';
 
-class AcceptOrderModal extends StatelessWidget {
-  const AcceptOrderModal({super.key});
+import '../../../core/app_text_style.dart';
+import '../../booking/presentation/widgets/custom_small_button.dart';
+import '../../booking/domain/modals/cancel_order_modal.dart';
+
+class FailedOrderModal extends StatelessWidget {
+  const FailedOrderModal({super.key});
   Future<void> show(BuildContext context) async =>
       await showModal(context, (context) => this);
   @override
@@ -21,46 +22,33 @@ class AcceptOrderModal extends StatelessWidget {
       child: Column(
         children: [
           const StatusIconWidget(
-            assetname: "success",
+            assetname:  "error",
           ),
           const Gap(10),
           Text(
-            context.tt("Accept the Person", "قبول الشخص"),
+            context.tt("Request failed", "فشل في إتمام الطلب"),
             style: AppTextStyles.HeaderModal,
             textAlign: TextAlign.center,
           ),
           const Gap(10),
           Text(
-            "Congratulation! your package will be picked up by the courier, please wait a moment",
+            context.tt("Unfortunately, the request could not be completed. Please try again later.", "للأسف، لم يتم إتمام الطلب. يرجى المحاولة لاحقًا."),
             style: AppTextStyles.subHeaderModal,
             textAlign: TextAlign.center,
           ),
           const Gap(20),
-          Row(
-            children: [
-              Expanded(
-                child: CustomSmallButton(
-                  onTap: () {},
-                  text: context.tt("Go to your order", "اذهب إلى طلبك"),
-                  padding: EdgeInsets.all(12),
-                ),
-              ),
-              const Gap(10),
-              Expanded(
-                child: CustomSmallButton(
+              Center(
+                  child: CustomSmallButton(
                 onTap: () 
                 {
                   Navigator.pop(context);
-                  Navigator.pop(context);
-                  //Navigator.pushNamed(context, HomeView.route);
                 },
-                padding:const EdgeInsets.all(12),
-                text: context.tt("Go to Home", "الذهاب إلى الصفحة الرئيسية"),
+                padding: const EdgeInsets.all(12),
+                text: context.tt("Back","الرجوع"),
                 colortext: AppColor.blacktext,
                 colorborder: AppColor.lightGrey,
                 color: Colors.white,
-              )),
-            ],
+              )
           )
         ],
       ),

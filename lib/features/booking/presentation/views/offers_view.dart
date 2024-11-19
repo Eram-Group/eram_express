@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/app_colors.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
-import '../../../accepet_order_modal.dart';
+import '../../domain/modals/accepet_order_modal.dart';
 import 'booking_request_view_controller.dart';
 import 'booking_request_view_state.dart';
 
@@ -72,9 +72,10 @@ class OffersView extends StatelessWidget {
               }
             },
             builder: (context, state) {
+              logger.debug("enter in offerview");
               List<BidViewModel> bids =
                   arguments.cubit.getBidding(arguments.id);
-              logger.debug(bids.length.toString());
+
               return bids.isNotEmpty
                   ? Expanded(
                       child: SingleChildScrollView(

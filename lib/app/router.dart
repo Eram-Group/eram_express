@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 
+import 'package:eram_express/features/booking/presentation/views/all_booking_request_view.dart';
+import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
 import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
@@ -40,12 +41,20 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     );
   } else if (name == SearchView.route) {
     page = const SearchView();
-  } else if (name == OffersView.route) {
+  }
+   else if (name == OffersView.route) {
     final arguments = settings.arguments as OfferViewArguments;
     page = OffersView(
       arguments: arguments,
     );
-  } else {
+  } 
+    else if (name == AllBookingRequestView.route) {
+    final arguments = settings.arguments as AllBookingRequestViewArguments;
+    page = AllBookingRequestView(
+      arguments: arguments,
+    );
+  } 
+  else {
     page = const NotFoundView();
   }
 

@@ -1,4 +1,3 @@
-
 import 'package:eram_express/features/booking/domain/repositories/booking_repository.dart';
 import 'package:eram_express/features/booking/domain/usecases/get_booking_request_usecase.dart';
 import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
@@ -10,8 +9,7 @@ import '../../domain/usecases/accept_bidding_usecase.dart';
 import 'booking_request_view_state.dart';
 
 BookingRequestViewState getBookingRequestState(
-    BookingRepository bookingRepository) 
-    {
+    BookingRepository bookingRepository) {
   return bookingRepository.cachetBooking == null
       ? BookingRequestViewState()
       : bookingRepository.cachetBooking!.isEmpty
@@ -39,13 +37,17 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
         _bookingRepository = bookingRepository,
         //_getBiddingsUsecase = getBiddingsUsecase,
         super(getBookingRequestState(bookingRepository)) {
-    listBookingRequest();
+    intiallistBookingRequest();
+  }
+
+  Future<void> intiallistBookingRequest() async {
+    if (state is BookingRequestSuccessViewState) return;
+    await listBookingRequest();
   }
 
   Future<void> listBookingRequest() async {
-
     //if (state is BookingRequestViewSuccessState) return;
-    logger.debug("message6666666");
+
     final result = await _getBookingRequestUsecase.execute();
     result.fold(
         (error) =>
@@ -54,44 +56,42 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState> {
       data.isEmpty
           ? emit(BookingRequestEmptyViewState())
           : emit(
-              BookingRequestSuccessViewState(data
+              BookingRequestSuccessViewState(List.from(data
                   .map((item) => BookingRequestViewModel.fromEntity(item))
-                  .toList()),
+                  .toList())),
             );
     });
   }
 
-
-
-
   Future<void> acceptBidding(BidViewModel bid) async {
     final result = await _acceptBiddingUsecase.execute(bid.id);
     result.fold(
-        (error) => emit((BookingRequesErrorViewState("Error in acceptinggggg"))),
-        (data) 
-        {
-           emit(AcceptbookingRequest());
-           removeAcceptingReqeust(bid.bookingRequestId);
-        });
+        (error) =>
+            emit((BookingRequesErrorViewState("Error in acceptinggggg"))),
+        (data) {
+      emit(AcceptbookingRequest());
+      removeAcceptingReqeust(bid.bookingRequestId);
+    });
   }
 
-  void removeAcceptingReqeust(int RemovedId) 
-  {
-  _bookingRepository.cachetBooking!.removeWhere((booking) => booking.id == RemovedId);
-    final newList = _bookingRepository.cachetBooking!.map((item) => BookingRequestViewModel.fromEntity(item)).toList();
+  void removeAcceptingReqeust(int RemovedId) {
+    _bookingRepository.cachetBooking!
+        .removeWhere((booking) => booking.id == RemovedId);
+    final newList = _bookingRepository.cachetBooking!
+        .map((item) => BookingRequestViewModel.fromEntity(item))
+        .toList();
     emit(BookingRequestSuccessViewState(newList));
   }
- List<BidViewModel> getBidding(int id) {
+
+  List<BidViewModel> getBidding(int id) {
     try {
-      
-      BookingRequestEntity booking = _bookingRepository.cachetBooking!.firstWhere((booking) => booking.id == id);
-      List<BidViewModel> bids = booking.bids.map((bid) => BidViewModel.fromEntity(bid)).toList();
+      BookingRequestEntity booking = _bookingRepository.cachetBooking!
+          .firstWhere((booking) => booking.id == id);
+      List<BidViewModel> bids =
+          booking.bids.map((bid) => BidViewModel.fromEntity(bid)).toList();
       return bids;
-    } catch (e) 
-    {
-     
+    } catch (e) {
       return [];
     }
   }
-
 }

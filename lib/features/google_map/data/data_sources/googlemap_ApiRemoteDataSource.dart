@@ -53,6 +53,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     return response;
   }
 
+//Future<Either<ApiError, Null>> لحد ما نصلحهاا
   Future<Either<ApiError, Null>> validateLocation(String accessToken, String lat, String long) async 
   {
     final response = await _dioClient.request(validPointEndpoint.prepare(headers: {

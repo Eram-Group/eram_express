@@ -57,7 +57,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
   }
 
   void getPlaceDetails() {
-    if (state is GoogleMapViewStateloading) return;
+    //if (state is GoogleMapViewStateloading) return; //why?
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       emit(PlaceDetailsLoadingState());
@@ -66,7 +66,9 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
         mapMarkers.first.position.longitude.toString(),
       );
       result.fold(
-        (errorMessage) {
+        (errorMessage) 
+        {
+          logger.debug("errorrrr");
           emit(PlaceDetailsError(errorMessage));
         },
         (placeDetails) {
@@ -106,8 +108,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     );
   }
 
-  void updateMarkerAndCamera(CameraPosition locationData,
-      {bool moveCamera = false}) {
+  void updateMarkerAndCamera(CameraPosition locationData, {bool moveCamera = false}) {
     emit(PlaceDetailsLoadingState());
     var updatedPosition = locationData.target;
     mapMarkers.removeWhere((marker) => marker.markerId.value == 'myLocation');
