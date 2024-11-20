@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:eram_express/features/profile/data/models/about_us_model.dart';
 import 'package:eram_express_shared/core/api/api_endpoint.dart';
 
+import '../models/contact_us_model.dart';
 import '../models/terms_model.dart';
 
 final aboutUsEndpoint = ApiEndpoint(
@@ -16,5 +17,13 @@ final termsEndpoint = ApiEndpoint(
   method: HttpMethod.get,
   responseHandlers: {
     HttpStatus.ok: (response) => TermsModel.fromJson(response.data)
+  },
+);
+
+final contactUsEndpoint = ApiEndpoint(
+  path: '/social-accounts/',
+  method: HttpMethod.get,
+  responseHandlers: {
+    HttpStatus.ok: (response) => ContactUsModel.fromJson(response.data)
   },
 );

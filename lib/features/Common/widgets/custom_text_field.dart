@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../profile/presentation/views/profile_presentation/profile_view.dart';
+
 //temp to use anaother way instead of statfulll
 class CustomTextField extends StatefulWidget {
   final String? hintText;
@@ -59,7 +61,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
           color: const Color(0xFF194595),
         ),
         suffix: _controller.text.isNotEmpty
-            ? SvgPicture.asset('assets/icons/tick-circle.svg')
+            ? const SvgIcon(
+                asset: 'tick-circle',
+              )
             : null,
       ),
       style: TextStyle(

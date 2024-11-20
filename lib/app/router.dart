@@ -9,6 +9,7 @@ import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
 import '../features/onboarding/presentation/views/onboarding.view.dart';
 import '../features/profile/presentation/views/about_us_presentation/about_us_view.dart';
+import '../features/profile/presentation/views/contact_us_presentation/contact_view.dart';
 import '../features/profile/presentation/views/edit_profile_view.dart';
 import 'presentation/views/not_found.view.dart';
 
@@ -40,11 +41,21 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = AboutUsView();
   } else if (name == TermsView.route) {
     page = TermsView();
-  } else if (name == EditProfileView.route) 
+  }
+  else if (name == TermsView.route) 
+  {
+    page = TermsView();
+  }
+  else if (name == ContactUsView.route) 
+  {
+    page = ContactUsView();
+  }
+   else if (name == EditProfileView.route) 
   {
     final arguments = settings.arguments as EditProfileViewArguments;
     page = EditProfileView(arguments);
   } 
+  
   else 
   {
     page = const NotFoundView();

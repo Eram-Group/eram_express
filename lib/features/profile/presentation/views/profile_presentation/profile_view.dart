@@ -1,5 +1,6 @@
 import 'package:eram_express/app/di.dart';
 import 'package:eram_express/app/navigation.dart';
+import 'package:eram_express/features/profile/presentation/views/contact_us_presentation/contact_view.dart';
 import 'package:eram_express/features/profile/presentation/views/terms_presentation/terms_view.dart';
 import 'package:eram_express_shared/core/iconsax_icons.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../domain/entities/menu_option_entity.dart';
+import '../../../domain/modals/language_modal.dart';
 import '../../widgets/list_title_card_widgets.dart';
 import '../../widgets/profile_header_widgets.dart';
 import '../about_us_presentation/about_us_view.dart';
@@ -20,7 +22,7 @@ class ProfileView extends StatelessWidget {
     MenuOptionEntity(
       title: "Language",
       onTap: () {
-        // Navigate to the Language screen or perform an action
+        LanguageModal().show(NavigationService.globalContext);
       },
       icon: const Icon(Iconsax.global),
     ),
@@ -35,16 +37,32 @@ class ProfileView extends StatelessWidget {
   ];
   List<MenuOptionEntity> MenuAboutUs = [
     MenuOptionEntity(
-      title: "Privacy Policy",
-      icon: const Icon(Iconsax.notification),
-      onTap: () {},
+      title: "Terms&Condiotions",
+      icon: const SvgIcon(
+        asset: "terms",
+      ),
+      onTap: () {
+        Navigator.of(NavigationService.globalContext)
+            .pushNamed(TermsView.route);
+      },
     ),
     MenuOptionEntity(
       title: "Contact Us",
+      icon: const SvgIcon(asset: "contact"),
+      onTap: () {
+        Navigator.of(NavigationService.globalContext)
+            .pushNamed(ContactUsView.route);
+      },
+    ),
+    MenuOptionEntity(
+      title: "About Us",
       icon: const SvgIcon(
-        asset: "Contact_us",
+        asset: "about",
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(NavigationService.globalContext)
+            .pushNamed(AboutUsView.route);
+      },
     ),
   ];
   List<MenuOptionEntity> MenuOther = [
@@ -53,12 +71,7 @@ class ProfileView extends StatelessWidget {
       icon: const SvgIcon(
         asset: "Share",
       ),
-      onTap: () {
-        // Corrected here
-        Navigator.of(NavigationService.globalContext)
-            .pushNamed(AboutUsView.route);
-        // Navigate to the Language screen or perform an action
-      },
+      onTap: () {},
     ),
     MenuOptionEntity(
       title: "Get The Latest Version",
@@ -176,7 +189,6 @@ class SvgIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(asset);
     return SvgPicture.asset(
       iconAsset(asset!),
       //colorFilter: ColorFilter.mode(color, BlendMode.srcIn),

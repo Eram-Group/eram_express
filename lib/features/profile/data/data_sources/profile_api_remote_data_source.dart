@@ -4,6 +4,7 @@ import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
 
 import '../models/about_us_model.dart';
+import '../models/contact_us_model.dart';
 import 'profile_api_endpoints.dart';
 import 'profile_remote_data_source.dart';
 
@@ -20,4 +21,8 @@ class ProfileApiRemoteDataSource implements ProfileRemoteDataSource {
   Future<Either<ApiError, TermsModel>> getterms() {
     return _dioClient.request(termsEndpoint.prepare());
   }
+   Future<Either<ApiError, ContactUsModel>> getContactUs()
+   {
+    return  _dioClient.request(contactUsEndpoint.prepare());
+   }
 }

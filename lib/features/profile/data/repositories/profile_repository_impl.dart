@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:either_dart/src/either.dart';
+import 'package:eram_express/features/profile/data/models/contact_us_model.dart';
 import 'package:eram_express/features/profile/data/models/terms_model.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
@@ -33,4 +34,9 @@ class ProfileRepositoryImpl extends ProfileRepository
     final Response = _profileRemoteDataSource.getterms();
     return await Response.fold((error) => Left(error), (data) => Right(data));
   }
+  Future<Either<ApiError, ContactUsModel>> getContactUs() async{
+
+         final Response = _profileRemoteDataSource.getContactUs();
+    return await Response.fold((error) => Left(error), (data) => Right(data));
+}
 }

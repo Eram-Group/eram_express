@@ -1,6 +1,7 @@
 import 'package:eram_express/app/app.dart';
 import 'package:eram_express/app/di.dart';
 import 'package:eram_express/features/customer/domain/entities/customer_entity.dart';
+import 'package:eram_express/features/profile/presentation/widgets/customappbar.widgets.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
@@ -47,74 +48,81 @@ class EditProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "Edit Profile",
-          style: TextStyle(
-            fontSize: 20,
-          ),
-        ),
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
+      appBar: CustomAppBar(title: context.tt("Edit Profile", "تعديل الحساب")),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16)
-            .copyWith(bottom: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: _buildProfilePicture(context),
+            .copyWith(bottom: 0),
+        child: CustomScrollView(
+          slivers: [
+            // المحتوى الرئيسي
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: _buildProfilePicture(context),
+                  ),
+                  const Gap(30),
+                  _buildTitleField(
+                    context.tt('full name', 'الاسم بالكامل'),
+                  ),
+                  BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                      bloc: viewmodel,
+                      builder: (context, state) {
+                        return CustomTextField(
+                          hintText: context.tt(
+                              'Enter your full name', 'ادخل اسمك الكامل'),
+                          onChanged: (string) {
+                            viewmodel.onFullNameChanged(string);
+                          },
+                          initialValue: state.fullName,
+                        );
+                      }),
+                  const Gap(30),
+                  _buildTitleField(context.tt('Phone Number', 'رقم التليفون')),
+                  BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                      bloc: viewmodel,
+                      builder: (context, state) {
+                        return CustomTextField(
+                          onChanged: (string) {},
+                          initialValue: state.phoneNumber!,
+                          isEnabled: false,
+                        );
+                      }),
+                ],
+              ),
             ),
-            const Gap(30),
-            _buildTitleField(
-              context.tt('full name', 'الاسم بالكامل'),
-            ),
-            BlocBuilder<EditProfileViewModel, EditProfileViewState>(
-                bloc: viewmodel,
-                builder: (context, state) {
-                  return CustomTextField(
-                    hintText:
-                        context.tt('Enter your full name', 'ادخل اسمك الكامل'),
-                    onChanged: (string) {
-                      viewmodel.onFullNameChanged(string);
-                    },
-                    initialValue: state.fullName,
-                  );
-                }),
-            const Gap(30),
-            _buildTitleField(context.tt('Phone Number', 'رقم التليفون')),
-            BlocBuilder<EditProfileViewModel, EditProfileViewState>(
-                bloc: viewmodel,
-                builder: (context, state) {
-                  return CustomTextField(
-                    onChanged: (string) {},
-                    initialValue: state.phoneNumber!,
-                    isEnabled: false,
-                  );
-                }),
-            const Spacer(),
-            BlocBuilder<EditProfileViewModel, EditProfileViewState>(
-                bloc: viewmodel,
-                builder: (context, state) {
-                  return CustomButton(
-                    enabled: viewmodel.enabledbutton(),
-                    onTap: () {
-                      logger.debug(viewmodel.state.fullName!);
-                      viewmodel.saveButtonOnClicked(context);
-                    },
-                    child: Text(
-                      context.tt('Save', 'حفظ'),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Outfit',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        height: 1.5,
+
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                  bloc: viewmodel,
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 40),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: CustomButton(
+                          enabled: viewmodel.enabledbutton(),
+                          onTap: () {
+                            logger.debug(viewmodel.state.fullName!);
+                            viewmodel.saveButtonOnClicked(context);
+                          },
+                          child: Text(
+                            context.tt('Save', 'حفظ'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Outfit',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  );
-                })
+                    );
+                  }),
+            )
           ],
         ),
       ),
@@ -122,6 +130,41 @@ class EditProfileView extends StatelessWidget {
   }
 }
 
+/*
+ SliverFillRemaining(
+                hasScrollBody: false,
+                child: Expanded(
+                  child: Column(
+                    mainAxisAlignment:
+                        MainAxisAlignment.end, // يضع المحتوى في النهاية
+                    children: [
+                      BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                          bloc: viewmodel,
+                          builder: (context, state) {
+                            return CustomButton(
+                              enabled: viewmodel.enabledbutton(),
+                              onTap: () {
+                                logger.debug(viewmodel.state.fullName!);
+                                viewmodel.saveButtonOnClicked(context);
+                              },
+                              child: Text(
+                                context.tt('Save', 'حفظ'),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Outfit',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.5,
+                                ),
+                              ),
+                            );
+                          }),
+                      const Gap(40),
+                    ],
+                  ),
+                )),
+          ],
+        ),*/
 Widget _buildTitleField(String title) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4),
@@ -137,3 +180,78 @@ Widget _buildTitleField(String title) {
     ),
   );
 }
+
+
+
+/*
+ Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(title: context.tt("Edit Profile", "تعديل الحساب")),
+      body: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16)
+            .copyWith(bottom: 40),
+        child: SingleChildScrollView(
+          child:
+           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: _buildProfilePicture(context),
+              ),
+              const Gap(30),
+              _buildTitleField(
+                context.tt('full name', 'الاسم بالكامل'),
+              ),
+              BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                  bloc: viewmodel,
+                  builder: (context, state) {
+                    return CustomTextField(
+                      hintText: context.tt(
+                          'Enter your full name', 'ادخل اسمك الكامل'),
+                      onChanged: (string) {
+                        viewmodel.onFullNameChanged(string);
+                      },
+                      initialValue: state.fullName,
+                    );
+                  }),
+              const Gap(30),
+              _buildTitleField(context.tt('Phone Number', 'رقم التليفون')),
+              BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                  bloc: viewmodel,
+                  builder: (context, state) {
+                    return CustomTextField(
+                      onChanged: (string) {},
+                      initialValue: state.phoneNumber!,
+                      isEnabled: false,
+                    );
+                  }),
+              //const Spacer(),
+
+              BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                  bloc: viewmodel,
+                  builder: (context, state) {
+                    return CustomButton(
+                      enabled: viewmodel.enabledbutton(),
+                      onTap: () {
+                        logger.debug(viewmodel.state.fullName!);
+                        viewmodel.saveButtonOnClicked(context);
+                      },
+                      child: Text(
+                        context.tt('Save', 'حفظ'),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Outfit',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          height: 1.5,
+                        ),
+                      ),
+                    );
+                  }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}*/
