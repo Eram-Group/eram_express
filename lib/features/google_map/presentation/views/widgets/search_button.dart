@@ -17,6 +17,7 @@ class SearchButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 10,
+          vertical: 30,
         ),
         child: Container(
           width: Responsive.screenWidth,

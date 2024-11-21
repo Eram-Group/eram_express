@@ -26,7 +26,9 @@ class HomeViewController extends Cubit<HomeViewState> {
         super(HomeViewState());
 
   Future<void> cargoCategoryOnClicked(BuildContext context) async {
-    emit(state.copyWith(isLoading: true,));
+    emit(state.copyWith(
+      isLoading: true,
+    ));
     _homerepo.getCargoCategories().then((result) {
       result.fold(
         (error) {
@@ -101,7 +103,9 @@ class HomeViewController extends Cubit<HomeViewState> {
   }
 
   Future<void> goodsOnClicked(BuildContext context) async {
-    emit(state.copyWith( isLoading: true,));
+    emit(state.copyWith(
+      isLoading: true,
+    ));
     _homerepo.getGoods().then((result) {
       result.fold(
         (error) {
@@ -147,22 +151,30 @@ class HomeViewController extends Cubit<HomeViewState> {
     }
   }
 
+  bool enabledSumbitButton() {
+    if (state.selectGoodsString == null ||
+        state.truckSize == null ||
+        state.pickupDate == null ||
+        state.pickup == null ||
+        state.loadType == null ||
+        state.destination == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future<void> createRequestlbuttonclick() async {
     if (state.selectGoodsString == null ||
         state.truckSize == null ||
         state.pickupDate == null ||
         state.pickup == null ||
         state.loadType == null ||
-        state.destination == null) 
-        {
-          
+        state.destination == null) {
       emit(state.copyWith(filled: true));
-    } 
-    else 
-    {
+    } else {
       List<int> goodids = [];
-      state.selectGoods?.forEach((good)
-       {
+      state.selectGoods?.forEach((good) {
         goodids.add(good.id);
       });
 
@@ -179,22 +191,29 @@ class HomeViewController extends Cubit<HomeViewState> {
     }
   }
 
-  void displayGoodstype(List<GoodViewModel> selectiongoods, BuildContext context) {
-    String goodsNames =  selectiongoods.map((good) => good.nameEn).toList().join(', ');
+  void displayGoodstype(
+      List<GoodViewModel> selectiongoods, BuildContext context) {
+    String goodsNames =
+        selectiongoods.map((good) => good.nameEn).toList().join(', ');
     emit(state.copyWith(selectGoodsString: goodsNames, filled: false));
   }
 
   void toggleGoodSelection(GoodViewModel good) {
     state.selectGoods ??= [];
-    if (state.selectGoods!.contains(good))
-     {
-      state.selectGoods!.remove(good);
-    } 
-    else
-    {
+    final existingGood = state.selectGoods!.firstWhere(
+      (selectedGood) => selectedGood.id == good.id,
+      orElse: () => GoodViewModel(
+        id: -1,
+        nameAr: 'Unknown',
+        nameEn: 'Unknown',
+        imageUrl: '',
+      ),
+    );
+    if (existingGood.id != -1) {
+      state.selectGoods!.remove(existingGood);
+    } else {
       state.selectGoods!.add(good);
     }
-
     emit(state.copyWith(selectGoods: state.selectGoods));
   }
 }

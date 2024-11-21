@@ -45,6 +45,8 @@ class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
               setState(() {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
+                Navigator.pop(
+                    context, DateFormat('yyyy-MM-dd').format(_selectedDay));
               });
             },
             enabledDayPredicate: (day) {
@@ -102,17 +104,6 @@ class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
             ),
           ),
           const Gap(6),
-          CustomButton(
-            text: "Select date",
-            onPressed: () {
-              logger.debug("Selected date: $_selectedDay");
-
-              Navigator.pop(
-                  context, DateFormat('yyyy-MM-dd').format(_selectedDay));
-            },
-            TextColor: Colors.black,
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          ),
         ],
       ),
     );

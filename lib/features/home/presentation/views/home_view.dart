@@ -6,6 +6,7 @@ import 'package:eram_express/features/booking/presentation/views/viewsmodel/book
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
+import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -14,7 +15,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../app/di.dart';
 import '../../../../core/app_text_style.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
-import '../../../Common/presentation/widgets/customButton.dart';
+
 import '../../../booking/domain/usecases/get_booking_request_usecase.dart';
 import '../../../booking/presentation/views/all_booking_request_view.dart';
 import '../../../booking/presentation/views/offers_view.dart';
@@ -180,16 +181,8 @@ profile viewmodel
                 _buildDateField(context),
                 _buildGoodsField(context),
                 const Gap(8),
+                _buildCustomButton(),
                 const Gap(8),
-                CustomButton(
-                  onPressed: () {
-                    homeViewModel.createRequestlbuttonclick();
-                  },
-                  text: "Check Rates",
-                  backgroundColor: AppColor.primaryColor,
-                  TextColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
               ],
             ),
           ),
@@ -425,6 +418,33 @@ profile viewmodel
       },
     );
   }
+
+  Widget _buildCustomButton() {
+    return BlocBuilder<HomeViewController, HomeViewState>(
+      bloc: homeViewModel,
+      builder: (context, state) {
+        return CustomButton(
+          enabled: homeViewModel.enabledSumbitButton(),
+          onTap: () {
+            homeViewModel.createRequestlbuttonclick();
+          },
+
+          child: Text(
+            context.tt("Create Booking", "انشاء حجز"),
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                height: 20.8 / 20,
+                fontSize:
+                    Responsive.getResponsiveFontSize(context, fontSize: 18)),
+          ),
+
+          //TextColor: Colors.white,
+          //padding: const EdgeInsets.symmetric(vertical: 15),
+        );
+      },
+    );
+  }
 }
 
 /*
@@ -452,7 +472,7 @@ profile viewmodel
                   child: BookingRequestCard(
                     key: ValueKey(bookingRequests[index].id),
                     cubit: con,
-                    bookingRequest: bookingRequests[index],
+                    bookingRequest: bookingRequests[index], 
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         OffersView.route,

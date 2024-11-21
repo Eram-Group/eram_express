@@ -31,7 +31,7 @@ class SelectCargoCategoryModal extends StatelessWidget {
             const TopBottomModel(),
             Text(
               context.tt("Choose the size of the truck", "اختر حجم الشاحنة"),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xff191D31),
                 fontWeight: FontWeight.w600,
                 fontSize: 18,
@@ -42,7 +42,6 @@ class SelectCargoCategoryModal extends StatelessWidget {
             Expanded(
               child: BlocBuilder<HomeViewController, HomeViewState>(
                 builder: (context, state) {
-                  logger.debug("yaleeeeeeeeeeeey");
                   if (state.isLoading) {
                     return EmptyLoadingWidget();
                   } else if (state.cargoCategories == null) {
@@ -53,13 +52,14 @@ class SelectCargoCategoryModal extends StatelessWidget {
                       children: state.cargoCategories!.map((cargo) {
                         return BlocSelector<HomeViewController, HomeViewState,
                             bool>(
-                          selector: (state) => state.loadType == cargo,
+                          selector: (state) => state.loadType == null
+                              ? false
+                              : state.loadType!.id == cargo.id,
                           builder: (context, isSelected) {
                             return ClickBottomSheetItem(
                               imageUrl: cargo.imageUrl,
                               isSelected: isSelected,
                               onTap: () {
-                                //cubit.setTruckSize(cargo);
                                 Navigator.of(context).pop(cargo);
                               },
                               content: Text(

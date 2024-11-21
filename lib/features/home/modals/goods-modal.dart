@@ -23,84 +23,75 @@ class SelectGoodsModal extends StatelessWidget {
     return BlocProvider.value(
         value: cubit,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const TopBottomModel(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    context.tt("Select type of goods", "اختر نوع البضائع"),
-                    style: AppTextStyles.headingStyle,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      final selectedGoods = cubit.state.selectGoods;
-                      Navigator.of(context).pop(selectedGoods);
-                    },
-                    child: const Text(
-                      'Done',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const TopBottomModel(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      context.tt("Select type of goods", "اختر نوع البضائع"),
+                      style: AppTextStyles.headingStyle,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        final selectedGoods = cubit.state.selectGoods;
+                        Navigator.of(context).pop(selectedGoods);
+                      },
+                      child: const Text(
+                        'Done',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Gap(12),
-            Expanded(
-              child: BlocBuilder<HomeViewController, HomeViewState>(
-                builder: (context, state) {
-                  if (state.isLoading) {
-                    return const EmptyLoadingWidget();
-                  } else if (state.goods == null) {
-                    return const Center(child: Text('No goods available'));
-                  } else {
-                    return SingleChildScrollView(
-                        child: Column(
-                      children: state.goods!.map((good) {
-                        return BlocSelector<HomeViewController, HomeViewState,
-                            bool>(
-                          selector: (state) {
-                            final selectedGoods = state.selectGoods ?? [];
-                            logger.debug(good.id.toString());
-                            logger.debug(selectedGoods.length.toString());
-                            logger
-                                .debug(selectedGoods.contains(good).toString());
-                            return selectedGoods.contains(good);
-                          },
-                          builder: (context, isSelected) {
-                            return ClickBottomSheetItem2(
-                              isSelected: isSelected,
-                              onTap: () {
-                                cubit.toggleGoodSelection(good);
-                              },
-                              content: Text(
-                                good.nameEn,
-                                style: TextStyle(
-                                  color: AppColor.blacktext,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  height: 18.2 / 20,
-                                ),
+              const Gap(12),
+              Expanded(
+                child: BlocBuilder<HomeViewController, HomeViewState>(
+                  builder: (context, state) {
+                    if (state.isLoading) {
+                      return const EmptyLoadingWidget();
+                    } else if (state.goods == null) {
+                      return const Center(child: Text('No goods available'));
+                    } else {
+                      return ListView.builder(
+                        itemCount: state.goods!.length,
+                        itemBuilder: (context, index) {
+                          final good = state.goods![index];
+                          final isSelected = state.selectGoods?.any(
+                                  (selectedGood) =>
+                                      selectedGood.id == good.id) ??
+                              false;
+                          return ClickBottomSheetItem2(
+                            isSelected: isSelected,
+                            onTap: () {
+                              cubit.toggleGoodSelection(good);
+                            },
+                            content: Text(
+                              good.nameEn,
+                              style: TextStyle(
+                                color: AppColor.blacktext,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                height: 18.2 / 20,
                               ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ));
-                  }
-                },
-              ),
-            ),
-          ],
-        ));
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              )
+            ]));
   }
 }
 

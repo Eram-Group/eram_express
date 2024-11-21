@@ -30,7 +30,7 @@ class SelectSubCargoCategoryModal extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  context.tt("Select the load type","اختر نوع الحمولة"),
+                  context.tt("Select the load type", "اختر نوع الحمولة"),
                   style: AppTextStyles.headingStyle,
                 ),
               ),
@@ -47,9 +47,11 @@ class SelectSubCargoCategoryModal extends StatelessWidget {
                       return SingleChildScrollView(
                           child: Column(
                         children: state.cargoSubCategories!.map((cargo) {
-                          return BlocSelector<HomeViewController,
-                              HomeViewState, bool>(
-                            selector: (state) => state.truckSize == cargo,
+                          return BlocSelector<HomeViewController, HomeViewState,
+                              bool>(
+                            selector: (state) => state.truckSize == null
+                                ? false
+                                : state.truckSize!.id == cargo.id,
                             builder: (context, isSelected) {
                               return ClickBottomSheetItem(
                                   imageUrl: cargo.imageUrl,
