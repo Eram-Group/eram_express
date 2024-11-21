@@ -14,6 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../domain/entities/support_type_entity.dart';
+import '../../domain/modals/failed_request_modal.dart';
+import '../../domain/modals/success_request_modal.dart';
 import '../support_presentation/support_view_state.dart';
 
 class SupportView extends StatelessWidget {
@@ -52,10 +54,9 @@ class SupportView extends StatelessWidget {
                 ),
                 _title(context.tt("Select reason", "اختار السبب"), context),
                 _builddropdown(context),
-                //_builddropdown(context),
                 _title(context.tt("Detail message", "تفاصيل الرسالة"), context),
                 _description(),
-                _buildSummbitButton(context)
+                _buildSubmitButton(context)
               ],
             ),
           ),
@@ -84,6 +85,10 @@ _title(String title, BuildContext context) {
 
 Widget _description() {
   return BlocBuilder<SupportViewModel, SupportViewState>(
+    buildWhen: (previous, current) =>
+        current is SupportFormLoad &&
+        (previous is! SupportFormLoad ||
+            previous.detailReason != current.detailReason),
     builder: (context, state) {
       return TextFormField(
         maxLines: 3,
@@ -123,55 +128,69 @@ Widget _description() {
   );
 }
 
-Widget _buildSummbitButton(BuildContext context) {
+Widget _buildSubmitButton(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 40),
-    child: CustomButton(
-      //enabled: viewmodel.enabledbutton(),
-      onTap: () {
-        //logger.debug(viewmodel.state.fullName!);
-        //viewmodel.saveButtonOnClicked(context);
+    child: BlocConsumer<SupportViewModel, SupportViewState>(
+      listener: (context, state) {
+        if (state is SupportFormSucecessState) {
+          SuccessfulRequestModal().show(context);
+        } else if (state is SupportFormErrorState) {
+          FailedOrderModal().show(context);
+        }
       },
-      child: Text(
-        context.tt('Save', 'حفظ'),
-        style: const TextStyle(
-          color: Colors.white,
-          fontFamily: 'Outfit',
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          height: 1.5,
-        ),
-      ),
+      builder: (context, state) {
+        return CustomButton(
+          enabled: context.read<SupportViewModel>().enabledbutton(),
+          onTap: () {
+            context.read<SupportViewModel>().onSubmitClicked(context);
+          },
+          child: Text(
+            context.tt('Save', 'حفظ'),
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'Outfit',
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              height: 1.5,
+            ),
+          ),
+        );
+      },
     ),
   );
 }
 
 Widget _builddropdown(BuildContext context) {
   return BlocBuilder<SupportViewModel, SupportViewState>(
-      
-   builder: (context, state) {
-    if (state is SupportViewErrorState) {
-      return Center(
-        child: Text(
-          state.errormessege,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: 'outfit',
-            fontWeight: FontWeight.w400,
-            color: AppColor.blacktext,
+      buildWhen: (previous, current) =>
+          current is SupportFormLoad &&
+          (previous is! SupportFormLoad ||
+              previous.supportTypes != current.supportTypes ||
+              previous.selectedReason != current.selectedReason),
+      builder: (context, state) {
+        if (state is SupportViewErrorState) {
+          return Center(
+            child: Text(
+              state.errormessege,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'outfit',
+                fontWeight: FontWeight.w400,
+                color: AppColor.blacktext,
+              ),
+            ),
+          );
+        } else if (state is SupportFormLoad) {
+          return _dropdown(context, state.supportTypes, state.selectedReason);
+        }
+        return Center(
+          child: CircularProgressIndicator(
+            color: AppColor.bordercolor,
+            strokeWidth: 3,
           ),
-        ),
-      );
-    } else if (state is SupportFormLoad) {
-      return _dropdown(context, state.supportTypes, state.selectedReason);
-    }
-    return Center(
-      child: CircularProgressIndicator(
-        color: AppColor.bordercolor,
-        strokeWidth: 3,
-      ),
-    );
-  });
+        );
+      });
 }
 
 Widget _dropdown(

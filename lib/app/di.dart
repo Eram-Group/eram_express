@@ -49,11 +49,12 @@ final customerRepository = CustomerRepositoryImpl(
 final profileRemoteDataSource = ProfileApiRemoteDataSource(
   dioClient: dioClient,
 );
-final profileRepository =
-    ProfileRepositoryImpl(profileRemoteDataSource: profileRemoteDataSource);
-
+final profileRepository = ProfileRepositoryImpl(
+  profileRemoteDataSource: profileRemoteDataSource,
+  tokensLocalDataSource: tokensLocalDataSource,
+  
+  );
 final localeCubit = LocaleCubit();
-
 final List<BlocProvider> providers = [
   BlocProvider<LocaleCubit>(
     create: (_) => localeCubit,

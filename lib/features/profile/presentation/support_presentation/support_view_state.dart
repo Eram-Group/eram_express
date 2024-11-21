@@ -22,6 +22,14 @@ class SupportViewErrorState extends SupportViewState
   SupportViewErrorState({required this.errormessege});
 
 }
+class SupportFormErrorState extends SupportViewState {
+  
+  SupportFormErrorState();
+}
+class SupportFormSucecessState extends SupportViewState {
+ 
+  SupportFormSucecessState();
+}
 class SupportLoadingState extends SupportViewState {
   
   SupportLoadingState();

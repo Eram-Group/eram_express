@@ -37,3 +37,10 @@ final supportEndpoint = ApiEndpoint(
         .toList(),
   },
 );
+final contacttEndpoint = ApiEndpoint(
+  path: "/contact/",
+  method: HttpMethod.post,
+  responseHandlers: {
+    HttpStatus.created: (response) => null,
+  },
+);
