@@ -1,5 +1,6 @@
 import 'package:eram_express/features/Common/presentation/widgets/empty_state_widget.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -41,6 +42,7 @@ class SelectCargoCategoryModal extends StatelessWidget {
             Expanded(
               child: BlocBuilder<HomeViewController, HomeViewState>(
                 builder: (context, state) {
+                  logger.debug("yaleeeeeeeeeeeey");
                   if (state.isLoading) {
                     return EmptyLoadingWidget();
                   } else if (state.cargoCategories == null) {

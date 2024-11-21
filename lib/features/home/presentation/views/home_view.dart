@@ -23,6 +23,9 @@ import '../../../booking/presentation/views/booking_request_view_state.dart';
 import '../../../booking/presentation/widgets/booking_request_card.dart';
 import '../../modals/failed-request-modal.dart';
 import '../../modals/successful-request-modal.dart';
+import '../viewsmodel/cargo_categories_viewmodel.dart';
+import '../viewsmodel/cargo_sub_category_view_model.dart';
+import '../viewsmodel/picking_location_view_model.dart';
 import '../widgets/empty_booking_view.dart';
 import '../widgets/selection-card.dart';
 import 'home_view_controller.dart';
@@ -199,146 +202,114 @@ profile viewmodel
     return Row(
       children: [
         Expanded(
-          child: BlocBuilder<HomeViewController, HomeViewState>(
-            bloc: homeViewModel,
-            builder: (context, state) {
-              return SelectionCard(
-                onTap: () => homeViewModel.PickClicked(context),
-                selectedValue: state.pickup?.address ?? " ",
-                label: state.pickup?.address ?? "Pick up",
-                iconName: 'Pick_Up',
-                filled: state.filled
-                    ? state.pickup?.address == null
-                        ? true
-                        : false
-                    : state.filled,
-              );
-            },
-          ),
-        ),
+            child: BlocSelector<HomeViewController, HomeViewState,
+                PickingLocationViewModel?>(
+          bloc: homeViewModel,
+          selector: (state) => state.pickup, // تحديد الخاصية المطلوبة فقط
+          builder: (context, pickup) {
+            return SelectionCard(
+              onTap: () => homeViewModel.PickClicked(context),
+              selectedValue: pickup?.address ?? " ", // استخدام الخاصية المحددة
+              label: pickup?.address ?? "Pick up",
+              iconName: 'Pick_Up',
+            );
+          },
+        )),
         const Gap(7),
         Expanded(
-          child: BlocBuilder<HomeViewController, HomeViewState>(
-            bloc: homeViewModel,
-            builder: (context, state) {
-              return SelectionCard(
-                onTap: () => homeViewModel.destinationClicked(context),
-                selectedValue: state.destination?.address ?? " ",
-                label: state.destination?.address ?? "Destination",
-                iconName: 'destination',
-                filled: state.filled
-                    ? state.destination?.address == null
-                        ? true
-                        : false
-                    : state.filled,
-              );
-            },
-          ),
-        ),
+            child: BlocSelector<HomeViewController, HomeViewState,
+                PickingLocationViewModel?>(
+          bloc: homeViewModel,
+          selector: (state) => state.destination,
+          builder: (context, destination) {
+            return SelectionCard(
+              onTap: () => homeViewModel.destinationClicked(context),
+              selectedValue: destination?.address ?? " ",
+              label: destination?.address ?? "Destination",
+              iconName: 'destination',
+            );
+          },
+        )),
       ],
     );
   }
 
   Widget _buildLoadTypeField(BuildContext context) {
-    return BlocBuilder<HomeViewController, HomeViewState>(
+    return BlocSelector<HomeViewController, HomeViewState,
+        CargoCategoryViewModel?>(
       bloc: homeViewModel,
-      builder: (context, state) {
+      selector: (state) => state.loadType,
+      builder: (context, loadType) {
+        logger.debug("enter in loaded");
         return SelectionCard(
           onTap: () => homeViewModel.cargoCategoryOnClicked(context),
-          selectedValue: context.tt(
-              state.loadType?.nameEn ?? " ", state.loadType?.nameAr ?? " "),
-          label: context.tt(state.loadType?.nameEn ?? "Select the load type",
-              state.loadType?.nameAr ?? "اختر نوع الحمولة"),
+          selectedValue:
+              context.tt(loadType?.nameEn ?? " ", loadType?.nameAr ?? " "),
+          label: context.tt(loadType?.nameEn ?? "Select the load type",
+              loadType?.nameAr ?? "اختر نوع الحمولة"),
           iconName: 'arrow-down',
-          filled: state.filled
-              ? context.tt(state.loadType?.nameEn ?? " ",
-                          state.loadType?.nameAr ?? " ") ==
-                      " "
-                  ? true
-                  : false
-              : state.filled,
         );
       },
     );
   }
 
   Widget _buildTruckSizeField(BuildContext context) {
-    return BlocBuilder<HomeViewController, HomeViewState>(
+    return BlocSelector<HomeViewController, HomeViewState,
+        CargoSubCategoryViewModel?>(
       bloc: homeViewModel,
-      builder: (context, state) {
+      selector: (state) => state.truckSize,
+      builder: (context, truckSize) {
+        logger.debug("message in truck");
         return SelectionCard(
           onTap: () => homeViewModel.cargosubCategoryOnClicked(context),
-          selectedValue: context.tt(
-              state.truckSize?.nameEn ?? " ", state.truckSize?.nameAr ?? " "),
-          label: context.tt(
-              state.truckSize?.nameEn ?? "Choose the size of the truck",
-              state.truckSize?.nameAr ?? "اختر حجم حمولتك"),
+          selectedValue:
+              context.tt(truckSize?.nameEn ?? " ", truckSize?.nameAr ?? " "),
+          label: context.tt(truckSize?.nameEn ?? "Choose the size of the truck",
+              truckSize?.nameAr ?? "اختر حجم حمولتك"),
           iconName: 'sizeTrack',
-          filled: state.filled
-              ? context.tt(state.truckSize?.nameEn ?? " ",
-                          state.truckSize?.nameAr ?? " ") ==
-                      " "
-                  ? true
-                  : false
-              : state.filled,
         );
       },
     );
   }
 
   Widget _buildDateField(BuildContext context) {
-    return BlocBuilder<HomeViewController, HomeViewState>(
+    return BlocSelector<HomeViewController, HomeViewState, String?>(
       bloc: homeViewModel,
-      builder: (context, state) {
+      selector: (state) => state.pickupDate, // تحديد الخاصية المطلوبة فقط
+      builder: (context, pickupDate) {
         return SelectionCard(
           onTap: () => homeViewModel.pickdateOnClicked(context),
           selectedValue: context.tt(
-            state.pickupDate ?? " ",
-            state.pickupDate ?? " ",
+            pickupDate ?? " ",
+            pickupDate ?? " ",
           ),
           label: context.tt(
-            state.pickupDate ?? "pick up date",
-            state.pickupDate ?? "اختر التاريخ",
+            pickupDate ?? "Pick up date",
+            pickupDate ?? "اختر التاريخ",
           ),
           iconName: 'calendar',
-          filled: state.filled
-              ? context.tt(
-                        state.pickupDate ?? " ",
-                        state.pickupDate ?? " ",
-                      ) ==
-                      " "
-                  ? true
-                  : false
-              : state.filled,
         );
       },
     );
   }
 
   Widget _buildGoodsField(BuildContext context) {
-    return BlocBuilder<HomeViewController, HomeViewState>(
+    return BlocSelector<HomeViewController, HomeViewState, String?>(
       bloc: homeViewModel,
-      builder: (context, state) {
+      selector: (state) =>
+          state.selectGoodsString, // تحديد الخاصية المطلوبة فقط
+      builder: (context, selectGoodsString) {
         return SelectionCard(
           onTap: () => homeViewModel.goodsOnClicked(context),
           selectedValue: context.tt(
-            state.selectGoodsString ?? " ",
-            state.selectGoodsString ?? " ",
+            selectGoodsString ?? " ",
+            selectGoodsString ?? " ",
           ),
           label: context.tt(
-            state.selectGoodsString ?? "Select Goods",
-            state.selectGoodsString ?? "اختر نوع البضائع",
+            selectGoodsString ?? "Select Goods",
+            selectGoodsString ?? "اختر نوع البضائع",
           ),
           iconName: 'calendar',
-          filled: state.filled
-              ? context.tt(
-                        state.selectGoodsString ?? " ",
-                        state.selectGoodsString ?? " ", // عربي او انجليزي
-                      ) ==
-                      " "
-                  ? true
-                  : false
-              : state.filled,
         );
       },
     );
@@ -355,7 +326,6 @@ profile viewmodel
       builder: (context, state) {
         logger.debug("rebuild booking Requests Cards");
         if (state is BookingRequestSuccessViewState) {
-          
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(

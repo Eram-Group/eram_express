@@ -11,7 +11,7 @@ class SelectionCard extends StatelessWidget {
   final String label;
   final String iconName;
   final String? selectedValue;
-  final bool filled;
+
 
   const SelectionCard({
     Key? key,
@@ -19,7 +19,7 @@ class SelectionCard extends StatelessWidget {
     required this.label,
     required this.iconName,
     required this.selectedValue,
-    required this.filled,
+
   }) : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ class SelectionCard extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: filled ? Colors.red : AppColor.bordercolor,
+                  color: AppColor.bordercolor,
                 ),
               ),
               child: Padding(
@@ -72,12 +72,7 @@ class SelectionCard extends StatelessWidget {
               ),
             ),
           ),
-          filled
-              ? Text(context.tt(
-                  " * this field required",
-                  "الخانة مطلوبة",
-                ))
-              : const SizedBox.shrink(),
+          
         ],
       ),
     );
