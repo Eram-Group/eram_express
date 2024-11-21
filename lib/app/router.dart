@@ -1,4 +1,5 @@
 import 'package:eram_express/features/profile/presentation/views/profile_presentation/profile_view.dart';
+import 'package:eram_express/features/profile/presentation/views/support_view.dart';
 import 'package:eram_express/features/profile/presentation/views/terms_presentation/terms_view.dart';
 import 'package:flutter/material.dart';
 
@@ -41,23 +42,16 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = AboutUsView();
   } else if (name == TermsView.route) {
     page = TermsView();
-  }
-  else if (name == TermsView.route) 
-  {
+  } else if (name == TermsView.route) {
     page = TermsView();
-  }
-  else if (name == ContactUsView.route) 
-  {
+  } else if (name == ContactUsView.route) {
     page = ContactUsView();
-  }
-   else if (name == EditProfileView.route) 
-  {
+  } else if (name == SupportView.route) {
+    page = SupportView();
+  } else if (name == EditProfileView.route) {
     final arguments = settings.arguments as EditProfileViewArguments;
     page = EditProfileView(arguments);
-  } 
-  
-  else 
-  {
+  } else {
     page = const NotFoundView();
   }
 

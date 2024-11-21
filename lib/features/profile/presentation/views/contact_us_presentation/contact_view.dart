@@ -118,7 +118,7 @@ Widget _buildSupportContiner(
   List<ContactUsViewModel> contactItems =
       ContactUsItems(context).generateSupportItems();
   return Clickable(
-      onTap: () {},
+      onTap: contactItems[0].onTap,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),

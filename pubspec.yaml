@@ -31,6 +31,7 @@ dependencies:
   cached_network_image: ^3.4.1
   cupertino_icons: ^1.0.6
   dio: ^5.7.0
+  dropdown_button2: ^2.3.9
   either_dart: ^1.0.0
   equatable: ^2.0.5
   eram_express_shared:

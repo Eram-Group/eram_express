@@ -1,4 +1,5 @@
 import 'package:either_dart/src/either.dart';
+import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 import 'package:eram_express/features/profile/data/models/terms_model.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
@@ -25,4 +26,7 @@ class ProfileApiRemoteDataSource implements ProfileRemoteDataSource {
    {
     return  _dioClient.request(contactUsEndpoint.prepare());
    }
+    Future<Either<ApiError, List<SupportTypeModel>>> getSupportType() {
+    return _dioClient.request(supportEndpoint.prepare());
+  }
 }

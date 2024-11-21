@@ -29,7 +29,8 @@ class EditProfileView extends StatelessWidget {
   final EditProfileViewArguments arguments;
   final EditProfileViewModel viewmodel =
       EditProfileViewModel(customerService: customerService);
-  EditProfileView(this.arguments, {super.key}) {
+  EditProfileView(this.arguments, {super.key}) 
+  {
     viewmodel.setInitialValues(arguments);
   }
 

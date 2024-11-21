@@ -1,3 +1,4 @@
+import 'package:eram_express/features/profile/presentation/views/support_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 
@@ -74,7 +75,9 @@ class ContactUsItems {
       title: context.tt('Support', "الدعم"),
       subtitle: context.tt(
           'Don’t hesitate to contact us ', "لا تتردد في الاتصال بنا"),
-      onTap: () async {},
+      onTap: () {
+        Navigator.of(context).pushNamed(SupportView.route);
+      },
       iconsvg: SvgIcon(
         asset: 'support',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
