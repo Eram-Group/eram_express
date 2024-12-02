@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:eram_express_shared/core/api/api_endpoint.dart';
 
-import '../../../../domain/objects/verify_otp_response_wrapper.dart';
+import '../../../../presentation/objects/verify_otp_response_wrapper.dart';
 import '../../../models/verify_otp_response_model.dart';
 
 final sendOtpEndpoint = ApiEndpoint(

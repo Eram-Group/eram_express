@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:eram_express/features/google_map/domain/Entities/address_entity.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../data/models/addressmodels/place_details_model.dart';
@@ -12,7 +12,7 @@ abstract class GoogleMapViewState extends Equatable {
 
 class GoogleMapViewStateInitial extends GoogleMapViewState {}
 
-class GoogleMapViewStateloading extends GoogleMapViewState {}
+class GoogleMapViewStateLoading extends GoogleMapViewState {}
 
 class GoogleMapViewStateUpdated extends GoogleMapViewState {
   final Set<Marker> markers;
@@ -24,9 +24,9 @@ class GoogleMapViewStateUpdated extends GoogleMapViewState {
 }
 
 class GoogleMapViewStateError extends GoogleMapViewState {
-  final String errormessege;
-  const GoogleMapViewStateError(this.errormessege);
-  List<Object> get props => [errormessege];
+  final String errorMessege;
+  const GoogleMapViewStateError(this.errorMessege);
+  List<Object> get props => [errorMessege];
 }
 
 class PlaceDetailsLoadingState extends GoogleMapViewState {
@@ -34,8 +34,8 @@ class PlaceDetailsLoadingState extends GoogleMapViewState {
 }
 
 class PlaceDetailsLoaded extends GoogleMapViewState {
-  final AddressEntity placeDetails;
-  PlaceDetailsLoaded(this.placeDetails);
+  final  PlaceDetailsModel placeDetails;
+  const PlaceDetailsLoaded(this.placeDetails);
   @override
   List<Object> get props => [placeDetails];
 }

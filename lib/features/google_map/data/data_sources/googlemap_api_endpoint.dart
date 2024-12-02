@@ -11,7 +11,6 @@ final validPointEndpoint = ApiEndpoint(
     method: HttpMethod.post,
     responseHandlers: {
       HttpStatus.ok: (response) => Null,
-      HttpStatus.badRequest: (Response) =>
-          "these location  move outside our service area ",
+      HttpStatus.badRequest: (Response) => "these location  move outside our service area ",
       //ApiError.fromJson(Response.data),
     });

@@ -2,8 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/common/viewmodels/provider_view_model.dart';
 import 'package:eram_express/core/app_colors.dart';
-import 'package:eram_express/features/booking/domain/Entities/bid_entity.dart';
-import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
+
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +10,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../app/iconsax_icons.dart';
+import '../../../../common/models/provider_model.dart';
+import '../../../../common/models/rating_model.dart';
 import '../../../../common/viewmodels/rating_view_model.dart';
 
 class HeaderBookingRequestCard extends StatelessWidget {
-  final ProviderViewModel provider;
+  final ProviderModel provider;
   const HeaderBookingRequestCard({super.key, required this.provider});
 
   @override
@@ -62,7 +63,7 @@ class HeaderBookingRequestCard extends StatelessWidget {
   }
 }
 
-Widget _buildRating(RatingViewModel rating) {
+Widget _buildRating(RatingModel rating) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [

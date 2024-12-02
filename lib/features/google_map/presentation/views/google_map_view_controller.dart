@@ -1,28 +1,26 @@
 import 'dart:async';
+import 'package:eram_express/app/di.dart';
 import 'package:eram_express/app/navigation.dart';
+import 'package:eram_express/features/google_map/data/repositories/google_map_reposirtoty.dart';
+import 'package:eram_express/features/google_map/data/services/locationservice.dart';
 import 'package:eram_express/features/google_map/presentation/search_model_view/search_view.dart';
 import 'package:eram_express/features/home/data/models/picking_locationModel.dart';
-import 'package:eram_express/features/home/presentation/viewsmodel/picking_location_view_model.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../domain/services/locationservice.dart';
-import '../../domain/usecases/get_current_location_usecase.dart';
-import '../../domain/usecases/get_place_details_usaecase.dart';
+
 import 'google_map_view_state.dart';
 
 class GoogleMapViewController extends Cubit<GoogleMapViewState> {
-  final GetCurrentLocationUsecase _getCurrentLocationUsecase;
-  final GetPlaceDetailsUsaecase _getPlaceDetailsUsaecase;
-  final Locationservice _locationService; // الي حاليا ممكن يتغير مكان current
+
+  final  GoogleMapRepository _googleMapRepository;
+  final LocationService _locationService; 
   GoogleMapViewController({
-    required GetCurrentLocationUsecase getCurrentLocationUsecase,
-    required GetPlaceDetailsUsaecase getPlaceDetailsUsaecase,
-    required locationService,
+    required GoogleMapRepository googleMapRepository,
+    required LocationService locationService,
   })  : _locationService = locationService,
-        _getPlaceDetailsUsaecase = getPlaceDetailsUsaecase,
-        _getCurrentLocationUsecase = getCurrentLocationUsecase,
+       _googleMapRepository=googleMapRepository,
+       
         super(GoogleMapViewStateInitial()) {}
 
   GoogleMapController? _controller;
@@ -32,21 +30,21 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
   late CameraPosition kInitialPosition;
   double kDefaultMapZoom = 15.0;
 
-  void setInitialCameraPostion(PointViewModel? initialAddress) {
+  void setInitialCameraPostion(Point? initialAddress) {
     if (initialAddress != null) {
       kInitialPosition = CameraPosition(
         target: LatLng(initialAddress.latitude, initialAddress.longitude),
         zoom: kDefaultMapZoom,
       );
     } else {
-      if (_locationService?.currentLocation != null) {
+      if (_locationService.currentLocation != null) {
         kInitialPosition = CameraPosition(
           target: LatLng(_locationService.currentLocation!.point.latitude,
               _locationService.currentLocation!.point.longitude),
           zoom: kDefaultMapZoom,
         );
       } else {
-        emit(GoogleMapViewStateloading());
+        emit(GoogleMapViewStateLoading());
         kInitialPosition = CameraPosition(
           target: LatLng(0, 0),
           zoom: kDefaultMapZoom,
@@ -61,17 +59,14 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       emit(PlaceDetailsLoadingState());
-      final result = await _getPlaceDetailsUsaecase.execute(
-        mapMarkers.first.position.latitude.toString(),
-        mapMarkers.first.position.longitude.toString(),
-      );
+      final result = await _googleMapRepository.getPlaceDetails(mapMarkers.first.position.latitude.toString(),  mapMarkers.first.position.longitude.toString(),);
       result.fold(
         (errorMessage) 
         {
-          logger.debug("errorrrr");
           emit(PlaceDetailsError(errorMessage));
         },
-        (placeDetails) {
+        (placeDetails)
+         {
           emit(PlaceDetailsLoaded(placeDetails));
         },
       );
@@ -80,11 +75,11 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
 
   @override
   Future<void> close() {
-    _debounce?.cancel(); // Cancel debounce when cubit is closed
+    _debounce?.cancel(); 
     return super.close();
   }
 
-  Future<void> setmapstyle(BuildContext context) async {
+  Future<void> setMapStyle(BuildContext context) async {
     mapstyle = await DefaultAssetBundle.of(context)
         .loadString('assets/map_styles/silvermap.json');
   }
@@ -94,8 +89,8 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
   }
 
   void getCurrentLocation() async {
-    emit(GoogleMapViewStateloading());
-    final result = await _getCurrentLocationUsecase.execute();
+    emit(GoogleMapViewStateLoading());
+    final result = await locationService.getCurrentLocation();
     result.fold(
       (error) => emit(GoogleMapViewStateError(error)),
       (locationData) {
@@ -103,7 +98,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
           target: LatLng(locationData.latitude!, locationData.longitude!),
           zoom: kDefaultMapZoom,
         );
-        updateMarkerAndCamera(kInitialPosition!, moveCamera: true);
+        updateMarkerAndCamera(kInitialPosition, moveCamera: true);
       },
     );
   }

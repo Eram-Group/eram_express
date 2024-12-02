@@ -1,4 +1,3 @@
-import '../../domain/entities/goods_entity.dart';
 
 class GoodModel {
   final int id;
@@ -24,13 +23,6 @@ class GoodModel {
    
     );
   }
-  GoodEntity toEntity() {
-    return GoodEntity(
-      id: this.id,
-      nameAr: this.nameAr,
-      nameEn: this.nameEn,
-      image: this.image,
-    );
-  }
 
+  
 }

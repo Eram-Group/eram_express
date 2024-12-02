@@ -4,13 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../core/app_colors.dart';
-import '../views/viewsmodel/bid_view_model.dart';
+
+import '../../data/models/bid_model.dart';
 import 'custom_small_button.dart';
 import 'delivery_cost.dart';
 import 'header_booking_request_card.dart';
 
 class AcceptOfferCard extends StatelessWidget {
-  final BidViewModel item;
+  final BidModel item;
   final Color?backgroundColor;
   final Function() onAcceptBidding;
 

@@ -10,7 +10,7 @@ sealed class SearchState extends Equatable
 }
 
 class SearchStateEmpty extends SearchState {}
-class SearchStateintial extends SearchState {}
+class SearchStateInitial extends SearchState {}
 class SearchStateLoading extends SearchState {}
 class SearchStateError extends SearchState 
 {
@@ -19,28 +19,9 @@ class SearchStateError extends SearchState
 }
 class SearchStateSuccess extends SearchState 
 {
-  const SearchStateSuccess(this.recommendplaces);
-  final List<PlaceAutocompleteModel> recommendplaces;
+  const SearchStateSuccess(this.recommendPlaces);
+  final List<PlaceAutocompleteModel> recommendPlaces;
   @override
-  List<Object> get props => [recommendplaces];
+  List<Object> get props => [recommendPlaces];
 }
 
-
-
-
-/*
-class AutoCompleteSelectedPlace extends SearchState {
-  const AutoCompleteSelectedPlace(this.place);
-  final Place place;
-
-  @override
-  List<Object> get props => [place];
-}
-
-class AutoCompleteError extends AutoCompleteState {
-  const AutoCompleteError(this.error);
-
-  final String error;
-}
-
-*/

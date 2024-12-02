@@ -2,8 +2,8 @@ import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
 
-import '../../../../domain/objects/otp_verification_data.dart';
-import '../../../../domain/objects/verify_otp_response_wrapper.dart';
+import '../../../../presentation/objects/otp_verification_data.dart';
+import '../../../../presentation/objects/verify_otp_response_wrapper.dart';
 import '../../../models/verify_otp_response_model.dart';
 import 'authentication_api_endpoints.dart';
 import 'authentication_remote_data_source.dart';

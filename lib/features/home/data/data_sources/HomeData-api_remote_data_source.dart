@@ -1,14 +1,13 @@
 import 'package:either_dart/either.dart';
 import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
 import 'package:eram_express/features/home/data/models/cargo-subcategoryModel.dart';
-import 'package:eram_express/features/home/data/models/goods-typeModel.dart';
-import 'package:eram_express_shared/core/api/api_endpoint.dart';
+import 'package:eram_express/features/home/data/models/home-Model.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
 
+import '../models/goods-typeModel.dart';
+import 'homeData-api-endpoint.dart';
 import 'homeData_remote_data_source.dart';
-import 'HomeData-api-endpoint.dart';
-
 class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource 
 {
   final DioApiClient _dioClient;
@@ -16,8 +15,7 @@ class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource
       : _dioClient = dioClient;
 
   @override
-  Future<Either<ApiError, List<CargoCategoryModel>>>
-      getCargoCategories() async {
+  Future<Either<ApiError, List<CargoCategoryModel>>>getCargoCategories() async {
     return await _dioClient.request(
       cargoCategoriesEndpoint.prepare() ,
     );
@@ -35,4 +33,14 @@ class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource
       goodTypeEndpoint.prepare() ,
     );
   }
+ @override
+  Future<Either<ApiError, HomeModel>> getHomeData() async
+   {
+    return await _dioClient.request(
+     homeDataEndPoint.prepare(),
+     
+    );
+  }
+
+
 }

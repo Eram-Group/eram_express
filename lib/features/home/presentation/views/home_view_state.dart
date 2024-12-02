@@ -1,21 +1,20 @@
-import '../viewsmodel/cargo_categories_viewmodel.dart';
-import '../viewsmodel/cargo_sub_category_view_model.dart';
-import '../viewsmodel/good_view_model.dart';
-import '../viewsmodel/picking_location_view_model.dart';
+import '../../data/models/cargo-categoriesModel.dart';
+import '../../data/models/cargo-subcategoryModel.dart';
+import '../../data/models/goods-typeModel.dart';
+import '../../data/models/picking_locationModel.dart';
 
 class HomeViewState {
-  final PickingLocationViewModel? pickup;
-  final PickingLocationViewModel? destination;
-  final CargoCategoryViewModel? loadType;
-  final CargoSubCategoryViewModel? truckSize;
+  final PickingLocationModel? pickup;
+  final PickingLocationModel? destination;
+  final CargoCategoryModel? loadType;
+  final CargoSubCategoryModel? truckSize;
   final String? pickupDate;
-  List<GoodViewModel>? selectGoods;
+  List<GoodModel>? selectGoods;
   final String? selectGoodsString;
-  final bool isLoading;
-  final List<CargoSubCategoryViewModel>? cargoSubCategories;
-  final List<CargoCategoryViewModel>? cargoCategories;
-  final List<GoodViewModel>? goods;
-  final bool filled;
+  final List<CargoSubCategoryModel>? cargoSubCategories;
+  final List<CargoCategoryModel>? cargoCategories;
+  final List<GoodModel>? goods;
+
   final String? errorMessage;
   
   HomeViewState({
@@ -26,27 +25,25 @@ class HomeViewState {
     this.pickupDate,
     this.selectGoods,
     this.selectGoodsString,
-    this.isLoading = false,
     this.cargoSubCategories,
     this.cargoCategories,
     this.goods,
-    this.filled = false,
+   
     this.errorMessage,
   });
 
   HomeViewState copyWith({
-    final PickingLocationViewModel? pickup,
-    final PickingLocationViewModel? destination,
-    CargoCategoryViewModel? loadType,
-    CargoSubCategoryViewModel? truckSize,
-    List<GoodViewModel>? selectGoods,
+    final PickingLocationModel? pickup,
+    final PickingLocationModel? destination,
+    CargoCategoryModel? loadType,
+    CargoSubCategoryModel? truckSize,
+    List<GoodModel>? selectGoods,
     String? selectGoodsString,
     String? pickupDate,
-    bool? isLoading,
-    List<CargoSubCategoryViewModel>? cargoSubCategories,
-    List<CargoCategoryViewModel>? cargoCategories,
-    List<GoodViewModel>? goods,
-    bool? filled,
+    //bool? isLoading,
+    List<CargoSubCategoryModel>? cargoSubCategories,
+    List<CargoCategoryModel>? cargoCategories,
+    List<GoodModel>? goods,
     String? errorMessage,
   }) {
     return HomeViewState(
@@ -56,11 +53,11 @@ class HomeViewState {
       truckSize: truckSize ?? this.truckSize,
       selectGoods: selectGoods ?? this.selectGoods,
       pickupDate: pickupDate ?? this.pickupDate,
-      isLoading: isLoading ?? this.isLoading,
+      //isLoading: isLoading ?? this.isLoading,
       cargoSubCategories: cargoSubCategories ?? this.cargoSubCategories,
       cargoCategories: cargoCategories ?? this.cargoCategories,
       goods: goods ?? this.goods,
-      filled: filled ?? this.filled,
+     
       selectGoodsString: selectGoodsString ?? this.selectGoodsString,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -77,11 +74,11 @@ class RequestCreateError extends HomeViewState
           pickupDate: null,
           selectGoods: null,
           selectGoodsString: null,
-          isLoading: false,
+          //isLoading: false,
           cargoSubCategories: [],
           cargoCategories: [],
           goods: [],
-          filled: false,
+          
           errorMessage: null,
         );
 
@@ -96,11 +93,9 @@ class RequestCreateSuccess extends HomeViewState {
           pickupDate: null,
           selectGoods: null,
           selectGoodsString: null,
-          isLoading: false,
           cargoSubCategories: [],
           cargoCategories: [],
           goods: [],
-          filled: false,
           errorMessage: null,
         );
 }

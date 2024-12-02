@@ -1,17 +1,17 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/features/booking/domain/Entities/bid_entity.dart';
-import 'package:eram_express/features/booking/domain/Entities/booking_request_entity.dart';
+import 'package:eram_express/features/booking/data/models/bid_model.dart';
+import 'package:eram_express/features/booking/data/models/booking_request_model.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
-import '../../../home/domain/objects/booking_request_form_data.dart';
-import '../../domain/repositories/booking_repository.dart';
+import '../../../home/presentation/objects/booking_request_form_data.dart';
+
 import '../remote/booking_remote_data_source.dart';
+import 'BookingRepository .dart';
 
 class BookingRepositoryImpl implements BookingRepository {
   final BookingRemoteDataSource _bookingRemoteDataSource;
   final TokensLocalDataSource _tokensLocalDataSource;
-  List<BidEntity>? _biddings;
-  List<BookingRequestEntity>? _bookingRequests;
+  List<BookingRequestModel>? _bookingRequests;
   BookingRepositoryImpl({
     required BookingRemoteDataSource bookingRemoteDataSource,
     required TokensLocalDataSource tokensLocalDataSource,
@@ -37,7 +37,7 @@ class BookingRepositoryImpl implements BookingRepository {
     return result;
   }
   @override
-  Future<Either<ApiError, List<BookingRequestEntity>>>listBookingRequest() async {
+  Future<Either<ApiError, List<BookingRequestModel>>>listBookingRequest() async {
     final accessToken = await _tokensLocalDataSource.accessToken;
     if (accessToken == null) {
       return Left(
@@ -54,7 +54,7 @@ class BookingRepositoryImpl implements BookingRepository {
     return result.fold(
       (error) => Left(error),
       (data) {
-        _bookingRequests= data.map((item) => item.toEntity()).toList();
+        _bookingRequests= data;
         return Right(_bookingRequests!);
       },
     );
@@ -78,5 +78,5 @@ class BookingRepositoryImpl implements BookingRepository {
   }
 
   @override
-  List<BookingRequestEntity>? get cachetBooking => _bookingRequests;
+  List<BookingRequestModel>? get cachetBooking => _bookingRequests;
 }

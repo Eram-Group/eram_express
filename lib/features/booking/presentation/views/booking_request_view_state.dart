@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:eram_express/features/booking/presentation/views/viewsmodel/booking_request_view_model.dart';
+import 'package:eram_express/features/booking/data/models/booking_request_model.dart';
 
 class BookingRequestViewState extends Equatable {
   @override
@@ -12,7 +12,7 @@ class BookingRequesErrorViewState extends BookingRequestViewState {
 }
 
 class BookingRequestSuccessViewState extends BookingRequestViewState {
-  final List<BookingRequestViewModel> bookingRequests;
+  final List<BookingRequestModel> bookingRequests;
   BookingRequestSuccessViewState(this.bookingRequests);
   @override
   //List<Object?> get props => [bookingRequests.map((e) => e.id).toList()];

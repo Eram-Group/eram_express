@@ -1,4 +1,3 @@
-import '../../domain/entities/picking_location_entity.dart';
 
 class PickingLocationModel {
   late Point point;
@@ -14,12 +13,6 @@ class PickingLocationModel {
   }
 
   
-  PickingLocationEntity toEntity(PickingLocationModel pickingLocationModel) {
-    return PickingLocationEntity(
-      point: point.toEntity(pickingLocationModel.point), 
-      address: pickingLocationModel.address,
-    );
-  }
 }
 
 class Point {
@@ -35,10 +28,4 @@ class Point {
     );
   }
 
-  PointEntity toEntity(Point point ) {
-    return PointEntity(
-      longitude: point.longitude,
-      latitude: latitude,
-    );
   }
-}

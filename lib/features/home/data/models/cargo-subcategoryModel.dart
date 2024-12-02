@@ -1,4 +1,3 @@
-import '../../domain/entities/cargo_subcategory_entity.dart';
 
 class CargoSubCategoryModel {
   final int id;
@@ -27,15 +26,6 @@ class CargoSubCategoryModel {
       image: json['image'],
     );
   }
-  CargoSubCategoryEntity toEntity() {
-    return CargoSubCategoryEntity(
-      id: this.id,
-      category: this.category,
-      nameAr: this.nameAr,
-      nameEn: this.nameEn,
-      capacity: this.capacity,
-      image: this.image,
-    );
-  }
+
 
 }

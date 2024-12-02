@@ -1,5 +1,4 @@
 import 'package:eram_express/common/models/provider_model.dart';
-import 'package:eram_express/features/booking/domain/Entities/bid_entity.dart';
 
 class BidModel {
   final int id;
@@ -33,13 +32,5 @@ class BidModel {
     );
   }
   
-  BidEntity toEntity() {
-    return BidEntity(
-        id: this.id,
-        status: this.status,
-        amount: this.amount,
-        amountCurrency: this.amountCurrency,
-        provider: this.provider.toEntity(),
-        bookingRequestId: this.bookingRequestId);
-  }
+
 }

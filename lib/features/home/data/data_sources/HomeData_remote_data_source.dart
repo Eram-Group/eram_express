@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:eram_express/features/home/data/models/home-Model.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import '../models/cargo-categoriesModel.dart';
 import '../models/cargo-subcategoryModel.dart';
@@ -8,4 +9,6 @@ abstract class HomeDataRemoteDataSource {
   Future<Either<ApiError, List<CargoCategoryModel>>>getCargoCategories(); 
   Future<Either<ApiError, List<CargoSubCategoryModel>>> getSubCargoCategories();
   Future<Either<ApiError, List<GoodModel>>> getgoods();
+  Future<Either<ApiError, HomeModel>> getHomeData();
+
 }

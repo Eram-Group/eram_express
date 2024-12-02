@@ -6,8 +6,8 @@ import 'package:eram_express_shared/presentation/views/modals/image_picker_modal
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../customer/domain/objects/update_customer_form_data.dart';
-import '../../../../../customer/domain/services/customer_service.dart';
+import '../../../../../customer/data/objects/update_customer_form_data.dart';
+import '../../../../../customer/data/services/customer_service.dart';
 import '../../modals/registered_successfully_modal.dart';
 import 'complete_profile_view_state.dart';
 

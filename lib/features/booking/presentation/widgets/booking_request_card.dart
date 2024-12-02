@@ -1,6 +1,4 @@
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
-import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
-import 'package:eram_express/features/booking/presentation/views/viewsmodel/booking_request_view_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
@@ -10,11 +8,13 @@ import 'package:gap/gap.dart';
 import '../../../../common/widgets/dot_line.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/app_text_style.dart';
+import '../../data/models/bid_model.dart';
+import '../../data/models/booking_request_model.dart';
 import 'accept_offer_card.dart';
 
 class BookingRequestCard extends StatelessWidget {
-  final BookingRequestViewModel bookingRequest;
-  final void Function(BidViewModel)? onTap;
+  final BookingRequestModel bookingRequest;
+  final void Function(BidModel)? onTap;
   final void Function()? shomMoreTap;
   const BookingRequestCard({
     super.key,
@@ -62,7 +62,7 @@ class BookingRequestCard extends StatelessWidget {
         ));
   }
 
-  Widget _buildbiddings(List<BidViewModel> bidds) {
+  Widget _buildbiddings(List<BidModel> bidds) {
     return BlocProvider(
         create: (context) => ExpansionTileCubit(),
         child: Column(
@@ -194,7 +194,7 @@ class BookingRequestCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCard(BuildContext context, BookingRequestViewModel booking) {
+  Widget _buildCard(BuildContext context, BookingRequestModel booking) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

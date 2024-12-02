@@ -1,7 +1,7 @@
  import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 
-import '../../../home/domain/objects/booking_request_form_data.dart';
+import '../../../home/presentation/objects/booking_request_form_data.dart';
 import '../models/bid_model.dart';
 import '../models/booking_request_model.dart';
 

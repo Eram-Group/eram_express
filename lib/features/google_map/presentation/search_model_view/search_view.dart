@@ -1,16 +1,11 @@
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
-import 'package:eram_express/features/authentication/presentation/views/modals/registered_successfully_modal.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../app/di.dart';
 import '../../data/models/place_auto_complete_model.dart';
-import '../../domain/usecases/get_Coordinates_address_usecase.dart';
-import '../../domain/usecases/get_search_result_usecase.dart';
 import 'search_model_view.dart';
 import 'search_model_view_state.dart';
 import 'widgets/search_text_field.dart';
@@ -23,8 +18,9 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SearchViewController(
-          getLonglatPlaceUsecase: GetCoordinatesForAddresseUsecase(googleMapRepository: googlemapRepository),
-          getSearchResultUsecase: GetSearchResultUsecase(googleMapRepository: googlemapRepository,authenticationRepository: authenticationRepository)),
+        googleMapRepository: googleMapRepository,
+        authenticationRepository: authenticationRepository,
+         ),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -47,9 +43,9 @@ class SearchView extends StatelessWidget {
                   if (state is SearchStateError) {
                     return  const Center(child: Text("Error occurred"));
                   } else if (state is SearchStateEmpty) {
-                    return _buildEmptystate(context);
+                    return _buildEmptyState(context);
                   } else if (state is SearchStateSuccess) {
-                    return _builddisplayresult(state.recommendplaces);
+                    return _buildDisplayResult(state.recommendPlaces);
                   }
                   return const SizedBox.shrink(); // defualt emptyscreen
                 },
@@ -62,7 +58,7 @@ class SearchView extends StatelessWidget {
   }
 }
 
-Widget _buildEmptystate(BuildContext context) {
+Widget _buildEmptyState(BuildContext context) {
   return Expanded(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -92,19 +88,19 @@ Widget _buildEmptystate(BuildContext context) {
   );
 }
 
-Widget _builddisplayresult(List<PlaceAutocompleteModel> recommendplaces) {
+Widget _buildDisplayResult(List<PlaceAutocompleteModel> recommendPlaces) {
   return Expanded(
       child: Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
     child: ListView.builder(
-      itemCount: recommendplaces.length,
+      itemCount: recommendPlaces.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: ()
            {
-            context.read<SearchViewController>().getCoordinatesForAddress(recommendplaces[index].description);
+            context.read<SearchViewController>().getCoordinatesForAddress(recommendPlaces[index].description);
           },
-          child: _buildSearchItemCard(recommendplaces[index].description),
+          child: _buildSearchItemCard(recommendPlaces[index].description),
         );
       },
     ),

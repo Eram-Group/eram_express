@@ -4,8 +4,8 @@ import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../domain/objects/login_form_data.dart';
-import '../../../../domain/services/authentication_service.dart';
+import '../../../objects/login_form_data.dart';
+import '../../../../data/services/authentication_service.dart';
 import '../../modals/select_country_modal.dart';
 import '../otp/otp_view.dart';
 import 'login_view_state.dart';

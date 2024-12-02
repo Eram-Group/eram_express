@@ -1,11 +1,10 @@
 import 'package:either_dart/either.dart';
-import 'package:eram_express/features/authentication/domain/objects/verify_otp_response_wrapper.dart';
+import 'package:eram_express/features/authentication/presentation/objects/verify_otp_response_wrapper.dart';
+import 'package:eram_express/features/customer/data/models/customer_model.dart';
 import 'package:eram_express_shared/core/app_error.dart';
-
-import '../../../customer/domain/entities/customer_entity.dart';
-import '../../../customer/domain/repositories/customer_repository.dart';
-import '../../domain/objects/otp_verification_data.dart';
-import '../../domain/repositories/authentication_repository.dart';
+import '../../../customer/data/repositories/customer_repository.dart';
+import '../../presentation/objects/otp_verification_data.dart';
+import 'authentication_repository.dart';
 import '../data_sources/authentication/remote/authentication_remote_data_source.dart';
 import '../data_sources/tokens/local/tokens_local_data_source.dart';
 
@@ -14,7 +13,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final TokensLocalDataSource _tokensLocalDataSource;
 
-  CustomerEntity? _authenticatedCustomer; 
+  CustomerModel? _authenticatedCustomer; 
 
   AuthenticationRepositoryImpl({
     required CustomerRepository customerRepository,
@@ -25,7 +24,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         _tokensLocalDataSource = tokensLocalDataSource;
 
   @override
-  Future<CustomerEntity?> get authenticatedCustomer async 
+  Future<CustomerModel?> get authenticatedCustomer async 
   {
     if (_authenticatedCustomer != null) return _authenticatedCustomer;
 
@@ -79,13 +78,13 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           response.refreshToken,
         );
 
-        final customer = CustomerEntity.fromModel(response.customer);
-        _authenticatedCustomer = customer;
+       
+        _authenticatedCustomer = response.customer;
 
         return Right(
           VerifyOtpResponseWrapper(
             isNewCustomer: data.isNewCustomer,
-            response: customer,
+            response: response.customer,
           ),
         );
       },
@@ -93,7 +92,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  void updateAuthenticatedCustomer(CustomerEntity data) {
+  void updateAuthenticatedCustomer(CustomerModel data) {
     _authenticatedCustomer = data;
   }
 }

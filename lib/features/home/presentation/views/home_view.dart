@@ -1,8 +1,4 @@
 import 'package:eram_express/core/app_colors.dart';
-import 'package:eram_express/features/booking/domain/usecases/accept_bidding_usecase.dart';
-import 'package:eram_express/features/booking/domain/usecases/create_booking_request_usecase.dart';
-import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
-import 'package:eram_express/features/booking/presentation/views/viewsmodel/booking_request_view_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
@@ -11,22 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:logger/logger.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../app/di.dart';
 import '../../../../core/app_text_style.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
-
-import '../../../booking/domain/usecases/get_booking_request_usecase.dart';
 import '../../../booking/presentation/views/all_booking_request_view.dart';
 import '../../../booking/presentation/views/offers_view.dart';
 import '../../../booking/presentation/views/booking_request_view_controller.dart';
 import '../../../booking/presentation/views/booking_request_view_state.dart';
 import '../../../booking/presentation/widgets/booking_request_card.dart';
-import '../../modals/failed-request-modal.dart';
-import '../../modals/successful-request-modal.dart';
-import '../viewsmodel/cargo_categories_viewmodel.dart';
-import '../viewsmodel/cargo_sub_category_view_model.dart';
-import '../viewsmodel/picking_location_view_model.dart';
+import '../../data/models/cargo-categoriesModel.dart';
+import '../../data/models/cargo-subcategoryModel.dart';
+import '../../data/models/picking_locationModel.dart';
+import '../modals/failed-request-modal.dart';
+import '../modals/successful-request-modal.dart';
+
 import '../widgets/empty_booking_view.dart';
 import '../widgets/selection-card.dart';
 import 'home_view_controller.dart';
@@ -35,17 +29,13 @@ import 'home_view_state.dart';
 class HomeView extends StatelessWidget {
   static const String route = '/home';
   final HomeViewController homeViewModel = HomeViewController(
-      homerepo: HomeRepository,
-      createBookingRequestUsecase:
-          CreateBookingRequestUsecase(bookingRepository: bookingRepository));
+      homeRepo: homeRepository,
+      bookingRepository: bookingRepository);
 
   final BookingRequestViewController bookingRequestViewModel =
       BookingRequestViewController(
           bookingRepository: bookingRepository,
-          acceptBiddingUsecase:
-              AcceptBiddingUsecase(bookingRepository: bookingRepository),
-          getBookingRequestUsecase:
-              GetBookingRequestUsecase(bookingRepository: bookingRepository));
+      );
 
   HomeView({super.key});
   @override
@@ -151,12 +141,12 @@ profile viewmodel
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x1C000000), // Hex value for #0000001C
-                offset: Offset(0, 4), // Equivalent to "0px 4px"
-                blurRadius: 24, // Equivalent to "24px"
-                spreadRadius: 0, // Equivalent to "0px"
+            boxShadow: const[
+               BoxShadow(
+                color: Color(0x1C000000),
+                offset: Offset(0, 4), 
+                blurRadius: 24, 
+                spreadRadius: 0, 
               ),
             ],
           ),
@@ -196,7 +186,7 @@ profile viewmodel
       children: [
         Expanded(
             child: BlocSelector<HomeViewController, HomeViewState,
-                PickingLocationViewModel?>(
+                PickingLocationModel?>(
           bloc: homeViewModel,
           selector: (state) => state.pickup, // تحديد الخاصية المطلوبة فقط
           builder: (context, pickup) {
@@ -211,7 +201,7 @@ profile viewmodel
         const Gap(7),
         Expanded(
             child: BlocSelector<HomeViewController, HomeViewState,
-                PickingLocationViewModel?>(
+                PickingLocationModel?>(
           bloc: homeViewModel,
           selector: (state) => state.destination,
           builder: (context, destination) {
@@ -229,7 +219,7 @@ profile viewmodel
 
   Widget _buildLoadTypeField(BuildContext context) {
     return BlocSelector<HomeViewController, HomeViewState,
-        CargoCategoryViewModel?>(
+        CargoCategoryModel?>(
       bloc: homeViewModel,
       selector: (state) => state.loadType,
       builder: (context, loadType) {
@@ -248,7 +238,7 @@ profile viewmodel
 
   Widget _buildTruckSizeField(BuildContext context) {
     return BlocSelector<HomeViewController, HomeViewState,
-        CargoSubCategoryViewModel?>(
+        CargoSubCategoryModel?>(
       bloc: homeViewModel,
       selector: (state) => state.truckSize,
       builder: (context, truckSize) {
@@ -394,6 +384,7 @@ profile viewmodel
                   ),
                   const Gap(10),
                   ...state.bookingRequests.map((item) => BookingRequestCard(
+                    
                         key: ValueKey(item.id),
                         bookingRequest: item,
                         shomMoreTap: () {
@@ -435,8 +426,7 @@ profile viewmodel
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 height: 20.8 / 20,
-                fontSize:
-                    Responsive.getResponsiveFontSize(context, fontSize: 18)),
+                fontSize:Responsive.getResponsiveFontSize(context, fontSize: 18)),
           ),
 
           //TextColor: Colors.white,

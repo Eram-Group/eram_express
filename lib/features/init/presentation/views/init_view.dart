@@ -1,10 +1,8 @@
 import 'dart:math';
-
 import 'package:eram_express_shared/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../app/di.dart';
 import 'init_view_model.dart';
 
@@ -12,9 +10,9 @@ class InitView extends StatelessWidget {
   static const String route = '/';
 
   final viewModel = InitViewModel(
-    authenticationRepository: authenticationRepository,
-    configurationsRepository: configurationsRepository,
-  );
+      authenticationRepository: authenticationRepository,
+      configurationsRepository: configurationsRepository,
+      );
 
   InitView({super.key}) {
     viewModel.init();

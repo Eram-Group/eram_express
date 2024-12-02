@@ -3,11 +3,8 @@ import 'package:either_dart/either.dart';
 import 'package:eram_express/app/di.dart';
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
-import 'package:eram_express/features/google_map/domain/usecases/get_current_location_usecase.dart';
-import 'package:eram_express/features/google_map/domain/usecases/get_place_details_usaecase.dart';
 import 'package:eram_express/features/google_map/presentation/views/google_map_view_controller.dart';
 import 'package:eram_express/features/google_map/presentation/views/widgets/search_button.dart';
-import 'package:eram_express/features/home/presentation/viewsmodel/picking_location_view_model.dart';
 import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
@@ -22,7 +19,7 @@ import 'google_map_view_state.dart';
 import 'package:provider/provider.dart';
 
 class GoogleMapViewArguments {
-  final PointViewModel? initialAddress;
+  final Point? initialAddress;
 
   const GoogleMapViewArguments({
     this.initialAddress,
@@ -38,19 +35,17 @@ class GoogleMapView extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         return GoogleMapViewController(
-            locationService: locationservice,
-            getCurrentLocationUsecase:
-                GetCurrentLocationUsecase(locationservice: locationservice),
-            getPlaceDetailsUsaecase: GetPlaceDetailsUsaecase(
-                authenticationRepository: authenticationRepository,
-                googleMapRepository: googlemapRepository))
+            locationService: locationService,
+            googleMapRepository: googleMapRepository
+           
+                )
           ..setInitialCameraPostion(googleMapViewArguments?.initialAddress);
       },
       child: BlocBuilder<GoogleMapViewController, GoogleMapViewState>(
         //علشان امنع ان مع كل حركه ترجع ت build
         buildWhen: (previous, current) {
           return current is GoogleMapViewStateUpdated ||
-              current is GoogleMapViewStateloading;
+              current is GoogleMapViewStateLoading;
         },
         builder: (context, state) {
           logger.debug("GoogleMap is being rebuilt with state: $state");
@@ -58,7 +53,7 @@ class GoogleMapView extends StatelessWidget {
               child: Scaffold(
             resizeToAvoidBottomInset: false,
             body: Opacity(
-              opacity: state is GoogleMapViewStateloading ? 0.5 : 1,
+              opacity: state is GoogleMapViewStateLoading ? 0.5 : 1,
               child: Stack(
                 children: [
                   GoogleMap(
@@ -79,7 +74,7 @@ class GoogleMapView extends StatelessWidget {
                         .read<GoogleMapViewController>()
                         .kInitialPosition,
                   ),
-                  if (!(state is GoogleMapViewStateloading)) ...[
+                  if (!(state is GoogleMapViewStateLoading)) ...[
                     Center(
                       child: _buildMarker(),
                     ),
@@ -175,7 +170,7 @@ class GoogleMapView extends StatelessWidget {
                                   if (state is PlaceDetailsLoaded)
                                     Column(children: [
                                       Text(
-                                        state.placeDetails.address,
+                                        state.placeDetails.formattedAddress,
                                         style: TextStyle(
                                           fontSize:
                                               Responsive.getResponsiveFontSize(
@@ -194,10 +189,10 @@ class GoogleMapView extends StatelessWidget {
                                         text: context.tt(
                                             "Select location", "حدد الموقع"),
                                         onPressed: () {
-                                          PickingLocationViewModel
+                                          PickingLocationModel
                                               pickingLocation =
-                                              PickingLocationViewModel(
-                                                  point: PointViewModel(
+                                              PickingLocationModel(
+                                                  point: Point(
                                                     longitude: context
                                                         .read<
                                                             GoogleMapViewController>()
@@ -214,7 +209,7 @@ class GoogleMapView extends StatelessWidget {
                                                         .latitude,
                                                   ),
                                                   address: state
-                                                      .placeDetails.address);
+                                                      .placeDetails.formattedAddress);
                                           Navigator.of(context).pop(
                                               pickingLocation); // Pop the current route and return the picking location
                                         },

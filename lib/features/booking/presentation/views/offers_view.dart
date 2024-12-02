@@ -1,4 +1,5 @@
-import 'package:eram_express/features/booking/presentation/views/viewsmodel/bid_view_model.dart';
+
+import 'package:eram_express/features/booking/presentation/modals/accepet_order_modal.dart';
 import 'package:eram_express/features/booking/presentation/widgets/accept_offer_card.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
@@ -10,7 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/app_colors.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
-import '../../domain/modals/accepet_order_modal.dart';
+import '../../data/models/bid_model.dart';
+
+
 import 'booking_request_view_controller.dart';
 import 'booking_request_view_state.dart';
 
@@ -73,7 +76,7 @@ class OffersView extends StatelessWidget {
             },
             builder: (context, state) {
               logger.debug("enter in offerview");
-              List<BidViewModel> bids =
+              List<BidModel> bids =
                   arguments.cubit.getBidding(arguments.id);
 
               return bids.isNotEmpty
@@ -146,7 +149,7 @@ class OffersView extends StatelessWidget {
             )));
   }
 
-  Widget _buildBiddings(BuildContext context, List<BidViewModel> biddings) {
+  Widget _buildBiddings(BuildContext context, List<BidModel> biddings) {
     return Column(
       children: biddings
           .map((bidding) => AcceptOfferCard(
