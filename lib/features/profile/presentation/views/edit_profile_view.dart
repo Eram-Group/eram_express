@@ -1,6 +1,5 @@
 import 'package:eram_express/app/app.dart';
 import 'package:eram_express/app/di.dart';
-import 'package:eram_express/features/customer/domain/entities/customer_entity.dart';
 import 'package:eram_express/features/profile/presentation/widgets/customappbar.widgets.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
@@ -12,12 +11,13 @@ import 'package:gap/gap.dart';
 import '../../../../app/navigation.dart';
 import '../../../Common/widgets/custom_text_field.dart';
 import '../../../authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
+import '../../../customer/data/models/customer_model.dart';
 import 'edit_profile_view_model.dart';
 import 'edit_profile_view_state.dart';
 import 'profile_presentation/profile_view_model.dart';
 
 class EditProfileViewArguments {
-  final CustomerEntity currentCustomer;
+  final CustomerModel currentCustomer;
 
   const EditProfileViewArguments({
     required this.currentCustomer,

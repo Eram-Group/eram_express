@@ -2,13 +2,11 @@ import 'package:eram_express/features/profile/presentation/views/profile_present
 import 'package:eram_express/features/profile/presentation/views/support_view.dart';
 import 'package:eram_express/features/profile/presentation/views/terms_presentation/terms_view.dart';
 import 'package:flutter/material.dart';
-
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
 import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
-import '../features/onboarding/presentation/views/onboarding.view.dart';
 import '../features/profile/presentation/views/about_us_presentation/about_us_view.dart';
 import '../features/profile/presentation/views/contact_us_presentation/contact_view.dart';
 import '../features/profile/presentation/views/edit_profile_view.dart';
@@ -25,8 +23,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
   if (name == InitView.route) {
     page = InitView();
-  } else if (name == OnboardingView.route) {
-    page = const OnboardingView();
+  
   } else if (name == LoginView.route) {
     page = LoginView();
   } else if (name == OtpView.route) {

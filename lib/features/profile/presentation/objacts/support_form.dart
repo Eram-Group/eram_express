@@ -1,9 +1,7 @@
 import 'dart:io';
-
-import '../entities/support_type_entity.dart';
-
+import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 class SupportForm {
-  final SupportTypeEntity? selectedReason;
+  final SupportTypeModel? selectedReason;
   final String? detailReason;
   final File? picture;
 

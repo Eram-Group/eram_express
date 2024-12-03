@@ -1,8 +1,9 @@
 import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 
-import '../../../authentication/domain/repositories/authentication_repository.dart';
-import '../entities/customer_entity.dart';
+import '../../../authentication/data/respositories/authentication_repository.dart';
+
+import '../models/customer_model.dart';
 import '../objects/update_customer_form_data.dart';
 import '../repositories/customer_repository.dart';
 
@@ -16,7 +17,7 @@ class CustomerService {
   })  : _customerRepository = customerRepository,
         _authenticationRepository = authenticationRepository;
 
-  Future<Either<ApiError, CustomerEntity>> updateProfile(
+  Future<Either<ApiError, CustomerModel>> updateProfile(
     {
     required UpdateCustomerFormData data,
   }) async {

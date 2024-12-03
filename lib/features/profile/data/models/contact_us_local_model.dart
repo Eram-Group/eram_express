@@ -3,12 +3,12 @@ class ContactUsViewModel {
   final String title;
   final String? subtitle;
   final void Function() onTap;
-  final Widget iconsvg;
+  final Widget iconSvg;
 
   ContactUsViewModel({
     required this.title,
     this.subtitle,
     required this.onTap,
-    required this.iconsvg,
+    required this.iconSvg,
   });
 }

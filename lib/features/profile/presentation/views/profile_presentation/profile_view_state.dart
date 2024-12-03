@@ -1,14 +1,15 @@
 import 'package:equatable/equatable.dart';
-import 'package:eram_express/features/customer/domain/entities/customer_entity.dart';
+
+import '../../../../customer/data/models/customer_model.dart';
 
 class ProfileViewState extends Equatable {
-  final CustomerEntity? currentCustomer;
+  final CustomerModel? currentCustomer;
   const ProfileViewState({this.currentCustomer});
   @override
   List<Object?> get props => [currentCustomer, ];
 
   ProfileViewState copyWith({
-    CustomerEntity? currentCustomer,
+    CustomerModel? currentCustomer,
     
   }) {
     return ProfileViewState(

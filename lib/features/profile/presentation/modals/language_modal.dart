@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../../data/models/language_model.dart';
-import '../../presentation/views/language_presentation/language_view_model.dart';
-import '../../presentation/views/language_presentation/language_view_state.dart';
-import '../../presentation/widgets/language_item.dart';
+import '../views/language_presentation/language_view_model.dart';
+import '../views/language_presentation/language_view_state.dart';
+import '../widgets/language_item.dart';
 
 class LanguageModal extends StatelessWidget {
   const LanguageModal({Key? key}) : super(key: key);

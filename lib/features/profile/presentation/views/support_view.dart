@@ -1,6 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:eram_express/app/di.dart';
-import 'package:eram_express/features/authentication/presentation/views/modals/registered_successfully_modal.dart';
+import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 import 'package:eram_express/features/profile/presentation/support_presentation/support_view_model.dart';
 import 'package:eram_express/features/profile/presentation/widgets/customappbar.widgets.dart';
 import 'package:eram_express_shared/core/app_colors.dart';
@@ -9,13 +9,9 @@ import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-
-import '../../domain/entities/support_type_entity.dart';
-import '../../domain/modals/failed_request_modal.dart';
-import '../../domain/modals/success_request_modal.dart';
+import '../modals/failed_request_modal.dart';
+import '../modals/success_request_modal.dart';
 import '../support_presentation/support_view_state.dart';
 
 class SupportView extends StatelessWidget {
@@ -26,12 +22,10 @@ class SupportView extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: context.tt("Support", "الدعم")),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24)
-            .copyWith(bottom: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24).copyWith(bottom: 0),
         child: BlocProvider(
           create: (context) =>
-              SupportViewModel(profileRepository: profileRepository)
-                ..getSupportTypes(),
+              SupportViewModel(profileRepository: profileRepository)..getSupportTypes(),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,14 +40,13 @@ class SupportView extends StatelessWidget {
                         Responsive.getResponsiveFontSize(context, fontSize: 16),
                     fontFamily: 'outfit',
                     fontWeight: FontWeight.w500,
-                    height: 24.6 /
-                        Responsive.getResponsiveFontSize(context, fontSize: 16),
+                    height: 24.6 /Responsive.getResponsiveFontSize(context, fontSize: 16),
                     letterSpacing: -0.32,
-                    color: Color(0xffA7A9B7),
+                    color:const Color(0xffA7A9B7),
                   ),
                 ),
                 _title(context.tt("Select reason", "اختار السبب"), context),
-                _builddropdown(context),
+               _buildDropdown(context),
                 _title(context.tt("Detail message", "تفاصيل الرسالة"), context),
                 _description(),
                 _buildSubmitButton(context)
@@ -161,7 +154,7 @@ Widget _buildSubmitButton(BuildContext context) {
   );
 }
 
-Widget _builddropdown(BuildContext context) {
+Widget _buildDropdown(BuildContext context) {
   return BlocBuilder<SupportViewModel, SupportViewState>(
       buildWhen: (previous, current) =>
           current is SupportFormLoad &&
@@ -172,7 +165,7 @@ Widget _builddropdown(BuildContext context) {
         if (state is SupportViewErrorState) {
           return Center(
             child: Text(
-              state.errormessege,
+              state.errorMessage,
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: 'outfit',
@@ -195,12 +188,12 @@ Widget _builddropdown(BuildContext context) {
 
 Widget _dropdown(
   BuildContext context,
-  List<SupportTypeEntity> reasonList,
-  SupportTypeEntity? selectReason,
+  List<SupportTypeModel> reasonList,
+  SupportTypeModel? selectReason,
 ) {
   logger.debug("rebuild");
   return DropdownButtonHideUnderline(
-    child: DropdownButton2<SupportTypeEntity>(
+    child: DropdownButton2<SupportTypeModel>(
       isExpanded: true,
       hint: Text(
         selectReason == null
@@ -220,7 +213,7 @@ Widget _dropdown(
         context.read<SupportViewModel>().onSelectReasonClicked(value);
       },
       items: reasonList
-          .map((item) => DropdownMenuItem<SupportTypeEntity>(
+          .map((item) => DropdownMenuItem<SupportTypeModel>(
                 value: item,
                 child: Text(
                   item.label,
@@ -259,7 +252,7 @@ Widget _dropdown(
           borderRadius: BorderRadius.circular(14),
           color: Colors.white,
         ),
-        offset: Offset(0, -5),
+        offset: const Offset(0, -5),
         scrollbarTheme: ScrollbarThemeData(
           radius: const Radius.circular(20),
           thickness: MaterialStateProperty.all(6),

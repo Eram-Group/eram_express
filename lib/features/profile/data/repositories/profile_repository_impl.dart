@@ -1,18 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:either_dart/src/either.dart';
-import 'package:eram_express/app/di.dart';
 import 'package:eram_express/features/profile/data/models/contact_us_model.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 import 'package:eram_express/features/profile/data/models/terms_model.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
-import 'package:eram_express_shared/core/api/dio_api_client.dart';
-
-import 'package:eram_express_shared/core/app_error.dart';
-
 import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
-import '../../domain/objacts/support_form.dart';
-import '../../domain/repositories/profile_repository.dart';
+import '../../presentation/objacts/support_form.dart';
+import 'profile_repository.dart';
 import '../data_sources/profile_remote_data_source.dart';
 import '../models/about_us_model.dart';
 
@@ -25,27 +19,27 @@ class ProfileRepositoryImpl extends ProfileRepository {
   })  : _profileRemoteDataSource = profileRemoteDataSource,
         _tokensLocalDataSource = tokensLocalDataSource;
 
-  @override
+@override
   Future<Either<ApiError, AboutUsModel>> getAboutUs() async {
-    final Response = _profileRemoteDataSource.getAboutUs();
-    return Response;
+    final response = _profileRemoteDataSource.getAboutUs();
+    return response;
   }
-
-  Future<Either<ApiError, TermsModel>> getterms() async {
-    final Response = _profileRemoteDataSource.getterms();
-    return Response;
+@override
+  Future<Either<ApiError, TermsModel>> getTerms() async {
+    final response = _profileRemoteDataSource.getTerms();
+    return response;
   }
-
+@override
   Future<Either<ApiError, ContactUsModel>> getContactUs() async {
-    final Response = _profileRemoteDataSource.getContactUs();
-    return Response;
+    final response = _profileRemoteDataSource.getContactUs();
+    return response;
   }
-
+@override
   Future<Either<ApiError, List<SupportTypeModel>>> getSupportType() async {
-    final Response = _profileRemoteDataSource.getSupportType();
-    return Response;
+    final response = _profileRemoteDataSource.getSupportType();
+    return response;
   }
-
+@override
   Future<Either<ApiError, Null>> postSupportForm(SupportForm data) async {
     final accessToken = await _tokensLocalDataSource.accessToken;
     if (accessToken == null) {
@@ -58,7 +52,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
         ),
       );
     }
-    final Response = _profileRemoteDataSource.postSupportForm(data, accessToken);
-    return Response;
+    final response = _profileRemoteDataSource.postSupportForm(data, accessToken);
+    return response;
   }
 }

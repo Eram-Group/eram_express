@@ -1,9 +1,9 @@
-import 'package:eram_express/features/customer/domain/services/customer_service.dart';
+import 'package:eram_express/features/customer/data/services/customer_service.dart';
 import 'package:eram_express/features/profile/presentation/views/profile_presentation/profile_view_state.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../app/navigation.dart';
-import '../../../../authentication/domain/repositories/authentication_repository.dart';
+import '../../../../authentication/data/respositories/authentication_repository.dart';
 
 import '../edit_profile_view.dart';
 

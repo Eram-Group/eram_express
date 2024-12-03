@@ -4,15 +4,12 @@ import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../../app/di.dart';
 import '../../../data/models/contact_us_model.dart';
-import '../../../domain/entities/contact_us_local_entity.dart';
+import '../../../data/models/contact_us_local_model.dart';
 import '../../widgets/customappbar.widgets.dart';
 import 'contact_view_model.dart';
 import 'contact_view_state.dart';
@@ -80,7 +77,7 @@ Widget _buildsquareContainer(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        contactItem.iconsvg,
+        contactItem.iconSvg,
         const Gap(10),
         Text(
           contactItem.title,
@@ -130,7 +127,7 @@ Widget _buildSupportContiner(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Row(
         children: [
-          contactItems[0].iconsvg,
+          contactItems[0].iconSvg,
           const Gap(20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,11 +211,11 @@ Widget _buildSocailMediaAccounts(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GestureDetector(
                     onTap: contactItems[index].onTap,
-                    child: contactItems[index].iconsvg));
+                    child: contactItems[index].iconSvg));
           }));
 }
 
-//TODo Moveit to Shareddd
+//TODo Move it to Shared
 
 TextStyle titleContact(BuildContext context, {double fontSize = 22}) {
   return TextStyle(

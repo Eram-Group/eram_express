@@ -9,7 +9,7 @@ import 'package:eram_express_shared/presentation/widgets/status_icon_widgets.dar
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../presentation/views/contact_us_presentation/contact_view.dart';
+import '../views/contact_us_presentation/contact_view.dart';
 
 class SuccessfulRequestModal extends StatelessWidget {
   const SuccessfulRequestModal({super.key});

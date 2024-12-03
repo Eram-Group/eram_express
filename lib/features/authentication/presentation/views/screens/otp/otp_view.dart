@@ -8,7 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../../../../../app/di.dart';
-import '../../../../domain/objects/login_form_data.dart';
+import '../../../objects/login_form_data.dart';
 import 'otp_view_model.dart';
 import 'otp_view_state.dart';
 

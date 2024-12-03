@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../domain/entities/menu_option_entity.dart';
-import '../../../domain/modals/language_modal.dart';
+import '../../../data/models/menu_option_model.dart';
+import '../../modals/language_modal.dart';
 import '../../widgets/list_title_card_widgets.dart';
 import '../../widgets/profile_header_widgets.dart';
 import '../about_us_presentation/about_us_view.dart';
@@ -18,15 +18,15 @@ import 'profile_view_model.dart';
 class ProfileView extends StatelessWidget {
   static const String route = "/profile";
   ProfileView({super.key});
-  List<MenuOptionEntity> menuSettings = [
-    MenuOptionEntity(
+  List<MenuOptionModel> menuSettings = [
+    MenuOptionModel(
       title: "Language",
       onTap: () {
         LanguageModal().show(NavigationService.globalContext);
       },
       icon: const Icon(Iconsax.global),
     ),
-    MenuOptionEntity(
+    MenuOptionModel(
         title: "Notification",
         onTap: () {
           // Navigate to the Notification screen or perform an action
@@ -35,8 +35,8 @@ class ProfileView extends StatelessWidget {
           asset: "Notification",
         ))
   ];
-  List<MenuOptionEntity> MenuAboutUs = [
-    MenuOptionEntity(
+  List<MenuOptionModel> MenuAboutUs = [
+    MenuOptionModel(
       title: "Terms&Condiotions",
       icon: const SvgIcon(
         asset: "terms",
@@ -46,7 +46,7 @@ class ProfileView extends StatelessWidget {
             .pushNamed(TermsView.route);
       },
     ),
-    MenuOptionEntity(
+    MenuOptionModel(
       title: "Contact Us",
       icon: const SvgIcon(asset: "contact"),
       onTap: () {
@@ -54,7 +54,7 @@ class ProfileView extends StatelessWidget {
             .pushNamed(ContactUsView.route);
       },
     ),
-    MenuOptionEntity(
+    MenuOptionModel(
       title: "About Us",
       icon: const SvgIcon(
         asset: "about",
@@ -65,15 +65,15 @@ class ProfileView extends StatelessWidget {
       },
     ),
   ];
-  List<MenuOptionEntity> MenuOther = [
-    MenuOptionEntity(
+  List<MenuOptionModel> MenuOther = [
+    MenuOptionModel(
       title: "Share",
       icon: const SvgIcon(
         asset: "Share",
       ),
       onTap: () {},
     ),
-    MenuOptionEntity(
+    MenuOptionModel(
       title: "Get The Latest Version",
       icon: SvgIcon(
         asset: "last_version",
@@ -132,7 +132,7 @@ class ProfileView extends StatelessWidget {
 }
 
 class BuildItems extends StatelessWidget {
-  final List<MenuOptionEntity> items;
+  final List<MenuOptionModel> items;
   BuildItems({required this.items});
 
   @override

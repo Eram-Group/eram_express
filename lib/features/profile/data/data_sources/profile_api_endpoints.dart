@@ -37,7 +37,7 @@ final supportEndpoint = ApiEndpoint(
         .toList(),
   },
 );
-final contacttEndpoint = ApiEndpoint(
+final contactEndpoint = ApiEndpoint(
   path: "/contact/",
   method: HttpMethod.post,
   responseHandlers: {

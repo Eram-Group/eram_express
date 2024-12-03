@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/entities/menu_option_entity.dart';
+import '../../data/models/menu_option_model.dart';
 
 class listtitleCard extends StatelessWidget {
-  MenuOptionEntity menuOption;
+  MenuOptionModel menuOption;
   listtitleCard({required this.menuOption});
 
   @override

@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:eram_express/app/di.dart';
-import 'package:eram_express/features/customer/domain/services/customer_service.dart';
+import 'package:eram_express/features/customer/data/services/customer_service.dart';
 import 'package:eram_express/features/profile/presentation/views/profile_presentation/profile_view.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/image_picker_modal/image_picker_modal.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../customer/domain/objects/update_customer_form_data.dart';
+import '../../../customer/data/objects/update_customer_form_data.dart';
 import 'edit_profile_view.dart';
 import 'edit_profile_view_state.dart';
 

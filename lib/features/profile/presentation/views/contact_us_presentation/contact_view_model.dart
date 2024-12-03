@@ -4,12 +4,12 @@ import 'package:eram_express_shared/core/utils/responsive.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eram_express/features/profile/domain/repositories/profile_repository.dart';
+import 'package:eram_express/features/profile/data/repositories/profile_repository.dart';
 import 'package:eram_express/features/profile/presentation/views/about_us_presentation/about_us_view_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/models/contact_us_model.dart';
-import '../../../domain/entities/contact_us_local_entity.dart';
+import '../../../data/models/contact_us_local_model.dart';
 import '../profile_presentation/profile_view.dart';
 import 'contact_view_state.dart';
 
@@ -78,7 +78,7 @@ class ContactUsItems {
       onTap: () {
         Navigator.of(context).pushNamed(SupportView.route);
       },
-      iconsvg: SvgIcon(
+      iconSvg: SvgIcon(
         asset: 'support',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
@@ -99,7 +99,7 @@ class ContactUsItems {
       },
       subtitle: context.tt("Our team is on the line\n Mon-Fri 9-17",
           "فريقنا متاح عبر الخط\nمن الإثنين إلى الجمعة • 9-17)"),
-      iconsvg: SvgIcon(
+      iconSvg: SvgIcon(
         asset: 'call_us',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
@@ -119,7 +119,7 @@ class ContactUsItems {
         );
       },
       subtitle: email,
-      iconsvg: SvgIcon(
+      iconSvg: SvgIcon(
         asset: 'email',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
@@ -131,7 +131,7 @@ class ContactUsItems {
     return ContactUsViewModel(
       title: context.tt("website", 'موقعنا'),
       onTap: () {},
-      iconsvg: SvgIcon(
+      iconSvg: SvgIcon(
         asset: 'new_website',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
@@ -145,7 +145,7 @@ class ContactUsItems {
       onTap: () async {
         launchUrl(Uri.parse(instagram));
       },
-      iconsvg: SvgIcon(
+      iconSvg: SvgIcon(
         asset: 'instagram',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
@@ -159,7 +159,7 @@ class ContactUsItems {
       onTap: () async {
         launchUrl(Uri.parse(facebook));
       },
-      iconsvg: SvgIcon(
+      iconSvg: SvgIcon(
         asset: 'facebook',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
@@ -171,7 +171,7 @@ class ContactUsItems {
     return ContactUsViewModel(
       title: context.tt('Tiktok', "تيك توك"),
       onTap: () async {},
-      iconsvg: SvgIcon(
+      iconSvg: SvgIcon(
         asset: 'call_us',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),

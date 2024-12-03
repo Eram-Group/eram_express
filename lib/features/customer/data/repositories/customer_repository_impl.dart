@@ -1,10 +1,9 @@
 import 'package:either_dart/either.dart';
+import 'package:eram_express/features/customer/data/models/customer_model.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
-
 import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
-import '../../domain/entities/customer_entity.dart';
-import '../../domain/objects/update_customer_form_data.dart';
-import '../../domain/repositories/customer_repository.dart';
+import '../objects/update_customer_form_data.dart';
+import 'customer_repository.dart';
 import '../data_sources/remote/customer_remote_data_source.dart';
 
 class CustomerRepositoryImpl implements CustomerRepository {
@@ -18,7 +17,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
         _tokensLocalDataSource = tokensLocalDataSource;
 
   @override
-  Future<CustomerEntity?> getAuthenticatedCustomer() async {
+  Future<CustomerModel?> getAuthenticatedCustomer() async {
     final accessToken = await _tokensLocalDataSource.accessToken;
     if (accessToken == null) return null;
 
@@ -27,12 +26,13 @@ class CustomerRepositoryImpl implements CustomerRepository {
 
     return response.fold(
       (error) => null,
-      (data) => CustomerEntity.fromModel(data),
+      (data) => data,
     );
   }
 
   @override
-  Future<Either<ApiError, CustomerEntity>> updateProfile(
+  Future<Either<ApiError, CustomerModel
+  >> updateProfile(
       UpdateCustomerFormData data) async {
     final accessToken = await _tokensLocalDataSource.accessToken;
     if (accessToken == null) {
@@ -52,7 +52,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
     return updatedCustomer.fold(
       (error) => Left(error),
       (data) {
-        return Right(CustomerEntity.fromModel(data));
+        return Right(data);
       },
     );
   }

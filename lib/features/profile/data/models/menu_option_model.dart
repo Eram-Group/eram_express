@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MenuOptionEntity {
+class MenuOptionModel {
   final String title;
   final void Function() onTap;
   final Widget icon;
 
-  MenuOptionEntity({
+  MenuOptionModel({
     required this.title,
     required this.onTap,
     required this.icon,

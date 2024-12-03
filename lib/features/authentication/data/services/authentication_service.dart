@@ -1,9 +1,9 @@
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 
-import '../../../customer/domain/repositories/customer_repository.dart';
-import '../objects/otp_verification_data.dart';
-import '../repositories/authentication_repository.dart';
+import '../../../customer/data/repositories/customer_repository.dart';
+import '../../presentation/objects/otp_verification_data.dart';
+import '../respositories/authentication_repository.dart';
 
 class AuthenticationService {
   final AuthenticationRepository _authenticationRepository;

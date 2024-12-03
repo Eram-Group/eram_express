@@ -1,12 +1,12 @@
 import 'package:either_dart/either.dart';
+import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/support_type_entity.dart';
-import '../../domain/objacts/support_form.dart';
-import '../../domain/repositories/profile_repository.dart';
+import '../objacts/support_form.dart';
+import '../../data/repositories/profile_repository.dart';
 import 'support_view_state.dart';
 
 class SupportViewModel extends Cubit<SupportViewState> {
@@ -22,19 +22,18 @@ class SupportViewModel extends Cubit<SupportViewState> {
     result.fold(
       (error) {
         emit(SupportViewErrorState(
-            errormessege: "Error in loading support types"));
+           errorMessage: "Error in loading support types"));
       },
       (data) {
-        //logger.debug(data.length.toString());
-
+      
         emit(SupportFormLoad().copyWith(
-            supportTypes: data.map((item) => item.toEntity()).toList()));
-        //logger.debug(data.length.toString());
+            supportTypes: data));
+
       },
     );
   }
 
-  void onSelectReasonClicked(SupportTypeEntity? selectedReason) {
+  void onSelectReasonClicked(SupportTypeModel? selectedReason) {
     {
       if (state is SupportFormLoad) {
         final currentState = state as SupportFormLoad;

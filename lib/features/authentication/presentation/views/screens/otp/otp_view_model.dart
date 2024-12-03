@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../home/presentation/views/home_view.dart';
-import '../../../../domain/objects/otp_verification_data.dart';
-import '../../../../domain/services/authentication_service.dart';
+import '../../../objects/otp_verification_data.dart';
+import '../../../../data/services/authentication_service.dart';
 import 'otp_view_state.dart';
 
 class OtpViewModel extends Cubit<OtpViewState> {

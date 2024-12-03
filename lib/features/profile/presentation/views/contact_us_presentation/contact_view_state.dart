@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:eram_express/features/profile/data/models/about_us_model.dart';
-import 'package:eram_express/features/profile/domain/entities/contact_us_local_entity.dart';
+import 'package:eram_express/features/profile/data/models/contact_us_local_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../data/models/contact_us_model.dart';

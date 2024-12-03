@@ -1,5 +1,3 @@
-import 'package:eram_express/features/profile/domain/entities/support_type_entity.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
 
 class SupportTypeModel {
   final String value;
@@ -14,7 +12,5 @@ class SupportTypeModel {
     );
   }
 
-  SupportTypeEntity toEntity() {
-    return SupportTypeEntity(value: this.value, label: this.label);
-  }
+ 
 }

@@ -3,23 +3,22 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
-import 'package:eram_express/features/profile/domain/entities/support_type_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 abstract class SupportViewState  {}
-class SupportViewloadingState extends SupportViewState {
+class SupportViewLoadingState extends SupportViewState {
 
 }
 
-class SupportViewintalState extends SupportViewState {
+class SupportViewInitialState extends SupportViewState {
 
 }
 
 
 class SupportViewErrorState extends SupportViewState 
 {
-  String errormessege;
-  SupportViewErrorState({required this.errormessege});
+  String errorMessage;
+  SupportViewErrorState({required this.errorMessage});
 
 }
 class SupportFormErrorState extends SupportViewState {
@@ -37,8 +36,8 @@ class SupportLoadingState extends SupportViewState {
 
 
 class SupportFormLoad extends SupportViewState {
-  final List<SupportTypeEntity> supportTypes;
-  final SupportTypeEntity? selectedReason;
+  final List<SupportTypeModel> supportTypes;
+  final SupportTypeModel? selectedReason;
   final String? detailReason;
   final File? picture;
   final bool enabled;
@@ -52,8 +51,8 @@ class SupportFormLoad extends SupportViewState {
   });
 
   SupportFormLoad copyWith({
-    List<SupportTypeEntity>? supportTypes,
-    SupportTypeEntity? selectedReason,
+    List<SupportTypeModel>? supportTypes,
+    SupportTypeModel? selectedReason,
     String? detailReason,
     File? picture,
     bool? enabled,

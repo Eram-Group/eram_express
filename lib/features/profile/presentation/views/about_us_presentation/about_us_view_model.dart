@@ -1,6 +1,6 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eram_express/features/profile/domain/repositories/profile_repository.dart';
+import 'package:eram_express/features/profile/data/repositories/profile_repository.dart';
 import 'package:eram_express/features/profile/presentation/views/about_us_presentation/about_us_view_state.dart';
 
 class AboutUsViewModel extends Cubit<AboutUsViewState> {
