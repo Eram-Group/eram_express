@@ -1,10 +1,9 @@
-import 'package:either_dart/either.dart';
-import 'package:eram_express/features/authentication/presentation/objects/verify_otp_response_wrapper.dart';
-import 'package:eram_express_shared/core/app_error.dart';
+
 import 'package:eram_express_shared/core/utils/logger.dart';
 import '../../../customer/data/models/customer_model.dart';
 import '../../../customer/data/repositories/customer_repository.dart';
 import '../../presentation/objects/otp_verification_data.dart';
+import '../models/verify_otp_response_model.dart';
 import 'authentication_repository.dart';
 import '../data_sources/authentication/remote/authentication_remote_data_source.dart';
 import '../data_sources/tokens/local/tokens_local_data_source.dart';
@@ -44,34 +43,34 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       await _tokensLocalDataSource.clearTokens();
       _authenticatedCustomer = null;
-      return const Right(null);
-    } catch (e) {
-      return Left(
+     
+    } 
+    catch (e) 
+    {
+    
+      /*
         AppError(
           title: 'Failed to logout',
           message: e.toString(),
         ),
-      );
+        */
+      
     }
   }
 
   @override
   sendOtp(String phoneNumber) async {
     final response = await _authenticationRemoteDataSource.sendOtp(phoneNumber);
-    return response.fold(
-      (error) => Left(error),
-      (data) => const Right(null),
-    );
+    
   }
 
   @override
   verifyOtp(OtpVerificationData data) async {
     final response = await _authenticationRemoteDataSource.verifyOtp(data);
 
-    return response.fold(
-      (error) => Left(error),
-      (data) async {
-        final response = data.response;
+    return response;
+    /*
+    final response = data.response;
 
         await _tokensLocalDataSource.saveTokens(
           response.accessToken,
@@ -87,13 +86,22 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
             response: customer,
           ),
         );
-      },
-    );
+        */
   }
 
   @override
   void updateAuthenticatedCustomer(CustomerModel data) {
     logger.debug(_authenticatedCustomer!.fullName);
     _authenticatedCustomer = data;
+  }
+ @override
+  void savingToken( VerifyOtpResponseModel response) async
+  {
+     await _tokensLocalDataSource.saveTokens(
+          response.accessToken,
+          response.refreshToken,);
+
+        final customer =response.customer;
+        _authenticatedCustomer = customer;
   }
 }

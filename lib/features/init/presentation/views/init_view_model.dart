@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../authentication/data/respositories/authentication_repository.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
-import '../../../home/presentation/views/home_view.dart';
 import '../../../profile/presentation/views/profile_presentation/profile_view.dart';
 
 class InitViewModel extends Cubit<bool> {
@@ -20,7 +19,7 @@ class InitViewModel extends Cubit<bool> {
 
   Future<void> init() async {
     final results = await Future.wait([
-      _configurationsRepository.countries,
+      _configurationsRepository.getCountries(),
       _authenticationRepository.isAuthenticated,
     ]);
 

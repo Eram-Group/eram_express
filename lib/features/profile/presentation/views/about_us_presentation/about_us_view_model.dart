@@ -1,7 +1,8 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eram_express/features/profile/data/repositories/profile_repository.dart';
 import 'package:eram_express/features/profile/presentation/views/about_us_presentation/about_us_view_state.dart';
+
+import '../../../data/repositories/profile_repository_impl.dart';
 
 class AboutUsViewModel extends Cubit<AboutUsViewState> {
   final ProfileRepository _profileRepository;
@@ -12,11 +13,17 @@ class AboutUsViewModel extends Cubit<AboutUsViewState> {
 
   Future<void> getAboutUs() async {
     emit(AboutUsViewLoadingState());
-    final result = await _profileRepository.getAboutUs();
-    result.fold(
-      (error) => emit(AboutUsViewErrorState()),
-      (data) => emit(AboutUsViewLoadedState(data)),
-    );
+    try
+    {
+            final result = await _profileRepository.getAboutUs();
+            emit(AboutUsViewLoadedState(result));
+    }
+    catch(e)
+    {
+             emit(AboutUsViewErrorState());
+    }
+  
+   
   }
 }
 

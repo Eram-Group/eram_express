@@ -1,10 +1,8 @@
 import 'package:eram_express/features/profile/data/data_sources/profile_api_remote_data_source.dart';
 import 'package:eram_express/features/profile/data/repositories/profile_repository_impl.dart';
-import 'package:eram_express/features/profile/data/repositories/profile_repository.dart';
 import 'package:eram_express_shared/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../features/authentication/data/data_sources/authentication/remote/authentication_api_remote_data_source.dart';
 import '../features/authentication/data/data_sources/tokens/local/tokens_secure_storage_local_data_source.dart';
 import '../features/authentication/data/respositories/authentication_repository_impl.dart';

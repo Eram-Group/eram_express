@@ -1,9 +1,5 @@
  import 'dart:io';
-import 'dart:ui';
-
-import 'package:equatable/equatable.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 abstract class SupportViewState  {}
 class SupportViewLoadingState extends SupportViewState {

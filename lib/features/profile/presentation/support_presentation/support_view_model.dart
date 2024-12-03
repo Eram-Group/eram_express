@@ -1,12 +1,8 @@
-import 'package:either_dart/either.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
-import 'package:eram_express_shared/core/api/dio_api_client.dart';
-import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/repositories/profile_repository_impl.dart';
 import '../objacts/support_form.dart';
-import '../../data/repositories/profile_repository.dart';
 import 'support_view_state.dart';
 
 class SupportViewModel extends Cubit<SupportViewState> {
@@ -17,20 +13,15 @@ class SupportViewModel extends Cubit<SupportViewState> {
         super(SupportLoadingState());
 
   Future<void> getSupportTypes() async {
-    final result = await _profileRepository.getSupportType();
-
-    result.fold(
-      (error) {
-        emit(SupportViewErrorState(
-           errorMessage: "Error in loading support types"));
-      },
-      (data) {
-      
-        emit(SupportFormLoad().copyWith(
-            supportTypes: data));
-
-      },
-    );
+    try
+    {
+        final result = await _profileRepository.getSupportType();
+        emit(SupportFormLoad().copyWith(supportTypes: result));
+    }
+    catch(e)
+    {
+       emit(SupportViewErrorState(errorMessage: "Error in loading support types"));
+    }
   }
 
   void onSelectReasonClicked(SupportTypeModel? selectedReason) {
@@ -62,16 +53,24 @@ class SupportViewModel extends Cubit<SupportViewState> {
     return false;
   }
 
-  void onSubmitClicked(BuildContext context) {
+  Future<void> onSubmitClicked(BuildContext context) async {
     if (state is SupportFormLoad) {
       final currentState = state as SupportFormLoad;
       SupportForm supportForm = SupportForm(
           selectedReason: currentState.selectedReason,
           detailReason: currentState.detailReason,
           picture: currentState.picture);
-      final result = _profileRepository.postSupportForm(supportForm);
-      result.fold((error) => emit(SupportFormErrorState()),
-          (data) => emit(SupportFormSucecessState()));
+          (data) => emit(SupportFormSucecessState());
+          try
+          {
+           await  _profileRepository.postSupportForm(supportForm);
+            emit(SupportFormSucecessState());
+
+          }
+          catch(e)
+          {
+                     emit(SupportFormErrorState());
+          }
     }
   }
 }

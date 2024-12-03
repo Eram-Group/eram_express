@@ -1,21 +1,21 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import '../../../customer/data/models/customer_model.dart';
 
-part 'verify_otp_response_model.freezed.dart';
-part 'verify_otp_response_model.g.dart';
+class VerifyOtpResponseModel {
+  final String accessToken;
+  final String refreshToken;
+  final CustomerModel customer;
 
-@freezed
-abstract class VerifyOtpResponseModel with _$VerifyOtpResponseModel {
-  const VerifyOtpResponseModel._();
+  VerifyOtpResponseModel({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.customer,
+  });
 
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  factory VerifyOtpResponseModel({
-    required String accessToken,
-    required String refreshToken,
-    required CustomerModel customer,
-  }) = _VerifyOtpResponseModel;
-
-  factory VerifyOtpResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$VerifyOtpResponseModelFromJson(json);
+  factory VerifyOtpResponseModel.fromJson(Map<String, dynamic> json) {
+    return VerifyOtpResponseModel(
+      accessToken: json["access_token"],
+      refreshToken: json["refresh_token"],
+      customer: CustomerModel.fromJson(json['customer']),
+    );
+  }
 }

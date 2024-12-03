@@ -1,11 +1,7 @@
 import 'dart:io';
-
-import 'package:either_dart/src/either.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 import 'package:eram_express/features/profile/data/models/terms_model.dart';
-import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
-
 import '../../presentation/objacts/support_form.dart';
 import '../models/about_us_model.dart';
 import '../models/contact_us_model.dart';
@@ -18,23 +14,23 @@ class ProfileApiRemoteDataSource implements ProfileRemoteDataSource {
       : _dioClient = dioClient;
 
 @override
-  Future<Either<ApiError, AboutUsModel>> getAboutUs() {
+  Future<AboutUsModel> getAboutUs() {
     return _dioClient.request(aboutUsEndpoint.prepare());
   }
 @override
-  Future<Either<ApiError, TermsModel>> getTerms() {
+  Future< TermsModel> getTerms() {
     return _dioClient.request(termsEndpoint.prepare());
   }
 @override
-  Future<Either<ApiError, ContactUsModel>> getContactUs() {
+  Future<ContactUsModel> getContactUs() {
     return _dioClient.request(contactUsEndpoint.prepare());
   }
 @override
-  Future<Either<ApiError, List<SupportTypeModel>>> getSupportType() {
+  Future<List<SupportTypeModel>> getSupportType() {
     return _dioClient.request(supportEndpoint.prepare());
   }
 @override
-  Future<Either<ApiError, Null>> postSupportForm(
+  Future<void> postSupportForm(
       SupportForm data, String accessToken) {
     return _dioClient.request(contactEndpoint.prepare(body: {
       "category": data.selectedReason!.value,

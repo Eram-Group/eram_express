@@ -269,7 +269,7 @@ class LoginView extends StatelessWidget {
           keyboardType: TextInputType.phone,
           inputFormatters: [
             if (state.selectedCountry != null)
-              state.selectedCountry!.numberFormatter,
+              state.selectedCountry!.numberFormat,
           ],
           decoration: InputDecoration(
             hintText: context.tt(

@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eram_express/features/profile/data/repositories/profile_repository.dart';
-
-
+import '../../../data/repositories/profile_repository_impl.dart';
 import 'terms_view_state.dart';
 
 class TermsViewModel extends Cubit<TermViewState> {
@@ -13,10 +11,16 @@ class TermsViewModel extends Cubit<TermViewState> {
 
   Future<void> getTerms() async {
     emit(TermsViewLoadingState());
+    try
+    {
     final result = await _profileRepository.getTerms();
-    result.fold(
-      (error) => emit(TermsViewErrorState()),
-      (data) => emit(TermsViewLoadedState(data)),
-    );
+    emit(TermsViewLoadedState(result));
+    }
+    catch(e)
+    {
+      emit(TermsViewErrorState());
+
+    }
+
   }
 }
