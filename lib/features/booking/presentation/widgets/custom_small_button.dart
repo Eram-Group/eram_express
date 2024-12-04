@@ -1,21 +1,19 @@
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import '../../../../core/app_colors.dart';
 
 class CustomSmallButton extends StatelessWidget {
   final Color? color;
   final String text;
-  final Color? colortext;
-  final Color? colorborder;
+  final Color? colorText;
+  final Color? colorBorder;
   final EdgeInsetsGeometry? padding;
   final void Function() onTap;
   const CustomSmallButton({
     this.color = AppColor.primaryColor,
     required this.text,
-    this.colortext = Colors.white,
-    this.colorborder = AppColor.primaryColor,
+    this.colorText = Colors.white,
+    this.colorBorder = AppColor.primaryColor,
     this.padding = const EdgeInsets.all(10.0),
   required  this.onTap,
     super.key,
@@ -30,14 +28,14 @@ class CustomSmallButton extends StatelessWidget {
             color: color,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: colorborder ?? AppColor.bordercolor,
+              color: colorBorder ?? AppColor.borderColor,
             )),
         padding: padding,
         child: Text(
           text,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: colortext,
+            color: colorText,
             fontWeight: FontWeight.w500,
             fontFamily: "outfit",
             fontSize: Responsive.getResponsiveFontSize(context, fontSize: 16),

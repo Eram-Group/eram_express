@@ -1,13 +1,10 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/app_text_style.dart';
-
 import '../../../Common/presentation/widgets/clickablebottomSheetItem.dart';
-import '../../../Common/presentation/widgets/empty_state_widget.dart';
 import '../views/home_view_controller.dart';
 import '../views/home_view_state.dart';
 import '../widgets/top_bottom_model.dart';
@@ -15,9 +12,9 @@ import '../widgets/top_bottom_model.dart';
 class SelectSubCargoCategoryModal extends StatelessWidget {
   final HomeViewController cubit;
   const SelectSubCargoCategoryModal({
-    Key? key,
+    super.key,
     required this.cubit,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -28,9 +25,8 @@ class SelectSubCargoCategoryModal extends StatelessWidget {
             children: [
               const TopBottomModel(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  context.tt("Select the load type", "اختر نوع الحمولة"),
+                padding:const EdgeInsets.symmetric(horizontal: 16),
+                child: Text( context.tt("Select the load type", "اختر نوع الحمولة"),
                   style: AppTextStyles.headingStyle,
                 ),
               ),
@@ -64,7 +60,7 @@ class SelectSubCargoCategoryModal extends StatelessWidget {
                                       Text(
                                         cargo.nameEn,
                                         style: TextStyle(
-                                          color: AppColor.blacktext,
+                                          color: AppColor.blackText,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                           height: 18.2 / 20,
@@ -73,7 +69,7 @@ class SelectSubCargoCategoryModal extends StatelessWidget {
                                       Text(
                                         cargo.capacity.toString(),
                                         style: TextStyle(
-                                          color: AppColor.ligthText,
+                                          color: AppColor.lightText,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                           height: 15.2 / 14,

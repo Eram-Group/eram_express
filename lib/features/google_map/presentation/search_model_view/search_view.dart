@@ -71,7 +71,7 @@ Widget _buildEmptyState(BuildContext context) {
           style: TextStyle(
             fontFamily: "outfit",
             fontSize: 16,
-            color: AppColor.blacktext,
+            color: AppColor.blackText,
           ),
         ),
         const Gap(2),

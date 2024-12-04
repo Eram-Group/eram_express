@@ -21,12 +21,12 @@ class AcceptOrderModal extends StatelessWidget {
       child: Column(
         children: [
           const StatusIconWidget(
-            assetname: "success",
+            assetName: "success",
           ),
           const Gap(10),
           Text(
             context.tt("Accept the Person", "قبول الشخص"),
-            style: AppTextStyles.HeaderModal,
+            style: AppTextStyles.headerModal,
             textAlign: TextAlign.center,
           ),
           const Gap(10),
@@ -42,7 +42,7 @@ class AcceptOrderModal extends StatelessWidget {
                 child: CustomSmallButton(
                   onTap: () {},
                   text: context.tt("Go to your order", "اذهب إلى طلبك"),
-                  padding: EdgeInsets.all(12),
+                  padding:const EdgeInsets.all(12),
                 ),
               ),
               const Gap(10),
@@ -56,8 +56,8 @@ class AcceptOrderModal extends StatelessWidget {
                 },
                 padding:const EdgeInsets.all(12),
                 text: context.tt("Go to Home", "الذهاب إلى الصفحة الرئيسية"),
-                colortext: AppColor.blacktext,
-                colorborder: AppColor.lightGrey,
+                colorText: AppColor.blackText,
+                colorBorder: AppColor.lightGrey,
                 color: Colors.white,
               )),
             ],

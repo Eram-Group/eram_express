@@ -1,12 +1,9 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:gap/gap.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/app_text_style.dart';
-import '../../../Common/presentation/widgets/empty_state_widget.dart';
 import '../views/home_view_controller.dart';
 import '../views/home_view_state.dart';
 import '../widgets/top_bottom_model.dart';
@@ -76,7 +73,7 @@ class SelectGoodsModal extends StatelessWidget {
                             content: Text(
                               good.nameEn,
                               style: TextStyle(
-                                color: AppColor.blacktext,
+                                color: AppColor.blackText,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 height: 18.2 / 20,
@@ -99,11 +96,11 @@ class ClickBottomSheetItem2 extends StatelessWidget {
   final Widget content;
 
   const ClickBottomSheetItem2({
-    Key? key,
+    super.key,
     this.isSelected = false,
     required this.onTap,
     required this.content,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +113,7 @@ class ClickBottomSheetItem2 extends StatelessWidget {
           decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(
               side: BorderSide(
-                color: isSelected ? Colors.green : AppColor.bordercolor,
+                color: isSelected ? Colors.green : AppColor.borderColor,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(20),
@@ -135,7 +132,7 @@ class ClickBottomSheetItem2 extends StatelessWidget {
                           ? Container(
                               width: 35,
                               height: 35,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.green,
                                 shape: BoxShape.circle,
                               ),
@@ -143,9 +140,9 @@ class ClickBottomSheetItem2 extends StatelessWidget {
                                 child: Container(
                                   width: 10,
                                   height: 10,
-                                  decoration: BoxDecoration(
+                                  decoration:const  BoxDecoration(
                                     color:
-                                        Colors.white, // Color of the inner hole
+                                        Colors.white,
                                     shape: BoxShape.circle,
                                   ),
                                 ),
@@ -157,7 +154,7 @@ class ClickBottomSheetItem2 extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Color(0xffA7A9B7),
+                                  color:const Color(0xffA7A9B7),
                                   width: 5,
                                 ),
                               ),

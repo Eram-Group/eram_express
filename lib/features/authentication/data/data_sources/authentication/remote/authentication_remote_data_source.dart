@@ -1,11 +1,9 @@
-import 'package:either_dart/either.dart';
-import 'package:eram_express_shared/core/api/api_error.dart';
-
 import '../../../../presentation/objects/otp_verification_data.dart';
 import '../../../../presentation/objects/verify_otp_response_wrapper.dart';
+import '../../../models/verify_otp_response_model.dart';
 
 abstract class AuthenticationRemoteDataSource {
-  Future<Either<ApiError, Null>> sendOtp(String phoneNumber);
-  Future<Either<ApiError, VerifyOtpResponseWrapper>> verifyOtp(
+  Future<void> sendOtp(String phoneNumber);
+  Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
       OtpVerificationData data);
 }

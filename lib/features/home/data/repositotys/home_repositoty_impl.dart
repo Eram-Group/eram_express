@@ -1,9 +1,7 @@
-import 'package:either_dart/either.dart';
 import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
 import 'package:eram_express/features/home/data/models/cargo-subcategoryModel.dart';
 import 'package:eram_express/features/home/data/models/goods-typeModel.dart';
 import 'package:eram_express/features/home/data/models/home-Model.dart';
-import 'package:eram_express_shared/core/api/api_error.dart';
 import 'home_repository.dart';
 import '../data_sources/homeData_remote_data_source.dart';
 
@@ -18,63 +16,50 @@ class HomeRepositoryImpl implements HomeRepository {
   }) : _remoteDataSource = remoteDataSource;
 
   @override
-Future<Either<ApiError, List<CargoCategoryModel>>>getCargoCategories() async {
+ Future<List<CargoCategoryModel>>getCargoCategories() async {
     if (cachedCargoCategories != null) {
-      return Right(cachedCargoCategories!);
+      return cachedCargoCategories!;
     }
-
     final response = await _remoteDataSource.getCargoCategories();
-
-    return response.fold((error) => Left(error), (data) {
-      cachedCargoCategories = data;
-      return Right(cachedCargoCategories!);
-    });
+    cachedCargoCategories = response;
+    return response;
+   
   }
 
   @override
-  Future<Either<ApiError, List<CargoSubCategoryModel>>> getSubCargoCategories() async {
+  Future<List<CargoSubCategoryModel>> getSubCargoCategories() async {
     if (cachedCargoSubCategory != null) 
     {
-      return Right(cachedCargoSubCategory!);
+      return cachedCargoSubCategory! ;
     }
     final response = await _remoteDataSource.getSubCargoCategories();
-    return response.fold(
-      (error) => Left(error),
-      (data) {
-        cachedCargoSubCategory = data;
-        return Right(cachedCargoSubCategory!);
-      },
-    );
+     cachedCargoSubCategory = response;
+    return response;
+    
+    
   }
 
   @override
-  Future<Either<ApiError, List<GoodModel>>> getGoods() async {
+  Future<List<GoodModel>> getGoods() async {
     if (cachedGoods!= null) {
-      return Right(cachedGoods!);
+      return cachedGoods!;
     }
     final response = await _remoteDataSource.getgoods();
-    return await response.fold((error) async => Left(error), (data) async 
-    {
-      cachedGoods= data;
-      return Right(cachedGoods!);
-    });
+     cachedGoods= response;
+     return response;
   }
 
  @override
-  Future<Either<ApiError, HomeModel>>getHome() async {
+  Future<HomeModel>getHome() async {
     if (cachedHomeData != null) 
     {
-      return Right(cachedHomeData!);
+      return cachedHomeData!;
     }
     final response = await _remoteDataSource.getHomeData();
-    return response.fold(
-      (error) => Left(error),
-      (data)
-       {
-        cachedHomeData=data;
-        return Right(cachedHomeData!);
-      },
-    );
+    cachedHomeData=response;
+    return response;
+    
+  
   }
 
 }

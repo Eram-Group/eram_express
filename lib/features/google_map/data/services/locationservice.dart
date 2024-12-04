@@ -1,4 +1,4 @@
-import 'package:either_dart/either.dart';
+
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:location/location.dart';
 import '../../../home/data/models/picking_locationModel.dart';
@@ -37,7 +37,7 @@ class LocationService {
     return true;
   }
 
-  Future<Either<String, LocationData>> getCurrentLocation() async {
+  Future<LocationData> getCurrentLocation() async {
     try {
       LocationData locationData = await location.getLocation();
 
@@ -48,11 +48,11 @@ class LocationService {
         ),
         address: " ",  
       );
-      return Right(locationData);
+      return locationData;
     }
      catch (e) 
      {
-      return Left("Failed to get current location: ${e.toString()}");
+      throw "Failed to get current location: ${e.toString()}";
     }
   }
   

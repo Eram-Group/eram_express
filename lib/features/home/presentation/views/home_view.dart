@@ -6,10 +6,7 @@ import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:logger/logger.dart';
 import '../../../../app/di.dart';
-import '../../../../core/app_text_style.dart';
-import '../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../../booking/presentation/views/all_booking_request_view.dart';
 import '../../../booking/presentation/views/offers_view.dart';
 import '../../../booking/presentation/views/booking_request_view_controller.dart';
@@ -51,7 +48,7 @@ class HomeView extends StatelessWidget {
                 Stack(
                   children: [
                     _buildHeader(context),
-                    _builddataContainer(context),
+                    _buildDataContainer(context),
                   ],
                 ),
                 BlocListener<HomeViewController, HomeViewState>(
@@ -128,8 +125,8 @@ profile viewmodel
             )));
   }
 
-  Widget _builddataContainer(BuildContext context) {
-    logger.debug(" rebuild data Conatiner");
+  Widget _buildDataContainer(BuildContext context) {
+    logger.debug(" rebuild data Container");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 110)
           .copyWith(bottom: 0),
@@ -188,11 +185,11 @@ profile viewmodel
             child: BlocSelector<HomeViewController, HomeViewState,
                 PickingLocationModel?>(
           bloc: homeViewModel,
-          selector: (state) => state.pickup, // تحديد الخاصية المطلوبة فقط
+          selector: (state) => state.pickup, 
           builder: (context, pickup) {
             return SelectionCard(
-              onTap: () => homeViewModel.PickClicked(context),
-              selectedValue: pickup?.address ?? " ", // استخدام الخاصية المحددة
+              onTap: () => homeViewModel.pickClicked(context),
+              selectedValue: pickup?.address ?? " ", 
               label: pickup?.address ?? "Pick up",
               iconName: 'Pick_Up',
             );
@@ -244,7 +241,7 @@ profile viewmodel
       builder: (context, truckSize) {
         logger.debug("message in truck");
         return SelectionCard(
-          onTap: () => homeViewModel.cargosubCategoryOnClicked(context),
+          onTap: () => homeViewModel.cargoSubCategoryOnClicked(context),
           selectedValue:
               context.tt(truckSize?.nameEn ?? " ", truckSize?.nameAr ?? " "),
           label: context.tt(truckSize?.nameEn ?? "Choose the size of the truck",
@@ -304,7 +301,7 @@ profile viewmodel
       buildWhen: (previous, current) {
         logger.debug(previous.toString());
         logger.debug(current.toString());
-        return !(current is AcceptbookingRequest);
+        return current is! AcceptBookingRequest;
       },
       builder: (context, state) {
         logger.debug("rebuild booking Requests Cards");
@@ -374,7 +371,7 @@ profile viewmodel
                             height: 25 /
                                 Responsive.getResponsiveFontSize(context,
                                     fontSize: 17),
-                            color: AppColor.blacktext,
+                            color: AppColor.blackText,
                             fontFamily: 'outfit',
                             fontWeight: FontWeight.w500,
                           ),
@@ -387,7 +384,7 @@ profile viewmodel
                     
                         key: ValueKey(item.id),
                         bookingRequest: item,
-                        shomMoreTap: () {
+                        showMoreTap: () {
                           Navigator.of(context).pushNamed(
                             OffersView.route,
                             arguments: OfferViewArguments(
@@ -400,7 +397,7 @@ profile viewmodel
                       ))
                 ],
               ));
-        } else if (state is BookingRequesErrorViewState) {
+        } else if (state is BookingRequestErrorViewState) {
           return const Text("Error in loading Booking request ");
         } else if (state is BookingRequestEmptyViewState) {
           return EmptyBookingView();
@@ -415,9 +412,9 @@ profile viewmodel
       bloc: homeViewModel,
       builder: (context, state) {
         return CustomButton(
-          enabled: homeViewModel.enabledSumbitButton(),
+          enabled: homeViewModel.enabledSubmitButton(),
           onTap: () {
-            homeViewModel.createRequestlbuttonclick();
+            homeViewModel.createRequestButtonClick();
           },
 
           child: Text(

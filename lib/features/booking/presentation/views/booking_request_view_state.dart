@@ -6,9 +6,10 @@ class BookingRequestViewState extends Equatable {
   List<Object?> get props => [];
 }
 
-class BookingRequesErrorViewState extends BookingRequestViewState {
+class BookingRequestErrorViewState
+ extends BookingRequestViewState {
   final String errorMessage;
-  BookingRequesErrorViewState(this.errorMessage);
+ BookingRequestErrorViewState(this.errorMessage);
 }
 
 class BookingRequestSuccessViewState extends BookingRequestViewState {
@@ -23,4 +24,4 @@ class BookingRequestEmptyViewState extends BookingRequestViewState {
   BookingRequestEmptyViewState();
 }
 
-class AcceptbookingRequest extends BookingRequestViewState {}
+class AcceptBookingRequest extends BookingRequestViewState {}

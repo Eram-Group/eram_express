@@ -26,7 +26,7 @@ class SelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Color textColor = selectedValue != null && selectedValue != " "
         ? Colors.black
-        : AppColor.ligthText;
+        : AppColor.lightText;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -42,7 +42,7 @@ class SelectionCard extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppColor.bordercolor,
+                  color: AppColor.borderColor,
                 ),
               ),
               child: Padding(

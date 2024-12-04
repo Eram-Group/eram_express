@@ -23,7 +23,7 @@ class InitViewModel extends Cubit<bool> {
 
   Future<void> init() async {
     final results = await Future.wait([
-      _configurationsRepository.countries,
+      _configurationsRepository.getCountries(),
       _authenticationRepository.isAuthenticated, 
     ]);
 

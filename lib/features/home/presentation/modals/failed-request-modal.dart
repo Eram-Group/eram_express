@@ -22,12 +22,12 @@ class FailedOrderModal extends StatelessWidget {
       child: Column(
         children: [
           const StatusIconWidget(
-            assetname:  "error",
+            assetName:  "error",
           ),
           const Gap(10),
           Text(
             context.tt("Request failed", "فشل في إتمام الطلب"),
-            style: AppTextStyles.HeaderModal,
+            style: AppTextStyles.headerModal,
             textAlign: TextAlign.center,
           ),
           const Gap(10),
@@ -45,8 +45,8 @@ class FailedOrderModal extends StatelessWidget {
                 },
                 padding: const EdgeInsets.all(12),
                 text: context.tt("Back","الرجوع"),
-                colortext: AppColor.blacktext,
-                colorborder: AppColor.lightGrey,
+                colorText: AppColor.blackText,
+                colorBorder: AppColor.lightGrey,
                 color: Colors.white,
               )
           )

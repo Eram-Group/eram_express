@@ -15,17 +15,17 @@ import 'accept_offer_card.dart';
 class BookingRequestCard extends StatelessWidget {
   final BookingRequestModel bookingRequest;
   final void Function(BidModel)? onTap;
-  final void Function()? shomMoreTap;
+  final void Function()? showMoreTap;
   const BookingRequestCard({
     super.key,
     required this.bookingRequest,
     required this.onTap,
-    required this.shomMoreTap,
+    required this.showMoreTap,
   });
   @override
   Widget build(BuildContext context) {
     return Clickable(
-        onTap: shomMoreTap,
+        onTap: showMoreTap,
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         width: Responsive.screenWidth,
@@ -33,7 +33,7 @@ class BookingRequestCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: AppColor.bordercolor,
+            color: AppColor.borderColor,
             width: 2,
           ),
         ),
@@ -49,20 +49,20 @@ class BookingRequestCard extends StatelessWidget {
                 const Gap(20),
                 Text(
                   bookingRequest.bookingDate,
-                  style: AppTextStyles.smalltitle,
+                  style: AppTextStyles.smallTitle,
                 ),
               ],
             ),
             _buildCard(context, bookingRequest),
             const Gap(10),
             bookingRequest.bids.isEmpty
-                ? _buildNobiddingContainer(context)
-                : _buildbiddings(bookingRequest.bids),
+                ? _buildNoBiddingContainer(context)
+                : _buildBiddings(bookingRequest.bids),
           ],
         ));
   }
 
-  Widget _buildbiddings(List<BidModel> bidds) {
+  Widget _buildBiddings(List<BidModel> bids) {
     return BlocProvider(
         create: (context) => ExpansionTileCubit(),
         child: Column(
@@ -73,8 +73,7 @@ class BookingRequestCard extends StatelessWidget {
                     child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          12), // تطبيق الـ borderRadius هنا
+                      borderRadius: BorderRadius.circular( 12), 
                       child: ExpansionTile(
                         minTileHeight: 10,
                         tilePadding: EdgeInsets.symmetric(
@@ -82,7 +81,7 @@ class BookingRequestCard extends StatelessWidget {
                                 ? 5
                                 : 20,
                             vertical: 5),
-                        collapsedBackgroundColor: Color(0xffF8F8F8),
+                        collapsedBackgroundColor:const Color(0xffF8F8F8),
                         title: Row(
                           children: [
                             Text(context.tt("New Bid", "عرض جديد"),
@@ -106,8 +105,8 @@ class BookingRequestCard extends StatelessWidget {
                                   shape: BoxShape.circle),
                               child: Center(
                                 child: Text(
-                                  bidds.length.toString(),
-                                  style: TextStyle(
+                                  bids.length.toString(),
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'outfit',
                                     fontWeight: FontWeight.w600,
@@ -120,17 +119,17 @@ class BookingRequestCard extends StatelessWidget {
                           ],
                         ),
                         shape: const RoundedRectangleBorder(
-                            side: const BorderSide(color: Colors.transparent)),
+                            side: BorderSide(color: Colors.transparent)),
                         trailing: context.read<ExpansionTileCubit>().state
                             ? TextButton(
-                                onPressed: shomMoreTap,
+                                onPressed: showMoreTap,
                                 child: Text(
                                   context.tt("Show more", "عرض المزيد"),
                                   style: TextStyle(
                                     fontSize: Responsive.getResponsiveFontSize(
                                         context,
                                         fontSize: 14),
-                                    color: AppColor.blacktext,
+                                    color: AppColor.blackText,
                                     fontFamily: 'outfit',
                                     fontWeight: FontWeight.w600,
                                     height: 25.2 /
@@ -147,13 +146,11 @@ class BookingRequestCard extends StatelessWidget {
                         onExpansionChanged: (bool expanding) {
                           context.read<ExpansionTileCubit>().toggleExpansion();
                         },
-                        children: List.generate(
-                            bidds.length, // طول القائمة
+                        children: List.generate(bids.length, 
                             (index) => AcceptOfferCard(
-                                  backgroundColor: Color(0xffF8F8F8),
-                                  item: bidds[index],
-                                  onAcceptBidding: () {
-                                    onTap?.call(bidds[index]);
+                                  backgroundColor:const Color(0xffF8F8F8),
+                                  item: bids[index],
+                                  onAcceptBidding: () {onTap?.call(bids[index]);
                                     //arguments.cubit.acceptBidding(bidding);
                                   },
                                 )),
@@ -175,7 +172,7 @@ class BookingRequestCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppTextStyles.smalltitle),
+              Text(title, style: AppTextStyles.smallTitle),
               Text(
                 address,
                 maxLines: 1,
@@ -184,7 +181,7 @@ class BookingRequestCard extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontFamily: "outfit",
-                  color: AppColor.blacktext,
+                  color: AppColor.blackText,
                 ),
               ),
             ],
@@ -194,6 +191,7 @@ class BookingRequestCard extends StatelessWidget {
     );
   }
 
+// redesign this card depend on  https://stackoverflow.com/questions/61822182/flutter-expand-column-inside-row/64331750#64331750
   Widget _buildCard(BuildContext context, BookingRequestModel booking) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,29 +201,29 @@ class BookingRequestCard extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: CustomPaint(
-              size: Size(1, 20), // عرض الخط وارتفاعه
+              size:const  Size(1, 20), // عرض الخط وارتفاعه
               painter: DottedLinePainter(),
             )),
-        _buildStatusRow("destinationn", context.tt("End point", "نقطه النهاية"),
+        _buildStatusRow("destination", context.tt("End point", "نقطه النهاية"),
             booking.destinationLocation.address),
       ],
     );
   }
 
-  Widget _buildNobiddingContainer(BuildContext context) {
+  Widget _buildNoBiddingContainer(BuildContext context) {
     return Center(
         child: Container(
       width: MediaQuery.of(context).size.width * 0.9,
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: Color(0xffF8F8F8),
+        color:const Color(0xffF8F8F8),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Center(
         child: Text(
           context.tt("No bidings right now", "لا عروض حتى الآن"),
           style: TextStyle(
-              color: Color(0xff666876),
+              color:const Color(0xff666876),
               fontFamily: 'outfit',
               fontWeight: FontWeight.w500,
               fontSize: Responsive.getResponsiveFontSize(context, fontSize: 16),
@@ -238,8 +236,7 @@ class BookingRequestCard extends StatelessWidget {
 }
 
 class ExpansionTileCubit extends Cubit<bool> {
-  ExpansionTileCubit() : super(false); // Initial state is collapsed (false)
+  ExpansionTileCubit() : super(false);
 
-  // Toggle the expansion state
   void toggleExpansion() => emit(!state);
 }

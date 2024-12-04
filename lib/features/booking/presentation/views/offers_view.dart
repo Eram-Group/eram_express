@@ -40,7 +40,7 @@ class OffersView extends StatelessWidget {
             fontSize: Responsive.getResponsiveFontSize(context, fontSize: 20),
             height:
                 20.8 / Responsive.getResponsiveFontSize(context, fontSize: 20),
-            color: AppColor.blacktext,
+            color: AppColor.blackText,
           ),
         ),
         centerTitle: true,
@@ -52,7 +52,7 @@ class OffersView extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: AppColor.bordercolor,
+                color: AppColor.borderColor,
                 width: 1.5,
               ),
             ),
@@ -70,7 +70,7 @@ class OffersView extends StatelessWidget {
           BlocConsumer<BookingRequestViewController, BookingRequestViewState>(
             bloc: arguments.cubit,
             listener: (context, state) {
-              if (state is AcceptbookingRequest) {
+              if (state is AcceptBookingRequest) {
                 const AcceptOrderModal().show(context);
               }
             },
@@ -92,7 +92,7 @@ class OffersView extends StatelessWidget {
                                   _buildBiddings(context, bids),
                                 ],
                               ))))
-                  : _buildEmptystate(context);
+                  : _buildEmptyState(context);
             },
           ),
           _buildCancelContainer(context),
@@ -123,7 +123,7 @@ class OffersView extends StatelessWidget {
                   offset: const Offset(0, -5),
                   blurRadius: 30,
                   spreadRadius: 4,
-                  color: const Color(0xff0C0C0D17).withOpacity(0.09),
+                  color: const Color(0xff0C0C0D).withOpacity(0.09),
                 ),
               ],
             ),
@@ -137,7 +137,7 @@ class OffersView extends StatelessWidget {
                     child: Text(
                       "Cancel Order",
                       style: TextStyle(
-                          color: AppColor.blacktext,
+                          color: AppColor.blackText,
                           fontWeight: FontWeight.w500,
                           height: 20.8 /
                               Responsive.getResponsiveFontSize(context,
@@ -168,7 +168,7 @@ Widget _buildComingOrder(BuildContext context) {
     height: Responsive.screenHeight! * 0.055,
     padding: const EdgeInsets.all(10),
     decoration: BoxDecoration(
-      color: AppColor.ligthgreen,
+      color: AppColor.lightGreen,
       borderRadius: BorderRadius.circular(10),
     ),
     width: Responsive.screenWidth,
@@ -196,7 +196,7 @@ Widget _buildComingOrder(BuildContext context) {
   );
 }
 
-Widget _buildEmptystate(BuildContext context) {
+Widget _buildEmptyState(BuildContext context) {
   return Expanded(
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.center,

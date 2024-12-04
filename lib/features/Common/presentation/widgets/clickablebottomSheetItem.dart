@@ -9,12 +9,12 @@ class ClickBottomSheetItem extends StatelessWidget {
   final Widget content;
   final String imageUrl;
   const ClickBottomSheetItem({
-    Key? key,
+    super.key,
     this.isSelected = false,
     required this.imageUrl,
     required this.onTap,
     required this.content,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ClickBottomSheetItem extends StatelessWidget {
           decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(
               side: BorderSide(
-                color: isSelected ? Colors.green : AppColor.bordercolor,
+                color: isSelected ? Colors.green : AppColor.borderColor,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(20),

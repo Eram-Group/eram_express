@@ -1,12 +1,7 @@
-import 'package:eram_express/features/Common/presentation/widgets/empty_state_widget.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
-import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../core/app_colors.dart';
 import '../../../Common/presentation/widgets/clickablebottomSheetItem.dart';
 import '../views/home_view_controller.dart';
@@ -63,7 +58,7 @@ class SelectCargoCategoryModal extends StatelessWidget {
                               content: Text(
                                 cargo.nameEn,
                                 style: TextStyle(
-                                  color: AppColor.blacktext,
+                                  color: AppColor.blackText,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   height: 18.2 / 20,

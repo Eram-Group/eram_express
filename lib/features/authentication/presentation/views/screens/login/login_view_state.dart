@@ -1,25 +1,35 @@
-import 'package:eram_express_shared/domain/entites/country_entity.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:eram_express_shared/data/configurations/models/country_model.dart';
 
-part 'login_view_state.freezed.dart';
+class LoginViewState {
+  final bool sendingOtp;
+  final String phoneNumber;
+  final CountryModel? selectedCountry;
 
-@freezed
-abstract class LoginViewState with _$LoginViewState 
-{
-  const LoginViewState._();
-
-  factory LoginViewState({
-    @Default(false) bool sendingOtp,
-    @Default('') String phoneNumber,
-    CountryEntity? selectedCountry,
-
-
-  }) = _LoginViewState;
+  LoginViewState({
+    this.sendingOtp = false,
+    this.phoneNumber = '',
+    this.selectedCountry,
+  });
 
   bool get loginButtonLoading => sendingOtp;
+
   bool get phoneNumberFieldEnabled => selectedCountry != null && !sendingOtp;
+
   bool get countryCodeButtonEnabled => selectedCountry != null;
+
   bool get loginButtonEnabled =>
       selectedCountry != null &&
       phoneNumber.length == selectedCountry!.numberLength;
+
+  LoginViewState copyWith({
+    bool? sendingOtp,
+    String? phoneNumber,
+    CountryModel? selectedCountry,
+  }) {
+    return LoginViewState(
+      sendingOtp: sendingOtp ?? this.sendingOtp,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      selectedCountry: selectedCountry ?? this.selectedCountry,
+    );
+  }
 }

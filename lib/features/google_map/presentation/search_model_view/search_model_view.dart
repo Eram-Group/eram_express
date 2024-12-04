@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:either_dart/either.dart';
 import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/authentication/data/respositories/authentication_repository_impl.dart';
 import 'package:eram_express/features/customer/data/models/customer_model.dart';
@@ -38,28 +37,33 @@ class SearchViewController extends Cubit<SearchState> {
     if (query.isNotEmpty && query.trim().isNotEmpty)
      {
       CustomerModel? user =await _authenticationRepository.authenticatedCustomer;
-      final result = _googleMapRepository.getPredictionPlaces(query, sessionToken!, user!.country.code);
-
-      result.fold((errorMessage) {
-        emit(const SearchStateError("fail to get places"));
-      }, (data) {
+       try {
+        final data = await _googleMapRepository.getPredictionPlaces(
+            query, sessionToken!, user!.country.code);
         data.isEmpty
             ? emit(SearchStateEmpty())
             : emit(SearchStateSuccess(data));
-      });
-    } else {
+      } catch (e) {
+        emit(const SearchStateError("fail to get places"));
+      }
+    } 
+    else {
       emit(SearchStateInitial());
     }
   }
 
-  void getCoordinatesForAddress(String address) {
-    final result = _googleMapRepository.getCoordinatesForAddress(address);
-    result.fold((error) => emit(const SearchStateError("fail to get places")),
-        (data) {
-      LatLng(data.lat!, data.long!);
-      Navigator.pop(
-          NavigationService.globalContext, LatLng(data.lat!, data.long!));
-    });
+  Future<void> getCoordinatesForAddress(String address) async {
+    try
+    {
+      final result = await  _googleMapRepository.getCoordinatesForAddress(address);
+      LatLng(result.lat!, result.long!);
+      Navigator.pop(NavigationService.globalContext, LatLng(result.lat!, result.long!));
+    }
+    catch(e)
+    {
+               emit(const SearchStateError("fail to get places"));
+    }
+   
   }
 
   @override

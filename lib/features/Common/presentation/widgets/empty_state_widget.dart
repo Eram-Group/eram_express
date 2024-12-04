@@ -1,23 +1,22 @@
 import 'package:eram_express/core/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../home/presentation/modals/cargo_categories-modal.dart';
 
 //ToDo   convert to skenelozier
 
 class EmptyLoadingWidget extends StatelessWidget {
-  const EmptyLoadingWidget({Key? key}) : super(key: key);
+  const EmptyLoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         itemCount: 3,
         itemBuilder: (context, index) {
-          return _buildemptyContainer();
+          return _buildEmptyContainer();
         });
   }
 }
-Widget _buildemptyContainer() {
+Widget _buildEmptyContainer() {
   return Padding(
     padding: const EdgeInsets.symmetric(
       horizontal: 20,
@@ -29,7 +28,7 @@ Widget _buildemptyContainer() {
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: AppColor.bordercolor,
+              color: AppColor.borderColor,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(20),

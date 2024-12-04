@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:either_dart/either.dart';
 import 'package:eram_express/app/di.dart';
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';

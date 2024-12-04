@@ -1,18 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express/app/navigation.dart';
-import 'package:eram_express/common/viewmodels/provider_view_model.dart';
 import 'package:eram_express/core/app_colors.dart';
-
 import 'package:eram_express_shared/core/utils/responsive.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../app/iconsax_icons.dart';
 import '../../../../common/models/provider_model.dart';
 import '../../../../common/models/rating_model.dart';
-import '../../../../common/viewmodels/rating_view_model.dart';
 
 class HeaderBookingRequestCard extends StatelessWidget {
   final ProviderModel provider;
@@ -31,7 +26,7 @@ class HeaderBookingRequestCard extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: provider.image ?? '', 
             placeholder: (context, url) => Container(
-                width: 50.0, height: 50.0, color: AppColor.bordercolor),
+                width: 50.0, height: 50.0, color: AppColor.borderColor),
             errorWidget: (context, url, error) => 
             Center(
               child: SvgPicture.asset(
@@ -49,7 +44,7 @@ class HeaderBookingRequestCard extends StatelessWidget {
             provider.fullName,
             style: TextStyle(
               fontFamily: "outfits",
-              color: AppColor.blacktext,
+              color: AppColor.blackText,
               fontSize: Responsive.getResponsiveFontSize(context, fontSize: 17),
               fontWeight: FontWeight.w500,
               height: 18.2 /Responsive.getResponsiveFontSize(context, fontSize: 17),
@@ -69,13 +64,13 @@ Widget _buildRating(RatingModel rating) {
     children: [
       for (int i = 0; i < 5; i++)
         Padding(
-          padding: EdgeInsets.all(0),
+          padding:const EdgeInsets.all(0),
           child: Icon(
             i < rating.totalRatings ? Iconsax.star1 : Iconsax.star,
             size: i < rating.totalRatings
                 ? 22
                 : 15, // حاسه الاحسن يبقي svg  علشان مقاسات
-            color: i < rating.totalRatings ? AppColor.starcolor : Colors.black,
+            color: i < rating.totalRatings ? AppColor.starColor : Colors.black,
           ),
         ),
       const Gap(3),

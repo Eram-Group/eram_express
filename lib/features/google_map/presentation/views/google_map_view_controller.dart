@@ -30,7 +30,8 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
   late CameraPosition kInitialPosition;
   double kDefaultMapZoom = 15.0;
 
-  void setInitialCameraPostion(Point? initialAddress) {
+  void setInitialCameraPostion(Point? initialAddress) 
+  {
     if (initialAddress != null) {
       kInitialPosition = CameraPosition(
         target: LatLng(initialAddress.latitude, initialAddress.longitude),
@@ -59,17 +60,19 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       emit(PlaceDetailsLoadingState());
-      final result = await _googleMapRepository.getPlaceDetails(mapMarkers.first.position.latitude.toString(),  mapMarkers.first.position.longitude.toString(),);
-      result.fold(
-        (errorMessage) 
-        {
-          emit(PlaceDetailsError(errorMessage));
-        },
-        (placeDetails)
-         {
-          emit(PlaceDetailsLoaded(placeDetails));
-        },
-      );
+      
+     try
+     {
+      final placeDetails = await _googleMapRepository.getPlaceDetails(
+          mapMarkers.first.position.latitude.toString(),
+          mapMarkers.first.position.longitude.toString(), );
+      emit(PlaceDetailsLoaded(placeDetails));
+     }
+     catch(e)
+     {
+       emit(PlaceDetailsError("Error to get place details" ));
+     }
+     
     });
   }
 
@@ -88,19 +91,23 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     _controller = controller;
   }
 
-  void getCurrentLocation() async {
+  void getCurrentLocation() async 
+  {
     emit(GoogleMapViewStateLoading());
-    final result = await locationService.getCurrentLocation();
-    result.fold(
-      (error) => emit(GoogleMapViewStateError(error)),
-      (locationData) {
+    try
+    {
+       final locationData = await locationService.getCurrentLocation();
         kInitialPosition = CameraPosition(
           target: LatLng(locationData.latitude!, locationData.longitude!),
           zoom: kDefaultMapZoom,
         );
         updateMarkerAndCamera(kInitialPosition, moveCamera: true);
-      },
-    );
+    }
+    catch(e)
+    {
+             emit(const GoogleMapViewStateError("failed"));
+    }
+    
   }
 
   void updateMarkerAndCamera(CameraPosition locationData, {bool moveCamera = false}) {
@@ -119,16 +126,18 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     }
   }
 
-  void ChangeCameraPosition(CameraPosition locationData) {
+  void ChangeCameraPosition(CameraPosition locationData) 
+  {
     _controller?.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(target: locationData.target, zoom: kDefaultMapZoom),
     ));
     emit(GoogleMapViewStateUpdated(Set.from(mapMarkers)));
   }
 
-  void searchButtonClick() async {
-    final result = await Navigator.pushNamed(
-        NavigationService.globalContext, SearchView.route);
+  void searchButtonClick() async 
+  {
+    final result = await Navigator.pushNamed(NavigationService.globalContext, SearchView.route);
+    
     if (result is LatLng) {
       CameraPosition(target: result);
       updateMarkerAndCamera(CameraPosition(target: result), moveCamera: true);

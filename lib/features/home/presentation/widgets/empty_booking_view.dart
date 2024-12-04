@@ -21,13 +21,13 @@ class EmptyBookingView extends StatelessWidget {
           const Gap(10),
           Text(
             context.tt("No Request add yet ", "لم يتم إضافة أي طلب بعد."),
-            style: AppTextStyles.HeaderModal,
+            style: AppTextStyles.headerModal,
           ),
           const Gap(10),
           Text(
             context.tt("Right now no Request add, you can add new order",
                 "لا يوجد أي طلب مضاف حاليًا، يمكنك إضافة طلب جديد."),
-            style: AppTextStyles.smalltitle,
+            style: AppTextStyles.smallTitle,
           ),
         ],
       ),

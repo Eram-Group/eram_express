@@ -1,12 +1,7 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
-import 'package:either_dart/either.dart';
-import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
-
 import '../../../../app/di.dart';
-
 import 'googlemap_api_endpoint.dart';
 import 'googlemap_remote_data_source.dart';
 
@@ -20,21 +15,20 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
 
   @override
   Future<dynamic> getPredictionPlaces(
-      String input, String sessiontoken, String country) async {
-    Response response =
-        await dio.get(url + "place/autocomplete/json", queryParameters: {
+      String input, String sessionToken, String country) async {
+    Response response =  await dio.get("${url}place/autocomplete/json", queryParameters: {
       'input': input,
       'key': apiKey,
-      'sessiontoken': sessiontoken,
+      'sessiontoken': sessionToken,
       'components': 'country:$country',
       //TODO
       //'language': 'ar',
     });
     return response;
   }
-
+@override
   Future<dynamic> getCoordinatesForAddress(String address) async {
-    Response response = await dio.get(url + "geocode/json", queryParameters: {
+    Response response = await dio.get("${url}geocode/json", queryParameters: {
       'address': address,
       'key': apiKey,
       //TODO
@@ -44,8 +38,8 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
   }
 
   Future<dynamic> getPlaceDetails(String lat, String long) async {
-    String input = lat + "," + long;
-    Response response = await dio.get(url + "geocode/json", queryParameters: {
+    String input = "$lat,$long";
+    Response response = await dio.get("${url}geocode/json", queryParameters: {
       'latlng': input,
       'key': apiKey,
       //TODO
@@ -54,8 +48,8 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     return response;
   }
 
-//Future<Either<ApiError, Null>> لحد ما نصلحهاا
-  Future<Either<ApiError, Null>> validateLocation(
+@override
+  Future<void> validateLocation(
       String accessToken, String lat, String long) async {
     final response =
         await _dioClient.request(validPointEndpoint.prepare(headers: {
@@ -70,9 +64,6 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
       }
     }));
 
-    return response.fold(
-      (error) => Left(error),
-      (success) => Right(null),
-    );
+  
   }
 }

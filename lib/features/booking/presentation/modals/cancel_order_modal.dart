@@ -1,5 +1,4 @@
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
-import 'package:eram_express/features/booking/presentation/views/offers_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
@@ -21,13 +20,13 @@ class CancelOrderModal extends StatelessWidget {
       child: Column(
         children: [
           const StatusIconWidget(
-            assetname: "error",
+            assetName: "error",
           ),
           const Gap(10),
           Text(
             context.tt("You will pay fees on canceling order!",
                 "ستدفع رسوم عند إلغاء الطلب!"),
-            style: AppTextStyles.HeaderModal,
+            style: AppTextStyles.headerModal,
             textAlign: TextAlign.center,
           ),
           const Gap(10),
@@ -41,19 +40,19 @@ class CancelOrderModal extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomSmallButton(
-                     onTap: () {},
+                  onTap: () {},
                   text: context.tt("back", "العودة"),
                   padding: const EdgeInsets.all(12),
                 ),
               ),
-              Gap(10),
+              const Gap(10),
               Expanded(
                   child: CustomSmallButton(
-                       onTap: () {},
+                onTap: () {},
                 padding: const EdgeInsets.all(12),
                 text: context.tt("Cancel Order", "إلغاء الطلب"),
-                colortext: Colors.red,
-                colorborder: Colors.red,
+                colorText: Colors.red,
+                colorBorder: Colors.red,
                 color: Colors.white,
               )),
             ],
@@ -69,12 +68,12 @@ class StatusIconWidget extends StatelessWidget {
   final double size;
   final Color backgroundColor;
   final Color shadowColor;
-  final String assetname;
+  final String assetName;
 
   const StatusIconWidget({
     Key? key,
     this.size = 90.0,
-    required this.assetname,
+    required this.assetName,
     this.backgroundColor = Colors.white,
     this.shadowColor = const Color(0xffB1B8C8),
   }) : super(key: key);
@@ -98,7 +97,7 @@ class StatusIconWidget extends StatelessWidget {
       ),
       child: Center(
         child: SvgIcon(
-          asset: assetname,
+          asset: assetName,
           size: size * 0.5,
         ),
       ),

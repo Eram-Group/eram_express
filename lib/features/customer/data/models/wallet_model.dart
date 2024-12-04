@@ -1,16 +1,19 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+class WalletModel {
+  final String balance;
+  final String balanceCurrency;
+  final bool isUseWalletInPayment;
 
-part 'wallet_model.freezed.dart';
-part 'wallet_model.g.dart';
+  WalletModel({
+    required this.balance,
+    required this.balanceCurrency,
+    required this.isUseWalletInPayment,
+  });
 
-@freezed
-abstract class WalletModel with _$WalletModel {
-  @JsonSerializable(fieldRename: FieldRename.snake)
-  factory WalletModel({
-    required String balance,
-    required String balanceCurrency,
-    required bool isUseWalletInPayment,
-  }) = _WalletModel;
-  factory WalletModel.fromJson(Map<String, dynamic> json) =>
-      _$WalletModelFromJson(json);
+  factory WalletModel.fromJson(Map<String, dynamic> json) {
+    return WalletModel(
+      balance: json['balance'],
+      balanceCurrency: json['balance_currency'],
+      isUseWalletInPayment: json['is_use_wallet_in_payment'],
+    );
+  }
 }

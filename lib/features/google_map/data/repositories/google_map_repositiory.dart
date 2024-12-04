@@ -1,4 +1,3 @@
-import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
 import 'google_map_reposirtoty.dart';
@@ -16,62 +15,59 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
       : _googleMapRemoteDataSource = googleMapRemoteDataSource,
        _tokensLocalDataSource = tokensLocalDataSource;
   @override
-  Future<Either<String, List<PlaceAutocompleteModel>>> getPredictionPlaces( String input, String sessionToken, String counrty) async {
-    try {
-      final result = await _googleMapRemoteDataSource.getPredictionPlaces( input, sessionToken, counrty);
-
+  Future< List<PlaceAutocompleteModel>> getPredictionPlaces( String input, String sessionToken, String country) async {
+      final result = await _googleMapRemoteDataSource.getPredictionPlaces(input, sessionToken, country);  
       if (result.statusCode == 200) 
       {
-        List<PlaceAutocompleteModel> predictionModels =
-            (result.data['predictions'] as List).map((item) => PlaceAutocompleteModel.fromjson(item)).toList();
-        return Right(predictionModels);
-      } else {
+        List<PlaceAutocompleteModel> predictionModels =(result.data['predictions'] as List).map((item) => PlaceAutocompleteModel.fromjson(item)).toList();
+        return predictionModels ;
+      } 
+      else 
+      {
         logger.error("Error fetching predictions: ${result.statusMessage}");
-        return Left("Error in prediction: ${result.statusMessage}");
+        throw "Error fetching predictions: ${result.statusMessage}";
       }
-    } catch (error) {
-      logger.error("Exception fetching predictions: ${error.toString()}");
-      return Left("Exception in prediction: ${error.toString()}");
-    }
+   
   }
 
   @override
-  Future<Either<String, PlaceDetailsModel>> getPlaceDetails(String lat, String long) async
+  Future<PlaceDetailsModel> getPlaceDetails(String lat, String long) async
   {
      final accessToken = await _tokensLocalDataSource.accessToken;
-    if (accessToken == null) {
-      return const Left("Error in Authorization"); 
-    }
-    final result= _googleMapRemoteDataSource.validateLocation(accessToken,lat, long);
-    return result.fold((error)=>Left(error.errors[0].code),  
-    (data) async
-    {
-    final result = await _googleMapRemoteDataSource.getPlaceDetails(lat, long);
-    if (result.statusCode == 200) 
-    {
-      logger.debug("Request successful");
+   try
+   {
+        await _googleMapRemoteDataSource.validateLocation(accessToken!,lat, long);
+        final places =  await _googleMapRemoteDataSource.getPlaceDetails(lat, long);
+      if (places.statusCode == 200) {
+        logger.debug("Request successful");
+        List<PlaceDetailsModel> placeDetailsList =(places.data['results'] as List) .map((item) => PlaceDetailsModel.fromJson(item)) .toList();
+        return placeDetailsList[0];
+      } 
+      else
+      {
+         throw "Error fetching predictions: ${places.statusMessage}";
+      }
+   }
+   catch(e)
+   {
+          throw "these location  move outside our service area ";
+
+    //throw    //e.errors[0].code
+   }
+   
+  }
+@override
+  Future<PlaceDetailsModel> getCoordinatesForAddress(String address) async {
+    final result = await _googleMapRemoteDataSource.getCoordinatesForAddress(address);
+    if (result.statusCode == 200)
+     {
       List<PlaceDetailsModel> placeDetailsList =(result.data['results'] as List).map((item) => PlaceDetailsModel.fromJson(item)).toList();
-      return Right(placeDetailsList[0]);
+      return placeDetailsList[0];
     } 
     else 
-   
     {
       logger.error("Error fetching predictions: ${result.statusMessage}");
-      return Left("Error in prediction: ${result.statusMessage}");
-    }
-  }
-    );
-    }
-@override
-  Future<Either<String, PlaceDetailsModel>> getCoordinatesForAddress(String address) async {
-    final result = await _googleMapRemoteDataSource.getCoordinatesForAddress(address);
-    if (result.statusCode == 200) {
-      List<PlaceDetailsModel> placeDetailsList =(result.data['results'] as List).map((item) => PlaceDetailsModel.fromJson(item)).toList();
-      return Right(placeDetailsList[0]);
-    } else 
-    {
-      logger.error("Error fetching predictions: ${result.statusMessage}");
-      return Left("Error in prediction: ${result.statusMessage}");
+      return throw "Error in prediction: ${result.statusMessage}";
     }
   }
 

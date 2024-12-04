@@ -1,5 +1,4 @@
 
-import 'package:either_dart/either.dart';
 import 'package:eram_express/features/booking/data/models/booking_request_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/bid_model.dart';
@@ -22,44 +21,47 @@ class BookingRequestViewController extends Cubit<BookingRequestViewState>
  {
   final BookingRepository _bookingRepository;
 
- BookingRequestViewController({
-    required BookingRepository bookingRepository,
-  }) :
-        _bookingRepository = bookingRepository,
-        //_getBiddingsUsecase = getBiddingsUsecase,
-        super(getBookingRequestState(bookingRepository)) {
-    intiallistBookingRequest();
+ BookingRequestViewController({ required BookingRepository bookingRepository,}) 
+ :_bookingRepository = bookingRepository,super(getBookingRequestState(bookingRepository)) 
+  {
+    initialListBookingRequest();
   }
-
-  Future<void> intiallistBookingRequest() async {
+  Future<void> initialListBookingRequest() async {
     if (state is BookingRequestSuccessViewState) return;
     await listBookingRequest();
   }
 
   Future<void> listBookingRequest() async {
     //if (state is BookingRequestViewSuccessState) return;
-
-    final result = _bookingRepository.listBookingRequest();
-    result.fold(
-        (error) =>emit(BookingRequesErrorViewState("Error: ${error.toString()}")),
-        (data) {
-      data.isEmpty
+    try
+    {
+         final result =  await _bookingRepository.listBookingRequest();
+         result.isEmpty
           ? emit(BookingRequestEmptyViewState())
           : emit(
-              BookingRequestSuccessViewState(data)
-            );
-    });
+              BookingRequestSuccessViewState(result));
+    }
+    catch (e)
+    {
+        emit(BookingRequestErrorViewState
+("Error: ${e.toString()}"));
+    }
+ 
   }
 
   Future<void> acceptBidding(BidModel bid) async {
+    try
+    {
     final result = await _bookingRepository.acceptBidding(bid.id);
-    result.fold(
-        (error) =>
-            emit((BookingRequesErrorViewState("Error in acceptinggggg"))),
-        (data) {
-      emit(AcceptbookingRequest());
+      emit(AcceptBookingRequest());
       removeAcceptingReqeust(bid.bookingRequestId);
-    });
+    }
+    catch(e)
+    {
+      emit((BookingRequestErrorViewState
+("Error in acceptinggggg")));
+    }
+   
   }
 
   void removeAcceptingReqeust(int removedId) {

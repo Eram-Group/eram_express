@@ -4,7 +4,6 @@ import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../core/app_text_style.dart';
 import '../../../booking/presentation/widgets/custom_small_button.dart';
 import '../../../booking/presentation/modals/cancel_order_modal.dart';
@@ -22,19 +21,17 @@ class SuccessfulRequestModal extends StatelessWidget {
       child: Column(
         children: [
           const StatusIconWidget(
-            assetname: "success",
+            assetName: "success",
           ),
           const Gap(10),
           Text(
-            context.tt("The request has been added successfully.",
-                "تمت إضافة الطلب بنجاح"),
-            style: AppTextStyles.HeaderModal,
+            context.tt("The request has been added successfully.",  "تمت إضافة الطلب بنجاح"),
+            style: AppTextStyles.headerModal,
             textAlign: TextAlign.center,
           ),
           const Gap(10),
           Text(
-            context.tt("You will wait for driver response to add there bid.",
-                "ستنتظر رد السائق لإضافة عرضه."),
+            context.tt("You will wait for driver response to add there bid.", "ستنتظر رد السائق لإضافة عرضه."),
             style: AppTextStyles.subHeaderModal,
             textAlign: TextAlign.center,
           ),
@@ -46,8 +43,8 @@ class SuccessfulRequestModal extends StatelessWidget {
             },
             padding: const EdgeInsets.all(12),
             text: context.tt("Back", "الرجوع"),
-            colortext: AppColor.blacktext,
-            colorborder: AppColor.lightGrey,
+            colorText: AppColor.blackText,
+            colorBorder: AppColor.lightGrey,
             color: Colors.white,
           ))
         ],

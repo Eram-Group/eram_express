@@ -1,5 +1,4 @@
 import 'package:eram_express/core/app_colors.dart';
-import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontSize: Responsive.getResponsiveFontSize(context, fontSize: 20),
           height:
               20.8 / Responsive.getResponsiveFontSize(context, fontSize: 20),
-          color: AppColor.blacktext,
+          color: AppColor.blackText,
         ),
       ),
       centerTitle: true,
@@ -32,7 +31,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColor.bordercolor,
+              color: AppColor.borderColor,
               width: 1.5,
             ),
           ),

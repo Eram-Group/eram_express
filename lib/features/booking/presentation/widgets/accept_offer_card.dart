@@ -1,10 +1,7 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
-
 import '../../../../core/app_colors.dart';
-
 import '../../data/models/bid_model.dart';
 import 'custom_small_button.dart';
 import 'delivery_cost.dart';
@@ -16,11 +13,11 @@ class AcceptOfferCard extends StatelessWidget {
   final Function() onAcceptBidding;
 
   const AcceptOfferCard({
-    Key? key,
+    super.key,
     required this.item,
     required this.onAcceptBidding,
     this.backgroundColor= Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class AcceptOfferCard extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: AppColor.bordercolor,
+            color: AppColor.borderColor,
             width: 1.5,
           ),
         ),

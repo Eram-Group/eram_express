@@ -1,13 +1,11 @@
 import 'package:eram_express/features/home/presentation/widgets/top_bottom_model.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 import 'package:gap/gap.dart';
-import '../../../../app/di.dart';
 import '../../../../core/app_colors.dart';
-import '../../../Common/presentation/widgets/customButton.dart';
 
 class PickDateBottomSheet extends StatefulWidget {
   const PickDateBottomSheet({super.key});
@@ -56,12 +54,12 @@ class _PickDateBottomSheetState extends State<PickDateBottomSheet> {
             },
             daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(
-                color: AppColor.blacktext,
+                color: AppColor.blackText,
                 fontWeight: FontWeight.w500,
                 fontSize: 15,
               ),
               weekendStyle: TextStyle(
-                color: AppColor.blacktext,
+                color: AppColor.blackText,
                 fontWeight: FontWeight.w500,
                 fontSize: 15,
               ),

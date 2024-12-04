@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/image_picker_modal/image_picker_modal.dart';
@@ -43,23 +44,20 @@ class CompleteProfileViewModel extends Cubit<CompleteProfileViewState> {
 
   Future<void> _saveButtonOnClicked(BuildContext context) async {
     emit(state.copyWith(saving: true));
+    try {
+      final response = await _customerService.updateProfile(
+        data: UpdateCustomerFormData(
+          fullName: state.fullName,
+          profilePicture: state.profilePicture,
+        ),
+      );
 
-    final response = await _customerService.updateProfile(
-      data: UpdateCustomerFormData(
-        fullName: state.fullName,
-        profilePicture: state.profilePicture,
-      ),
-    );
-
-    emit(state.copyWith(saving: false));
-
-    response.fold(
-      (error) => ErrorModal.fromApiError(error).show(context),
-      (data) async {
-        final navigator = Navigator.of(context);
-        await const RegisteredSuccessfullyModal().show(context);
-        navigator.pop();
-      },
-    );
+      emit(state.copyWith(saving: false));
+      final navigator = Navigator.of(context);
+      await const RegisteredSuccessfullyModal().show(context);
+      navigator.pop();
+    } catch (e) {
+      ErrorModal.fromApiError(e as ServerException).show(context);
+    }
   }
 }

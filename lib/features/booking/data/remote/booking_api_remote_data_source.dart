@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:either_dart/either.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
-
 import '../../../home/presentation/objects/booking_request_form_data.dart';
-import '../models/bid_model.dart';
 import '../models/booking_request_model.dart';
 import 'booking_api_endpoints.dart';
 import 'booking_remote_data_source.dart';
@@ -16,7 +13,7 @@ class BookingApiRemoteDataSource implements BookingRemoteDataSource {
   BookingApiRemoteDataSource({required DioApiClient dioClient})
       : _dioClient = dioClient;
   @override
-  Future<Either<ApiError, Null>> bookingRequest(
+  Future<void> bookingRequest(
     BookingRequestFormData data,
     String accessToken,
   ) async {
@@ -64,11 +61,11 @@ class BookingApiRemoteDataSource implements BookingRemoteDataSource {
   }
 
   @override
-  Future<Either<ApiError, List<BookingRequestModel>>> listbBookingRequest(
+  Future<List<BookingRequestModel>> listBookingRequest(
     String accessToken,
   ) async {
     return await _dioClient.request(
-      listbBookingRequestEndpoint.prepare(
+      listBookingRequestEndpoint.prepare(
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer $accessToken',
         },
@@ -77,9 +74,9 @@ class BookingApiRemoteDataSource implements BookingRemoteDataSource {
   }
 
   @override
-  Future<Either<ApiError, Null>> acceptBidding(
+  Future<void> acceptBidding(
       String accessToken, int bidId) async {
-    return await _dioClient.request(acceptBiddingtEndpoint(bidId).prepare(
+    return await _dioClient.request(acceptBiddingEndpoint(bidId).prepare(
       headers: {HttpHeaders.authorizationHeader: 'Bearer $accessToken'},
     ));
   }

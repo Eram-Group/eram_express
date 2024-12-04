@@ -1,13 +1,10 @@
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:either_dart/either.dart';
-import 'package:eram_express/features/customer/data/objects/update_customer_form_data.dart';
-import 'package:eram_express/features/home/presentation/objects/booking_request_form_data.dart';
-import 'package:eram_express_shared/core/api/api_error.dart';
-import 'package:eram_express_shared/core/api/dio_api_client.dart';
 
+import 'package:eram_express/features/customer/data/objects/update_customer_form_data.dart';
+
+import 'package:eram_express_shared/core/api/dio_api_client.dart';
 
 import '../../models/customer_model.dart';
 import 'customer_api_endpoints.dart';
@@ -20,7 +17,7 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
       : _dioClient = dioClient;
 
   @override
-  Future<Either<ApiError, CustomerModel>> getAuthenticatedCustomer(
+  Future<CustomerModel> getAuthenticatedCustomer(
     String accessToken,
   ) async {
     return await _dioClient.request(
@@ -33,7 +30,7 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
   }
 
   @override
-  Future<Either<ApiError, CustomerModel>> updateProfile(
+  Future<CustomerModel> updateProfile(
     UpdateCustomerFormData data,
     String accessToken,
   ) async {
@@ -51,6 +48,4 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
       ),
     );
   }
-
-
 }
