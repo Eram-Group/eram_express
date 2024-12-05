@@ -55,14 +55,18 @@ final customerRepository = CustomerRepositoryImpl(
 );
 
 //Home
-final homeRepository =HomeRepositoryImpl(remoteDataSource: homeDataRemoteDataSource);
+final homeRepository = HomeRepositoryImpl(
+    remoteDataSource: homeDataRemoteDataSource,
+    tokensLocalDataSource: tokensLocalDataSource);
 final homeDataRemoteDataSource = HomeDataApiRemoteDataSource(
   dioClient: dioClient,
 );
 
 //GoogleMap
 
-final googleMapRemoteDataSource = GoogleMapApiRemoteDataSource( dioClient: dioClient,);
+final googleMapRemoteDataSource = GoogleMapApiRemoteDataSource(
+  dioClient: dioClient,
+);
 final googleMapRepository = GoogleMapRepositoryImpl(
     tokensLocalDataSource: tokensLocalDataSource,
     googleMapRemoteDataSource: googleMapRemoteDataSource);

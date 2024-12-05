@@ -22,7 +22,7 @@ class CargoCategoryModel {
       nameAr: json['name_ar'] as String,
       nameEn: json['name_en'] as String,
       image: json['image'] as String,
-      subcategory: (json['subcategory'] as List<dynamic>?) ?.map((item) =>CargoSubCategoryModel.fromJson(item as Map<String, dynamic>)).toList() ?? [],
+      subcategory: (json['subcategories'] as List<dynamic>?) ?.map((item) =>CargoSubCategoryModel.fromJson(item as Map<String, dynamic>)).toList() ?? [],
     );
   }
 

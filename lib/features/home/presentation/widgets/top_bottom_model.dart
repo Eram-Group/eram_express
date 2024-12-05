@@ -12,7 +12,7 @@ class TopBottomModel extends StatelessWidget {
           width: 60,
           height: 5,
           decoration: BoxDecoration(
-            color: Color(0xffDFE2EB),
+            color:const Color(0xffDFE2EB),
             borderRadius: BorderRadius.circular(2),
           ),
         ),

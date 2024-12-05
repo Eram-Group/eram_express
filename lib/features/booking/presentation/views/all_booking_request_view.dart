@@ -30,17 +30,17 @@ class AllBookingRequestView extends StatelessWidget {
                 bloc: arguments.cubit,
                 listener: (context, state)
                 {
-                  if (state is AcceptBookingRequest)
+                  if (state.isAcceptingBid)
                    {
                         const AcceptOrderModal().show(context);
                    }
                 },
                 builder: (context, state) {
-                  if (state is BookingRequestSuccessViewState) {
+                  if (state.isLoaded) {
                     return Padding(
                         padding:const EdgeInsets.symmetric(horizontal: 24),
                         child: ListView.builder(
-                          itemCount: state.bookingRequests.length,
+                          itemCount: state.bookingRequests!.length,
                           itemBuilder: (context, index) {
                             return BookingRequestCard(
                               showMoreTap:(){
@@ -48,18 +48,18 @@ class AllBookingRequestView extends StatelessWidget {
                                   OffersView.route,
                                   arguments: OfferViewArguments(
                                       cubit: arguments.cubit,
-                                      id: state.bookingRequests[index].id),
+                                      id: state.bookingRequests![index].id),
                                 );
                               } ,
-                              bookingRequest: state.bookingRequests[index],
+                              bookingRequest: state.bookingRequests![index],
                               onTap: (bidViewModel) {
                                 arguments.cubit.acceptBidding(bidViewModel);
                               },
                             );
                           },
                         ));
-                  } else if (state is BookingRequestErrorViewState) {
-                    return const Center(child: Text("error"));
+                  } else if (state.isError) {
+                    return  Center(child: Text(state.errorMessage!));
                   } else {
                     return EmptyBookingView();
                   }

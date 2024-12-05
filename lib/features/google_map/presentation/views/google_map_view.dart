@@ -15,7 +15,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../Common/presentation/widgets/customButton.dart';
 import '../../../home/data/models/picking_locationModel.dart';
 import 'google_map_view_state.dart';
-import 'package:provider/provider.dart';
+
+
 
 class GoogleMapViewArguments {
   final Point? initialAddress;
@@ -38,13 +39,14 @@ class GoogleMapView extends StatelessWidget {
             googleMapRepository: googleMapRepository
            
                 )
-          ..setInitialCameraPostion(googleMapViewArguments?.initialAddress);
+          ..setInitialCameraPosition(googleMapViewArguments?.initialAddress);
       },
       child: BlocBuilder<GoogleMapViewController, GoogleMapViewState>(
-        //علشان امنع ان مع كل حركه ترجع ت build
+       //To prevent rebuilding on every action
         buildWhen: (previous, current) {
-          return current is GoogleMapViewStateUpdated ||
-              current is GoogleMapViewStateLoading;
+          return (current.status == GoogleMapViewStatus.updated ||
+                 current.status == GoogleMapViewStatus.loading);
+
         },
         builder: (context, state) {
           logger.debug("GoogleMap is being rebuilt with state: $state");
@@ -52,31 +54,24 @@ class GoogleMapView extends StatelessWidget {
               child: Scaffold(
             resizeToAvoidBottomInset: false,
             body: Opacity(
-              opacity: state is GoogleMapViewStateLoading ? 0.5 : 1,
+              opacity: state.isLoading ? 0.5 : 1,
               child: Stack(
                 children: [
                   GoogleMap(
                     onMapCreated: (controller) async {
-                      context
-                          .read<GoogleMapViewController>()
-                          .setController(controller);
+                      context .read<GoogleMapViewController>().setController(controller);
                     },
                     onCameraMove: (CameraPosition position) {
-                      context
-                          .read<GoogleMapViewController>()
-                          .updateMarkerAndCamera(position);
+                      context .read<GoogleMapViewController>().updateMarkerAndCamera(position);
                     },
                     onCameraIdle: () {
                       context.read<GoogleMapViewController>().getPlaceDetails();
                     },
-                    initialCameraPosition: context
-                        .read<GoogleMapViewController>()
-                        .kInitialPosition,
+                    initialCameraPosition: context.read<GoogleMapViewController>().kInitialPosition,
                   ),
-                  if (!(state is GoogleMapViewStateLoading)) ...[
-                    Center(
-                      child: _buildMarker(),
-                    ),
+                  if (!(state.isLoading)) ...
+                  [
+                    Center(child: _buildMarker(),),
                     const SearchButton(),
                     _buildAddressContainer(),
                   ],
@@ -127,12 +122,12 @@ class GoogleMapView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const TopBottomModel(),
-                      if (state is PlaceDetailsError)
+                      if (state.isPlaceDetailsError)
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Icon(Icons.error),
-                            Text(state.errorMessage),
+                            Text(state.errorMessage!),
                           ],
                         )
                       else
@@ -141,9 +136,7 @@ class GoogleMapView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             const SvgIcon(asset: 'record-circle'),
-                            SizedBox(
-                              width: Responsive.getResponsiveFontSize(context,
-                                  fontSize: 20),
+                            SizedBox(width: Responsive.getResponsiveFontSize(context, fontSize: 20),
                             ),
                             Expanded(
                               child: Column(
@@ -166,27 +159,20 @@ class GoogleMapView extends StatelessWidget {
                                       color: AppColor.lightGrey,
                                     ),
                                   ),
-                                  if (state is PlaceDetailsLoaded)
+                                  if (state.isPlaceDetailsLoaded)
                                     Column(children: [
                                       Text(
-                                        state.placeDetails.formattedAddress,
+                                        state.placeDetails!.formattedAddress,
                                         style: TextStyle(
-                                          fontSize:
-                                              Responsive.getResponsiveFontSize(
-                                                  context,
-                                                  fontSize: 14),
-                                          height: 18.2 /
-                                              Responsive.getResponsiveFontSize(
-                                                  context,
-                                                  fontSize: 14),
+                                          fontSize: Responsive.getResponsiveFontSize(context,fontSize: 14),
+                                          height: 18.2 /Responsive.getResponsiveFontSize(context,fontSize: 14),
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                       const Gap(30),
                                       CustomButton(
                                         padding: const EdgeInsets.all(15),
-                                        text: context.tt(
-                                            "Select location", "حدد الموقع"),
+                                        text: context.tt("Select location", "حدد الموقع"),
                                         onPressed: () {
                                           PickingLocationModel
                                               pickingLocation =
@@ -207,10 +193,8 @@ class GoogleMapView extends StatelessWidget {
                                                         .position
                                                         .latitude,
                                                   ),
-                                                  address: state
-                                                      .placeDetails.formattedAddress);
-                                          Navigator.of(context).pop(
-                                              pickingLocation); // Pop the current route and return the picking location
+                                                  address: state .placeDetails!.formattedAddress);
+                                                   Navigator.of(context).pop( pickingLocation); 
                                         },
                                       ),
                                     ])

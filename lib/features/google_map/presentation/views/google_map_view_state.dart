@@ -4,35 +4,52 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../data/models/addressmodels/place_details_model.dart';
 
-abstract class GoogleMapViewState extends Equatable {
-  const GoogleMapViewState();
-  @override
-  List<Object> get props => [];
+
+enum GoogleMapViewStatus {
+  initial,
+  loading,
+  updated,
+  error,
+  placeDetailsLoaded,
+  placeDetailsLoading,
+  placeDetailsError,
 }
 
-class GoogleMapViewStateInitial extends GoogleMapViewState {}
+extension GoogleMapViewStateX on GoogleMapViewState {
+  bool get isInitial => status == GoogleMapViewStatus.initial;
+  bool get isLoading => status == GoogleMapViewStatus.loading;
+  bool get isLoaded => status == GoogleMapViewStatus.updated;
+  bool get isError => status == GoogleMapViewStatus.error;
+  bool get isEmpty => status == GoogleMapViewStatus.placeDetailsError;
+  bool get isPlaceDetailsLoaded => status == GoogleMapViewStatus.placeDetailsLoaded;
+  bool get isPlaceDetailsLoading => status == GoogleMapViewStatus.placeDetailsLoading;
+  bool get isPlaceDetailsError =>status == GoogleMapViewStatus.placeDetailsError;
+}
 
-class GoogleMapViewStateLoading extends GoogleMapViewState {}
+class GoogleMapViewState extends Equatable {
+  final GoogleMapViewStatus status;
+  final Set<Marker>? markers;
+  final String? errorMessage;
+  final PlaceDetailsModel? placeDetails; 
 
-class GoogleMapViewStateUpdated extends GoogleMapViewState {
-  final Set<Marker> markers;
-  const GoogleMapViewStateUpdated(
+  const GoogleMapViewState({
+    required this.status,
     this.markers,
-  );
+    this.errorMessage, 
+    this.placeDetails,
+  });
+
   @override
-  List<Object> get props => [markers];
+  List<Object?> get props =>[markers];
 }
 
-class GoogleMapViewStateError extends GoogleMapViewState {
-  final String errorMessege;
-  const GoogleMapViewStateError(this.errorMessege);
-  List<Object> get props => [errorMessege];
-}
 
-class PlaceDetailsLoadingState extends GoogleMapViewState {
-  List<Object> get props => [];
-}
 
+
+
+
+
+/*
 class PlaceDetailsLoaded extends GoogleMapViewState {
   final  PlaceDetailsModel placeDetails;
   const PlaceDetailsLoaded(this.placeDetails);
@@ -46,3 +63,4 @@ class PlaceDetailsError extends GoogleMapViewState {
   @override
   List<Object> get props => [errorMessage];
 }
+*/

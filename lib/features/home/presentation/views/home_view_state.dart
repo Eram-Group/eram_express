@@ -1,3 +1,4 @@
+import 'package:eram_express/features/home/data/models/home-Model.dart';
 import '../../data/models/cargo-categoriesModel.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
@@ -11,12 +12,10 @@ class HomeViewState {
   final String? pickupDate;
   List<GoodModel>? selectGoods;
   final String? selectGoodsString;
-  final List<CargoSubCategoryModel>? cargoSubCategories;
-  final List<CargoCategoryModel>? cargoCategories;
-  final List<GoodModel>? goods;
-
+  final HomeModel? homeModel;
   final String? errorMessage;
-  
+  final bool? isValidateLoadType;
+
   HomeViewState({
     this.pickup,
     this.destination,
@@ -25,27 +24,25 @@ class HomeViewState {
     this.pickupDate,
     this.selectGoods,
     this.selectGoodsString,
-    this.cargoSubCategories,
-    this.cargoCategories,
-    this.goods,
-   
+    this.homeModel,
     this.errorMessage,
+    this.isValidateLoadType = true,
   });
 
-  HomeViewState copyWith({
-    final PickingLocationModel? pickup,
-    final PickingLocationModel? destination,
-    CargoCategoryModel? loadType,
-    CargoSubCategoryModel? truckSize,
-    List<GoodModel>? selectGoods,
-    String? selectGoodsString,
-    String? pickupDate,
-    //bool? isLoading,
-    List<CargoSubCategoryModel>? cargoSubCategories,
-    List<CargoCategoryModel>? cargoCategories,
-    List<GoodModel>? goods,
-    String? errorMessage,
-  }) {
+  HomeViewState copyWith(
+      {final PickingLocationModel? pickup,
+      final PickingLocationModel? destination,
+      CargoCategoryModel? loadType,
+      CargoSubCategoryModel? truckSize,
+      List<GoodModel>? selectGoods,
+      String? selectGoodsString,
+      String? pickupDate,
+      HomeModel? homeModel,
+      List<CargoSubCategoryModel>? cargoSubCategories,
+      List<CargoCategoryModel>? cargoCategories,
+      List<GoodModel>? goods,
+      String? errorMessage,
+      bool? isValidateLoadType}) {
     return HomeViewState(
       pickup: pickup ?? this.pickup,
       destination: destination ?? this.destination,
@@ -53,20 +50,17 @@ class HomeViewState {
       truckSize: truckSize ?? this.truckSize,
       selectGoods: selectGoods ?? this.selectGoods,
       pickupDate: pickupDate ?? this.pickupDate,
-      //isLoading: isLoading ?? this.isLoading,
-      cargoSubCategories: cargoSubCategories ?? this.cargoSubCategories,
-      cargoCategories: cargoCategories ?? this.cargoCategories,
-      goods: goods ?? this.goods,
-     
+      homeModel: homeModel ?? this.homeModel,
       selectGoodsString: selectGoodsString ?? this.selectGoodsString,
       errorMessage: errorMessage ?? this.errorMessage,
+      isValidateLoadType: isValidateLoadType ?? this.isValidateLoadType,
     );
   }
 }
-class RequestCreateError extends HomeViewState
-{
-  RequestCreateError():
-  super(
+
+class RequestCreateError extends HomeViewState {
+  RequestCreateError()
+      : super(
           pickup: null,
           destination: null,
           loadType: null,
@@ -74,15 +68,10 @@ class RequestCreateError extends HomeViewState
           pickupDate: null,
           selectGoods: null,
           selectGoodsString: null,
-          //isLoading: false,
-          cargoSubCategories: [],
-          cargoCategories: [],
-          goods: [],
-          
           errorMessage: null,
         );
-
 }
+
 class RequestCreateSuccess extends HomeViewState {
   RequestCreateSuccess()
       : super(
@@ -93,9 +82,6 @@ class RequestCreateSuccess extends HomeViewState {
           pickupDate: null,
           selectGoods: null,
           selectGoodsString: null,
-          cargoSubCategories: [],
-          cargoCategories: [],
-          goods: [],
           errorMessage: null,
         );
 }

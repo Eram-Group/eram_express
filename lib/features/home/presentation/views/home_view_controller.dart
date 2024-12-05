@@ -23,33 +23,33 @@ class HomeViewController extends Cubit<HomeViewState> {
     required BookingRepository bookingRepository,
   })  : _homeRepository = homeRepo,
         _bookingRepository = bookingRepository,
-        super(HomeViewState());
+        super(HomeViewState()) {
+    initialHomeData();
+  }
+
+  Future<void> initialHomeData() async {
+    try {
+      final result = await _homeRepository.getHome();
+      emit(state.copyWith(homeModel: result));
+    } catch (e) {
+      state.copyWith(errorMessage: "Failed to get data");
+    }
+  }
 
   Future<void> cargoCategoryOnClicked(BuildContext context) async {
-    // emit(state.copyWith(isLoading: true,));
-    _homeRepository.getHome().then((result) {
-      try {
-        emit(state.copyWith(cargoCategories: result.categories));
-      } catch (e) {
-        emit(state.copyWith(errorMessage: "Failed to get data"));
-      }
-    });
-
     final selection = await showModalBottomSheet<CargoCategoryModel>(
       context: context,
       builder: (context) => SelectCargoCategoryModal(
         cubit: this,
       ),
     );
-
-    if (selection != null) {
-      emit(state.copyWith(
-        loadType: selection,
-      ));
+    if (selection != null) 
+    {
+      emit(state.copyWith(loadType: selection, isValidateLoadType: true));
     }
   }
 
-  Future<void> pickdateOnClicked(BuildContext context) async {
+  Future<void> pickDateOnClicked(BuildContext context) async {
     final selection = await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -63,11 +63,7 @@ class HomeViewController extends Cubit<HomeViewState> {
   }
 
   Future<void> cargoSubCategoryOnClicked(BuildContext context) async {
-    try {
-      // ايه الفرق بينها وبين لو عملت
-      //.then?
-      final result = await _homeRepository.getSubCargoCategories();
-      emit(state.copyWith(cargoSubCategories: result));
+    if (state.loadType != null) {
       final selection = await showModalBottomSheet<CargoSubCategoryModel>(
         context: context,
         builder: (context) => SelectSubCargoCategoryModal(
@@ -77,30 +73,22 @@ class HomeViewController extends Cubit<HomeViewState> {
       if (selection != null) {
         emit(state.copyWith(truckSize: selection));
       }
-    } catch (e) {}
+    } else {
+      emit(state.copyWith(isValidateLoadType: false));
+    }
   }
 
   Future<void> goodsOnClicked(BuildContext context) async {
-    try {
-      final result = await _homeRepository.getGoods();
-      emit(state.copyWith(goods: result));
+    final selection = await showModalBottomSheet<List<GoodModel>>(
+      context: context,
+      builder: (context) => SelectGoodsModal(
+        cubit: this,
+      ),
+    );
 
-      final selection = await showModalBottomSheet<List<GoodModel>>(
-        context: context,
-        builder: (context) => SelectGoodsModal(
-          cubit: this,
-        ),
-      );
-
-      if (selection != null) {
-        displayGoodstype(selection, context);
-      }
-    } catch (e) {
-      emit(state.copyWith(
-        errorMessage: "Error in getting Goods",
-      ));
+    if (selection != null) {
+      displayGoodstype(selection, context);
     }
-    
   }
 
   Future<void> pickClicked(BuildContext context) async {
@@ -155,30 +143,21 @@ class HomeViewController extends Cubit<HomeViewState> {
     }
   }
 
-  void displayGoodstype(List<GoodModel> selectiongoods, BuildContext context) {
+  void displayGoodstype(List<GoodModel> selectionGoods, BuildContext context) {
     String goodsNames =
-        selectiongoods.map((good) => good.nameEn).toList().join(', ');
+        selectionGoods.map((good) => good.nameEn).toList().join(', ');
     emit(state.copyWith(
       selectGoodsString: goodsNames,
     ));
   }
 
   void toggleGoodSelection(GoodModel good) {
-    state.selectGoods ??= [];
-    final existingGood = state.selectGoods!.firstWhere(
-      (selectedGood) => selectedGood.id == good.id,
-      orElse: () => GoodModel(
-        id: -1,
-        nameAr: 'Unknown',
-        nameEn: 'Unknown',
-        image: '',
-      ),
-    );
-    if (existingGood.id != -1) {
-      state.selectGoods!.remove(existingGood);
+    final selectGoods = state.selectGoods ?? [];
+    if (selectGoods.contains(good)) {
+      selectGoods.remove(good);
     } else {
-      state.selectGoods!.add(good);
+      selectGoods.add(good);
     }
-    emit(state.copyWith(selectGoods: state.selectGoods));
+    emit(state.copyWith(selectGoods: selectGoods));
   }
 }

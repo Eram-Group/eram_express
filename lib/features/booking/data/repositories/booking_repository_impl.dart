@@ -15,26 +15,28 @@ class BookingRepositoryImpl implements BookingRepository {
         _tokensLocalDataSource = tokensLocalDataSource;
 
   @override
-  Future<void> bookingRequest(
-      BookingRequestFormData data) async {
+  Future<void> bookingRequest(BookingRequestFormData data) async {
     final accessToken = await _tokensLocalDataSource.accessToken;
-   
-     await _bookingRemoteDataSource.bookingRequest(data, accessToken!);
-    
+
+    await _bookingRemoteDataSource.bookingRequest(data, accessToken!);
   }
+
   @override
-  Future<List<BookingRequestModel>>listBookingRequest() async {
+  Future<List<BookingRequestModel>> listBookingRequest() async {
     final accessToken = await _tokensLocalDataSource.accessToken;
-   
-    final result = await _bookingRemoteDataSource.listBookingRequest(accessToken!);
+
+    final result =
+        await _bookingRemoteDataSource.listBookingRequest(accessToken!);
+    _bookingRequests = result;
     return result;
   }
- @override
+
+  @override
   Future<void> acceptBidding(int bidId) async {
     final accessToken = await _tokensLocalDataSource.accessToken;
-    
-    final result =
-        await _bookingRemoteDataSource.acceptBidding(accessToken!, bidId);
+
+    final result = await _bookingRemoteDataSource.acceptBidding(accessToken!, bidId);
+
     return result;
   }
 

@@ -39,7 +39,8 @@ class LoginViewModel extends Cubit<LoginViewState> {
           selectedCountry: countries.first,
         ),
       );
-    } on ServerException catch (e) {
+    } on ServerException catch (e) 
+    {
       //emit(state)
     }
   }

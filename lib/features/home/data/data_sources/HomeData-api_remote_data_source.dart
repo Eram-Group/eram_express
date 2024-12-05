@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
 import 'package:eram_express/features/home/data/models/cargo-subcategoryModel.dart';
 import 'package:eram_express/features/home/data/models/home-Model.dart';
@@ -12,33 +14,19 @@ class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource
   HomeDataApiRemoteDataSource({required DioApiClient dioClient})
       : _dioClient = dioClient;
 
-  @override
-  Future<List<CargoCategoryModel>>getCargoCategories() async {
-    return await _dioClient.request(
-      cargoCategoriesEndpoint.prepare() ,
-    );
-  }
 
-  @override
-  Future< List<CargoSubCategoryModel>>getSubCargoCategories() async {
-    return await _dioClient.request(cargoSubCategoriesEndpoint.prepare() );
-  }
-
-  @override
-  Future<List<GoodModel>> getgoods() async 
-  {
-    return await _dioClient.request(
-      goodTypeEndpoint.prepare() ,
-    );
-  }
    @override
-  Future<HomeModel> getHomeData() async
+  Future<HomeModel> getHomeData(String accessToken) async
    {
+     
     return await _dioClient.request(
-     homeDataEndPoint.prepare(),
+
+     homeDataEndPoint.prepare(   
+      headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+        }),
      
     );
   }
-
 
 }

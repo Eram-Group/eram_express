@@ -1,4 +1,5 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -37,14 +38,14 @@ class SelectCargoCategoryModal extends StatelessWidget {
             Expanded(
               child: BlocBuilder<HomeViewController, HomeViewState>(
                 builder: (context, state) {
-                  if (state.cargoCategories == null) {
+                  if (state.homeModel!.categories.isEmpty) {
                     return const Center(child: Text('No categories available'));
-                  } 
-                  else {
+                  } else {
                     return SingleChildScrollView(
                         child: Column(
-                      children: state.cargoCategories!.map((cargo) {
-                        return BlocSelector<HomeViewController, HomeViewState,bool>(
+                         children: state.homeModel!.categories.map((cargo) {
+                        return BlocSelector<HomeViewController, HomeViewState,
+                            bool>(
                           selector: (state) => state.loadType == null
                               ? false
                               : state.loadType!.id == cargo.id,

@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-
-import '../../../booking/data/models/booking_request_model.dart';
-
 import 'cargo-categoriesModel.dart';
 import 'goods-typeModel.dart';
 
@@ -20,6 +14,7 @@ class HomeModel {
   });
 
   factory HomeModel.fromJson(Map<String, dynamic> json) {
+  
     return HomeModel(
       categories: (json["categories"] as List)
           .map((category) => CargoCategoryModel.fromJson(category))
@@ -32,7 +27,9 @@ class HomeModel {
     
   }
   
+ String toString() {
+    return 'HomeModel(categories: $categories)';
 
-
+}
 }
 

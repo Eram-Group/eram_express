@@ -12,8 +12,6 @@ import 'package:gap/gap.dart';
 import '../../../../core/app_colors.dart';
 import '../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../data/models/bid_model.dart';
-
-
 import 'booking_request_view_controller.dart';
 import 'booking_request_view_state.dart';
 
@@ -70,7 +68,7 @@ class OffersView extends StatelessWidget {
           BlocConsumer<BookingRequestViewController, BookingRequestViewState>(
             bloc: arguments.cubit,
             listener: (context, state) {
-              if (state is AcceptBookingRequest) {
+              if (state.isAcceptingBid) {
                 const AcceptOrderModal().show(context);
               }
             },

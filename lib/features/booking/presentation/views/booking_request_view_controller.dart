@@ -1,5 +1,5 @@
-
 import 'package:eram_express/features/booking/data/models/booking_request_model.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/bid_model.dart';
 import '../../data/repositories/BookingRepository .dart';
@@ -8,78 +8,72 @@ import 'booking_request_view_state.dart';
 BookingRequestViewState getBookingRequestState(
     BookingRepository bookingRepository) {
   return bookingRepository.cachetBooking == null
-      ? BookingRequestViewState()
+      ? const BookingRequestViewState(status: BookingRequestStatus.initial)
       : bookingRepository.cachetBooking!.isEmpty
-          ? BookingRequestEmptyViewState()
-          : BookingRequestSuccessViewState(
-              bookingRepository.cachetBooking!
-                  
-            );
+          ? const BookingRequestViewState(status: BookingRequestStatus.empty)
+          : BookingRequestViewState(
+              status: BookingRequestStatus.loaded,
+              bookingRequests: bookingRepository.cachetBooking);
 }
- 
-class BookingRequestViewController extends Cubit<BookingRequestViewState>
- {
+
+class BookingRequestViewController extends Cubit<BookingRequestViewState> {
   final BookingRepository _bookingRepository;
 
- BookingRequestViewController({ required BookingRepository bookingRepository,}) 
- :_bookingRepository = bookingRepository,super(getBookingRequestState(bookingRepository)) 
-  {
+  BookingRequestViewController({
+    required BookingRepository bookingRepository,
+  })  : _bookingRepository = bookingRepository,
+        super(getBookingRequestState(bookingRepository)) {
     initialListBookingRequest();
   }
   Future<void> initialListBookingRequest() async {
-    if (state is BookingRequestSuccessViewState) return;
+    if (state.isLoaded) return;
     await listBookingRequest();
   }
 
   Future<void> listBookingRequest() async {
-    //if (state is BookingRequestViewSuccessState) return;
-    try
-    {
-         final result =  await _bookingRepository.listBookingRequest();
-         result.isEmpty
-          ? emit(BookingRequestEmptyViewState())
-          : emit(
-              BookingRequestSuccessViewState(result));
+    //if (state.isLoaded) return;
+    try {
+      final result = await _bookingRepository.listBookingRequest();
+      result.isEmpty
+          ? emit(state.copyWith(status: BookingRequestStatus.empty))
+          : emit(state.copyWith(
+              status: BookingRequestStatus.loaded, bookingRequests: result));
+    } catch (e) {
+      emit(state.copyWith(errorMessage: "fail to load booking Request"));
     }
-    catch (e)
-    {
-        emit(BookingRequestErrorViewState
-("Error: ${e.toString()}"));
-    }
- 
   }
 
   Future<void> acceptBidding(BidModel bid) async {
-    try
-    {
-    final result = await _bookingRepository.acceptBidding(bid.id);
-      emit(AcceptBookingRequest());
-      removeAcceptingReqeust(bid.bookingRequestId);
+    try {
+      await _bookingRepository.acceptBidding(bid.id);
+      emit(state.copyWith(status: BookingRequestStatus.acceptBidding));
+      removeAcceptingRequest(bid.bookingRequestId);
+    } catch (e) {
+      logger.debug(e.toString());
+      emit(state.copyWith(
+          status: BookingRequestStatus.error,
+          errorMessage: "Error in accepting Bid"));
     }
-    catch(e)
-    {
-      emit((BookingRequestErrorViewState
-("Error in acceptinggggg")));
-    }
-   
   }
 
-  void removeAcceptingReqeust(int removedId) {
-    _bookingRepository.cachetBooking! .removeWhere((booking) => booking.id == removedId);
-    final newList =  _bookingRepository.cachetBooking;
-    emit(BookingRequestSuccessViewState(newList!));
+  void removeAcceptingRequest(int removedId) {
+    _bookingRepository.cachetBooking!
+        .removeWhere((booking) => booking.id == removedId);
+    final newList = _bookingRepository.cachetBooking;
+    newList!.isEmpty
+        ? emit(state.copyWith(status: BookingRequestStatus.empty))
+        : emit(state.copyWith(
+            status: BookingRequestStatus.loaded, bookingRequests: newList));
   }
 
   List<BidModel> getBidding(int id) {
     try {
-      BookingRequestModel booking = _bookingRepository.cachetBooking!.firstWhere((booking) => booking.id == id);
-      List<BidModel> bids =booking.bids;
+      BookingRequestModel booking = _bookingRepository.cachetBooking!
+          .firstWhere((booking) => booking.id == id);
+      List<BidModel> bids = booking.bids;
       return bids;
-    } 
-    catch (e) 
-    {
+    } catch (e) {
       return [];
     }
   }
-
- }
+}

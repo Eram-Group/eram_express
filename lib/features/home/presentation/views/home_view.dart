@@ -17,7 +17,6 @@ import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/picking_locationModel.dart';
 import '../modals/failed-request-modal.dart';
 import '../modals/successful-request-modal.dart';
-
 import '../widgets/empty_booking_view.dart';
 import '../widgets/selection-card.dart';
 import 'home_view_controller.dart';
@@ -26,14 +25,11 @@ import 'home_view_state.dart';
 class HomeView extends StatelessWidget {
   static const String route = '/home';
   final HomeViewController homeViewModel = HomeViewController(
-      homeRepo: homeRepository,
-      bookingRepository: bookingRepository);
-
+      homeRepo: homeRepository, bookingRepository: bookingRepository);
   final BookingRequestViewController bookingRequestViewModel =
       BookingRequestViewController(
-          bookingRepository: bookingRepository,
-      );
-
+    bookingRepository: bookingRepository,
+  );
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
@@ -70,12 +66,7 @@ class HomeView extends StatelessWidget {
         )));
   }
 
-/*
-لما نعمل merge 
-هستخدم 
-profile viewmodel
-*/
-
+  // we wait to merge profileFeature to wrap it with ProfileViewModel
   Widget _buildHeader(BuildContext context) {
     return Container(
         width: Responsive.screenWidth,
@@ -128,7 +119,7 @@ profile viewmodel
   Widget _buildDataContainer(BuildContext context) {
     logger.debug(" rebuild data Container");
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 110)
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 90)
           .copyWith(bottom: 0),
       child: Card(
         shape: RoundedRectangleBorder(
@@ -138,12 +129,12 @@ profile viewmodel
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            boxShadow: const[
-               BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Color(0x1C000000),
-                offset: Offset(0, 4), 
-                blurRadius: 24, 
-                spreadRadius: 0, 
+                offset: Offset(0, 4),
+                blurRadius: 24,
+                spreadRadius: 0,
               ),
             ],
           ),
@@ -185,11 +176,12 @@ profile viewmodel
             child: BlocSelector<HomeViewController, HomeViewState,
                 PickingLocationModel?>(
           bloc: homeViewModel,
-          selector: (state) => state.pickup, 
+          selector: (state) => state.pickup,
           builder: (context, pickup) {
+            logger.debug("build locationRow");
             return SelectionCard(
               onTap: () => homeViewModel.pickClicked(context),
-              selectedValue: pickup?.address ?? " ", 
+              selectedValue: pickup?.address ?? " ",
               label: pickup?.address ?? "Pick up",
               iconName: 'Pick_Up',
             );
@@ -215,37 +207,40 @@ profile viewmodel
   }
 
   Widget _buildLoadTypeField(BuildContext context) {
-    return BlocSelector<HomeViewController, HomeViewState,
-        CargoCategoryModel?>(
+    return BlocSelector<HomeViewController, HomeViewState, CargoCategoryModel?>(
       bloc: homeViewModel,
       selector: (state) => state.loadType,
       builder: (context, loadType) {
-        logger.debug("enter in loaded");
-        return SelectionCard(
-          onTap: () => homeViewModel.cargoCategoryOnClicked(context),
-          selectedValue:
-              context.tt(loadType?.nameEn ?? " ", loadType?.nameAr ?? " "),
-          label: context.tt(loadType?.nameEn ?? "Select the load type",
-              loadType?.nameAr ?? "اختر نوع الحمولة"),
-          iconName: 'arrow-down',
+        logger.debug("build Type");
+        return BlocSelector<HomeViewController, HomeViewState, bool>(
+          bloc: homeViewModel,
+          selector: (state) => state.isValidateLoadType ?? false,
+          builder: (context, isValid) {
+            return SelectionCard(
+                onTap: () => homeViewModel.cargoCategoryOnClicked(context),
+                selectedValue: context.tt(
+                    loadType?.nameEn ?? " ", loadType?.nameAr ?? " "),
+                label: context.tt(loadType?.nameEn ?? "Select the load type",
+                    loadType?.nameAr ?? "اختر نوع الحمولة"),
+                iconName: 'arrow-down',
+                isValidate: isValid);
+          },
         );
       },
     );
   }
 
   Widget _buildTruckSizeField(BuildContext context) {
-    return BlocSelector<HomeViewController, HomeViewState,
-        CargoSubCategoryModel?>(
+    return BlocSelector<HomeViewController, HomeViewState, CargoSubCategoryModel?>(
       bloc: homeViewModel,
       selector: (state) => state.truckSize,
       builder: (context, truckSize) {
-        logger.debug("message in truck");
+        logger.debug("build truck");
         return SelectionCard(
           onTap: () => homeViewModel.cargoSubCategoryOnClicked(context),
           selectedValue:
               context.tt(truckSize?.nameEn ?? " ", truckSize?.nameAr ?? " "),
-          label: context.tt(truckSize?.nameEn ?? "Choose the size of the truck",
-              truckSize?.nameAr ?? "اختر حجم حمولتك"),
+          label: context.tt(truckSize?.nameEn ?? "Choose the size of the truck", truckSize?.nameAr ?? "اختر حجم حمولتك"),
           iconName: 'sizeTrack',
         );
       },
@@ -255,10 +250,11 @@ profile viewmodel
   Widget _buildDateField(BuildContext context) {
     return BlocSelector<HomeViewController, HomeViewState, String?>(
       bloc: homeViewModel,
-      selector: (state) => state.pickupDate, // تحديد الخاصية المطلوبة فقط
+      selector: (state) => state.pickupDate,
       builder: (context, pickupDate) {
+        logger.debug("build date");
         return SelectionCard(
-          onTap: () => homeViewModel.pickdateOnClicked(context),
+          onTap: () => homeViewModel.pickDateOnClicked(context),
           selectedValue: context.tt(
             pickupDate ?? " ",
             pickupDate ?? " ",
@@ -276,9 +272,9 @@ profile viewmodel
   Widget _buildGoodsField(BuildContext context) {
     return BlocSelector<HomeViewController, HomeViewState, String?>(
       bloc: homeViewModel,
-      selector: (state) =>
-          state.selectGoodsString, // تحديد الخاصية المطلوبة فقط
+      selector: (state) => state.selectGoodsString,
       builder: (context, selectGoodsString) {
+        logger.debug("build goods");
         return SelectionCard(
           onTap: () => homeViewModel.goodsOnClicked(context),
           selectedValue: context.tt(
@@ -299,13 +295,13 @@ profile viewmodel
     return BlocBuilder<BookingRequestViewController, BookingRequestViewState>(
       bloc: bookingRequestViewModel,
       buildWhen: (previous, current) {
-        logger.debug(previous.toString());
-        logger.debug(current.toString());
-        return current is! AcceptBookingRequest;
+        logger.debug("previous: ${previous.toString()}");
+        logger.debug("current: ${current.toString()}");
+        return !current.isAcceptingBid;
       },
       builder: (context, state) {
         logger.debug("rebuild booking Requests Cards");
-        if (state is BookingRequestSuccessViewState) {
+        if (state.isLoaded) {
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
@@ -338,7 +334,7 @@ profile viewmodel
                                 shape: BoxShape.circle),
                             child: Center(
                               child: Text(
-                                state.bookingRequests.length.toString(),
+                                state.bookingRequests!.length.toString(),
                                 style: TextStyle(
                                   fontSize: Responsive.getResponsiveFontSize(
                                       context,
@@ -380,8 +376,7 @@ profile viewmodel
                     ],
                   ),
                   const Gap(10),
-                  ...state.bookingRequests.map((item) => BookingRequestCard(
-                    
+                  ...state.bookingRequests!.map((item) => BookingRequestCard(
                         key: ValueKey(item.id),
                         bookingRequest: item,
                         showMoreTap: () {
@@ -391,16 +386,16 @@ profile viewmodel
                                 cubit: bookingRequestViewModel, id: item.id),
                           );
                         },
-                        onTap: (BidViewModel) {
-                          bookingRequestViewModel.acceptBidding(BidViewModel);
+                        onTap: (bidViewModel) {
+                          bookingRequestViewModel.acceptBidding(bidViewModel);
                         },
                       ))
                 ],
               ));
-        } else if (state is BookingRequestErrorViewState) {
+        } else if (state.isError) {
           return const Text("Error in loading Booking request ");
-        } else if (state is BookingRequestEmptyViewState) {
-          return EmptyBookingView();
+        } else if (state.isEmpty) {
+          return const EmptyBookingView();
         }
         return const SizedBox.shrink();
       },
@@ -416,28 +411,27 @@ profile viewmodel
           onTap: () {
             homeViewModel.createRequestButtonClick();
           },
-
           child: Text(
             context.tt("Create Booking", "انشاء حجز"),
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 height: 20.8 / 20,
-                fontSize:Responsive.getResponsiveFontSize(context, fontSize: 18)),
+                fontSize:
+                    Responsive.getResponsiveFontSize(context, fontSize: 18)),
           ),
-
-          //TextColor: Colors.white,
-          //padding: const EdgeInsets.symmetric(vertical: 15),
         );
       },
     );
   }
 }
 
+// This is a temporary solution to make the scroller horizontal. the main issue is that it requires a fixed height, and I am unable to set, as I need the height to be determined by the child "
+
 /*
   Widget _buildSuccessBooking(List<BookingRequestViewModel> bookingRequests) {
     final PageController _pageController = PageController(
-      viewportFraction: 0.9, // يترك مساحة للبطاقات الأخرى
+      viewportFraction: 0.9,
     );
 
     return BlocProvider(
@@ -446,7 +440,7 @@ profile viewmodel
         mainAxisSize: MainAxisSize.min,
         children: [
           IntrinsicHeight(
-            // استخدم IntrinsicHeight هنا
+            // ا            //IntrinsicHeight هنا
             child: PageView.builder(
               controller: _pageController,
               itemCount: bookingRequests.length,

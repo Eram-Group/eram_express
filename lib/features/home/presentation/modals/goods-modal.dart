@@ -54,17 +54,17 @@ class SelectGoodsModal extends StatelessWidget {
               Expanded(
                 child: BlocBuilder<HomeViewController, HomeViewState>(
                   builder: (context, state) {
-                  if (state.goods == null) {
+                    if (state.homeModel!.goods.isEmpty) {
                       return const Center(child: Text('No goods available'));
                     } else {
                       return ListView.builder(
-                        itemCount: state.goods!.length,
+                        itemCount: state.homeModel!.goods.length,
                         itemBuilder: (context, index) {
-                          final good = state.goods![index];
-                          final isSelected = state.selectGoods?.any(
-                                  (selectedGood) =>
-                                      selectedGood.id == good.id) ??
-                              false;
+                          final good = state.homeModel!.goods[index];
+                          final isSelected = state.selectGoods == null
+                              ? false
+                              : state.selectGoods!.contains(good);
+                        
                           return ClickBottomSheetItem2(
                             isSelected: isSelected,
                             onTap: () {
@@ -140,9 +140,8 @@ class ClickBottomSheetItem2 extends StatelessWidget {
                                 child: Container(
                                   width: 10,
                                   height: 10,
-                                  decoration:const  BoxDecoration(
-                                    color:
-                                        Colors.white,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
                                     shape: BoxShape.circle,
                                   ),
                                 ),
@@ -154,7 +153,7 @@ class ClickBottomSheetItem2 extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color:const Color(0xffA7A9B7),
+                                  color: const Color(0xffA7A9B7),
                                   width: 5,
                                 ),
                               ),

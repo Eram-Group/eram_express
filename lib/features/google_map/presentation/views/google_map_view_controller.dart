@@ -20,17 +20,16 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     required LocationService locationService,
   })  : _locationService = locationService,
        _googleMapRepository=googleMapRepository,
-       
-        super(GoogleMapViewStateInitial()) {}
+        super(const GoogleMapViewState(status: GoogleMapViewStatus.initial)) ;
 
   GoogleMapController? _controller;
   Timer? _debounce;
   final Set<Marker> mapMarkers = {};
-  late String mapstyle = '';
+  late String mapStyle = '';
   late CameraPosition kInitialPosition;
   double kDefaultMapZoom = 15.0;
 
-  void setInitialCameraPostion(Point? initialAddress) 
+  void setInitialCameraPosition(Point? initialAddress) 
   {
     if (initialAddress != null) {
       kInitialPosition = CameraPosition(
@@ -45,9 +44,9 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
           zoom: kDefaultMapZoom,
         );
       } else {
-        emit(GoogleMapViewStateLoading());
+        emit(const GoogleMapViewState(status: GoogleMapViewStatus.loading));
         kInitialPosition = CameraPosition(
-          target: LatLng(0, 0),
+          target: const LatLng(0, 0),
           zoom: kDefaultMapZoom,
         );
         getCurrentLocation();
@@ -59,18 +58,20 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     //if (state is GoogleMapViewStateloading) return; //why?
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      emit(PlaceDetailsLoadingState());
+      emit(const GoogleMapViewState(status: GoogleMapViewStatus.placeDetailsLoading));
       
      try
      {
       final placeDetails = await _googleMapRepository.getPlaceDetails(
           mapMarkers.first.position.latitude.toString(),
           mapMarkers.first.position.longitude.toString(), );
-      emit(PlaceDetailsLoaded(placeDetails));
+      emit(GoogleMapViewState(status: GoogleMapViewStatus.placeDetailsLoaded,placeDetails: placeDetails));
      }
      catch(e)
      {
-       emit(PlaceDetailsError("Error to get place details" ));
+       emit(const GoogleMapViewState(
+            status: GoogleMapViewStatus.placeDetailsError,
+            errorMessage: "Fail to get place details"));
      }
      
     });
@@ -83,8 +84,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
   }
 
   Future<void> setMapStyle(BuildContext context) async {
-    mapstyle = await DefaultAssetBundle.of(context)
-        .loadString('assets/map_styles/silvermap.json');
+    mapStyle = await DefaultAssetBundle.of(context).loadString('assets/map_styles/silvermap.json');
   }
 
   void setController(GoogleMapController controller) {
@@ -93,7 +93,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
 
   void getCurrentLocation() async 
   {
-    emit(GoogleMapViewStateLoading());
+    emit( const GoogleMapViewState(status: GoogleMapViewStatus.loading));
     try
     {
        final locationData = await locationService.getCurrentLocation();
@@ -105,13 +105,13 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     }
     catch(e)
     {
-             emit(const GoogleMapViewStateError("failed"));
+             emit(const GoogleMapViewState(status: GoogleMapViewStatus.error,errorMessage: "Fail to get current location"));
     }
     
   }
 
   void updateMarkerAndCamera(CameraPosition locationData, {bool moveCamera = false}) {
-    emit(PlaceDetailsLoadingState());
+    emit(const GoogleMapViewState( status: GoogleMapViewStatus.placeDetailsLoading,));
     var updatedPosition = locationData.target;
     mapMarkers.removeWhere((marker) => marker.markerId.value == 'myLocation');
     var myLocationMarker = Marker(
@@ -120,24 +120,23 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
       draggable: true,
     );
     mapMarkers.add(myLocationMarker);
-
     if (moveCamera) {
-      ChangeCameraPosition(locationData);
+      changeCameraPosition(locationData);
     }
   }
 
-  void ChangeCameraPosition(CameraPosition locationData) 
+  void changeCameraPosition(CameraPosition locationData) 
   {
     _controller?.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(target: locationData.target, zoom: kDefaultMapZoom),
     ));
-    emit(GoogleMapViewStateUpdated(Set.from(mapMarkers)));
+    emit(GoogleMapViewState(status: GoogleMapViewStatus.updated,markers:Set.from(mapMarkers) ));
+      
   }
 
   void searchButtonClick() async 
   {
     final result = await Navigator.pushNamed(NavigationService.globalContext, SearchView.route);
-    
     if (result is LatLng) {
       CameraPosition(target: result);
       updateMarkerAndCamera(CameraPosition(target: result), moveCamera: true);

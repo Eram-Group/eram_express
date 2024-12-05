@@ -6,7 +6,7 @@ class LoginViewState {
   final CountryModel? selectedCountry;
 
   LoginViewState({
-    this.sendingOtp = false,
+    this.sendingOtp = false,    //instead of enum
     this.phoneNumber = '',
     this.selectedCountry,
   });

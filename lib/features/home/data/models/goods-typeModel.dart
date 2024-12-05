@@ -1,17 +1,16 @@
+import 'package:equatable/equatable.dart';
 
-class GoodModel {
+class GoodModel extends Equatable {
   final int id;
   final String nameAr;
   final String nameEn;
   final String image;
 
-
-  GoodModel({
+  const GoodModel({
     required this.id,
     required this.nameAr,
     required this.nameEn,
     required this.image,
-
   });
 
   factory GoodModel.fromJson(Map<String, dynamic> json) {
@@ -20,9 +19,9 @@ class GoodModel {
       nameAr: json['name_ar'],
       nameEn: json['name_en'],
       image: json['image'],
-   
     );
   }
 
-  
+  @override
+  List<Object?> get props => [id, nameAr, nameEn, image];
 }
