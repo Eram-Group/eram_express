@@ -25,22 +25,20 @@ class TermsView extends StatelessWidget {
         child: SafeArea(
           child: BlocBuilder<TermsViewModel, TermViewState>(
             builder: (context, state) {
-              if (state is TermsViewLoadingState) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state is TermsViewLoadedState) {
+              if (state.isLoading || state.isInitial) {
+                return const  Center(child: CircularProgressIndicator());
+              } else if (state.isLoaded) {
                 return Container(
-                  padding: EdgeInsets.all(16.0),
+                  padding:const  EdgeInsets.all(16.0),
                   child: Html(
-                    data: context.tt(state.termsContent.contentEn,
-                        state.termsContent.contentEn),
+                    data: context.tt(state.termsContent!.contentEn,
+                        state.termsContent!.contentEn),
                   ),
                 );
-              } else if (state is TermsViewErrorState) {
-                return Center(child: Text("Failed to load about us data"));
-              } else {
-                return Container();
               }
-            },
+                return Center(child: Text(state.errorMessage!));
+              
+            }
           ),
         ),
       ),

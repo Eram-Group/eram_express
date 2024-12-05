@@ -104,10 +104,8 @@ class OtpViewModel extends Cubit<OtpViewState> {
     emit(state.copyWith(resendingOtp: true));
     await _authenticationService.sendOtp(
       phoneNumber: _phoneNumber,
-      onOtpSent: () {
-        _startResendOtpTimer();
-        emit(state.copyWith(resendingOtp: false));
-      },
     );
+    _startResendOtpTimer();
+    emit(state.copyWith(resendingOtp: false));
   }
 }

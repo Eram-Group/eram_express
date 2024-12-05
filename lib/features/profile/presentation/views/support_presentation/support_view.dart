@@ -1,18 +1,17 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:eram_express/app/di.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
-import 'package:eram_express/features/profile/presentation/support_presentation/support_view_model.dart';
+import 'package:eram_express/features/profile/presentation/views/support_presentation/support_view_model.dart';
 import 'package:eram_express/features/profile/presentation/widgets/customappbar.widgets.dart';
 import 'package:eram_express_shared/core/app_colors.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../modals/failed_request_modal.dart';
-import '../modals/success_request_modal.dart';
-import '../support_presentation/support_view_state.dart';
+import '../../modals/failed_request_modal.dart';
+import '../../modals/success_request_modal.dart';
+import 'support_view_state.dart';
 
 class SupportView extends StatelessWidget {
   const SupportView({super.key});
@@ -22,11 +21,14 @@ class SupportView extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: context.tt("Support", "الدعم")),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24).copyWith(bottom: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24)
+            .copyWith(bottom: 0),
         child: BlocProvider(
           create: (context) =>
-              SupportViewModel(profileRepository: profileRepository)..getSupportTypes(),
-          child: SingleChildScrollView(
+              SupportViewModel(profileRepository: profileRepository)
+                ..getSupportTypes(),
+          child:
+           SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -40,13 +42,14 @@ class SupportView extends StatelessWidget {
                         Responsive.getResponsiveFontSize(context, fontSize: 16),
                     fontFamily: 'outfit',
                     fontWeight: FontWeight.w500,
-                    height: 24.6 /Responsive.getResponsiveFontSize(context, fontSize: 16),
+                    height: 24.6 /
+                        Responsive.getResponsiveFontSize(context, fontSize: 16),
                     letterSpacing: -0.32,
-                    color:const Color(0xffA7A9B7),
+                    color: const Color(0xffA7A9B7),
                   ),
                 ),
                 _title(context.tt("Select reason", "اختار السبب"), context),
-               _buildDropdown(context),
+                _buildDropdown(context),
                 _title(context.tt("Detail message", "تفاصيل الرسالة"), context),
                 _description(),
                 _buildSubmitButton(context)
@@ -77,12 +80,9 @@ _title(String title, BuildContext context) {
 }
 
 Widget _description() {
-  return BlocBuilder<SupportViewModel, SupportViewState>(
-    buildWhen: (previous, current) =>
-        current is SupportFormLoad &&
-        (previous is! SupportFormLoad ||
-            previous.detailReason != current.detailReason),
-    builder: (context, state) {
+  return BlocSelector<SupportViewModel, SupportViewState, String?>(
+    selector: (state) => state.detailReason ,
+    builder: (context, detailReason) {
       return TextFormField(
         maxLines: 3,
         decoration: InputDecoration(
@@ -112,9 +112,10 @@ Widget _description() {
             ),
           ),
         ),
+        initialValue:detailReason,
         onChanged: (value) {
-          logger.debug(value);
-          context.read<SupportViewModel>().onDescreptionClicked(value);
+         
+          context.read<SupportViewModel>().onDescriptionClicked(value);
         },
       );
     },
@@ -126,10 +127,10 @@ Widget _buildSubmitButton(BuildContext context) {
     padding: const EdgeInsets.symmetric(vertical: 40),
     child: BlocConsumer<SupportViewModel, SupportViewState>(
       listener: (context, state) {
-        if (state is SupportFormSucecessState) {
-          SuccessfulRequestModal().show(context);
-        } else if (state is SupportFormErrorState) {
-          FailedOrderModal().show(context);
+        if (state.isSupportFormSuccess) {
+          const SuccessfulRequestModal().show(context);
+        } else if (state.isSupportFormError) {
+          const FailedOrderModal().show(context);
         }
       },
       builder: (context, state) {
@@ -156,34 +157,42 @@ Widget _buildSubmitButton(BuildContext context) {
 
 Widget _buildDropdown(BuildContext context) {
   return BlocBuilder<SupportViewModel, SupportViewState>(
-      buildWhen: (previous, current) =>
-          current is SupportFormLoad &&
-          (previous is! SupportFormLoad ||
+    
+    buildWhen: (previous, current) {
+      return
               previous.supportTypes != current.supportTypes ||
-              previous.selectedReason != current.selectedReason),
-      builder: (context, state) {
-        if (state is SupportViewErrorState) {
-          return Center(
-            child: Text(
-              state.errorMessage,
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: 'outfit',
-                fontWeight: FontWeight.w400,
-                color: AppColor.blacktext,
-              ),
-            ),
-          );
-        } else if (state is SupportFormLoad) {
-          return _dropdown(context, state.supportTypes, state.selectedReason);
-        }
+          previous.selectedReason != current.selectedReason;
+    },
+    
+    builder: (context, state) {
+      if (state.isLoading || state.isInitial) {
+
         return Center(
           child: CircularProgressIndicator(
             color: AppColor.bordercolor,
             strokeWidth: 3,
           ),
         );
-      });
+      } 
+      else if (state.isLoaded) 
+      {
+        
+        return _dropdown(context, state.supportTypes!, state.selectedReason);
+      }
+
+      return Center(
+        child: Text(
+          state.errorMessage!,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: 'outfit',
+            fontWeight: FontWeight.w400,
+            color: AppColor.blacktext,
+          ),
+        ),
+      );
+    },
+  );
 }
 
 Widget _dropdown(
@@ -191,7 +200,7 @@ Widget _dropdown(
   List<SupportTypeModel> reasonList,
   SupportTypeModel? selectReason,
 ) {
-  logger.debug("rebuild");
+
   return DropdownButtonHideUnderline(
     child: DropdownButton2<SupportTypeModel>(
       isExpanded: true,

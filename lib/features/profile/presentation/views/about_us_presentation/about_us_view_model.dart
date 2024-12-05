@@ -9,18 +9,19 @@ class AboutUsViewModel extends Cubit<AboutUsViewState> {
 
   AboutUsViewModel({required ProfileRepository profileRepository})
       : _profileRepository = profileRepository,
-        super(AboutUsViewLoadingState());
+        super(const AboutUsViewState(status: AboutUsStatus.initial));
 
   Future<void> getAboutUs() async {
-    emit(AboutUsViewLoadingState());
+    emit(state.copyWith(status: AboutUsStatus.loading));
     try
     {
             final result = await _profileRepository.getAboutUs();
-            emit(AboutUsViewLoadedState(result));
+            emit(state.copyWith(status: AboutUsStatus.loaded,
+           aboutUsModel: result));
     }
     catch(e)
     {
-             emit(AboutUsViewErrorState());
+             emit(state.copyWith(status: AboutUsStatus.error));
     }
   
    

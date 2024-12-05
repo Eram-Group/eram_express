@@ -1,24 +1,27 @@
-import 'package:eram_express/features/profile/presentation/views/profile_presentation/profile_view.dart';
+
+
+import 'package:eram_express/app/di.dart';
 import 'package:eram_express_shared/core/app_colors.dart';
+import 'package:eram_express_shared/core/app_text_style.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../../app/di.dart';
-import '../../../data/models/contact_us_model.dart';
+
 import '../../../data/models/contact_us_local_model.dart';
+import '../../../data/models/contact_us_model.dart';
 import '../../widgets/customappbar.widgets.dart';
+import '../profile_presentation/profile_view.dart';
 import 'contact_view_model.dart';
 import 'contact_view_state.dart';
 
 class ContactUsView extends StatelessWidget {
   ContactUsView({super.key});
   static const String route = "/contact_us";
-  final ContactUsViewModel =
-      ContactViewModel(profileRepository: profileRepository);
+  final ContactViewModel  contactViewModel = ContactViewModel(profileRepository: profileRepository);
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +30,12 @@ class ContactUsView extends StatelessWidget {
         title: context.tt("Contact Us", "تواصل معنا"),
       ),
       body: BlocProvider(
-          create: (context) => ContactUsViewModel..getContactUs(),
+          create: (context) => contactViewModel..getContactUs(),
           child: BlocBuilder<ContactViewModel, ContactViewState>(
               builder: (context, state) {
-            if (state is ContactViewErrorState) {
-              return Center(child: Text(state.errormesseg));
-            } else if (state is ContactViewLoadedState) {
+            if (state.isError) {
+              return Center(child: Text(state.errorMessage!));
+            } else if (state.isLoaded) {
               return SafeArea(
                 child: Padding(
                   padding:
@@ -40,15 +43,14 @@ class ContactUsView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildCommuicationContainer(
-                          context, state.contactUsViewModel),
+                      _buildCommunicationContainer(
+                          context, state.contactUsModel!),
                       const Gap(20),
-                      _buildSupportContiner(context, state.contactUsViewModel),
-                      const Gap(20),
-                      Text(context.tt("Follow Us", "تابعنا"),
-                          style: titleContact(context)),
-                      _buildSocailMediaAccounts(
-                          context, state.contactUsViewModel),
+                     _buildSupportContiner(context, state.contactUsModel!),
+                     // const Gap(20),
+                      Text(context.tt("Follow Us", "تابعنا"), style: AppTextStyles().titleContact(context)),
+                      _buildSocialMediaAccounts(
+                          context, state.contactUsModel!),
                     ],
                   ),
                 ),
@@ -61,8 +63,9 @@ class ContactUsView extends StatelessWidget {
   }
 }
 
-Widget _buildsquareContainer(
-    ContactUsViewModel contactItem, BuildContext context) {
+
+Widget _buildSquareContainer( ContactUsLocalModel contactItem, BuildContext context) {
+
   return Clickable(
     onTap: contactItem.onTap,
     decoration: BoxDecoration(
@@ -82,38 +85,34 @@ Widget _buildsquareContainer(
         Text(
           contactItem.title,
           textAlign: TextAlign.center,
-          style: titleContact(context, fontSize: 18),
+          style:AppTextStyles().titleContact(context, fontSize: 18),
         ),
         Text(
           textAlign: TextAlign.center,
           contactItem.subtitle!,
-          style: subtitleContact(context),
+          style: AppTextStyles().subtitleContact(context),
         ),
       ],
     ),
   );
 }
 
-Widget _buildCommuicationContainer(
-    BuildContext context, ContactUsModel contantusmodel) {
-  List<ContactUsViewModel> contactItems =
-      ContactUsItems(context).generateContactItems(contantusmodel);
+Widget _buildCommunicationContainer( BuildContext context, ContactUsModel contactUsModel) {
+  List<ContactUsLocalModel> contactItems =ContactUsItems(context).generateContactItems(contactUsModel);
   return IntrinsicHeight(
       child: Row(
     children: [
       Expanded(
-        child: _buildsquareContainer(contactItems[0], context),
+        child: _buildSquareContainer(contactItems[0], context),
       ),
       const Gap(20),
-      Expanded(child: _buildsquareContainer(contactItems[1], context))
+      Expanded(child: _buildSquareContainer(contactItems[1], context))
     ],
   ));
 }
 
-Widget _buildSupportContiner(
-    BuildContext context, ContactUsModel contantusmodel) {
-  List<ContactUsViewModel> contactItems =
-      ContactUsItems(context).generateSupportItems();
+Widget _buildSupportContiner( BuildContext context, ContactUsModel contantusmodel) {
+  List<ContactUsLocalModel> contactItems = ContactUsItems(context).generateSupportItems();
   return Clickable(
       onTap: contactItems[0].onTap,
       decoration: BoxDecoration(
@@ -134,11 +133,11 @@ Widget _buildSupportContiner(
             children: [
               Text(
                 contactItems[0].title,
-                style: titleContact(context, fontSize: 18),
+                style:AppTextStyles(). titleContact(context, fontSize: 18),
               ),
               Text(
                 contactItems[0].subtitle!,
-                style: subtitleContact(context, fontSize: 15),
+                style: AppTextStyles().subtitleContact(context, fontSize: 15),
               ),
             ],
           ),
@@ -197,10 +196,8 @@ Widget _buildLoadingContactUs() {
       ));
 }
 
-Widget _buildSocailMediaAccounts(
-    BuildContext context, ContactUsModel contantusmodel) {
-  List<ContactUsViewModel> contactItems =
-      ContactUsItems(context).generateSocialMediaItems(contantusmodel);
+Widget _buildSocialMediaAccounts( BuildContext context, ContactUsModel contantUsModel) {
+  List<ContactUsLocalModel> contactItems = ContactUsItems(context).generateSocialMediaItems(contantUsModel);
   return SizedBox(
       height: 100,
       child: ListView.builder(
@@ -215,25 +212,3 @@ Widget _buildSocailMediaAccounts(
           }));
 }
 
-//TODo Move it to Shared
-
-TextStyle titleContact(BuildContext context, {double fontSize = 22}) {
-  return TextStyle(
-      fontSize: Responsive.getResponsiveFontSize(context, fontSize: fontSize),
-      fontFamily: 'ourfit',
-      fontWeight: FontWeight.w600,
-      height:
-          24.6 / Responsive.getResponsiveFontSize(context, fontSize: fontSize));
-}
-
-TextStyle subtitleContact(BuildContext context, {double fontSize = 12}) {
-  return TextStyle(
-    fontSize: Responsive.getResponsiveFontSize(context, fontSize: fontSize),
-    fontFamily: 'ourfit',
-    fontWeight: FontWeight.w500,
-    height:
-        24.6 / Responsive.getResponsiveFontSize(context, fontSize: fontSize),
-    letterSpacing: -0.32,
-    color: Color(0xff717171),
-  );
-}

@@ -1,11 +1,12 @@
-import 'package:eram_express/features/profile/presentation/views/support_view.dart';
+import 'package:eram_express/features/profile/presentation/views/support_presentation/support_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../data/models/contact_us_model.dart';
+
 import '../../../data/models/contact_us_local_model.dart';
+import '../../../data/models/contact_us_model.dart';
 import '../../../data/repositories/profile_repository_impl.dart';
 import '../profile_presentation/profile_view.dart';
 import 'contact_view_state.dart';
@@ -15,17 +16,17 @@ class ContactViewModel extends Cubit<ContactViewState> {
 
   ContactViewModel({required ProfileRepository profileRepository})
       : _profileRepository = profileRepository,
-        super(ContactViewLoadingState());
+        super(const ContactViewState(status: ContactUsStatus.initial));
 
   Future<void> getContactUs() async {
-    emit(ContactViewLoadingState());
+    emit(state.copyWith(status: ContactUsStatus.loading));
     try{
     final result = await _profileRepository.getContactUs();
-      emit(ContactViewLoadedState(result));
+      emit(state.copyWith(status: ContactUsStatus.loaded,contactUsModel: result));
     }
     catch(e)
     {
-       emit(ContactViewErrorState(errormesseg: "Error in Loading data"));
+      emit(state.copyWith(status: ContactUsStatus.error,errorMessage: "Fail to load contact Us"));
     }
 
   }
@@ -35,45 +36,43 @@ class ContactUsItems {
   final BuildContext context;
   ContactUsItems(this.context);
 
-  List<ContactUsViewModel> generateAllItems(ContactUsModel contantusmodel) {
+  List<ContactUsLocalModel> generateAllItems(ContactUsModel contactUsModel) {
     return [
-      getCallUs(contantusmodel.phoneNumber ?? ''),
-      getEmail(contantusmodel.email),
-      getWebsite(contantusmodel.website),
-      getInstagram(contantusmodel.instagram),
-      getFacebook(contantusmodel.facebook),
-      getTiktok(contantusmodel.tiktok),
+      getCallUs(contactUsModel.phoneNumber ?? ''),
+      getEmail(contactUsModel.email),
+      getWebsite(contactUsModel.website),
+      getInstagram(contactUsModel.instagram),
+      getFacebook(contactUsModel.facebook),
+      getTiktok(contactUsModel.tiktok),
     ];
   }
 
-  List<ContactUsViewModel> generateContactItems(ContactUsModel contantusmodel) {
+  List<ContactUsLocalModel> generateContactItems(ContactUsModel contactUsModel) {
     return [
-      getCallUs(contantusmodel.phoneNumber ?? ''),
-      getEmail(contantusmodel.email),
+      getCallUs(contactUsModel.phoneNumber ?? ''),
+      getEmail(contactUsModel.email),
     ];
   }
 
-  List<ContactUsViewModel> generateSupportItems() {
+  List<ContactUsLocalModel> generateSupportItems() {
     return [
       getMessageUs(),
     ];
   }
 
-  List<ContactUsViewModel> generateSocialMediaItems(
-      ContactUsModel contantusmodel) {
+  List<ContactUsLocalModel> generateSocialMediaItems(ContactUsModel contactUsModel) {
     return [
-      getInstagram(contantusmodel.instagram),
-      getFacebook(contantusmodel.facebook),
-      getTiktok(contantusmodel.tiktok),
+      getInstagram(contactUsModel.instagram),
+      getFacebook(contactUsModel.facebook),
+      getTiktok(contactUsModel.tiktok),
     ];
   }
 
-  // دالة getMessageUs
-  ContactUsViewModel getMessageUs() {
-    return ContactUsViewModel(
+  ContactUsLocalModel getMessageUs() {
+    return ContactUsLocalModel(
       title: context.tt('Support', "الدعم"),
       subtitle: context.tt(
-          'Don’t hesitate to contact us ', "لا تتردد في الاتصال بنا"),
+          'Don’t hesitate to contact Us ', "لا تتردد في الاتصال بنا"),
       onTap: () {
         Navigator.of(context).pushNamed(SupportView.route);
       },
@@ -84,9 +83,8 @@ class ContactUsItems {
     );
   }
 
-  // دالة getCallUs
-  ContactUsViewModel getCallUs(String? phoneNumber) {
-    return ContactUsViewModel(
+  ContactUsLocalModel getCallUs(String? phoneNumber) {
+    return ContactUsLocalModel(
       title: context.tt('Call Us', "اتصل بنا"),
       onTap: () async {
         launchUrl(
@@ -99,15 +97,14 @@ class ContactUsItems {
       subtitle: context.tt("Our team is on the line\n Mon-Fri 9-17",
           "فريقنا متاح عبر الخط\nمن الإثنين إلى الجمعة • 9-17)"),
       iconSvg: SvgIcon(
-        asset: 'call_us',
+        asset: 'call_Us',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
     );
   }
 
-  // دالة getEmail
-  ContactUsViewModel getEmail(String email) {
-    return ContactUsViewModel(
+  ContactUsLocalModel getEmail(String email) {
+    return ContactUsLocalModel(
       title: context.tt("Email", 'ايميل'),
       onTap: () async {
         launchUrl(
@@ -125,9 +122,9 @@ class ContactUsItems {
     );
   }
 
-  // دالة getWebsite
-  ContactUsViewModel getWebsite(String website) {
-    return ContactUsViewModel(
+  
+  ContactUsLocalModel getWebsite(String website) {
+    return ContactUsLocalModel(
       title: context.tt("website", 'موقعنا'),
       onTap: () {},
       iconSvg: SvgIcon(
@@ -137,9 +134,9 @@ class ContactUsItems {
     );
   }
 
-  // دالة getInstagram
-  ContactUsViewModel getInstagram(String instagram) {
-    return ContactUsViewModel(
+  
+  ContactUsLocalModel getInstagram(String instagram) {
+    return ContactUsLocalModel(
       title: context.tt("Instagram", 'انستغرام'),
       onTap: () async {
         launchUrl(Uri.parse(instagram));
@@ -151,9 +148,9 @@ class ContactUsItems {
     );
   }
 
-  // دالة getFacebook
-  ContactUsViewModel getFacebook(String facebook) {
-    return ContactUsViewModel(
+  
+  ContactUsLocalModel getFacebook(String facebook) {
+    return ContactUsLocalModel(
       title: context.tt("Facebook", 'فيس بوك'),
       onTap: () async {
         launchUrl(Uri.parse(facebook));
@@ -165,13 +162,12 @@ class ContactUsItems {
     );
   }
 
-  // دالة getTiktok
-  ContactUsViewModel getTiktok(String tiktok) {
-    return ContactUsViewModel(
+  ContactUsLocalModel getTiktok(String tiktok) {
+    return ContactUsLocalModel(
       title: context.tt('Tiktok', "تيك توك"),
       onTap: () async {},
       iconSvg: SvgIcon(
-        asset: 'call_us',
+        asset: 'call_Us',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
     );

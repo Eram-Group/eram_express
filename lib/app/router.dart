@@ -1,5 +1,5 @@
 import 'package:eram_express/features/profile/presentation/views/profile_presentation/profile_view.dart';
-import 'package:eram_express/features/profile/presentation/views/support_view.dart';
+import 'package:eram_express/features/profile/presentation/views/support_presentation/support_view.dart';
 import 'package:eram_express/features/profile/presentation/views/terms_presentation/terms_view.dart';
 import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';

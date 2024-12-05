@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart'; 
-class ContactUsViewModel {
+class ContactUsLocalModel {
   final String title;
   final String? subtitle;
   final void Function() onTap;
   final Widget iconSvg;
 
-  ContactUsViewModel({
+  ContactUsLocalModel({
     required this.title,
     this.subtitle,
     required this.onTap,

@@ -7,18 +7,18 @@ class TermsViewModel extends Cubit<TermViewState> {
 
   TermsViewModel({required ProfileRepository profileRepository})
       : _profileRepository = profileRepository,
-        super(TermsViewLoadingState());
+        super(const TermViewState(status:  TermsStatus.initial));
 
   Future<void> getTerms() async {
-    emit(TermsViewLoadingState());
+    emit(state.copyWith(status: TermsStatus.loading));
     try
     {
     final result = await _profileRepository.getTerms();
-    emit(TermsViewLoadedState(result));
+    emit(state.copyWith(status: TermsStatus.loaded,termsContent:result));
     }
     catch(e)
     {
-      emit(TermsViewErrorState());
+     emit(state.copyWith(status: TermsStatus.error ,errorMessage: "Fail to get terms & conditions")); // error depend on the language?
 
     }
 

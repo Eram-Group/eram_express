@@ -2,28 +2,42 @@ import 'package:equatable/equatable.dart';
 
 import '../../../data/models/contact_us_model.dart';
 
-abstract class ContactViewState extends Equatable {
-  const ContactViewState();
 
-  @override
-  List<Object?> get props => [];
+
+
+enum ContactUsStatus { initial, loading, loaded, error }
+
+extension  ContactViewStateX on  ContactViewState {
+  bool get isInitial => status ==ContactUsStatus.initial;
+  bool get isLoading => status ==ContactUsStatus.loading;
+  bool get isError => status ==ContactUsStatus.error;
+  bool get isLoaded => status ==ContactUsStatus.loaded;
 }
 
-class ContactViewLoadedState extends ContactViewState {
-  final ContactUsModel contactUsViewModel;
 
-  ContactViewLoadedState(this.contactUsViewModel);
+class ContactViewState extends Equatable {
+  final   ContactUsStatus  status;
+  final ContactUsModel? contactUsModel;
+  final String? errorMessage;
 
-  @override
-  List<Object?> get props => [contactUsViewModel];
-}
-
-class ContactViewLoadingState extends ContactViewState {}
-class ContactViewErrorState extends ContactViewState {
-  final String errormesseg;
-
-  ContactViewErrorState({required this.errormesseg
+  const ContactViewState({
+    required this.status,
+    this.contactUsModel,
+    this.errorMessage,
   });
-}
 
-class ContactViewStateViewErrorState extends ContactViewState {}
+  @override
+  List<Object?> get props => [status, contactUsModel, errorMessage];
+
+  ContactViewState copyWith({
+   ContactUsStatus ? status ,
+   ContactUsModel? contactUsModel,
+    String? errorMessage,
+  }) {
+    return ContactViewState(
+      status: status ?? this.status,
+      contactUsModel: contactUsModel ?? this.contactUsModel,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+}

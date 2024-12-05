@@ -33,6 +33,7 @@ class LoginViewModel extends Cubit<LoginViewState> {
 
   Future<void> init() async {
     try {
+      
       final countries = await _configurationsRepository.getCountries();
       emit(
         state.copyWith(

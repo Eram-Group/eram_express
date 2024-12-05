@@ -66,7 +66,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : null,
       ),
-      style: TextStyle(
+      style: const TextStyle(
         color: Color(0xff191D31),
         fontFamily: 'Outfit',
         fontSize: 14,

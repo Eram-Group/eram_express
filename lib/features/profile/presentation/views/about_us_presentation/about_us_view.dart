@@ -27,18 +27,19 @@ class AboutUsView extends StatelessWidget {
         child: SafeArea(
           child: BlocBuilder<AboutUsViewModel, AboutUsViewState>(
             builder: (context, state) {
-              if (state is AboutUsViewLoadingState) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state is AboutUsViewLoadedState) {
+              if (state.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state.isLoaded) {
                 return Container(
-                  padding: EdgeInsets.all(16.0),
+                  padding:const EdgeInsets.all(16.0),
                   child: Html(
-                    data: context.tt(state.aboutUsModel.contentEn,
-                        state.aboutUsModel.contentEn),
+                    data: context.tt(state.aboutUsModel!.contentEn,
+                        state.aboutUsModel
+                        !.contentEn),
                   ),
                 );
-              } else if (state is AboutUsViewErrorState) {
-                return Center(child: Text("Failed to load about us data"));
+              } else if (state.isError) {
+                return const Center(child: Text("Failed to load about us data"));
               } else {
                 return Container();
               }

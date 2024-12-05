@@ -1,5 +1,4 @@
-class AboutUsModel
- {
+class AboutUsModel {
   final String contentEn;
   final String contentAr;
   AboutUsModel({
@@ -9,7 +8,7 @@ class AboutUsModel
 
   factory AboutUsModel.fromJson(Map<String, dynamic> json) {
     return AboutUsModel(
-      contentEn: json['content_en'] ?? '', 
+      contentEn: json['content_en'] ?? '',
       contentAr: json['content_ar'] ?? '',
     );
   }
