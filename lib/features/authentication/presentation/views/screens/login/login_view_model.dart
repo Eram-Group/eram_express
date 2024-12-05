@@ -80,7 +80,9 @@ class LoginViewModel extends Cubit<LoginViewState> {
           ),
         ),
       );
-    } catch (e) {
+    } 
+    catch (e) 
+    {
       emit(state.copyWith(sendingOtp: false));
       ErrorModal.fromApiError(e as ServerException).show(context);
     }
