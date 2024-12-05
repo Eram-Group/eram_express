@@ -23,22 +23,15 @@ class BookingApiRemoteDataSource implements BookingRemoteDataSource {
           "cargo_subcategory": data.cargoVehicleSubcategoryId,
           "goods": data.goodIds,
           "booking_date": data.bookingDate,
-          "picking_location_text": data.pickup.address,
-          "destination_location_text": data.pickup.address,
+          //"picking_location_text": data.pickup.address,
+          //"destination_location_text": data.pickup.address,
           "picking_location": {
             "type": "Point",
-            "coordinates": [
-              data.pickup.point.longitude,
-              data.pickup.point.latitude
-            ],
+            "coordinates": [46.6753, 24.7136]
           },
           "destination_location": {
             "type": "Point",
-            "coordinates": [
-               data.destination.point.longitude,
-              data.destination.point.latitude
-            
-            ],
+            "coordinates": [46.6753, 24.7136]
           }
         },
         /*
@@ -74,8 +67,7 @@ class BookingApiRemoteDataSource implements BookingRemoteDataSource {
   }
 
   @override
-  Future<void> acceptBidding(
-      String accessToken, int bidId) async {
+  Future<void> acceptBidding(String accessToken, int bidId) async {
     return await _dioClient.request(acceptBiddingEndpoint(bidId).prepare(
       headers: {HttpHeaders.authorizationHeader: 'Bearer $accessToken'},
     ));

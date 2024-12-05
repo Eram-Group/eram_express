@@ -5,14 +5,14 @@ class BookingRequestFormData {
   final int? cargoVehicleSubcategoryId;
   final List<int> goodIds;
   final String bookingDate;
-  final PickingLocationModel pickup;
-  final PickingLocationModel destination;
+  //final PickingLocationModel pickup;
+  //final PickingLocationModel destination;
 
   BookingRequestFormData({
     required this.cargoVehicleSubcategoryId,
     required this.goodIds,
     required this.bookingDate,
-    required this.pickup,
-    required this.destination,
+    //required this.pickup,
+    //required this.destination,
   });
 }

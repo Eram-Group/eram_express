@@ -50,11 +50,11 @@ class HomeView extends StatelessWidget {
                 BlocListener<HomeViewController, HomeViewState>(
                   bloc: homeViewModel,
                   listener: (context, state) {
-                    if (state is RequestCreateSuccess) {
+                    if (state.isRequestCreateSuccess) {
                       const SuccessfulRequestModal().show(context);
                       bookingRequestViewModel.listBookingRequest();
                     }
-                    if (state is RequestCreateError) {
+                    if (state.isRequestCreateError) {
                       const FailedOrderModal().show(context);
                     }
                   },
@@ -92,7 +92,7 @@ class HomeView extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                   const Text(
                       "Ahmed Adel",
                       style: TextStyle(
                         fontFamily: 'Outfit',
@@ -103,7 +103,7 @@ class HomeView extends StatelessWidget {
                     ),
                     Text(
                       context.tt("Have a nice day !", 'يوم سعيد'),
-                      style: TextStyle(
+                      style:const TextStyle(
                         fontFamily: 'Outfit',
                         color: Colors.white,
                         fontSize: 13,

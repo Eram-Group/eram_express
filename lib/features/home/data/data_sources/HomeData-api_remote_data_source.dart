@@ -1,11 +1,8 @@
 
 import 'dart:io';
-
-import 'package:eram_express/features/home/data/models/cargo-categoriesModel.dart';
-import 'package:eram_express/features/home/data/models/cargo-subcategoryModel.dart';
 import 'package:eram_express/features/home/data/models/home-Model.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
-import '../models/goods-typeModel.dart';
+
 import 'homeData-api-endpoint.dart';
 import 'homeData_remote_data_source.dart';
 class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource 

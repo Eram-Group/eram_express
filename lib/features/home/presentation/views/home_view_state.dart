@@ -4,7 +4,22 @@ import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
 import '../../data/models/picking_locationModel.dart';
 
+
+enum HomeBookingRequestStatus {
+initial,
+  requestCreateError,
+  requestCreateSuccess,
+}
+
+extension HomeViewStateX on HomeViewState {
+  bool get isInitial=>status==HomeBookingRequestStatus.initial;
+  bool get isRequestCreateError =>status == HomeBookingRequestStatus.requestCreateError;
+  bool get isRequestCreateSuccess =>status == HomeBookingRequestStatus.requestCreateSuccess;
+}
+
+
 class HomeViewState {
+ final HomeBookingRequestStatus status;
   final PickingLocationModel? pickup;
   final PickingLocationModel? destination;
   final CargoCategoryModel? loadType;
@@ -17,6 +32,7 @@ class HomeViewState {
   final bool? isValidateLoadType;
 
   HomeViewState({
+    required this.status,
     this.pickup,
     this.destination,
     this.loadType,
@@ -30,8 +46,10 @@ class HomeViewState {
   });
 
   HomeViewState copyWith(
-      {final PickingLocationModel? pickup,
+{
+      final PickingLocationModel? pickup,
       final PickingLocationModel? destination,
+      HomeBookingRequestStatus? status,
       CargoCategoryModel? loadType,
       CargoSubCategoryModel? truckSize,
       List<GoodModel>? selectGoods,
@@ -44,6 +62,7 @@ class HomeViewState {
       String? errorMessage,
       bool? isValidateLoadType}) {
     return HomeViewState(
+      status: status??this.status,
       pickup: pickup ?? this.pickup,
       destination: destination ?? this.destination,
       loadType: loadType ?? this.loadType,
@@ -58,6 +77,9 @@ class HomeViewState {
   }
 }
 
+
+/*
+//The best approach is to leave them like this, or should we still make them an enum?
 class RequestCreateError extends HomeViewState {
   RequestCreateError()
       : super(
@@ -85,3 +107,4 @@ class RequestCreateSuccess extends HomeViewState {
           errorMessage: null,
         );
 }
+*/

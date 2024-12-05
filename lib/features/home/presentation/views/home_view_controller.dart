@@ -1,5 +1,6 @@
 import 'package:eram_express/features/booking/data/repositories/BookingRepository%20.dart';
 import 'package:eram_express/features/home/presentation/objects/booking_request_form_data.dart';
+import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,7 @@ class HomeViewController extends Cubit<HomeViewState> {
     required BookingRepository bookingRepository,
   })  : _homeRepository = homeRepo,
         _bookingRepository = bookingRepository,
-        super(HomeViewState()) {
+        super(HomeViewState(status: HomeBookingRequestStatus.initial)) {
     initialHomeData();
   }
 
@@ -43,8 +44,7 @@ class HomeViewController extends Cubit<HomeViewState> {
         cubit: this,
       ),
     );
-    if (selection != null) 
-    {
+    if (selection != null) {
       emit(state.copyWith(loadType: selection, isValidateLoadType: true));
     }
   }
@@ -112,11 +112,12 @@ class HomeViewController extends Cubit<HomeViewState> {
 
   bool enabledSubmitButton() {
     if (state.selectGoodsString == null ||
-        state.truckSize == null ||
-        state.pickupDate == null ||
-        state.pickup == null ||
-        state.loadType == null ||
-        state.destination == null) {
+            state.truckSize == null ||
+            state.pickupDate == null ||
+            //state.pickup == null ||
+            state.loadType == null
+        //state.destination == null
+        ) {
       return false;
     } else {
       return true;
@@ -130,16 +131,32 @@ class HomeViewController extends Cubit<HomeViewState> {
     });
 
     BookingRequestFormData formData = BookingRequestFormData(
-        cargoVehicleSubcategoryId: state.truckSize?.id,
-        goodIds: goodids,
-        bookingDate: state.pickupDate!,
-        pickup: state.pickup!,
-        destination: state.destination!);
+      cargoVehicleSubcategoryId: state.truckSize?.id,
+      goodIds: goodids,
+      bookingDate: state.pickupDate!,
+      //pickup: state.pickup!,
+      //destination: state.destination!
+    );
     try {
-      final result = await _bookingRepository.bookingRequest(formData);
-      emit(RequestCreateSuccess());
-    } catch (e) {
-      emit(RequestCreateError());
+      await _bookingRepository.bookingRequest(formData);
+      emit(state.copyWith(
+        status: HomeBookingRequestStatus.requestCreateSuccess,
+        pickup: null,
+        destination: null,
+        loadType: null,
+        truckSize: null,
+        pickupDate: null,
+        selectGoods: null,
+        selectGoodsString: null,
+        errorMessage: null,
+      ));
+    } on ServerException catch (e) 
+    {
+      //emit(state)
+      emit(state.copyWith(
+        status: HomeBookingRequestStatus.requestCreateError,
+        //errorMessage: e.errors[0].code  ask backend to make it accept the language."
+      ));
     }
   }
 
