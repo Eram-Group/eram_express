@@ -42,7 +42,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       await _tokensLocalDataSource.clearTokens();
       _authenticatedCustomer = null;
-    } catch (e) {
+    } catch (e) 
+    {
       /*
         AppError(
           title: 'Failed to logout',

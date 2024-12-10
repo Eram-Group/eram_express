@@ -33,56 +33,81 @@ import '../features/home/data/data_sources/HomeData-api_remote_data_source.dart'
 import '../features/home/data/repositotys/home_repositoty_impl.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 
-
 final sl = GetIt.instance;
 
 class ServiceLocator {
   void init() {
-    sl.registerLazySingleton(() => Dio(BaseOptions(  baseUrl: 'https://prod.eramex.eramapps.com/api',),));
-    sl.registerLazySingleton(() => DioApiClient(dio: sl()),);
+    sl.registerLazySingleton(() => Dio(
+          BaseOptions(
+            baseUrl: 'https://prod.eramex.eramapps.com/api',
+          ),
+        ));
     sl.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(sl()));
-    sl.registerLazySingleton<ConfigurationsRemoteDataSource>(() => ConfigurationsApiRemoteDataSource( networkService: sl(), ), );
-    sl.registerLazySingleton<ConfigurationsRepository>( () => ConfigurationsRepositoryImpl( remoteDataSource: sl(),), );
+    sl.registerLazySingleton<ConfigurationsRemoteDataSource>(
+      () => ConfigurationsApiRemoteDataSource(
+        networkService: sl(),
+      ),
+    );
+    sl.registerLazySingleton<ConfigurationsRepository>(
+      () => ConfigurationsRepositoryImpl(
+        remoteDataSource: sl(),
+      ),
+    );
 
-  //home
-    sl.registerLazySingleton(() => const FlutterSecureStorage(),);
-    sl.registerLazySingleton<TokensLocalDataSource>(() => TokensSecureStorageLocalDataSource(secureStorage: sl()),);
-    sl.registerLazySingleton(() => HomeDataApiRemoteDataSource(networkService: sl()));
-    sl.registerLazySingleton(() => HomeRepositoryImpl(remoteDataSource: sl(), tokensLocalDataSource: sl()),);
+    //home
+    sl.registerLazySingleton(
+      () => const FlutterSecureStorage(),
+    );
+    sl.registerLazySingleton<TokensLocalDataSource>(
+      () => TokensSecureStorageLocalDataSource(secureStorage: sl()),
+    );
+    sl.registerLazySingleton(
+        () => HomeDataApiRemoteDataSource(networkService: sl()));
+    sl.registerLazySingleton(
+      () => HomeRepositoryImpl(
+          remoteDataSource: sl(), tokensLocalDataSource: sl()),
+    );
 
- //booking
-    sl.registerLazySingleton<BookingRemoteDataSource>(() => BookingApiRemoteDataSource(networkService: sl()));
-    sl.registerLazySingleton(() => BookingRepositoryImpl(bookingRemoteDataSource: sl(), tokensLocalDataSource: sl()),);
+    //booking
+    sl.registerLazySingleton<BookingRemoteDataSource>(
+        () => BookingApiRemoteDataSource(networkService: sl()));
+    sl.registerLazySingleton(
+      () => BookingRepositoryImpl(
+          bookingRemoteDataSource: sl(), tokensLocalDataSource: sl()),
+    );
     sl.registerFactory(() => ExpansionTileCubit());
 
- //GoogleMap
-    sl.registerLazySingleton<GoogleMapRemoteDataSource>( () => GoogleMapApiRemoteDataSource(networkService: sl(), dio: sl()),);
+    //GoogleMap
+    sl.registerLazySingleton<GoogleMapRemoteDataSource>(
+      () => GoogleMapApiRemoteDataSource(networkService: sl(), dio: sl()),
+    );
     sl.registerLazySingleton(() => LocationService());
-    sl.registerLazySingleton(() => GoogleMapRepositoryImpl( googleMapRemoteDataSource: sl(), tokensLocalDataSource: sl()));
-    sl.registerFactory(() => SearchViewController( googleMapRepository: sl(), authenticationRepository: sl()));
-    sl.registerFactory(() => GoogleMapViewController( googleMapRepository: sl(), locationService: sl()));
-
+    sl.registerLazySingleton(() => GoogleMapRepositoryImpl(
+        googleMapRemoteDataSource: sl(), tokensLocalDataSource: sl()));
+    sl.registerFactory(() => SearchViewController(
+        googleMapRepository: sl(), authenticationRepository: sl()));
+    sl.registerFactory(() => GoogleMapViewController(
+        googleMapRepository: sl(), locationService: sl()));
 
 //customer
-    sl.registerLazySingleton<CustomerRemoteDataSource>(() => CustomerApiRemoteDataSource(dioClient: sl()));
-    sl.registerLazySingleton<CustomerRepository>(() => CustomerRepositoryImpl(remoteDataSource: sl(), tokensLocalDataSource: sl()));
-    sl.registerLazySingleton(() => CustomerService(customerRepository: sl(), authenticationRepository: sl()));
+    sl.registerLazySingleton<CustomerRemoteDataSource>(
+        () => CustomerApiRemoteDataSource(networkService: sl()));
+    sl.registerLazySingleton<CustomerRepository>(() => CustomerRepositoryImpl(
+        remoteDataSource: sl(), tokensLocalDataSource: sl()));
+    sl.registerLazySingleton(() => CustomerService(
+        customerRepository: sl(), authenticationRepository: sl()));
 
 //Authentication
 
-    sl.registerLazySingleton(() => AuthenticationService(authenticationRepository: sl(), customerRepository: sl()));
-    sl.registerLazySingleton<AuthenticationRemoteDataSource>(() => AuthenticationApiRemoteDataSource(networkService: sl()));
-    sl.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(authenticationRemoteDataSource: sl(),tokensLocalDataSource: sl(),customerRepository: sl()));
-    sl.registerLazySingleton<LocaleCubit>(() =>LocaleCubit());
-
-
-
-
+    sl.registerLazySingleton(() => AuthenticationService(
+        authenticationRepository: sl(), customerRepository: sl()));
+    sl.registerLazySingleton<AuthenticationRemoteDataSource>(
+        () => AuthenticationApiRemoteDataSource(networkService: sl()));
+    sl.registerLazySingleton<AuthenticationRepository>(() =>
+        AuthenticationRepositoryImpl(
+            authenticationRemoteDataSource: sl(),
+            tokensLocalDataSource: sl(),
+            customerRepository: sl()));
+    sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
+  }
 }
-
-
-}
-
-
-
-

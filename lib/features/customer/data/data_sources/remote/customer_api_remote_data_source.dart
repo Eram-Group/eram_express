@@ -1,32 +1,22 @@
-import 'dart:io';
 
 import 'package:dio/dio.dart';
-
 import 'package:eram_express/features/customer/data/objects/update_customer_form_data.dart';
-
-import 'package:eram_express_shared/core/api/dio_api_client.dart';
-
+import 'package:eram_express_shared/core/api/network-service.dart';
 import '../../models/customer_model.dart';
-import 'customer_api_endpoints.dart';
 import 'customer_remote_data_source.dart';
-
 class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
-  final DioApiClient _dioClient;
+  final NetworkService _networkService;
 
-  CustomerApiRemoteDataSource({required DioApiClient dioClient})
-      : _dioClient = dioClient;
+  CustomerApiRemoteDataSource({required NetworkService networkService})
+      : _networkService = networkService; // تمت إضافة الفاصلة المنقوطة
 
   @override
-  Future<CustomerModel> getAuthenticatedCustomer(
-    String accessToken,
-  ) async {
-    return await _dioClient.request(
-      getAuthenticatedCustomerEndpoint.prepare(
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-        },
-      ),
+  Future<CustomerModel> getAuthenticatedCustomer(String accessToken) async {
+    final response = await _networkService.get(
+      '/customer/me/',
+     
     );
+    return CustomerModel.fromMap(response.data);
   }
 
   @override
@@ -34,18 +24,16 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
     UpdateCustomerFormData data,
     String accessToken,
   ) async {
-    return await _dioClient.request(
-      updateProfileEndpoint.prepare(
-        body: FormData.fromMap({
-          'full_name': data.fullName,
-          if (data.profilePicture != null)
-            'image': MultipartFile.fromFileSync(data.profilePicture!.path),
-        }),
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-          HttpHeaders.contentTypeHeader: 'multipart/form-data',
-        },
-      ),
+    final formData = FormData.fromMap({
+      'full_name': data.fullName,
+      if (data.profilePicture != null)
+        'image': MultipartFile.fromFileSync(data.profilePicture!.path),
+    });
+
+    final response = await _networkService.patch(
+      '/customer/me/',
+      data: formData,
     );
+    return CustomerModel.fromMap(response.data);
   }
 }
