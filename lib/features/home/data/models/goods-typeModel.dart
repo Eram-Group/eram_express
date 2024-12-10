@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class GoodModel extends Equatable {
@@ -5,23 +7,54 @@ class GoodModel extends Equatable {
   final String nameAr;
   final String nameEn;
   final String image;
-
-  const GoodModel({
+  GoodModel({
     required this.id,
     required this.nameAr,
     required this.nameEn,
     required this.image,
   });
 
-  factory GoodModel.fromJson(Map<String, dynamic> json) {
+  GoodModel copyWith({
+    int? id,
+    String? nameAr,
+    String? nameEn,
+    String? image,
+  }) {
     return GoodModel(
-      id: json['id'],
-      nameAr: json['name_ar'],
-      nameEn: json['name_en'],
-      image: json['image'],
+      id: id ?? this.id,
+      nameAr: nameAr ?? this.nameAr,
+      nameEn: nameEn ?? this.nameEn,
+      image: image ?? this.image,
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'nameAr': nameAr,
+      'nameEn': nameEn,
+      'image': image,
+    };
+  }
+
+  factory GoodModel.fromMap(Map<String, dynamic> map) {
+    return GoodModel(
+      id: map['id']?.toInt() ?? 0,
+      nameAr: map['nameAr'] ?? '',
+      nameEn: map['nameEn'] ?? '',
+      image: map['image'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory GoodModel.fromJson(String source) => GoodModel.fromMap(json.decode(source));
+
   @override
-  List<Object?> get props => [id, nameAr, nameEn, image];
+  String toString() {
+    return 'GoodModel(id: $id, nameAr: $nameAr, nameEn: $nameEn, image: $image)';
+  }
+
+  @override
+  List<Object> get props => [id, nameAr, nameEn, image];
 }

@@ -19,7 +19,7 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
       final result = await _googleMapRemoteDataSource.getPredictionPlaces(input, sessionToken, country);  
       if (result.statusCode == 200) 
       {
-        List<PlaceAutocompleteModel> predictionModels =(result.data['predictions'] as List).map((item) => PlaceAutocompleteModel.fromjson(item)).toList();
+        List<PlaceAutocompleteModel> predictionModels =(result.data['predictions'] as List).map((item) => PlaceAutocompleteModel.fromMap(item)).toList();
         return predictionModels ;
       } 
       else 
@@ -40,7 +40,7 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
         final places =  await _googleMapRemoteDataSource.getPlaceDetails(lat, long);
       if (places.statusCode == 200) {
         logger.debug("Request successful");
-        List<PlaceDetailsModel> placeDetailsList =(places.data['results'] as List) .map((item) => PlaceDetailsModel.fromJson(item)) .toList();
+        List<PlaceDetailsModel> placeDetailsList =(places.data['results'] as List) .map((item) => PlaceDetailsModel.fromMap(item)) .toList();
         return placeDetailsList[0];
       } 
       else
@@ -61,7 +61,7 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
     final result = await _googleMapRemoteDataSource.getCoordinatesForAddress(address);
     if (result.statusCode == 200)
      {
-      List<PlaceDetailsModel> placeDetailsList =(result.data['results'] as List).map((item) => PlaceDetailsModel.fromJson(item)).toList();
+      List<PlaceDetailsModel> placeDetailsList =(result.data['results'] as List).map((item) => PlaceDetailsModel.fromMap(item)).toList();
       return placeDetailsList[0];
     } 
     else 

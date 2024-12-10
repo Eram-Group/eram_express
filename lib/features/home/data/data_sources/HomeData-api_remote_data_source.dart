@@ -1,29 +1,16 @@
-
-import 'dart:io';
 import 'package:eram_express/features/home/data/models/home-Model.dart';
-import 'package:eram_express_shared/core/api/dio_api_client.dart';
-
-import 'homeData-api-endpoint.dart';
+import 'package:eram_express_shared/core/api/network-service.dart';
 import 'homeData_remote_data_source.dart';
-class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource 
-{
-  final DioApiClient _dioClient;
-  HomeDataApiRemoteDataSource({required DioApiClient dioClient})
-      : _dioClient = dioClient;
 
-
-   @override
-  Future<HomeModel> getHomeData(String accessToken) async
-   {
-     
-    return await _dioClient.request(
-
-     homeDataEndPoint.prepare(   
-      headers: {
-          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-        }),
-     
+class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource {
+  final NetworkService _networkService;
+  HomeDataApiRemoteDataSource({required NetworkService networkService})
+      : _networkService = networkService;
+  @override
+  Future<HomeModel> getHomeData() async {
+    final response = await _networkService.get(
+      '/customer/home/',
     );
+    return HomeModel.fromMap(response.data);
   }
-
 }

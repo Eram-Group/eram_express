@@ -1,22 +1,24 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eram_express_shared/core/api/dio_api_client.dart';
-import '../../../../app/di.dart';
+import 'package:eram_express_shared/core/api/network-service.dart';
 import 'googlemap_api_endpoint.dart';
 import 'googlemap_remote_data_source.dart';
 
-class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
-  final DioApiClient _dioClient;
-  GoogleMapApiRemoteDataSource({required DioApiClient dioClient})
-      : _dioClient = dioClient;
+class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource 
+{
+  final NetworkService _networkService;
+    final Dio _dio;
+  GoogleMapApiRemoteDataSource({required NetworkService networkService,required Dio dio})
+      : _networkService=networkService,
+      _dio = dio;
 
   String url = 'https://maps.googleapis.com/maps/api/';
   String apiKey = 'AIzaSyBjgqhScxJNS9pvwKyDNEdvjW-RKpIP5uM';
 
   @override
-  Future<dynamic> getPredictionPlaces(
-      String input, String sessionToken, String country) async {
-    Response response =  await dio.get("${url}place/autocomplete/json", queryParameters: {
+  Future<dynamic> getPredictionPlaces( String input, String sessionToken, String country) async {
+    Response response =  await _dio.get("${url}place/autocomplete/json", queryParameters: {
       'input': input,
       'key': apiKey,
       'sessiontoken': sessionToken,
@@ -28,7 +30,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
   }
 @override
   Future<dynamic> getCoordinatesForAddress(String address) async {
-    Response response = await dio.get("${url}geocode/json", queryParameters: {
+    Response response = await _dio.get("${url}geocode/json", queryParameters: {
       'address': address,
       'key': apiKey,
       //TODO
@@ -39,7 +41,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
 
   Future<dynamic> getPlaceDetails(String lat, String long) async {
     String input = "$lat,$long";
-    Response response = await dio.get("${url}geocode/json", queryParameters: {
+    Response response = await _dio.get("${url}geocode/json", queryParameters: {
       'latlng': input,
       'key': apiKey,
       //TODO
@@ -51,10 +53,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
 @override
   Future<void> validateLocation(
       String accessToken, String lat, String long) async {
-    final response =
-        await _dioClient.request(validPointEndpoint.prepare(headers: {
-      HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-    }, body: {
+    final response =_networkService.post('/validate-location/',data: {
       "point": {
         "type": "Point",
         "coordinates": [
@@ -62,8 +61,6 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
           double.parse(lat)
         ] // Ensure valid lat/long format
       }
-    }));
-
-  
+    });
   }
 }

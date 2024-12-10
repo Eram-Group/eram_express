@@ -125,18 +125,17 @@ class HomeViewController extends Cubit<HomeViewState> {
   }
 
   Future<void> createRequestButtonClick() async {
-    List<int> goodids = [];
+    List<int> goodIds = [];
     state.selectGoods?.forEach((good) {
-      goodids.add(good.id);
+      goodIds.add(good.id);
     });
 
     BookingRequestFormData formData = BookingRequestFormData(
-      cargoVehicleSubcategoryId: state.truckSize?.id,
-      goodIds: goodids,
-      bookingDate: state.pickupDate!,
-      //pickup: state.pickup!,
-      //destination: state.destination!
-    );
+        cargoSubcategory: state.truckSize?.id,
+        goods: goodIds,
+        bookingDate: state.pickupDate!,
+        pickup: state.pickup!,
+        destination: state.destination!);
     try {
       await _bookingRepository.bookingRequest(formData);
       emit(state.copyWith(
@@ -150,8 +149,7 @@ class HomeViewController extends Cubit<HomeViewState> {
         selectGoodsString: null,
         errorMessage: null,
       ));
-    } on ServerException catch (e) 
-    {
+    } on ServerException catch (e) {
       //emit(state)
       emit(state.copyWith(
         status: HomeBookingRequestStatus.requestCreateError,

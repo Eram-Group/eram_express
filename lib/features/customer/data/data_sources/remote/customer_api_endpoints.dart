@@ -7,7 +7,7 @@ final getAuthenticatedCustomerEndpoint = ApiEndpoint(
   path: '/customer/me/',
   method: HttpMethod.get,
   responseHandlers: {
-    HttpStatus.ok: (response) => CustomerModel.fromJson(response.data),
+    HttpStatus.ok: (response) => CustomerModel.fromMap(response.data),
   },
 );
 
@@ -15,6 +15,6 @@ final updateProfileEndpoint = ApiEndpoint(
   path: '/customer/me/',
   method: HttpMethod.patch,
   responseHandlers: {
-    HttpStatus.ok: (response) => CustomerModel.fromJson(response.data),
+    HttpStatus.ok: (response) => CustomerModel.fromMap(response.data),
   },
 );

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:eram_express/app/di.dart';
+
 import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/google_map/data/repositories/google_map_reposirtoty.dart';
 import 'package:eram_express/features/google_map/data/services/locationservice.dart';
@@ -96,7 +96,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     emit( const GoogleMapViewState(status: GoogleMapViewStatus.loading));
     try
     {
-       final locationData = await locationService.getCurrentLocation();
+       final locationData = await _locationService.getCurrentLocation();
         kInitialPosition = CameraPosition(
           target: LatLng(locationData.latitude!, locationData.longitude!),
           zoom: kDefaultMapZoom,

@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
 import 'package:eram_express/features/booking/data/models/bid_model.dart';
+
 import '../../../customer/data/models/customer_model.dart';
 import '../../../home/data/models/cargo-subcategoryModel.dart';
 import '../../../home/data/models/goods-typeModel.dart';
@@ -28,28 +33,110 @@ class BookingRequestModel {
     required this.bids,
   });
 
-  factory BookingRequestModel.fromJson(Map<String, dynamic> json) {
-    Map<String, dynamic> pickingLocationJson = {
-      'location': json['picking_location'],
-      'location_text': json['picking_location_text'],
-    };
-    Map<String, dynamic> destinationLocationJson = {
-      'location': json['destination_location'],
-      'location_text': json['destination_location_text'],
-    };
+  BookingRequestModel copyWith({
+    int? id,
+    String? status,
+    String? bookingDate,
+    DateTime? createdAt,
+    List<GoodModel>? goods,
+    CargoSubCategoryModel? cargoSubcategory,
+    CustomerModel? customer,
+    PickingLocationModel? pickingLocation,
+    PickingLocationModel? destinationLocation,
+    List<BidModel>? bids,
+  }) {
     return BookingRequestModel(
-      id: json['id'],
-      status: json['status'],
-      bookingDate: json['booking_date'],
-      createdAt: DateTime.parse(json['created_at']),
-      goods: (json['goods'] as List).map((e) => GoodModel.fromJson(e)).toList(),
-      cargoSubcategory:CargoSubCategoryModel.fromJson(json['cargo_subcategory']),
-      customer: CustomerModel.fromJson(json['customer']),
-      pickingLocation: PickingLocationModel.fromJson(pickingLocationJson),
-      destinationLocation:PickingLocationModel.fromJson(destinationLocationJson),
-      bids: (json["bids"] as List).map((item) => BidModel.fromJson(item)).toList(),
+      id: id ?? this.id,
+      status: status ?? this.status,
+      bookingDate: bookingDate ?? this.bookingDate,
+      createdAt: createdAt ?? this.createdAt,
+      goods: goods ?? this.goods,
+      cargoSubcategory: cargoSubcategory ?? this.cargoSubcategory,
+      customer: customer ?? this.customer,
+      pickingLocation: pickingLocation ?? this.pickingLocation,
+      destinationLocation: destinationLocation ?? this.destinationLocation,
+      bids: bids ?? this.bids,
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'status': status,
+      'bookingDate': bookingDate,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+      'goods': goods.map((x) => x.toMap()).toList(),
+      'cargoSubcategory': cargoSubcategory.toMap(),
+      'customer': customer.toMap(),
+      'pickingLocation': pickingLocation.toMap(),
+      'destinationLocation': destinationLocation.toMap(),
+      'bids': bids.map((x) => x.toMap()).toList(),
+    };
+  }
 
+  factory BookingRequestModel.fromMap(Map<String, dynamic> map) {
+    Map<String, dynamic> pickingLocationMap = {
+      'location': map['pickingLocation'],
+      'location_text': map['pickingLocationText'],
+    };
+    Map<String, dynamic> destinationLocationMap = {
+      'location': map['destinationLocation'],
+      'location_text': map['destinationLocationText'],
+    };
+
+    return BookingRequestModel(
+      id: map['id'],
+      status: map['status'] ?? '',
+      bookingDate: map['bookingDate'] ?? '',
+      createdAt: DateTime.parse(map['createdAt']),
+      goods:
+          List<GoodModel>.from(map['goods']?.map((x) => GoodModel.fromMap(x))),
+      cargoSubcategory: CargoSubCategoryModel.fromMap(map['cargoSubcategory']),
+      customer: CustomerModel.fromMap(map['customer']),
+      pickingLocation: PickingLocationModel.fromMap(pickingLocationMap),
+      destinationLocation: PickingLocationModel.fromMap(destinationLocationMap),
+      bids: List<BidModel>.from(map['bids']?.map((x) => BidModel.fromMap(x))),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory BookingRequestModel.fromJson(String source) =>
+      BookingRequestModel.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'BookingRequestModel(id: $id, status: $status, bookingDate: $bookingDate, createdAt: $createdAt, goods: $goods, cargoSubcategory: $cargoSubcategory, customer: $customer, pickingLocation: $pickingLocation, destinationLocation: $destinationLocation, bids: $bids)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is BookingRequestModel &&
+        other.id == id &&
+        other.status == status &&
+        other.bookingDate == bookingDate &&
+        other.createdAt == createdAt &&
+        listEquals(other.goods, goods) &&
+        other.cargoSubcategory == cargoSubcategory &&
+        other.customer == customer &&
+        other.pickingLocation == pickingLocation &&
+        other.destinationLocation == destinationLocation &&
+        listEquals(other.bids, bids);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        status.hashCode ^
+        bookingDate.hashCode ^
+        createdAt.hashCode ^
+        goods.hashCode ^
+        cargoSubcategory.hashCode ^
+        customer.hashCode ^
+        pickingLocation.hashCode ^
+        destinationLocation.hashCode ^
+        bids.hashCode;
+  }
 }

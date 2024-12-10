@@ -1,11 +1,14 @@
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
+import 'package:eram_express/features/authentication/data/respositories/authentication_repository_impl.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../app/di.dart';
+import '../../../../app/ServiceLocator.dart';
+
 import '../../data/models/place_auto_complete_model.dart';
+import '../../data/repositories/google_map_repositiory.dart';
 import 'search_model_view.dart';
 import 'search_model_view_state.dart';
 import 'widgets/search_text_field.dart';
@@ -16,11 +19,8 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SearchViewController(
-        googleMapRepository: googleMapRepository,
-        authenticationRepository: authenticationRepository,
-         ),
+    return BlocProvider<SearchViewController>(
+      create: (_) => sl(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -41,7 +41,7 @@ class SearchView extends StatelessWidget {
               BlocBuilder<SearchViewController, SearchState>(
                 builder: (context, state) {
                   if (state is SearchStateError) {
-                    return  const Center(child: Text("Error occurred"));
+                    return const Center(child: Text("Error occurred"));
                   } else if (state is SearchStateEmpty) {
                     return _buildEmptyState(context);
                   } else if (state is SearchStateSuccess) {
@@ -96,9 +96,10 @@ Widget _buildDisplayResult(List<PlaceAutocompleteModel> recommendPlaces) {
       itemCount: recommendPlaces.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: ()
-           {
-            context.read<SearchViewController>().getCoordinatesForAddress(recommendPlaces[index].description);
+          onTap: () {
+            context
+                .read<SearchViewController>()
+                .getCoordinatesForAddress(recommendPlaces[index].description);
           },
           child: _buildSearchItemCard(recommendPlaces[index].description),
         );

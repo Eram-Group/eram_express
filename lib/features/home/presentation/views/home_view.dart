@@ -6,7 +6,9 @@ import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../app/di.dart';
+import '../../../../app/ServiceLocator.dart';
+
+import '../../../booking/data/repositories/booking_repository_impl.dart';
 import '../../../booking/presentation/views/all_booking_request_view.dart';
 import '../../../booking/presentation/views/offers_view.dart';
 import '../../../booking/presentation/views/booking_request_view_controller.dart';
@@ -15,21 +17,19 @@ import '../../../booking/presentation/widgets/booking_request_card.dart';
 import '../../data/models/cargo-categoriesModel.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/picking_locationModel.dart';
+import '../../data/repositotys/home_repositoty_impl.dart';
 import '../modals/failed-request-modal.dart';
 import '../modals/successful-request-modal.dart';
 import '../widgets/empty_booking_view.dart';
 import '../widgets/selection-card.dart';
 import 'home_view_controller.dart';
 import 'home_view_state.dart';
-
-class HomeView extends StatelessWidget {
+class HomeView extends StatelessWidget
+ {
   static const String route = '/home';
-  final HomeViewController homeViewModel = HomeViewController(
-      homeRepo: homeRepository, bookingRepository: bookingRepository);
-  final BookingRequestViewController bookingRequestViewModel =
-      BookingRequestViewController(
-    bookingRepository: bookingRepository,
-  );
+  final HomeViewController homeViewModel = HomeViewController( homeRepo: sl<HomeRepositoryImpl>(),bookingRepository: sl<BookingRepositoryImpl>());
+  final BookingRequestViewController bookingRequestViewModel = BookingRequestViewController(bookingRepository: sl<BookingRepositoryImpl>(),);
+  
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class HomeView extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   const Text(
+                    const Text(
                       "Ahmed Adel",
                       style: TextStyle(
                         fontFamily: 'Outfit',
@@ -103,7 +103,7 @@ class HomeView extends StatelessWidget {
                     ),
                     Text(
                       context.tt("Have a nice day !", 'يوم سعيد'),
-                      style:const TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Outfit',
                         color: Colors.white,
                         fontSize: 13,
@@ -173,7 +173,7 @@ class HomeView extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-            child: BlocSelector<HomeViewController, HomeViewState,
+           child: BlocSelector<HomeViewController, HomeViewState,
                 PickingLocationModel?>(
           bloc: homeViewModel,
           selector: (state) => state.pickup,
@@ -231,7 +231,8 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildTruckSizeField(BuildContext context) {
-    return BlocSelector<HomeViewController, HomeViewState, CargoSubCategoryModel?>(
+    return BlocSelector<HomeViewController, HomeViewState,
+        CargoSubCategoryModel?>(
       bloc: homeViewModel,
       selector: (state) => state.truckSize,
       builder: (context, truckSize) {
@@ -240,7 +241,8 @@ class HomeView extends StatelessWidget {
           onTap: () => homeViewModel.cargoSubCategoryOnClicked(context),
           selectedValue:
               context.tt(truckSize?.nameEn ?? " ", truckSize?.nameAr ?? " "),
-          label: context.tt(truckSize?.nameEn ?? "Choose the size of the truck", truckSize?.nameAr ?? "اختر حجم حمولتك"),
+          label: context.tt(truckSize?.nameEn ?? "Choose the size of the truck",
+              truckSize?.nameAr ?? "اختر حجم حمولتك"),
           iconName: 'sizeTrack',
         );
       },

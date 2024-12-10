@@ -1,3 +1,4 @@
+import 'package:eram_express/app/ServiceLocator.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
@@ -6,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
-
-import '../../../../../../app/di.dart';
+import '../../../../data/services/authentication_service.dart';
 import '../../../objects/login_form_data.dart';
 import 'otp_view_model.dart';
 import 'otp_view_state.dart';
@@ -17,7 +17,7 @@ class OtpView extends StatelessWidget {
 
   final OtpViewArguments arguments;
   final OtpViewModel viewModel =
-      OtpViewModel(authenticationService: authenticationService);
+      OtpViewModel(authenticationService: sl<AuthenticationService>());
 
   OtpView(this.arguments, {super.key}) {
     viewModel.init(phoneNumber: arguments.loginFormData.phoneNumber);

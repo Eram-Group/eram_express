@@ -6,36 +6,34 @@ import 'BookingRepository .dart';
 
 class BookingRepositoryImpl implements BookingRepository {
   final BookingRemoteDataSource _bookingRemoteDataSource;
-  final TokensLocalDataSource _tokensLocalDataSource;
+
   List<BookingRequestModel>? _bookingRequests;
   BookingRepositoryImpl({
     required BookingRemoteDataSource bookingRemoteDataSource,
     required TokensLocalDataSource tokensLocalDataSource,
-  })  : _bookingRemoteDataSource = bookingRemoteDataSource,
-        _tokensLocalDataSource = tokensLocalDataSource;
+  })  : _bookingRemoteDataSource = bookingRemoteDataSource;
+      
 
   @override
   Future<void> bookingRequest(BookingRequestFormData data) async {
-    final accessToken = await _tokensLocalDataSource.accessToken;
 
-    await _bookingRemoteDataSource.bookingRequest(data, accessToken!);
+    await _bookingRemoteDataSource.bookingRequest(data,);
   }
 
   @override
   Future<List<BookingRequestModel>> listBookingRequest() async {
-    final accessToken = await _tokensLocalDataSource.accessToken;
-
+ 
     final result =
-        await _bookingRemoteDataSource.listBookingRequest(accessToken!);
+        await _bookingRemoteDataSource.listBookingRequest();
     _bookingRequests = result;
     return result;
   }
 
   @override
   Future<void> acceptBidding(int bidId) async {
-    final accessToken = await _tokensLocalDataSource.accessToken;
-
-    final result = await _bookingRemoteDataSource.acceptBidding(accessToken!, bidId);
+   
+    final result =
+        await _bookingRemoteDataSource.acceptBidding( bidId);
 
     return result;
   }

@@ -5,6 +5,7 @@ import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import '../../../../app/ServiceLocator.dart';
 import '../../../../common/widgets/dot_line.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/app_text_style.dart';
@@ -63,8 +64,8 @@ class BookingRequestCard extends StatelessWidget {
   }
 
   Widget _buildBiddings(List<BidModel> bids) {
-    return BlocProvider(
-        create: (context) => ExpansionTileCubit(),
+    return BlocProvider<ExpansionTileCubit>(
+        create: (context) => sl(),
         child: Column(
           children: [
             BlocBuilder<ExpansionTileCubit, bool>(
@@ -73,7 +74,7 @@ class BookingRequestCard extends StatelessWidget {
                     child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular( 12), 
+                      borderRadius: BorderRadius.circular(12),
                       child: ExpansionTile(
                         minTileHeight: 10,
                         tilePadding: EdgeInsets.symmetric(
@@ -81,7 +82,7 @@ class BookingRequestCard extends StatelessWidget {
                                 ? 5
                                 : 20,
                             vertical: 5),
-                        collapsedBackgroundColor:const Color(0xffF8F8F8),
+                        collapsedBackgroundColor: const Color(0xffF8F8F8),
                         title: Row(
                           children: [
                             Text(context.tt("New Bid", "عرض جديد"),
@@ -146,11 +147,13 @@ class BookingRequestCard extends StatelessWidget {
                         onExpansionChanged: (bool expanding) {
                           context.read<ExpansionTileCubit>().toggleExpansion();
                         },
-                        children: List.generate(bids.length, 
+                        children: List.generate(
+                            bids.length,
                             (index) => AcceptOfferCard(
-                                  backgroundColor:const Color(0xffF8F8F8),
+                                  backgroundColor: const Color(0xffF8F8F8),
                                   item: bids[index],
-                                  onAcceptBidding: () {onTap?.call(bids[index]);
+                                  onAcceptBidding: () {
+                                    onTap?.call(bids[index]);
                                     //arguments.cubit.acceptBidding(bidding);
                                   },
                                 )),
@@ -201,7 +204,7 @@ class BookingRequestCard extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: CustomPaint(
-              size:const  Size(1, 20), // عرض الخط وارتفاعه
+              size: const Size(1, 20), // عرض الخط وارتفاعه
               painter: DottedLinePainter(),
             )),
         _buildStatusRow("destination", context.tt("End point", "نقطه النهاية"),
@@ -216,14 +219,14 @@ class BookingRequestCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color:const Color(0xffF8F8F8),
+        color: const Color(0xffF8F8F8),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Center(
         child: Text(
           context.tt("No bidings right now", "لا عروض حتى الآن"),
           style: TextStyle(
-              color:const Color(0xff666876),
+              color: const Color(0xff666876),
               fontFamily: 'outfit',
               fontWeight: FontWeight.w500,
               fontSize: Responsive.getResponsiveFontSize(context, fontSize: 16),

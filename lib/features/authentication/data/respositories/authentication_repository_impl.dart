@@ -60,26 +60,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   verifyOtp(OtpVerificationData data) async {
     final response = await _authenticationRemoteDataSource.verifyOtp(data);
-
+   savingToken(response.response);
     return response;
-    /*
-    final response = data.response;
-
-        await _tokensLocalDataSource.saveTokens(
-          response.accessToken,
-          response.refreshToken,
-        );
-
-        final customer =response.customer;
-        _authenticatedCustomer = customer;
-
-        return Right(
-          VerifyOtpResponseWrapper(
-            isNewCustomer: data.isNewCustomer,
-            response: customer,
-          ),
-        );
-        */
   }
 
   @override

@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/server_expection.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
 import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 
 import '../../../objects/login_form_data.dart';
 import '../../../../data/services/authentication_service.dart';
@@ -41,6 +43,7 @@ class LoginViewModel extends Cubit<LoginViewState> {
       );
     } on ServerException catch (e) 
     {
+      
       //emit(state)
     }
   }

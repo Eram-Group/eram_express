@@ -77,34 +77,13 @@ class OtpViewModel extends Cubit<OtpViewState> {
     }
   }
 
-/*
- onOtpVerified: (bool newCustomer) {
-        emit(state.copyWith(verifyingOtp: false));
-
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          HomeView.route,
-          (route) => false,
-        );
-
-        if (newCustomer) {
-          logger.debug('New customer');
-          Navigator.of(context).pushNamed(CompleteProfileView.route);
-                        }
-      },
-      onOtpVerificationFailed: (ApiError error) {
-        emit(state.copyWith(verifyingOtp: false));
-
-       // ErrorModal.fromApiError(error).show(context);
-      },
-      */
   void Function()? resendOtpOnClicked() =>
       !state.resendButtonEnabled ? null : _resendOtpOnClicked;
 
   Future<void> _resendOtpOnClicked() async {
     emit(state.copyWith(resendingOtp: true));
-     _authenticationService.sendOtp(
+    _authenticationService.sendOtp(
       phoneNumber: _phoneNumber,
-      
     );
     _startResendOtpTimer();
     emit(state.copyWith(resendingOtp: false));
