@@ -1,4 +1,4 @@
-import 'package:eram_express/app/ServiceLocator.dart';
+import 'package:eram_express/app/service_locator.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';

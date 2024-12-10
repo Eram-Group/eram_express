@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../app/ServiceLocator.dart';
+import '../../../../app/service_locator.dart';
 import '../../../Common/presentation/widgets/customButton.dart';
 import '../../../home/data/models/picking_locationModel.dart';
 

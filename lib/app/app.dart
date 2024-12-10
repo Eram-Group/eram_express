@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 import '../features/init/presentation/views/init_view.dart';
-import 'ServiceLocator.dart';
+import 'service_locator.dart';
 import 'navigation.dart';
 import 'presentation/theme.dart';
 import 'router.dart';

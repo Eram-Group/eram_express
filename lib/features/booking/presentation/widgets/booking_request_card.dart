@@ -5,7 +5,7 @@ import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../app/ServiceLocator.dart';
+import '../../../../app/service_locator.dart';
 import '../../../../common/widgets/dot_line.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/app_text_style.dart';

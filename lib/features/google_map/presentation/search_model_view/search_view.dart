@@ -1,14 +1,11 @@
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express/features/Common/presentation/widgets/SvgIcon.dart';
-import 'package:eram_express/features/authentication/data/respositories/authentication_repository_impl.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../app/ServiceLocator.dart';
-
+import '../../../../app/service_locator.dart';
 import '../../data/models/place_auto_complete_model.dart';
-import '../../data/repositories/google_map_repositiory.dart';
 import 'search_model_view.dart';
 import 'search_model_view_state.dart';
 import 'widgets/search_text_field.dart';

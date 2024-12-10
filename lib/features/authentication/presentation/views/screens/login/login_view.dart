@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/di.dart';
-import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
+import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
@@ -12,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 
-import '../../../../../../app/ServiceLocator.dart';
+import '../../../../../../app/service_locator.dart';
 import '../../../../data/services/authentication_service.dart';
 import 'login_view_state.dart';
 import 'login_view_model.dart';

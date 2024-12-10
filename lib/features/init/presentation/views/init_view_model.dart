@@ -1,5 +1,5 @@
 
-import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
+import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../authentication/data/respositories/authentication_repository.dart';

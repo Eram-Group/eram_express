@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:eram_express_shared/core/api/dio_api_client.dart';
 import 'package:eram_express_shared/core/api/network-service.dart';
-import 'googlemap_api_endpoint.dart';
-import 'googlemap_remote_data_source.dart';
+import 'google_map_remote_data_source.dart';
 
 class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource 
 {

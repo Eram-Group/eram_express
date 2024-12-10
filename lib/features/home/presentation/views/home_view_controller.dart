@@ -1,4 +1,4 @@
-import 'package:eram_express/features/booking/data/repositories/BookingRepository%20.dart';
+import 'package:eram_express/features/booking/data/repositories/booking_repository%20.dart';
 import 'package:eram_express/features/home/presentation/objects/booking_request_form_data.dart';
 import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
@@ -17,6 +17,8 @@ import '../modals/pick_data-modal.dart';
 import 'home_view_state.dart';
 
 class HomeViewController extends Cubit<HomeViewState> {
+
+  
   final HomeRepository _homeRepository;
   final BookingRepository _bookingRepository;
   HomeViewController({
@@ -24,9 +26,7 @@ class HomeViewController extends Cubit<HomeViewState> {
     required BookingRepository bookingRepository,
   })  : _homeRepository = homeRepo,
         _bookingRepository = bookingRepository,
-        super(HomeViewState(status: HomeBookingRequestStatus.initial)) {
-    initialHomeData();
-  }
+        super(HomeViewState(status: HomeBookingRequestStatus.initial)) {}
 
   Future<void> initialHomeData() async {
     try {

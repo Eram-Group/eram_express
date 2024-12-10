@@ -1,7 +1,7 @@
 import 'package:eram_express_shared/core/utils/logger.dart';
 import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
 import 'google_map_reposirtoty.dart';
-import '../data_sources/googlemap_remote_data_source.dart';
+import '../data_sources/google_map_remote_data_source.dart';
 import '../models/addressmodels/place_details_model.dart';
 import '../models/place_auto_complete_model.dart';
 

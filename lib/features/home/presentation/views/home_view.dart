@@ -6,9 +6,8 @@ import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../app/ServiceLocator.dart';
-
-import '../../../booking/data/repositories/booking_repository_impl.dart';
+import '../../../../app/service_locator.dart';
+import '../../../booking/data/repositories/booking_repository .dart';
 import '../../../booking/presentation/views/all_booking_request_view.dart';
 import '../../../booking/presentation/views/offers_view.dart';
 import '../../../booking/presentation/views/booking_request_view_controller.dart';
@@ -17,53 +16,56 @@ import '../../../booking/presentation/widgets/booking_request_card.dart';
 import '../../data/models/cargo-categoriesModel.dart';
 import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/picking_locationModel.dart';
-import '../../data/repositotys/home_repositoty_impl.dart';
 import '../modals/failed-request-modal.dart';
 import '../modals/successful-request-modal.dart';
 import '../widgets/empty_booking_view.dart';
 import '../widgets/selection-card.dart';
 import 'home_view_controller.dart';
 import 'home_view_state.dart';
-class HomeView extends StatelessWidget
- {
+
+class HomeView extends StatelessWidget {
   static const String route = '/home';
-  final HomeViewController homeViewModel = HomeViewController( homeRepo: sl<HomeRepositoryImpl>(),bookingRepository: sl<BookingRepositoryImpl>());
-  final BookingRequestViewController bookingRequestViewModel = BookingRequestViewController(bookingRepository: sl<BookingRepositoryImpl>(),);
-  
+
+  final BookingRequestViewController bookingRequestViewModel =
+      BookingRequestViewController(
+    bookingRepository: sl<BookingRepository>(),
+  );
+
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    _buildHeader(context),
-                    _buildDataContainer(context),
-                  ],
-                ),
-                BlocListener<HomeViewController, HomeViewState>(
-                  bloc: homeViewModel,
-                  listener: (context, state) {
-                    if (state.isRequestCreateSuccess) {
-                      const SuccessfulRequestModal().show(context);
-                      bookingRequestViewModel.listBookingRequest();
-                    }
-                    if (state.isRequestCreateError) {
-                      const FailedOrderModal().show(context);
-                    }
-                  },
-                  child: _buildBookingRequest(),
-                ),
-              ],
+    return 
+      Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+              child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      _buildHeader(context),
+                      _buildDataContainer(context),
+                    ],
+                  ),
+                  BlocListener<HomeViewController, HomeViewState>(
+                  
+                    listener: (context, state) {
+                      if (state.isRequestCreateSuccess) {
+                        const SuccessfulRequestModal().show(context);
+                        bookingRequestViewModel.listBookingRequest();
+                      }
+                      if (state.isRequestCreateError) {
+                        const FailedOrderModal().show(context);
+                      }
+                    },
+                    child: _buildBookingRequest(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )));
+          )));
   }
 
   // we wait to merge profileFeature to wrap it with ProfileViewModel
@@ -159,7 +161,7 @@ class HomeView extends StatelessWidget
                 _buildDateField(context),
                 _buildGoodsField(context),
                 const Gap(8),
-                _buildCustomButton(),
+                _buildCustomButton(context),
                 const Gap(8),
               ],
             ),
@@ -170,12 +172,13 @@ class HomeView extends StatelessWidget
   }
 
   Widget _buildLocationRow(BuildContext context) {
+    final homeViewModel=context.read<HomeViewController>();
     return Row(
       children: [
         Expanded(
-           child: BlocSelector<HomeViewController, HomeViewState,
+            child: BlocSelector<HomeViewController, HomeViewState,
                 PickingLocationModel?>(
-          bloc: homeViewModel,
+        
           selector: (state) => state.pickup,
           builder: (context, pickup) {
             logger.debug("build locationRow");
@@ -207,6 +210,8 @@ class HomeView extends StatelessWidget
   }
 
   Widget _buildLoadTypeField(BuildContext context) {
+        final homeViewModel = context.read<HomeViewController>();
+
     return BlocSelector<HomeViewController, HomeViewState, CargoCategoryModel?>(
       bloc: homeViewModel,
       selector: (state) => state.loadType,
@@ -231,6 +236,8 @@ class HomeView extends StatelessWidget
   }
 
   Widget _buildTruckSizeField(BuildContext context) {
+        final homeViewModel = context.read<HomeViewController>();
+
     return BlocSelector<HomeViewController, HomeViewState,
         CargoSubCategoryModel?>(
       bloc: homeViewModel,
@@ -250,6 +257,8 @@ class HomeView extends StatelessWidget
   }
 
   Widget _buildDateField(BuildContext context) {
+    final homeViewModel=context.read<HomeViewController>();
+
     return BlocSelector<HomeViewController, HomeViewState, String?>(
       bloc: homeViewModel,
       selector: (state) => state.pickupDate,
@@ -272,6 +281,8 @@ class HomeView extends StatelessWidget
   }
 
   Widget _buildGoodsField(BuildContext context) {
+        final homeViewModel = context.read<HomeViewController>();
+
     return BlocSelector<HomeViewController, HomeViewState, String?>(
       bloc: homeViewModel,
       selector: (state) => state.selectGoodsString,
@@ -404,7 +415,9 @@ class HomeView extends StatelessWidget
     );
   }
 
-  Widget _buildCustomButton() {
+  Widget _buildCustomButton(BuildContext context) {
+        final homeViewModel = context.read<HomeViewController>();
+
     return BlocBuilder<HomeViewController, HomeViewState>(
       bloc: homeViewModel,
       builder: (context, state) {
