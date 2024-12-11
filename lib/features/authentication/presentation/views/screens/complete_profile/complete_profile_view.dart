@@ -1,12 +1,12 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import '../../../../../../app/iconsax_icons.dart';
-import '../../../../../../app/service_locator.dart';
 import 'complete_profile_view_model.dart';
 import 'complete_profile_view_state.dart';
 

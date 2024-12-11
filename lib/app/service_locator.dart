@@ -4,10 +4,10 @@ import 'package:eram_express_shared/data/configurations/data_sources/remote/conf
 import 'package:eram_express_shared/data/configurations/data_sources/remote/configurations_remote_data_source.dart';
 import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
 import 'package:eram_express_shared/data/configurations/repositories/configurations_repository_impl.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
 import 'package:eram_express_shared/tokens/local/tokens_secure_storage_local_data_source.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get_it/get_it.dart';
 import '../features/authentication/data/data_sources/authentication/remote/authentication_api_remote_data_source.dart';
 import '../features/authentication/data/data_sources/authentication/remote/authentication_remote_data_source.dart';
 import '../features/authentication/data/respositories/authentication_repository.dart';
@@ -41,9 +41,8 @@ import '../features/home/presentation/views/home_view_controller.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 import '../features/init/presentation/views/init_view_model.dart';
 
-final sl = GetIt.instance;
 
-class ServiceLocator {
+class ServiceLocator  {
   void init() {
     sl.registerLazySingleton(() => Dio());
     sl.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(sl()));
@@ -61,7 +60,8 @@ class ServiceLocator {
       ),
     );
 
- 
+    //home
+
     sl.registerLazySingleton<HomeDataRemoteDataSource>(
         () => HomeDataApiRemoteDataSource(networkService: sl()));
     sl.registerLazySingleton<HomeRepository>(

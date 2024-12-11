@@ -1,9 +1,8 @@
 import 'dart:math';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../../app/service_locator.dart';
-
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
 import '../../../home/presentation/views/home_view.dart';
 import 'init_view_model.dart';
