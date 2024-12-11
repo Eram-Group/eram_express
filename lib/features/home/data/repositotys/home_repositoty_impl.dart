@@ -4,9 +4,9 @@ import 'package:eram_express/features/home/data/models/goods-typeModel.dart';
 import 'package:eram_express/features/home/data/models/home-Model.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
-import '../data_sources/home_data-api_remote_data_source.dart';
+
+import '../data_sources/home_data_remote_data_source.dart';
 import 'home_repository.dart';
-import '../data_sources/homeData_remote_data_source.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
   final HomeDataRemoteDataSource _remoteDataSource;
@@ -17,7 +17,7 @@ class HomeRepositoryImpl implements HomeRepository {
 
   HomeRepositoryImpl({
     required final TokensLocalDataSource tokensLocalDataSource,
-    required HomeDataApiRemoteDataSource remoteDataSource,
+    required HomeDataRemoteDataSource remoteDataSource,
   })  : _remoteDataSource = remoteDataSource;
 
   @override

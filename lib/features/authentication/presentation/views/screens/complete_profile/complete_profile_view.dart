@@ -1,4 +1,3 @@
-import 'package:eram_express/app/service_locator.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
@@ -7,41 +6,47 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import '../../../../../../app/iconsax_icons.dart';
-import '../../../../../customer/data/services/customer_service.dart';
+import '../../../../../../app/service_locator.dart';
 import 'complete_profile_view_model.dart';
 import 'complete_profile_view_state.dart';
 
 class CompleteProfileView extends StatelessWidget {
   static const String route = '/complete-profile';
-  final CompleteProfileViewModel viewModel =
-      CompleteProfileViewModel(customerService: sl<CustomerService>());
 
-  CompleteProfileView({super.key});
+  const CompleteProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              const Gap(24),
-              _buildHeading(context),
-              const Gap(30),
-              _buildProfilePicture(context),
-              const Gap(30),
-              _buildFullNameField(context),
-              const Gap(30),
-              _buildSaveButton(context),
-            ],
-          ),
-        ),
+    return BlocProvider(
+      create: (context) => sl<CompleteProfileViewModel>(),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    const Gap(24),
+                    _buildHeading(context),
+                    const Gap(30),
+                    _buildProfilePicture(context),
+                    const Gap(30),
+                    _buildFullNameField(context),
+                    const Gap(30),
+                    _buildSaveButton(context),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
       ),
     );
   }
 
   Widget _buildFullNameField(BuildContext context) {
+    final viewModel = context.read<CompleteProfileViewModel>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -131,6 +136,7 @@ class CompleteProfileView extends StatelessWidget {
   }
 
   Widget _buildProfilePicture(BuildContext context) {
+    final viewModel = context.read<CompleteProfileViewModel>();
     return BlocBuilder<CompleteProfileViewModel, CompleteProfileViewState>(
       bloc: viewModel,
       builder: (context, state) {
@@ -192,6 +198,7 @@ class CompleteProfileView extends StatelessWidget {
   }
 
   Widget _buildSaveButton(BuildContext context) {
+    final viewModel = context.read<CompleteProfileViewModel>();
     return BlocBuilder<CompleteProfileViewModel, CompleteProfileViewState>(
       bloc: viewModel,
       builder: (_, state) {

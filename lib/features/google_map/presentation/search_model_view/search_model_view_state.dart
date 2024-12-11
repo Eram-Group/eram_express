@@ -1,27 +1,50 @@
 
-import 'package:equatable/equatable.dart';
 import '../../data/models/place_auto_complete_model.dart';
 
-sealed class SearchState extends Equatable 
-{
-  const SearchState();
-  @override
-  List<Object> get props => [];
+
+enum SearchStateStatus {
+  empty,
+  initial,
+  loading,
+  error,
+  success,
 }
 
-class SearchStateEmpty extends SearchState {}
-class SearchStateInitial extends SearchState {}
-class SearchStateLoading extends SearchState {}
-class SearchStateError extends SearchState 
-{
-  const SearchStateError(this.error);
-  final String error;
+extension SearchStateX on SearchState {
+  bool get isInitial => status == SearchStateStatus.initial;
+  bool get isError =>
+      status == SearchStateStatus.error;
+  bool get isSuccess =>
+      status == SearchStateStatus.success;
+       bool get isLoading => status == SearchStateStatus.loading;
+        bool get isEmpty => status == SearchStateStatus.empty;
 }
-class SearchStateSuccess extends SearchState 
-{
-  const SearchStateSuccess(this.recommendPlaces);
-  final List<PlaceAutocompleteModel> recommendPlaces;
-  @override
-  List<Object> get props => [recommendPlaces];
+
+class SearchState {
+  final SearchStateStatus status;
+  final String? errorMessage;
+  final List<PlaceAutocompleteModel> ?recommendPlaces;
+
+  const SearchState({
+    this.status = SearchStateStatus.initial,
+    this.errorMessage,
+    this.recommendPlaces,
+  });
+
+  SearchState copyWith({
+    SearchStateStatus? status,
+    String? errorMessage,
+    List<PlaceAutocompleteModel>? recommendPlaces,
+  }) {
+    return SearchState(
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      recommendPlaces: recommendPlaces ?? this.recommendPlaces,
+    );
+  }
+
+  //List<Object?> get props => [status, errorMessage, recommendPlaces];
 }
+
+
 

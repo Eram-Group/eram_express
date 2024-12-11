@@ -21,12 +21,13 @@ class SearchViewController extends Cubit<SearchState> {
       required AuthenticationRepositoryImpl authenticationRepository})
       : _googleMapRepository = googleMapRepository,
         _authenticationRepository = authenticationRepository,
-        super(SearchStateInitial()) {
+        super(const SearchState(status: SearchStateStatus.initial)) {
     searchController.addListener(() {
       if (debounce?.isActive ?? false) {
         debounce?.cancel();
       }
-      debounce = Timer(const Duration(milliseconds: 500), () {
+      debounce = Timer(const Duration(milliseconds: 500), () 
+      {
         sessionToken ??= const Uuid().v4(); // check it
         updateSearchQuery(searchController.text);
       });
@@ -41,14 +42,14 @@ class SearchViewController extends Cubit<SearchState> {
         final data = await _googleMapRepository.getPredictionPlaces(
             query, sessionToken!, user!.country.code);
         data.isEmpty
-            ? emit(SearchStateEmpty())
-            : emit(SearchStateSuccess(data));
+            ? emit(const SearchState(status: SearchStateStatus.empty))
+            : emit(SearchState(status: SearchStateStatus.success,recommendPlaces: data));
       } catch (e) {
-        emit(const SearchStateError("fail to get places"));
+        emit(const SearchState(status: SearchStateStatus.error,errorMessage: "Fail to get result"));
       }
     } 
     else {
-      emit(SearchStateInitial());
+      emit(const SearchState(status: SearchStateStatus.initial ));
     }
   }
 
@@ -61,7 +62,8 @@ class SearchViewController extends Cubit<SearchState> {
     }
     catch(e)
     {
-               emit(const SearchStateError("fail to get places"));
+                emit(const SearchState(
+          status: SearchStateStatus.error, errorMessage: "Fail to get result"));
     }
    
   }

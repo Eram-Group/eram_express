@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
-import '../../../../data/services/authentication_service.dart';
 import '../../../objects/login_form_data.dart';
 import 'otp_view_model.dart';
 import 'otp_view_state.dart';
@@ -16,36 +15,39 @@ class OtpView extends StatelessWidget {
   static const String route = '/otp';
 
   final OtpViewArguments arguments;
-  final OtpViewModel viewModel =
-      OtpViewModel(authenticationService: sl<AuthenticationService>());
 
-  OtpView(this.arguments, {super.key}) {
-    viewModel.init(phoneNumber: arguments.loginFormData.phoneNumber);
-  }
+  const OtpView(this.arguments, {super.key}) ;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              _buildTopBar(context),
-              const Gap(24),
-              _buildHeading(context),
-              const Gap(10),
-              _buildSubheading(context),
-              const Gap(30),
-              _buildPin(),
-              const Gap(30),
-              _buildVerifyButton(context),
-              const Gap(30),
-              _buildResendOtp(context),
-            ],
-          ),
-        ),
+    return BlocProvider(
+      create: (context) => sl<OtpViewModel>()..init(phoneNumber: arguments.loginFormData.phoneNumber),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    _buildTopBar(context),
+                    const Gap(24),
+                    _buildHeading(context),
+                    const Gap(10),
+                    _buildSubheading(context),
+                    const Gap(30),
+                    _buildPin(context),
+                    const Gap(30),
+                    _buildVerifyButton(context),
+                    const Gap(30),
+                    _buildResendOtp(context),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
       ),
     );
   }
@@ -87,9 +89,10 @@ class OtpView extends StatelessWidget {
     );
   }
 
-  Widget _buildPin() {
+  Widget _buildPin(BuildContext context) {
+    final viewModel=context.read<OtpViewModel>();
     return BlocBuilder<OtpViewModel, OtpViewState>(
-      bloc: viewModel,
+      //bloc: viewModel,
       builder: (_, state) {
         return Pinput(
           enabled: state.pinEnabled,
@@ -116,8 +119,8 @@ class OtpView extends StatelessWidget {
   }
 
   Widget _buildResendOtp(BuildContext context) {
+    final viewModel = context.read<OtpViewModel>();
     return BlocBuilder<OtpViewModel, OtpViewState>(
-      bloc: viewModel,
       builder: (_, state) {
         return RichText(
           text: TextSpan(
@@ -166,6 +169,7 @@ class OtpView extends StatelessWidget {
   }
 
   Widget _buildSubheading(BuildContext context) {
+    final viewModel = context.read<OtpViewModel>();
     return RichText(
       text: TextSpan(
         children: [
@@ -216,8 +220,9 @@ class OtpView extends StatelessWidget {
   }
 
   Widget _buildVerifyButton(BuildContext context) {
+    final viewModel = context.read<OtpViewModel>();
     return BlocBuilder<OtpViewModel, OtpViewState>(
-      bloc: viewModel,
+      //bloc: viewModel,
       builder: (_, state) {
         return CustomButton(
           enabled: state.verifyButtonEnabled,

@@ -2,48 +2,46 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
-
 import '../../../../../../app/service_locator.dart';
-import '../../../../data/services/authentication_service.dart';
 import 'login_view_state.dart';
 import 'login_view_model.dart';
 
 class LoginView extends StatelessWidget {
   static const String route = '/login';
 
-  final LoginViewModel viewModel = LoginViewModel(
-    configurationsRepository: sl<ConfigurationsRepository>(),
-    authenticationService: sl<AuthenticationService>(),
-  ); 
 
-  LoginView({super.key}) {
-    viewModel.init();
-  }
+
+  const LoginView({super.key}) ;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackground(),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: _buildBottomSheet(
-              context,
-              child: _buildBody(context),
+    return BlocProvider(
+      create: (context) => sl<LoginViewModel>()..init(),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                _buildBackground(),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: _buildBottomSheet(
+                    context,
+                    child: _buildBody(context),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        }
       ),
     );
   }
@@ -106,6 +104,7 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildCountryCodeButton(BuildContext context) {
+     final viewModel=context.read<LoginViewModel>();
     return BlocBuilder<LoginViewModel, LoginViewState>(
       bloc: viewModel,
       builder: (_, state) {
@@ -208,6 +207,7 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildLoginButton(BuildContext context) {
+    final viewModel = context.read<LoginViewModel>();
     return BlocBuilder<LoginViewModel, LoginViewState>(
       bloc: viewModel,
       builder: (_, state) => CustomButton(
@@ -263,18 +263,18 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _buildPhoneNumberTextField(BuildContext context) {
+    final viewModel = context.read<LoginViewModel>();
     return BlocBuilder<LoginViewModel, LoginViewState>(
       bloc: viewModel,
       builder: (_, state) {
         return TextFormField(
           enabled: state.phoneNumberFieldEnabled,
           keyboardType: TextInputType.phone,
-          /*
+          
           inputFormatters: [
             if (state.selectedCountry != null)
-              state.selectedCountry!.numberFormatter,
+              state.selectedCountry!.numberFormat
           ],
-          */
           decoration: InputDecoration(
             hintText: context.tt(
               'Enter your phone number',

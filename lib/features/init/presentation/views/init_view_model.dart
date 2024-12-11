@@ -36,9 +36,5 @@ class InitViewModel extends Cubit<bool> {
     emit(false);
   }
 
-  void listener(BuildContext context, bool state) =>
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        state ? HomeView.route : LoginView.route,
-        (route) => false,
-      );
+ 
 }

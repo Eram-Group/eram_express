@@ -1,4 +1,3 @@
-import 'package:eram_express_shared/core/utils/logger.dart';
 import '../../../customer/data/repositories/customer_repository.dart';
 import '../../presentation/objects/otp_verification_data.dart';
 import '../../presentation/objects/verify_otp_response_wrapper.dart';

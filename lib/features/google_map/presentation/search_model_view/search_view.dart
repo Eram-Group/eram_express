@@ -37,14 +37,14 @@ class SearchView extends StatelessWidget {
               const SearchTextField(),
               BlocBuilder<SearchViewController, SearchState>(
                 builder: (context, state) {
-                  if (state is SearchStateError) {
-                    return const Center(child: Text("Error occurred"));
-                  } else if (state is SearchStateEmpty) {
+                  if (state.isError) {
+                    return  Center(child: Text(state.errorMessage!));
+                  } else if (state.isEmpty) {
                     return _buildEmptyState(context);
-                  } else if (state is SearchStateSuccess) {
-                    return _buildDisplayResult(state.recommendPlaces);
+                  } else if (state.isSuccess) {
+                    return _buildDisplayResult(state.recommendPlaces!);
                   }
-                  return const SizedBox.shrink(); // defualt emptyscreen
+                  return const SizedBox();// defualt emptyscreen
                 },
               ),
             ],

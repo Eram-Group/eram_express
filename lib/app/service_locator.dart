@@ -13,10 +13,14 @@ import '../features/authentication/data/data_sources/tokens/local/tokens_secure_
 import '../features/authentication/data/respositories/authentication_repository.dart';
 import '../features/authentication/data/respositories/authentication_repository_impl.dart';
 import '../features/authentication/data/services/authentication_service.dart';
+import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view_model.dart';
+import '../features/authentication/presentation/views/screens/login/login_view_model.dart';
+import '../features/authentication/presentation/views/screens/otp/otp_view_model.dart';
 import '../features/booking/data/remote/booking_api_remote_data_source.dart';
 import '../features/booking/data/remote/booking_remote_data_source.dart';
 import '../features/booking/data/repositories/booking_repository .dart';
 import '../features/booking/data/repositories/booking_repository_impl.dart';
+import '../features/booking/presentation/views/booking_request_view_controller.dart';
 import '../features/booking/presentation/widgets/booking_request_card.dart';
 import '../features/customer/data/data_sources/remote/customer_api_remote_data_source.dart';
 import '../features/customer/data/data_sources/remote/customer_remote_data_source.dart';
@@ -30,10 +34,12 @@ import '../features/google_map/data/services/locationservice.dart';
 import '../features/google_map/presentation/search_model_view/search_model_view.dart';
 import '../features/google_map/presentation/views/google_map_view_controller.dart';
 import '../features/home/data/data_sources/home_data-api_remote_data_source.dart';
+import '../features/home/data/data_sources/home_data_remote_data_source.dart';
 import '../features/home/data/repositotys/home_repository.dart';
 import '../features/home/data/repositotys/home_repositoty_impl.dart';
 import '../features/home/presentation/views/home_view_controller.dart';
 import '../features/i18n/domain/locale_cubit.dart';
+import '../features/init/presentation/views/init_view_model.dart';
 
 final sl = GetIt.instance;
 
@@ -41,7 +47,7 @@ class ServiceLocator {
   void init() {
     sl.registerLazySingleton(() => Dio(
           BaseOptions(
-            baseUrl: 'https://prod.eramex.eramapps.com/api',
+            baseUrl: 'https://prod.eramex.eramapps.com/api', // remove ittttttt
           ),
         ));
     sl.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(sl()));
@@ -50,6 +56,9 @@ class ServiceLocator {
         networkService: sl(),
       ),
     );
+    sl.registerFactory(() => InitViewModel(
+        authenticationRepository: sl(), configurationsRepository: sl()));
+
     sl.registerLazySingleton<ConfigurationsRepository>(
       () => ConfigurationsRepositoryImpl(
         remoteDataSource: sl(),
@@ -63,7 +72,7 @@ class ServiceLocator {
     sl.registerLazySingleton<TokensLocalDataSource>(
       () => TokensSecureStorageLocalDataSource(secureStorage: sl()),
     );
-    sl.registerLazySingleton(
+    sl.registerLazySingleton<HomeDataRemoteDataSource>(
         () => HomeDataApiRemoteDataSource(networkService: sl()));
     sl.registerLazySingleton<HomeRepository>(
       () => HomeRepositoryImpl(
@@ -79,6 +88,9 @@ class ServiceLocator {
       () => BookingRepositoryImpl(
           bookingRemoteDataSource: sl(), tokensLocalDataSource: sl()),
     );
+    sl.registerFactory(
+        () => BookingRequestViewController(bookingRepository: sl()));
+
     sl.registerFactory(() => ExpansionTileCubit());
 
     //GoogleMap
@@ -113,6 +125,20 @@ class ServiceLocator {
             tokensLocalDataSource: sl(),
             customerRepository: sl()));
 
+//log in
+     sl.registerFactory(() => LoginViewModel(
+        configurationsRepository: sl(),authenticationService: sl()));
+  
+//Otp
+    sl.registerFactory(() => OtpViewModel(
+         authenticationService: sl()));
+
+//completeprofile
+   sl.registerFactory(() => CompleteProfileViewModel(customerService: sl()));
+  
+
+//localization
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
+
   }
 }
