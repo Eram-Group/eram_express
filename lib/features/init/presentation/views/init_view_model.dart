@@ -28,7 +28,8 @@ class InitViewModel extends Cubit<bool> {
     ]);
 
     final isAuthenticated = results[1] as bool;
-    if (isAuthenticated) {
+    if (isAuthenticated)
+     {
       emit(true);
       return;
     }

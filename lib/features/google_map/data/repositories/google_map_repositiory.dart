@@ -1,5 +1,4 @@
 import 'package:eram_express_shared/core/utils/logger.dart';
-import '../../../authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
 import 'google_map_reposirtoty.dart';
 import '../data_sources/google_map_remote_data_source.dart';
 import '../models/addressmodels/place_details_model.dart';
@@ -7,13 +6,13 @@ import '../models/place_auto_complete_model.dart';
 
 class GoogleMapRepositoryImpl extends GoogleMapRepository {
   final GoogleMapRemoteDataSource _googleMapRemoteDataSource;
-   final TokensLocalDataSource _tokensLocalDataSource;
+  
   GoogleMapRepositoryImpl(
       {required GoogleMapRemoteDataSource googleMapRemoteDataSource,
-       required TokensLocalDataSource tokensLocalDataSource,
+     
        })
-      : _googleMapRemoteDataSource = googleMapRemoteDataSource,
-       _tokensLocalDataSource = tokensLocalDataSource;
+      : _googleMapRemoteDataSource = googleMapRemoteDataSource;
+       
   @override
   Future< List<PlaceAutocompleteModel>> getPredictionPlaces( String input, String sessionToken, String country) async {
       final result = await _googleMapRemoteDataSource.getPredictionPlaces(input, sessionToken, country);  
@@ -33,10 +32,10 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
   @override
   Future<PlaceDetailsModel> getPlaceDetails(String lat, String long) async
   {
-     final accessToken = await _tokensLocalDataSource.accessToken;
+    
    try
    {
-        await _googleMapRemoteDataSource.validateLocation(accessToken!,lat, long);
+        await _googleMapRemoteDataSource.validateLocation(lat, long);
         final places =  await _googleMapRemoteDataSource.getPlaceDetails(lat, long);
       if (places.statusCode == 200) {
         logger.debug("Request successful");

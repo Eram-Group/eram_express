@@ -4,12 +4,12 @@ import 'package:eram_express_shared/data/configurations/data_sources/remote/conf
 import 'package:eram_express_shared/data/configurations/data_sources/remote/configurations_remote_data_source.dart';
 import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
 import 'package:eram_express_shared/data/configurations/repositories/configurations_repository_impl.dart';
+import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
+import 'package:eram_express_shared/tokens/local/tokens_secure_storage_local_data_source.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import '../features/authentication/data/data_sources/authentication/remote/authentication_api_remote_data_source.dart';
 import '../features/authentication/data/data_sources/authentication/remote/authentication_remote_data_source.dart';
-import '../features/authentication/data/data_sources/tokens/local/tokens_local_data_source.dart';
-import '../features/authentication/data/data_sources/tokens/local/tokens_secure_storage_local_data_source.dart';
 import '../features/authentication/data/respositories/authentication_repository.dart';
 import '../features/authentication/data/respositories/authentication_repository_impl.dart';
 import '../features/authentication/data/services/authentication_service.dart';
@@ -45,9 +45,7 @@ final sl = GetIt.instance;
 
 class ServiceLocator {
   void init() {
-    sl.registerLazySingleton(() => Dio(
-         
-        ));
+    sl.registerLazySingleton(() => Dio());
     sl.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(sl()));
     sl.registerLazySingleton<ConfigurationsRemoteDataSource>(
       () => ConfigurationsApiRemoteDataSource(
@@ -63,18 +61,11 @@ class ServiceLocator {
       ),
     );
 
-    //home
-    sl.registerLazySingleton(
-      () => const FlutterSecureStorage(),
-    );
-    sl.registerLazySingleton<TokensLocalDataSource>(
-      () => TokensSecureStorageLocalDataSource(secureStorage: sl()),
-    );
+ 
     sl.registerLazySingleton<HomeDataRemoteDataSource>(
         () => HomeDataApiRemoteDataSource(networkService: sl()));
     sl.registerLazySingleton<HomeRepository>(
-      () => HomeRepositoryImpl(
-          remoteDataSource: sl(), tokensLocalDataSource: sl()),
+      () => HomeRepositoryImpl(remoteDataSource: sl()),
     );
     sl.registerFactory(
         () => HomeViewController(homeRepo: sl(), bookingRepository: sl()));
@@ -84,7 +75,8 @@ class ServiceLocator {
         () => BookingApiRemoteDataSource(networkService: sl()));
     sl.registerLazySingleton<BookingRepository>(
       () => BookingRepositoryImpl(
-          bookingRemoteDataSource: sl(), tokensLocalDataSource: sl()),
+        bookingRemoteDataSource: sl(),
+      ),
     );
     sl.registerFactory(
         () => BookingRequestViewController(bookingRepository: sl()));
@@ -97,7 +89,8 @@ class ServiceLocator {
     );
     sl.registerLazySingleton(() => LocationService());
     sl.registerLazySingleton(() => GoogleMapRepositoryImpl(
-        googleMapRemoteDataSource: sl(), tokensLocalDataSource: sl()));
+          googleMapRemoteDataSource: sl(),
+        ));
     sl.registerFactory(() => SearchViewController(
         googleMapRepository: sl(), authenticationRepository: sl()));
     sl.registerFactory(() => GoogleMapViewController(
@@ -107,7 +100,8 @@ class ServiceLocator {
     sl.registerLazySingleton<CustomerRemoteDataSource>(
         () => CustomerApiRemoteDataSource(networkService: sl()));
     sl.registerLazySingleton<CustomerRepository>(() => CustomerRepositoryImpl(
-        remoteDataSource: sl(), tokensLocalDataSource: sl()));
+          remoteDataSource: sl(),
+        ));
     sl.registerLazySingleton(() => CustomerService(
         customerRepository: sl(), authenticationRepository: sl()));
 
@@ -124,19 +118,16 @@ class ServiceLocator {
             customerRepository: sl()));
 
 //log in
-     sl.registerFactory(() => LoginViewModel(
-        configurationsRepository: sl(),authenticationService: sl()));
-  
+    sl.registerFactory(() => LoginViewModel(
+        configurationsRepository: sl(), authenticationService: sl()));
+
 //Otp
-    sl.registerFactory(() => OtpViewModel(
-         authenticationService: sl()));
+    sl.registerFactory(() => OtpViewModel(authenticationService: sl()));
 
 //completeprofile
-   sl.registerFactory(() => CompleteProfileViewModel(customerService: sl()));
-  
+    sl.registerFactory(() => CompleteProfileViewModel(customerService: sl()));
 
 //localization
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
-
   }
 }

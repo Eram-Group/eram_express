@@ -10,8 +10,7 @@ abstract class AuthenticationRepository {
 
   Future<void> logout();
   Future<void> sendOtp(String phoneNumber);
-  Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
-      OtpVerificationData data);
+  Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(OtpVerificationData data);
   void updateAuthenticatedCustomer(CustomerModel data);
   void savingToken(VerifyOtpResponseModel response);
 }
