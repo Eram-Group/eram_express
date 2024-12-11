@@ -2,18 +2,19 @@
 import 'package:dio/dio.dart';
 import 'package:eram_express/features/customer/data/objects/update_customer_form_data.dart';
 import 'package:eram_express_shared/core/api/network-service.dart';
+import '../../../../../app/api_keys.dart';
 import '../../models/customer_model.dart';
 import 'customer_remote_data_source.dart';
 class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
   final NetworkService _networkService;
 
   CustomerApiRemoteDataSource({required NetworkService networkService})
-      : _networkService = networkService; // تمت إضافة الفاصلة المنقوطة
+      : _networkService = networkService; 
 
   @override
   Future<CustomerModel> getAuthenticatedCustomer(String accessToken) async {
     final response = await _networkService.get(
-      '/customer/me/',
+      '$baseUrl/customer/me/',
      
     );
     return CustomerModel.fromMap(response.data);
@@ -31,7 +32,7 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
     });
 
     final response = await _networkService.patch(
-      '/customer/me/',
+      '$baseUrl/customer/me/',
       data: formData,
     );
     return CustomerModel.fromMap(response.data);

@@ -46,9 +46,7 @@ final sl = GetIt.instance;
 class ServiceLocator {
   void init() {
     sl.registerLazySingleton(() => Dio(
-          BaseOptions(
-            baseUrl: 'https://prod.eramex.eramapps.com/api', // remove ittttttt
-          ),
+         
         ));
     sl.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(sl()));
     sl.registerLazySingleton<ConfigurationsRemoteDataSource>(

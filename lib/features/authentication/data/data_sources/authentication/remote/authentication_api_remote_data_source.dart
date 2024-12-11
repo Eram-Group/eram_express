@@ -1,5 +1,7 @@
 import 'package:eram_express/features/authentication/data/models/verify_otp_response_model.dart';
 import 'package:eram_express_shared/core/api/network-service.dart';
+
+import '../../../../../../app/api_keys.dart';
 import '../../../../presentation/objects/otp_verification_data.dart';
 import '../../../../presentation/objects/verify_otp_response_wrapper.dart';
 import 'authentication_remote_data_source.dart';
@@ -14,7 +16,7 @@ class AuthenticationApiRemoteDataSource
   @override
   Future<void> sendOtp(String phoneNumber) async {
     final response = await _networkService.post(
-      '/user/send-otp/',
+      '$baseUrl/user/send-otp/',
       data: {'phone_number': phoneNumber},
     );
   }
@@ -23,7 +25,7 @@ class AuthenticationApiRemoteDataSource
   Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
       OtpVerificationData data) async {
     final response = await _networkService.post(
-      '/customer/authenticate/',
+      '$baseUrl/customer/authenticate/',
       data: {
         'phone_number': data.phoneNumber,
         'otp': data.otp,

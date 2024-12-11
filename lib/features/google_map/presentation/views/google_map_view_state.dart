@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../data/models/addressmodels/place_details_model.dart';
 
 

@@ -1,6 +1,7 @@
 import 'package:eram_express/features/home/data/models/home-Model.dart';
 import 'package:eram_express_shared/core/api/network-service.dart';
 
+import '../../../../app/api_keys.dart';
 import 'home_data_remote_data_source.dart';
 
 class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource {
@@ -10,7 +11,7 @@ class HomeDataApiRemoteDataSource implements HomeDataRemoteDataSource {
   @override
   Future<HomeModel> getHomeData() async {
     final response = await _networkService.get(
-      '/customer/home/',
+      '$baseUrl/customer/home/',
     );
     return HomeModel.fromMap(response.data);
   }
