@@ -1,4 +1,5 @@
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
 import 'package:eram_express_shared/service_locator.dart';
@@ -12,36 +13,33 @@ import 'complete_profile_view_state.dart';
 
 class CompleteProfileView extends StatelessWidget {
   static const String route = '/complete-profile';
-
   const CompleteProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<CompleteProfileViewModel>(),
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  children: [
-                    const Gap(24),
-                    _buildHeading(context),
-                    const Gap(30),
-                    _buildProfilePicture(context),
-                    const Gap(30),
-                    _buildFullNameField(context),
-                    const Gap(30),
-                    _buildSaveButton(context),
-                  ],
-                ),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  const Gap(24),
+                  _buildHeading(context),
+                  const Gap(30),
+                  _buildProfilePicture(context),
+                  const Gap(30),
+                  _buildFullNameField(context),
+                  const Gap(30),
+                  _buildSaveButton(context),
+                ],
               ),
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 
@@ -140,6 +138,7 @@ class CompleteProfileView extends StatelessWidget {
     return BlocBuilder<CompleteProfileViewModel, CompleteProfileViewState>(
       bloc: viewModel,
       builder: (context, state) {
+        logger.debug(state.profilePicture.toString());
         return Stack(
           clipBehavior: Clip.none,
           children: [

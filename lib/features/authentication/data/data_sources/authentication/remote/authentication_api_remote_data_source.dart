@@ -1,5 +1,6 @@
 import 'package:eram_express/features/authentication/data/models/verify_otp_response_model.dart';
 import 'package:eram_express_shared/core/api/network-service.dart';
+import 'package:eram_express_shared/core/api/server_expection.dart';
 
 import '../../../../../../app/api_keys.dart';
 import '../../../../presentation/objects/otp_verification_data.dart';
@@ -31,9 +32,10 @@ class AuthenticationApiRemoteDataSource
         'otp': data.otp,
       },
     );
+
     if (response.statusCode == 200) {
       return VerifyOtpResponseWrapper(
-        isNewCustomer: false,
+        isNewCustomer: true, //  TODo convert it to false
         response: VerifyOtpResponseModel.fromMap(response.data),
       );
     } else if (response.statusCode == 201) {
@@ -41,7 +43,12 @@ class AuthenticationApiRemoteDataSource
         isNewCustomer: true,
         response: VerifyOtpResponseModel.fromMap(response.data),
       );
+    } else 
+    {
+      // هي متحلتش غير لما عملت كده  فازاي ومفروض اني مهندله في الى
+      //networkservice
+      
+      throw ServerException.fromMap(response.data);
     }
-    return response.data;
   }
 }

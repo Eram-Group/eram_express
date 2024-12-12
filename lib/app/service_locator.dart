@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:eram_express_shared/core/api/log_interceptor.dart';
 import 'package:eram_express_shared/core/api/network-service.dart';
 import 'package:eram_express_shared/data/configurations/data_sources/remote/configurations_api_remote_data_source.dart';
 import 'package:eram_express_shared/data/configurations/data_sources/remote/configurations_remote_data_source.dart';
@@ -41,11 +42,8 @@ import '../features/home/presentation/views/home_view_controller.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 import '../features/init/presentation/views/init_view_model.dart';
 
-
-class ServiceLocator  {
+class ServiceLocator {
   void init() {
-    sl.registerLazySingleton(() => Dio());
-    sl.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(sl()));
     sl.registerLazySingleton<ConfigurationsRemoteDataSource>(
       () => ConfigurationsApiRemoteDataSource(
         networkService: sl(),

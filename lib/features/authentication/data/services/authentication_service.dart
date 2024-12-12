@@ -15,9 +15,10 @@ class AuthenticationService {
   Future<bool> get isAuthenticated async =>
       (await _authenticationRepository.authenticatedCustomer) != null;
 
-  Future<void> sendOtp({
-    required String phoneNumber,
-  }) async {
+  Future<void> sendOtp({required String phoneNumber,
+  }) async
+   {
+    
     final response = await _authenticationRepository.sendOtp(phoneNumber);
   }
 
