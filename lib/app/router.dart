@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
 
+import 'package:eram_express/features/booking/presentation/views/all_booking_request_view.dart';
+import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
 import '../features/authentication/presentation/views/screens/otp/otp_view.dart';
+import '../features/booking/presentation/views/offers_view.dart';
+import '../features/google_map/presentation/search_model_view/search_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
-import '../features/onboarding/presentation/views/onboarding.view.dart';
+import '../features/google_map/presentation/views/google_map_view.dart';
 import 'presentation/views/not_found.view.dart';
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -19,8 +22,6 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
 
   if (name == InitView.route) {
     page = InitView();
-  } else if (name == OnboardingView.route) {
-    page = const OnboardingView();
   } else if (name == LoginView.route) {
     page = LoginView();
   } else if (name == OtpView.route) {
@@ -29,8 +30,28 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   } else if (name == CompleteProfileView.route) {
     page = CompleteProfileView();
   } else if (name == HomeView.route) {
-    page = const HomeView();
-  } else {
+    page = HomeView();
+  } else if (name == GoogleMapView.route) {
+    final arguments = settings.arguments as GoogleMapViewArguments?;
+    page = GoogleMapView(
+      googleMapViewArguments: arguments,
+    );
+  } else if (name == SearchView.route) {
+    page = const SearchView();
+  }
+   else if (name == OffersView.route) {
+    final arguments = settings.arguments as OfferViewArguments;
+    page = OffersView(
+      arguments: arguments,
+    );
+  } 
+    else if (name == AllBookingRequestView.route) {
+    final arguments = settings.arguments as AllBookingRequestViewArguments;
+    page = AllBookingRequestView(
+      arguments: arguments,
+    );
+  } 
+  else {
     page = const NotFoundView();
   }
 

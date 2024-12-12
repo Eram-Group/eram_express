@@ -1,59 +1,59 @@
 import 'dart:math';
-
-import 'package:eram_express_shared/di.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../../app/di.dart';
+import '../../../authentication/presentation/views/screens/login/login_view.dart';
+import '../../../home/presentation/views/home_view.dart';
 import 'init_view_model.dart';
 
 class InitView extends StatelessWidget {
   static const String route = '/';
 
-  final viewModel = InitViewModel(
-    authenticationRepository: authenticationRepository,
-    configurationsRepository: configurationsRepository,
-  );
-
-  InitView({super.key}) {
-    viewModel.init();
-  }
+  const InitView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<InitViewModel, bool>(
-      bloc: viewModel,
-      listener: viewModel.listener,
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/splash.png'),
-                  fit: BoxFit.cover,
+    return BlocProvider<InitViewModel>(
+      create: (context) => sl<InitViewModel>()..init(),
+      child: BlocListener<InitViewModel, bool>(
+        listener: (context, state) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            state ? HomeView.route : LoginView.route,
+            (route) => false,
+          );
+        },
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/splash.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 200,
-              left: 0,
-              right: 0,
-              child: SvgPicture.asset('assets/logo.svg'),
-            ),
-            const Positioned(
-              top: 280,
-              left: 0,
-              right: 0,
-              child: Spinner(),
-            ),
-          ],
+              Positioned(
+                top: 200,
+                left: 0,
+                right: 0,
+                child: SvgPicture.asset('assets/logo.svg'),
+              ),
+              const Positioned(
+                top: 280,
+                left: 0,
+                right: 0,
+                child: Spinner(),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
 
 class Spinner extends StatefulWidget {
   const Spinner({

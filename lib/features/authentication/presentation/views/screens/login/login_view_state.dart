@@ -1,22 +1,56 @@
-import 'package:eram_express_shared/domain/entites/country_entity.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:eram_express_shared/core/api/server_expection.dart';
+import 'package:eram_express_shared/data/configurations/models/country_model.dart';
 
-part 'login_view_state.freezed.dart';
 
-@freezed
-abstract class LoginViewState with _$LoginViewState {
-  const LoginViewState._();
 
-  factory LoginViewState({
-    @Default(false) bool sendingOtp,
-    @Default('') String phoneNumber,
-    CountryEntity? selectedCountry,
-  }) = _LoginViewState;
+enum LogInStatus {
+  initial,
+  loading,
+  error,
+  countryError,
+  success,
+}
 
-  bool get loginButtonLoading => sendingOtp;
-  bool get phoneNumberFieldEnabled => selectedCountry != null && !sendingOtp;
-  bool get countryCodeButtonEnabled => selectedCountry != null;
-  bool get loginButtonEnabled =>
-      selectedCountry != null &&
-      phoneNumber.length == selectedCountry!.numberLength;
+extension LoginViewStateX on LoginViewState {
+ 
+  bool get isInitial => status == LogInStatus.initial;
+  bool get isLoading => status == LogInStatus.loading;
+  bool get isSuccess => status == LogInStatus.success;
+  bool get isError => status == LogInStatus.error;
+  bool get isCountryError => status == LogInStatus.countryError;
+ 
+
+}
+
+class LoginViewState {
+ 
+  final LogInStatus status;
+  final String ?phoneNumber;
+  final CountryModel? selectedCountry;
+  final String ?errorMessage ;
+  final ServerException ? serverException;
+  LoginViewState({
+     
+    required this.status,
+    this.phoneNumber = '',
+    this.selectedCountry,
+    this.errorMessage,
+    this.serverException,
+  });
+  LoginViewState copyWith
+  ({
+   LogInStatus? status,
+   String ?phoneNumber,
+  String ?errorMessage ,
+  CountryModel? selectedCountry,
+  ServerException ? serverException,
+  }) {
+    return LoginViewState(
+      status:  status ?? this.status,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      selectedCountry: selectedCountry ?? this.selectedCountry,
+      errorMessage: errorMessage?? this.errorMessage,
+      serverException: serverException??this.serverException,
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
-import 'package:eram_express_shared/domain/entites/country_entity.dart';
+import 'package:eram_express_shared/data/configurations/models/country_model.dart';
 import 'package:eram_express_shared/presentation/utils/show_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
@@ -9,8 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 class SelectCountryModal extends StatelessWidget {
-  final CountryEntity selectedCountry;
-  final List<CountryEntity> countries;
+  final CountryModel selectedCountry;
+  final List<CountryModel> countries;
   const SelectCountryModal({
     super.key,
     required this.selectedCountry,
@@ -60,12 +60,12 @@ class SelectCountryModal extends StatelessWidget {
     );
   }
 
-  Future<CountryEntity?> show(BuildContext context) async =>
-      await showModal<CountryEntity>(context, (context) => this);
+  Future<CountryModel?> show(BuildContext context) async =>
+      await showModal<CountryModel>(context, (context) => this);
 
   Widget _buildCountryOption(
     BuildContext context,
-    CountryEntity country,
+    CountryModel country,
     bool isSelected,
   ) {
     return Clickable(

@@ -1,14 +1,19 @@
+import 'package:eram_express/app/service_locator.dart';
+import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
-
-import '../../../../../../app/di.dart';
-import '../../../../domain/objects/login_form_data.dart';
+import '../../../../../home/presentation/views/home_view.dart';
+import '../../../objects/login_form_data.dart';
+import '../complete_profile/complete_profile_view.dart';
 import 'otp_view_model.dart';
 import 'otp_view_state.dart';
 
@@ -16,37 +21,57 @@ class OtpView extends StatelessWidget {
   static const String route = '/otp';
 
   final OtpViewArguments arguments;
-  final OtpViewModel viewModel =
-      OtpViewModel(authenticationService: authenticationService);
 
-  OtpView(this.arguments, {super.key}) {
-    viewModel.init(phoneNumber: arguments.loginFormData.phoneNumber);
-  }
+  const OtpView(this.arguments, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              _buildTopBar(context),
-              const Gap(24),
-              _buildHeading(context),
-              const Gap(10),
-              _buildSubheading(context),
-              const Gap(30),
-              _buildPin(),
-              const Gap(30),
-              _buildVerifyButton(context),
-              const Gap(30),
-              _buildResendOtp(context),
-            ],
+    return BlocProvider(
+      create: (context) => sl<OtpViewModel>()
+        ..init(phoneNumber: arguments.loginFormData.phoneNumber),
+      child: Builder(builder: (context) {
+        return BlocListener<OtpViewModel, OtpViewState>(
+          listener: (context, state) {
+            if (state.isError) {
+              ErrorModal.fromApiError(state.serverException!).show(context);
+            } else if (state.isSuccess) {
+              if (state.isNewCustomer!) {
+                Navigator.of(context).pushNamed(CompleteProfileView.route);
+              } else {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  HomeView.route,
+                  (route) => false,
+                );
+              }
+            } else if (state.isError) {
+              ErrorModal.fromApiError(state.serverException!).show(context);
+            }
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    _buildTopBar(context),
+                    const Gap(24),
+                    _buildHeading(context),
+                    const Gap(10),
+                    _buildSubheading(context),
+                    const Gap(30),
+                    _buildPin(context),
+                    const Gap(30),
+                    _buildVerifyButton(context),
+                    const Gap(30),
+                    _buildResendOtp(context),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -64,7 +89,7 @@ class OtpView extends StatelessWidget {
       ),
       child: const Icon(Icons.arrow_back),
       onTap: () {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(); // المشكله  لما بيرجع بيكون محتفظ بال state =success
       },
     );
   }
@@ -87,12 +112,13 @@ class OtpView extends StatelessWidget {
     );
   }
 
-  Widget _buildPin() {
+  Widget _buildPin(BuildContext context) {
+    final viewModel = context.read<OtpViewModel>();
     return BlocBuilder<OtpViewModel, OtpViewState>(
-      bloc: viewModel,
       builder: (_, state) {
+        
         return Pinput(
-          enabled: state.pinEnabled,
+          enabled: state.isTiming,
           onChanged: viewModel.onOtpChanged(),
           separatorBuilder: (index) => const Gap(21),
           autofocus: true,
@@ -116,15 +142,14 @@ class OtpView extends StatelessWidget {
   }
 
   Widget _buildResendOtp(BuildContext context) {
+    final viewModel = context.read<OtpViewModel>();
     return BlocBuilder<OtpViewModel, OtpViewState>(
-      bloc: viewModel,
       builder: (_, state) {
         return RichText(
           text: TextSpan(
             children: [
               TextSpan(
-                text:
-                    context.tt('Didn\'t receive the code?', 'لم تستلم الرمز؟'),
+                text:context.tt('Didn\'t receive the code?', 'لم تستلم الرمز؟'),
                 style: const TextStyle(
                   color: Color(0xFFA7A9B7),
                   fontFamily: 'Outfit',
@@ -143,21 +168,23 @@ class OtpView extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                text: !state.resendButtonEnabled && state.canResendIn > 0
-                    ? '${context.tt('Resend in', 'إعادة الإرسال في')} ${state.canResendIn} ${context.tt('seconds', 'ثواني')}'
-                    : context.tt('Resend', 'إعادة الإرسال'),
+                text: viewModel.resendButtonEnabled()
+                    ? context.tt('Resend', 'إعادة الإرسال')
+                    : '${context.tt('Resend in', 'إعادة الإرسال في')} ${state.canResendIn} ${context.tt('seconds', 'ثواني')}',
                 style: TextStyle(
                   fontFamily: 'Outfit',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   height: 1.8,
                   color: const Color(0xFF194595).withOpacity(
-                    !state.resendButtonEnabled ? 0.5 : 1.0,
+                    viewModel.resendButtonEnabled() ? 1 : 0.5,
                   ),
                 ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = viewModel.resendOtpOnClicked(),
-              ),
+                recognizer: viewModel.resendButtonEnabled()
+                    ? (TapGestureRecognizer()
+                      ..onTap = () => viewModel.resendOtpOnClicked())
+                    : null,
+              )
             ],
           ),
         );
@@ -166,6 +193,7 @@ class OtpView extends StatelessWidget {
   }
 
   Widget _buildSubheading(BuildContext context) {
+    final viewModel = context.read<OtpViewModel>();
     return RichText(
       text: TextSpan(
         children: [
@@ -216,13 +244,13 @@ class OtpView extends StatelessWidget {
   }
 
   Widget _buildVerifyButton(BuildContext context) {
+    final viewModel = context.read<OtpViewModel>();
     return BlocBuilder<OtpViewModel, OtpViewState>(
-      bloc: viewModel,
       builder: (_, state) {
         return CustomButton(
-          enabled: state.verifyButtonEnabled,
-          loading: state.verifyButtonLoading,
-          onTap: viewModel.verifyButtonOnClicked(context),
+          enabled: state.otp!.length == 4,  // هو صلح اني اعمل check كده؟؟
+          loading: state.isLoading,
+          onTap: () => viewModel.verifyButtonOnClicked(context),
           child: Text(
             context.tt('Verify', 'تحقق'),
             style: const TextStyle(
