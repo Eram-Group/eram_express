@@ -1,7 +1,9 @@
 
 import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../app/notification_service.dart';
 import '../../../authentication/data/respositories/authentication_repository.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
 import '../../../home/presentation/views/home_view.dart';
@@ -23,7 +25,8 @@ class InitViewModel extends Cubit<bool> {
 
   Future<void> init() async {
     final results = await Future.wait([
-      _configurationsRepository.getCountries(),
+       sl< NotificationService>().init(),
+      //_configurationsRepository.getCountries(),
       _authenticationRepository.isAuthenticated, 
     ]);
 

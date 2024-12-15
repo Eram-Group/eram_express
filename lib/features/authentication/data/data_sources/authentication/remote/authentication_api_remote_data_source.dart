@@ -35,7 +35,7 @@ class AuthenticationApiRemoteDataSource
 
     if (response.statusCode == 200) {
       return VerifyOtpResponseWrapper(
-        isNewCustomer: true, //  TODo convert it to false
+        isNewCustomer: false, //  TODo convert it to false
         response: VerifyOtpResponseModel.fromMap(response.data),
       );
     } else if (response.statusCode == 201) {
@@ -43,11 +43,10 @@ class AuthenticationApiRemoteDataSource
         isNewCustomer: true,
         response: VerifyOtpResponseModel.fromMap(response.data),
       );
-    } else 
-    {
+    } else {
       // هي متحلتش غير لما عملت كده  فازاي ومفروض اني مهندله في الى
       //networkservice
-      
+
       throw ServerException.fromMap(response.data);
     }
   }
