@@ -41,7 +41,6 @@ import '../features/home/data/repositotys/home_repositoty_impl.dart';
 import '../features/home/presentation/views/home_view_controller.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 import '../features/init/presentation/views/init_view_model.dart';
-import 'notification_service.dart';
 
 class ServiceLocator {
   void init() {
@@ -131,6 +130,6 @@ class ServiceLocator {
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
 
 //Notification
-    sl.registerLazySingleton(() => NotificationService());
+   
   }
 }

@@ -313,8 +313,8 @@ packages:
   eram_express_shared:
     dependency: "direct main"
     description:
-      path: "/Users/eramgroup/StudioProjects/eram_express_shared"
-      relative: false
+      path: "../eram_express_shared"
+      relative: true
     source: path
     version: "0.0.1"
   fake_async:

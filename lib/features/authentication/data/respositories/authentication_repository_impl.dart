@@ -1,7 +1,6 @@
 import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/notification_service.dart';
 import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
-import 'package:flutter/material.dart';
-import '../../../../app/notification_service.dart';
 import '../../../customer/data/models/customer_model.dart';
 import '../../../customer/data/repositories/customer_repository.dart';
 import '../../presentation/objects/otp_verification_data.dart';

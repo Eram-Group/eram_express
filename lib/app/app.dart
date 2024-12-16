@@ -1,12 +1,11 @@
 import 'package:eram_express_shared/core/i18n/app_localizations_setup.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
+import 'package:eram_express_shared/notification_service.dart';
 import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 import '../features/init/presentation/views/init_view.dart';
-import 'notification_service.dart';
-import 'service_locator.dart';
 import 'navigation.dart';
 import 'presentation/theme.dart';
 import 'router.dart';
