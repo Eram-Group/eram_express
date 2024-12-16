@@ -1,9 +1,10 @@
-import 'package:eram_express/app/di.dart';
+
 import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/profile/presentation/views/contact_us_presentation/contact_view.dart';
 import 'package:eram_express/features/profile/presentation/views/terms_presentation/terms_view.dart';
 import 'package:eram_express_shared/core/iconsax_icons.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -84,16 +85,13 @@ class ProfileView extends StatelessWidget {
       },
     ),
   ];
-  ProfileViewModel profileViewModel = ProfileViewModel(
-    customerservice: customerService,
-    authenticationRepository: authenticationRepository,
-  );
+
 
   @override
   Widget build(BuildContext context) {
     {
-      return BlocProvider(
-          create: (context) => profileViewModel,
+      return BlocProvider<ProfileViewModel>(
+          create: (context) => sl()..getCustomerData(),
           child: Scaffold(
               backgroundColor: Colors.white,
               body: Column(

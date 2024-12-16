@@ -1,43 +1,54 @@
-import 'dart:io';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 import 'package:eram_express/features/profile/data/models/terms_model.dart';
-import 'package:eram_express_shared/core/api/dio_api_client.dart';
+import 'package:eram_express_shared/core/api/network-service.dart';
+import '../../../../app/api_keys.dart';
 import '../../presentation/objacts/support_form.dart';
 import '../models/about_us_model.dart';
 import '../models/contact_us_model.dart';
-import 'profile_api_endpoints.dart';
 import 'profile_remote_data_source.dart';
 
 class ProfileApiRemoteDataSource implements ProfileRemoteDataSource {
-  final DioApiClient _dioClient;
-  ProfileApiRemoteDataSource({required DioApiClient dioClient})
-      : _dioClient = dioClient;
+  final NetworkService _networkService;
+  ProfileApiRemoteDataSource({required NetworkService networkService})
+      : _networkService = networkService;
 
-@override
-  Future<AboutUsModel> getAboutUs() {
-    return _dioClient.request(aboutUsEndpoint.prepare());
+  @override
+  Future<AboutUsModel> getAboutUs() async {
+    final response = await _networkService.get('$baseUrl/app/about-us/');
+    return AboutUsModel.fromMap(response.data);
   }
-@override
-  Future< TermsModel> getTerms() {
-    return _dioClient.request(termsEndpoint.prepare());
+
+  @override
+  Future<TermsModel> getTerms() async {
+    final response =
+        await _networkService.get('$baseUrl/app/terms-and-conditions/');
+    return TermsModel.fromMap(response.data);
   }
-@override
-  Future<ContactUsModel> getContactUs() {
-    return _dioClient.request(contactUsEndpoint.prepare());
+
+  @override
+  Future<ContactUsModel> getContactUs() async {
+    final response = await _networkService.get('$baseUrl/app/social-accounts/');
+    return ContactUsModel.fromMap(response.data);
   }
-@override
-  Future<List<SupportTypeModel>> getSupportType() {
-    return _dioClient.request(supportEndpoint.prepare());
+
+  @override
+  Future<List<SupportTypeModel>> getSupportType() async {
+    final response =
+        await _networkService.get('$baseUrl/communication/contact/types/');
+    return (response.data as List)
+        .map((item) => SupportTypeModel.fromMap(item))
+        .toList();
   }
-@override
-  Future<void> postSupportForm(
-      SupportForm data, String accessToken) {
-    return _dioClient.request(contactEndpoint.prepare(body: {
-      "category": data.selectedReason!.value,
-      "message": data.detailReason,
-      "image": data.picture,
-    }, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-    }));
+
+  @override
+  Future<void> postSupportForm(SupportForm data) {
+    return _networkService.post(
+      '$baseUrl/communication/contact/',
+      data: {
+        "category": data.selectedReason!.value,
+        "message": data.detailReason,
+        "image": data.picture,
+      },
+    );
   }
 }

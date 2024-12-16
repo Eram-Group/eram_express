@@ -47,3 +47,5 @@ app.*.map.json
 # Added by me
 **/*.g.dart
 **/*.freezed.dart
+
+api_keys.dart

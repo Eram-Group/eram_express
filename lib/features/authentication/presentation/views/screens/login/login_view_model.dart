@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
-import 'package:eram_express_shared/core/api/api_error.dart';
 import 'package:eram_express_shared/core/api/server_expection.dart';
-import 'package:eram_express_shared/domain/repositories/configurations_repository.dart';
+import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
 import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,19 +20,10 @@ class LoginViewModel extends Cubit<LoginViewState> {
     required AuthenticationService authenticationService,
   })  : _authenticationService = authenticationService,
         _configurationsRepository = configurationsRepository,
-        super(LoginViewState());
-
-  Function()? loginButtonOnClicked(BuildContext context) =>
-      !state.loginButtonEnabled ? null : () => _loginButtonOnClicked(context);
-
-  Function()? countryCodeButtonOnClicked(BuildContext context) =>
-      !state.countryCodeButtonEnabled
-          ? null
-          : () => _countryCodeButtonOnClicked(context);
+        super(LoginViewState(status: LogInStatus.initial));
 
   Future<void> init() async {
     try {
-      
       final countries = await _configurationsRepository.getCountries();
       emit(
         state.copyWith(
@@ -41,7 +31,9 @@ class LoginViewModel extends Cubit<LoginViewState> {
         ),
       );
     } on ServerException catch (e) {
-      //emit(state)
+      LoginViewState(
+          status: LogInStatus.countryError,
+          errorMessage: "Failed to get Countries");
     }
   }
 
@@ -49,7 +41,23 @@ class LoginViewModel extends Cubit<LoginViewState> {
     emit(state.copyWith(phoneNumber: phoneNumber.replaceAll(' ', '')));
   }
 
-  Future<void> _countryCodeButtonOnClicked(BuildContext context) async {
+  bool enabledButton() {
+    logger.debug(state.selectedCountry.toString());
+    logger.debug(state.phoneNumber!);
+
+    if (state.selectedCountry != null &&
+        state.phoneNumber!.length == state.selectedCountry!.numberLength) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool phoneNumberFieldEnabled() {
+    return state.selectedCountry != null && !state.isLoading;
+  }
+
+  Future<void> countryCodeButtonOnClicked(BuildContext context) async {
     final countries = await _configurationsRepository.getCountries();
 
     try {
@@ -63,28 +71,21 @@ class LoginViewModel extends Cubit<LoginViewState> {
     } catch (e) {}
   }
 
-  _loginButtonOnClicked(BuildContext context) async {
-    emit(state.copyWith(sendingOtp: true));
-
-    final phoneNumber = state.selectedCountry!.phoneCode + state.phoneNumber;
-
-   
+  Future<void> loginButtonOnClicked(BuildContext context) async {
+    final phoneNumber =
+        '${state.selectedCountry?.phoneCode ?? ''}${state.phoneNumber ?? ''}';
     try {
-      emit(state.copyWith(sendingOtp: false));
+      emit(state.copyWith(status: LogInStatus.loading));
       await _authenticationService.sendOtp(phoneNumber: phoneNumber);
-      Navigator.of(context).pushNamed(
-        OtpView.route,
-        arguments: OtpViewArguments(
-          loginFormData: LoginFormData(
-            phoneNumber: phoneNumber,
-          ),
-        ),
-      );
-    } 
-    catch (e) 
-    {
-      emit(state.copyWith(sendingOtp: false));
-      ErrorModal.fromApiError(e as ServerException).show(context);
+      emit(state.copyWith(
+        status: LogInStatus.success,
+        phoneNumber: phoneNumber,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: LogInStatus.error,
+        serverException: e as ServerException,
+      ));
     }
   }
 }

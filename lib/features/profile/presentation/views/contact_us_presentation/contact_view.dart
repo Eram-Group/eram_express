@@ -1,11 +1,11 @@
 
 
-import 'package:eram_express/app/di.dart';
 import 'package:eram_express_shared/core/app_colors.dart';
 import 'package:eram_express_shared/core/app_text_style.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
 import 'package:eram_express_shared/presentation/widgets/skeleton.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +21,6 @@ import 'contact_view_state.dart';
 class ContactUsView extends StatelessWidget {
   ContactUsView({super.key});
   static const String route = "/contact_us";
-  final ContactViewModel  contactViewModel = ContactViewModel(profileRepository: profileRepository);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +28,8 @@ class ContactUsView extends StatelessWidget {
       appBar: CustomAppBar(
         title: context.tt("Contact Us", "تواصل معنا"),
       ),
-      body: BlocProvider(
-          create: (context) => contactViewModel..getContactUs(),
+      body: BlocProvider<ContactViewModel>(
+          create: (context) => sl()..getContactUs(),
           child: BlocBuilder<ContactViewModel, ContactViewState>(
               builder: (context, state) {
             if (state.isError) {

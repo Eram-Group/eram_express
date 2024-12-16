@@ -1,12 +1,11 @@
-
 import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
 import '../../../customer/data/models/customer_model.dart';
 import '../../../customer/data/repositories/customer_repository.dart';
 import '../../presentation/objects/otp_verification_data.dart';
 import '../models/verify_otp_response_model.dart';
 import 'authentication_repository.dart';
 import '../data_sources/authentication/remote/authentication_remote_data_source.dart';
-import '../data_sources/tokens/local/tokens_local_data_source.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final CustomerRepository _customerRepository;
@@ -26,12 +25,13 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<CustomerModel?> get authenticatedCustomer async {
     if (_authenticatedCustomer != null) return _authenticatedCustomer;
-
-    final customer = await _customerRepository.getAuthenticatedCustomer();
-
-    if (customer != null) _authenticatedCustomer = customer;
-
-    return customer;
+    try {
+      final customer = await _customerRepository.getAuthenticatedCustomer();
+      if (customer != null) _authenticatedCustomer = customer;
+      return customer;
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
@@ -43,50 +43,26 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       await _tokensLocalDataSource.clearTokens();
       _authenticatedCustomer = null;
-     
-    } 
-    catch (e) 
-    {
-    
+    } catch (e) {
       /*
         AppError(
           title: 'Failed to logout',
           message: e.toString(),
         ),
         */
-      
     }
   }
 
   @override
   sendOtp(String phoneNumber) async {
     final response = await _authenticationRemoteDataSource.sendOtp(phoneNumber);
-    
   }
 
   @override
   verifyOtp(OtpVerificationData data) async {
     final response = await _authenticationRemoteDataSource.verifyOtp(data);
-
+    savingToken(response.response);
     return response;
-    /*
-    final response = data.response;
-
-        await _tokensLocalDataSource.saveTokens(
-          response.accessToken,
-          response.refreshToken,
-        );
-
-        final customer =response.customer;
-        _authenticatedCustomer = customer;
-
-        return Right(
-          VerifyOtpResponseWrapper(
-            isNewCustomer: data.isNewCustomer,
-            response: customer,
-          ),
-        );
-        */
   }
 
   @override
@@ -94,14 +70,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     logger.debug(_authenticatedCustomer!.fullName);
     _authenticatedCustomer = data;
   }
- @override
-  void savingToken( VerifyOtpResponseModel response) async
-  {
-     await _tokensLocalDataSource.saveTokens(
-          response.accessToken,
-          response.refreshToken,);
 
-        final customer =response.customer;
-        _authenticatedCustomer = customer;
+  @override
+  void savingToken(VerifyOtpResponseModel response) async {
+    await _tokensLocalDataSource.saveTokens(
+      response.accessToken,
+      response.refreshToken,
+    );
+
+    final customer = response.customer;
+    _authenticatedCustomer = customer;
   }
+
 }

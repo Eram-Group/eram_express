@@ -1,6 +1,6 @@
 import 'dart:io';
 
-class CompleteProfileViewState  {
+class CompleteProfileViewState {
   final File? profilePicture;
   final String fullName;
   final bool saving;
@@ -16,7 +16,6 @@ class CompleteProfileViewState  {
   bool get profilePictureEnabled => !saveButtonLoading;
   bool get fullNameEnabled => !saveButtonLoading;
 
-  
   CompleteProfileViewState copyWith({
     File? profilePicture,
     String? fullName,

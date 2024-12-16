@@ -1,4 +1,3 @@
-
 import '../../../customer/data/repositories/customer_repository.dart';
 import '../../presentation/objects/otp_verification_data.dart';
 import '../../presentation/objects/verify_otp_response_wrapper.dart';
@@ -16,10 +15,11 @@ class AuthenticationService {
   Future<bool> get isAuthenticated async =>
       (await _authenticationRepository.authenticatedCustomer) != null;
 
-  Future<void> sendOtp({
-    required String phoneNumber,}) async {
+  Future<void> sendOtp({required String phoneNumber,
+  }) async
+   {
+    
     final response = await _authenticationRepository.sendOtp(phoneNumber);
-
   }
 
   Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp({
@@ -27,8 +27,6 @@ class AuthenticationService {
   }) async {
     final response = await _authenticationRepository.verifyOtp(data);
     return response;
-
-
   }
 
   Future<void> logout({Function()? onLogout}) async {

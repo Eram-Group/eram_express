@@ -9,7 +9,7 @@ abstract class ProfileRemoteDataSource {
   Future<TermsModel> getTerms();
   Future<ContactUsModel> getContactUs();
   Future< List<SupportTypeModel>> getSupportType();
-  Future<void> postSupportForm(SupportForm data, String accessToken) ;
+  Future<void> postSupportForm(SupportForm data,) ;
    
   
 }

@@ -1,10 +1,11 @@
-import 'package:eram_express/features/authentication/presentation/views/screens/login/login_view.dart';
-import 'package:eram_express_shared/core/i18n/context_extension.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eram_express/features/authentication/presentation/views/screens/login/login_view.dart';
+import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import '../../../../../app/di.dart';
+
 import '../../widgets/customappbar.widgets.dart';
 import 'about_us_view_model.dart';
 import 'about_us_view_state.dart';
@@ -13,8 +14,6 @@ class AboutUsView extends StatelessWidget {
   static const String route = "/about_us";
   AboutUsView({super.key});
 
-  final aboutUsViewModel =
-      AboutUsViewModel(profileRepository: profileRepository);
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +21,8 @@ class AboutUsView extends StatelessWidget {
       appBar: CustomAppBar(
         title: context.tt("About Us", "معلومات عنا"),
       ),
-      body: BlocProvider(
-        create: (context) => aboutUsViewModel..getAboutUs(),
+      body: BlocProvider<AboutUsViewModel>(
+        create: (context) => sl()..getAboutUs(),
         child: SafeArea(
           child: BlocBuilder<AboutUsViewModel, AboutUsViewState>(
             builder: (context, state) {

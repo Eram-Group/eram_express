@@ -1,5 +1,3 @@
-
-
 import '../../../authentication/data/respositories/authentication_repository.dart';
 
 import '../models/customer_model.dart';
@@ -16,7 +14,8 @@ class CustomerService {
   })  : _customerRepository = customerRepository,
         _authenticationRepository = authenticationRepository;
 
-  Future<CustomerModel> updateProfile({required UpdateCustomerFormData data}) async {
+  Future<CustomerModel> updateProfile(
+      {required UpdateCustomerFormData data}) async {
     final response = await _customerRepository.updateProfile(data);
     return response;
   }

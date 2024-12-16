@@ -18,9 +18,11 @@ class OtpViewModel extends Cubit<OtpViewState> {
   OtpViewModel({
     required AuthenticationService authenticationService,
   })  : _authenticationService = authenticationService,
-        super(OtpViewState());
+        super(OtpViewState(status: OtpViewStatus.initial));
 
   String get phoneNumber => _phoneNumber;
+  Function(String) onOtpChanged() =>
+      (String otp) => emit(state.copyWith(otp: otp));
 
   void init({required String phoneNumber}) {
     _phoneNumber = phoneNumber;
@@ -28,84 +30,66 @@ class OtpViewModel extends Cubit<OtpViewState> {
   }
 
   void _startResendOtpTimer() {
-    emit(state.copyWith(canResendIn: kResendOtpInterval));
+    emit(state.copyWith(
+        status: OtpViewStatus.timing, canResendIn: kResendOtpInterval));
     Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
         if (state.canResendIn == 0) {
           timer.cancel();
         } else {
-          emit(state.copyWith(canResendIn: state.canResendIn - 1));
+          emit(state.copyWith(
+              status: OtpViewStatus.timing,
+              canResendIn: state.canResendIn! - 1));
         }
       },
     );
   }
 
-  Function(String) onOtpChanged() =>
-      (String otp) => emit(state.copyWith(otp: otp));
-
-  Function()? verifyButtonOnClicked(BuildContext context) =>
-      !state.verifyButtonEnabled ? null : () => _verifyButtonOnClicked(context);
-
-  Future<void> _verifyButtonOnClicked(BuildContext context) async {
-    emit(state.copyWith(verifyingOtp: true));
-
+  Future<void> verifyButtonOnClicked(BuildContext context) async {
+    emit(state.copyWith(status: OtpViewStatus.loading));
     try {
       final response = await _authenticationService.verifyOtp(
         data: OtpVerificationData(
           phoneNumber: _phoneNumber,
-          otp: state.otp,
+          otp: state.otp!,
         ),
       );
-
       _authenticationService.savingToken(response.response);
-      // Stop showing the loading state
-      emit(state.copyWith(verifyingOtp: false));
 
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        HomeView.route,
-        (route) => false,
-      );
       if (response.isNewCustomer) {
-        logger.debug('New customer');
-        Navigator.of(context).pushNamed(CompleteProfileView.route);
+        emit(
+            state.copyWith(status: OtpViewStatus.success, isNewCustomer: true));
+      } else {
+        emit(state.copyWith(
+            status: OtpViewStatus.success, isNewCustomer: false));
       }
     } catch (e) {
-      // Handle errors
-      emit(state.copyWith(verifyingOtp: false));
-      ErrorModal.fromApiError(e as ServerException).show(context);
+      logger.debug(e.toString());
+      emit(state.copyWith(
+          status: OtpViewStatus.error, serverException: e as ServerException));
     }
   }
 
-/*
- onOtpVerified: (bool newCustomer) {
-        emit(state.copyWith(verifyingOtp: false));
+  //  ايه الاحسن ان اعمل فانكشن كده ولا اني اعمل مثلا
+  // state = timingOut
+  bool resendButtonEnabled() {
+    if (state.canResendIn == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          HomeView.route,
-          (route) => false,
-        );
-
-        if (newCustomer) {
-          logger.debug('New customer');
-          Navigator.of(context).pushNamed(CompleteProfileView.route);
-                        }
-      },
-      onOtpVerificationFailed: (ApiError error) {
-        emit(state.copyWith(verifyingOtp: false));
-
-       // ErrorModal.fromApiError(error).show(context);
-      },
-      */
-  void Function()? resendOtpOnClicked() =>
-      !state.resendButtonEnabled ? null : _resendOtpOnClicked;
-
-  Future<void> _resendOtpOnClicked() async {
-    emit(state.copyWith(resendingOtp: true));
-    await _authenticationService.sendOtp(
-      phoneNumber: _phoneNumber,
-    );
-    _startResendOtpTimer();
-    emit(state.copyWith(resendingOtp: false));
+  Future<void> resendOtpOnClicked() async {
+    emit(state.copyWith(status: OtpViewStatus.loading));
+    try {
+      await _authenticationService.sendOtp(
+        phoneNumber: _phoneNumber,
+      );
+      _startResendOtpTimer();
+    } on ServerException catch (e) {
+      emit(state.copyWith(status: OtpViewStatus.error, serverException: e));
+    }
   }
 }

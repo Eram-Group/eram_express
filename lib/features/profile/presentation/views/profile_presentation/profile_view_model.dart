@@ -15,10 +15,7 @@ class ProfileViewModel extends Cubit<ProfileViewState> {
       required AuthenticationRepository authenticationRepository})
       : _customerService = customerservice,
         _authenticationRepository = authenticationRepository,
-        super(ProfileViewState())
-        {
-          getCustomerData();
-        }
+        super(ProfileViewState());
 
   void getCustomerData() async 
   {

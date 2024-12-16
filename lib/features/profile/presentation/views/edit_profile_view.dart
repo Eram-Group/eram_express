@@ -1,8 +1,8 @@
-import 'package:eram_express/app/di.dart';
 import 'package:eram_express/features/profile/presentation/widgets/customappbar.widgets.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -23,15 +23,11 @@ class EditProfileViewArguments {
 class EditProfileView extends StatelessWidget {
   static const String route = "/Editprofile";
   final EditProfileViewArguments arguments;
-  final EditProfileViewModel viewModel = EditProfileViewModel(
-    customerService: customerService,
-    authenticationRepository: authenticationRepository,
-  );
-  EditProfileView(this.arguments, {super.key}) {
-    viewModel.setInitialValues(arguments);
-  }
+
+  EditProfileView(this.arguments, {super.key}) {}
 
   Widget _buildProfilePicture(BuildContext context) {
+    EditProfileViewModel viewModel = context.read<EditProfileViewModel>();
     return BlocBuilder<EditProfileViewModel, EditProfileViewState>(
         bloc: viewModel,
         builder: (context, state) {
@@ -45,65 +41,72 @@ class EditProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: context.tt("Edit Profile", "تعديل الحساب")),
-      body: Padding(
-        padding:const EdgeInsets.symmetric(vertical: 20, horizontal: 16)
-            .copyWith(bottom: 0),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: _buildProfilePicture(context),
-                  ),
-                  const Gap(30),
-                  _buildTitleField(
-                    context.tt('full name', 'الاسم بالكامل'),
-                  ),
-                  BlocBuilder<EditProfileViewModel, EditProfileViewState>(
-                      bloc: viewModel,
-                      builder: (context, state) {
+    return BlocProvider<EditProfileViewModel>(
+      create: (context) => sl()..setInitialValues(arguments),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          appBar:
+              CustomAppBar(title: context.tt("Edit Profile", "تعديل الحساب")),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16)
+                .copyWith(bottom: 0),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: _buildProfilePicture(context),
+                      ),
+                      const Gap(30),
+                      _buildTitleField(
+                        context.tt('full name', 'الاسم بالكامل'),
+                      ),
+                      BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                          builder: (context, state) {
                         return CustomTextField(
                           hintText: context.tt(
                               'Enter your full name', 'ادخل اسمك الكامل'),
                           onChanged: (string) {
-                            viewModel.onFullNameChanged(string);
+                            context
+                                .read<EditProfileViewModel>()
+                                .onFullNameChanged(string);
                           },
                           initialValue: state.fullName,
                         );
                       }),
-                  const Gap(30),
-                  _buildTitleField(context.tt('Phone Number', 'رقم التليفون')),
-                  BlocBuilder<EditProfileViewModel, EditProfileViewState>(
-                      bloc: viewModel,
-                      builder: (context, state) {
+                      const Gap(30),
+                      _buildTitleField(
+                          context.tt('Phone Number', 'رقم التليفون')),
+                      BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                          builder: (context, state) {
                         return CustomTextField(
                           onChanged: (string) {},
                           initialValue: state.phoneNumber!,
                           isEnabled: false,
                         );
                       }),
-                ],
-              ),
-            ),
-
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: BlocBuilder<EditProfileViewModel, EditProfileViewState>(
-                  bloc: viewModel,
-                  builder: (context, state) {
+                    ],
+                  ),
+                ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child:
+                      BlocBuilder<EditProfileViewModel, EditProfileViewState>(
+                          builder: (context, state) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 40),
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: CustomButton(
-                          enabled: viewModel.enabledButton(),
+                          enabled: context
+                              .read<EditProfileViewModel>()
+                              .enabledButton(),
                           onTap: () {
-                            logger.debug(viewModel.state.fullName!);
-                            viewModel.saveButtonOnClicked(context);
+                            context
+                                .read<EditProfileViewModel>()
+                                .saveButtonOnClicked(context);
                           },
                           child: Text(
                             context.tt('Save', 'حفظ'),
@@ -119,13 +122,16 @@ class EditProfileView extends StatelessWidget {
                       ),
                     );
                   }),
-            )
-          ],
-        ),
-      ),
+                )
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }
+
 Widget _buildTitleField(String title) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4),

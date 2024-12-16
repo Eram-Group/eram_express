@@ -34,8 +34,8 @@ class CompleteProfileViewModel extends Cubit<CompleteProfileViewState> {
     emit(state.copyWith(fullName: fullName));
   }
 
-  void _profilePictureOnClicked(BuildContext context) =>
-      ImagePickerModal(onImagePicked: _profilePictureOnPicked).show(context);
+
+  void _profilePictureOnClicked(BuildContext context) =>ImagePickerModal(onImagePicked: _profilePictureOnPicked).show(context);
 
   void _profilePictureOnPicked(File pickedImage) {
     logger.debug('Profile picture on picked called');
@@ -44,22 +44,21 @@ class CompleteProfileViewModel extends Cubit<CompleteProfileViewState> {
 
   Future<void> _saveButtonOnClicked(BuildContext context) async {
     emit(state.copyWith(saving: true));
-try{
-    final response = await _customerService.updateProfile(
-      data: UpdateCustomerFormData(
-        fullName: state.fullName,
-        profilePicture: state.profilePicture,
-      ),
-    );
+    try {
+      final response = await _customerService.updateProfile(
+        data: UpdateCustomerFormData(
+          fullName: state.fullName,
+          profilePicture: state.profilePicture,
+        ),
+      );
 
-    emit(state.copyWith(saving: false));
-    final navigator = Navigator.of(context);
-        await const RegisteredSuccessfullyModal().show(context);
-        navigator.pop();
-}
-    catch(e)
+      emit(state.copyWith(saving: false));
+      final navigator = Navigator.of(context);
+      await const RegisteredSuccessfullyModal().show(context);
+      navigator.pop();
+    } catch (e) 
     {
       ErrorModal.fromApiError(e as ServerException).show(context);
     }
-}
+  }
 }

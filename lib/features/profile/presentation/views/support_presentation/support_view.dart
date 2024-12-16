@@ -1,5 +1,5 @@
+
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:eram_express/app/di.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
 import 'package:eram_express/features/profile/presentation/views/support_presentation/support_view_model.dart';
 import 'package:eram_express/features/profile/presentation/widgets/customappbar.widgets.dart';
@@ -7,6 +7,7 @@ import 'package:eram_express_shared/core/app_colors.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/custom_button.dart';
+import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../modals/failed_request_modal.dart';
@@ -23,10 +24,9 @@ class SupportView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24)
             .copyWith(bottom: 0),
-        child: BlocProvider(
-          create: (context) =>
-              SupportViewModel(profileRepository: profileRepository)
-                ..getSupportTypes(),
+        child: BlocProvider<SupportViewModel>(
+          create: (context) =>sl()
+              ..getSupportTypes(),
           child:
            SingleChildScrollView(
             child: Column(
