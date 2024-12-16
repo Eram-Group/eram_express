@@ -114,7 +114,8 @@ class ServiceLocator {
         AuthenticationRepositoryImpl(
             authenticationRemoteDataSource: sl(),
             tokensLocalDataSource: sl(),
-            customerRepository: sl()));
+            customerRepository: sl(),
+            notificationService: sl()));
 
 //log in
     sl.registerFactory(() => LoginViewModel(
@@ -123,15 +124,13 @@ class ServiceLocator {
 //Otp
     sl.registerFactory(() => OtpViewModel(authenticationService: sl()));
 
-//completeprofile
+//completprofile
     sl.registerFactory(() => CompleteProfileViewModel(customerService: sl()));
 
 //localization
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
 
 //Notification
- sl.registerLazySingleton(() => NotificationService());
-      
-
+    sl.registerLazySingleton(() => NotificationService());
   }
 }

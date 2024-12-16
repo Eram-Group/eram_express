@@ -24,12 +24,13 @@ class AuthenticationApiRemoteDataSource
 
   @override
   Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
-      OtpVerificationData data) async {
+      OtpVerificationData data,String tokenDevice) async {
     final response = await _networkService.post(
       '$baseUrl/customer/authenticate/',
       data: {
         'phone_number': data.phoneNumber,
         'otp': data.otp,
+        //'tokenDevice':tokenDevice,
       },
     );
 
