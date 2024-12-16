@@ -15,8 +15,9 @@ class NotificationService {
   {
      _requestPermission();
 
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      logger.debug(message.notification!.title!);
+         print('Simulated Notification: Title - Test Title');
       final notification = message.notification;
       if (notification != null) {
        await  _FlutterLocalNotificationHelper.init();

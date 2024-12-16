@@ -14,8 +14,6 @@ Future<void> main() async {
   SharedServiceLocator().init();
   ServiceLocator().init();
 
-// ...
-
 
   runApp(
     MultiBlocProvider(

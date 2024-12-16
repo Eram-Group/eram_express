@@ -313,7 +313,7 @@ packages:
   eram_express_shared:
     dependency: "direct main"
     description:
-      path: "C:\\Users\\sheri\\Music\\Work\\eram_express_shared"
+      path: "/Users/eramgroup/StudioProjects/eram_express_shared"
       relative: false
     source: path
     version: "0.0.1"
