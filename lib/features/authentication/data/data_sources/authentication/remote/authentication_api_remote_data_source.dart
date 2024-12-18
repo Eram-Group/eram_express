@@ -24,19 +24,25 @@ class AuthenticationApiRemoteDataSource
 
   @override
   Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
-      OtpVerificationData data,String tokenDevice) async {
+      OtpVerificationData data, String tokenDevice) async {
     final response = await _networkService.post(
       '$baseUrl/customer/authenticate/',
       data: {
         'phone_number': data.phoneNumber,
         'otp': data.otp,
-        //'tokenDevice':tokenDevice,
+        'device': {
+          'registration_id':
+              "dO-IKM7eQ2yJ2xMDe6YpSI:APA91bF9P0EyF_3DjbZsxi3RlZszM5UWVdCI59GPhI8A2HoRV72ZLkul1Svi2Sd_nr5dHnnVfNtRDL-UeYCr0c73JDedz24dT37A31xVg86xoLz_jb75aZkOvjDS6uQIZNCUtvgn_WSi",
+          'device_id':
+              "dO-IKM7eQ2yJ2xMDe6YpSI:APA91bF9P0EyF_3DjbZsxi3RlZszM5UWVdCI59GPhI8A2HoRV72ZLkul1Svi2Sd_nr5dHnnVfNtRDL-UeYCr0c73JDedz24dT37A31xVg86xoLz_jb75aZkOvjDS6uQIZNCUtvgn_WSi",
+          'type': 'android',
+        },
       },
     );
 
     if (response.statusCode == 200) {
       return VerifyOtpResponseWrapper(
-        isNewCustomer: false, //  TODo convert it to false
+        isNewCustomer: false,
         response: VerifyOtpResponseModel.fromMap(response.data),
       );
     } else if (response.statusCode == 201) {

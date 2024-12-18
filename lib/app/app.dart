@@ -1,4 +1,5 @@
 import 'package:eram_express_shared/core/i18n/app_localizations_setup.dart';
+
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/notification_service.dart';
 import 'package:eram_express_shared/service_locator.dart';
