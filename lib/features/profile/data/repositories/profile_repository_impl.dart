@@ -28,29 +28,29 @@ class ProfileRepositoryImpl extends ProfileRepository {
         
 
 @override
-  Future<AboutUsModel> getAboutUs() async {
-    final response = _profileRemoteDataSource.getAboutUs();
-    return response;
+  Future<AboutUsModel> getAboutUs()  {
+    return  _profileRemoteDataSource.getAboutUs();
+ 
   }
 @override
-  Future<TermsModel> getTerms() async {
-    final response = _profileRemoteDataSource.getTerms();
-    return response;
-  }
-@override
-  Future<ContactUsModel> getContactUs() async {
-    final response = _profileRemoteDataSource.getContactUs();
-    return response;
-  }
-@override
-  Future<List<SupportTypeModel>> getSupportType() async {
-    final response = _profileRemoteDataSource.getSupportType();
-    return response;
-  }
-@override
-  Future<void> postSupportForm(SupportForm data) async {
+  Future<TermsModel> getTerms() {
+     return _profileRemoteDataSource.getTerms();
     
-    final response = _profileRemoteDataSource.postSupportForm(data); 
-    return response;
+  }
+@override
+  Future<ContactUsModel> getContactUs() {
+     return _profileRemoteDataSource.getContactUs();
+   
+  }
+@override
+  Future<List<SupportTypeModel>> getSupportType() {
+     return  _profileRemoteDataSource.getSupportType();
+ 
+  }
+@override
+  Future<void> postSupportForm(SupportForm data) 
+  {
+    return  _profileRemoteDataSource.postSupportForm(data); 
+   
   }
 }

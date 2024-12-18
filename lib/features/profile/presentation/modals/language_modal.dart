@@ -14,7 +14,7 @@ import '../widgets/language_item.dart';
 class LanguageModal extends StatelessWidget {
   const LanguageModal({Key? key}) : super(key: key);
 
-  static const List<LanguageModel> languagesApp = [
+  static  List<LanguageModel> languagesApp = [
     LanguageModel(language: "English", flag: "usa"),
     LanguageModel(language: "Arabic", flag: "sau"),
   ];

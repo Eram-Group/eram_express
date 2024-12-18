@@ -31,7 +31,7 @@ dependencies:
   cached_network_image: ^3.4.1
   cupertino_icons: ^1.0.6
   dropdown_button2: ^2.3.9
-  equatable: ^2.0.5
+
   eram_express_shared:
     path: "C:/Users/sheri/Music/Work/eram_express_shared"
   flutter:

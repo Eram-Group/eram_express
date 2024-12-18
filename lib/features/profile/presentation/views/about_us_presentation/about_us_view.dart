@@ -40,7 +40,7 @@ class AboutUsView extends StatelessWidget {
               } else if (state.isError) {
                 return const Center(child: Text("Failed to load about us data"));
               } else {
-                return Container();
+                return const SizedBox();
               }
             },
           ),

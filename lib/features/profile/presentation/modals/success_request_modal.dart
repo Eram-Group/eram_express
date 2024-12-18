@@ -9,8 +9,6 @@ import 'package:eram_express_shared/presentation/widgets/status_icon_widgets.dar
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../views/contact_us_presentation/contact_view.dart';
-
 class SuccessfulRequestModal extends StatelessWidget {
   const SuccessfulRequestModal({super.key});
   Future<void> show(BuildContext context) async =>
@@ -44,10 +42,9 @@ class SuccessfulRequestModal extends StatelessWidget {
           const Gap(20),
           Center(
               child: CustomSmallButton(
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              // Navigator.pushNamed(context, ContactUsView.route);
+            onTap: () 
+            {
+            Navigator.of(context)..pop()..pop();
             },
             padding: const EdgeInsets.all(12),
             text: context.tt("Back", "الرجوع"),
