@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:eram_express/features/profile/presentation/views/profile_presentation/profile_view.dart';
 import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,7 @@ class InitView extends StatelessWidget {
       child: BlocListener<InitViewModel, bool>(
         listener: (context, state) {
           Navigator.of(context).pushNamedAndRemoveUntil(
-            state ? HomeView.route : LoginView.route,
+            state ? ProfileView.route : LoginView.route,
             (route) => false,
           );
         },
@@ -53,7 +54,6 @@ class InitView extends StatelessWidget {
     );
   }
 }
-
 
 class Spinner extends StatefulWidget {
   const Spinner({

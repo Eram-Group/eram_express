@@ -25,32 +25,25 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<CustomerModel?> get authenticatedCustomer async {
     if (_authenticatedCustomer != null) return _authenticatedCustomer;
-    try {
-      final customer = await _customerRepository.getAuthenticatedCustomer();
-      if (customer != null) _authenticatedCustomer = customer;
-      return customer;
-    } catch (e) {
-      return null;
+    final customer = await _customerRepository.getAuthenticatedCustomer();
+    if (customer != null) _authenticatedCustomer = customer;
+    return customer;
+  }
+
+  @override
+  Future<bool> isAuthenticated() async {
+    final tokens = await _tokensLocalDataSource.accessToken;
+    if (tokens != null) {
+      return true;
+    } else {
+      return false;
     }
   }
 
   @override
-  Future<bool> get isAuthenticated async =>
-      (await authenticatedCustomer) != null;
-
-  @override
   logout() async {
-    try {
-      await _tokensLocalDataSource.clearTokens();
-      _authenticatedCustomer = null;
-    } catch (e) {
-      /*
-        AppError(
-          title: 'Failed to logout',
-          message: e.toString(),
-        ),
-        */
-    }
+    await _authenticationRemoteDataSource.logOut();
+    await _tokensLocalDataSource.clearTokens();
   }
 
   @override
