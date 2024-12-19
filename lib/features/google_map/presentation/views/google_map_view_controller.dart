@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/google_map/data/repositories/google_map_reposirtoty.dart';
 import 'package:eram_express/features/google_map/data/services/locationservice.dart';
 import 'package:eram_express/features/google_map/presentation/search_model_view/search_view.dart';
@@ -134,9 +133,9 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
       
   }
 
-  void searchButtonClick() async 
+  void searchButtonClick(BuildContext context) async 
   {
-    final result = await Navigator.pushNamed(NavigationService.globalContext, SearchView.route);
+    final result = await Navigator.pushNamed(context, SearchView.route);
     if (result is LatLng) {
       CameraPosition(target: result);
       updateMarkerAndCamera(CameraPosition(target: result), moveCamera: true);

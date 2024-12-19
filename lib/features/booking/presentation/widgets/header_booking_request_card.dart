@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -51,14 +50,14 @@ class HeaderBookingRequestCard extends StatelessWidget {
             ),
           ),
           const Gap(5),
-          _buildRating(provider.rating), 
+          _buildRating(provider.rating,context), 
         ],
       ),
     ]);
   }
 }
 
-Widget _buildRating(RatingModel rating) {
+Widget _buildRating(RatingModel rating ,BuildContext context) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
@@ -81,10 +80,10 @@ Widget _buildRating(RatingModel rating) {
           fontWeight: FontWeight.w400,
           color: AppColor.lightGrey,
           fontSize: Responsive.getResponsiveFontSize(
-              NavigationService.globalContext,
+              context,
               fontSize: 15),
           height: 21.6 /
-              Responsive.getResponsiveFontSize(NavigationService.globalContext,
+              Responsive.getResponsiveFontSize(context,
                   fontSize: 15),
         ),
       ),

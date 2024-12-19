@@ -82,6 +82,7 @@ class AuthenticationApiRemoteDataSource
   {
     // final DeviceDetailsModel deviceDetails= await _notificationService.getDeviceDetails();
     final refreshToken=await _tokensDataSource.refreshToken;
+    
     final response = await _networkService.post(
       '$baseUrl/user/logout/',
       data: {
@@ -94,7 +95,7 @@ class AuthenticationApiRemoteDataSource
         }
         */
         "device": {
-          "registration_id":
+          "registrationId":
               "dO-IKM7eQ2yJ2xMDe6YpSI:APA91bF9P0EyF_3DjbZsxi3RlZszM5UWVdCI59GPhI8A2HoRV72ZLkul1Svi2Sd_nr5dHnnVfNtRDL-UeYCr0c73JDedz24dT37A31xVg86xoLz_jb75aZkOvjDS6uQIZNCUtvgn_WSi",
           "device_id":
               "dO-IKM7eQ2yJ2xMDe6YpSI:APA91bF9P0EyF_3DjbZsxi3RlZszM5UWVdCI59GPhI8A2HoRV72ZLkul1Svi2Sd_nr5dHnnVfNtRDL-UeYCr0c73JDedz24dT37A31xVg86xoLz_jb75aZkOvjDS6uQIZNCUtvgn_WSi",

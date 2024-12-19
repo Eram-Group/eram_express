@@ -1,15 +1,11 @@
-import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/authentication/presentation/views/screens/login/login_view.dart';
 import 'package:eram_express/features/profile/presentation/views/contact_us_presentation/contact_view.dart';
 import 'package:eram_express/features/profile/presentation/views/terms_presentation/terms_view.dart';
 import 'package:eram_express_shared/core/iconsax_icons.dart';
-import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:eram_express_shared/presentation/widgets/svgIcon.dart';
 import 'package:eram_express_shared/service_locator.dart';
-import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../data/models/menu_option_model.dart';
 import '../../modals/language_modal.dart';
@@ -27,7 +23,7 @@ class ProfileView extends StatelessWidget {
     MenuOptionModel(
       title: "Language",
       onTap: (context) {
-        LanguageModal().show(NavigationService.globalContext);
+        LanguageModal().show(context);
       },
       icon: const Icon(Iconsax.global),
     ),
@@ -46,7 +42,7 @@ class ProfileView extends StatelessWidget {
         asset: "terms",
       ),
       onTap: (context) {
-        Navigator.of(NavigationService.globalContext)
+        Navigator.of(context)
             .pushNamed(TermsView.route);
       },
     ),
@@ -54,7 +50,7 @@ class ProfileView extends StatelessWidget {
       title: "Contact Us",
       icon: const SvgIcon(asset: "contact"),
       onTap: (context) {
-        Navigator.of(NavigationService.globalContext)
+        Navigator.of(context)
             .pushNamed(ContactUsView.route);
       },
     ),
@@ -64,7 +60,7 @@ class ProfileView extends StatelessWidget {
         asset: "about",
       ),
       onTap: (context) {
-        Navigator.of(NavigationService.globalContext)
+        Navigator.of(context)
             .pushNamed(AboutUsView.route);
       },
     ),
@@ -84,7 +80,7 @@ class ProfileView extends StatelessWidget {
         asset: "last_version",
       ),
       onTap: (context) {
-        Navigator.of(NavigationService.globalContext)
+        Navigator.of(context)
             .pushNamed(TermsView.route);
       },
     ),

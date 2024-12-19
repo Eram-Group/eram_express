@@ -6,24 +6,19 @@ import 'app/app.dart';
 import 'app/service_locator.dart';
 import 'features/i18n/domain/locale_cubit.dart';
 
-
-void main() {
-SharedServiceLocator().init();
-ServiceLocator().init();
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<LocaleCubit>(
-          create: (_) => sl<LocaleCubit>(),
-        ),
-      ],
-      
-      child:RequestsInspector(
-    enabled: true,
-  
-    child:
-       const App(),
+void main()
+ {
+  SharedServiceLocator().init();
+  ServiceLocator().init();
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<LocaleCubit>(
+        create: (_) => sl<LocaleCubit>(),
+      ),
+    ],
+    child: const RequestsInspector(
+      enabled: true,
+      child: App(),
     ),
   ));
 }
-
