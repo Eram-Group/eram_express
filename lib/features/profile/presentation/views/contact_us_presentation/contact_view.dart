@@ -11,10 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../Common/presentation/widgets/SvgIcon.dart';
 import '../../../data/models/contact_us_local_model.dart';
 import '../../../data/models/contact_us_model.dart';
 import '../../widgets/customappbar.widgets.dart';
-import '../profile_presentation/profile_view.dart';
+
 import 'contact_view_model.dart';
 import 'contact_view_state.dart';
 

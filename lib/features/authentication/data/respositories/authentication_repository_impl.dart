@@ -39,18 +39,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       (await authenticatedCustomer) != null;
 
   @override
-  logout() async {
-    try {
-      await _tokensLocalDataSource.clearTokens();
-      _authenticatedCustomer = null;
-    } catch (e) {
-      /*
-        AppError(
-          title: 'Failed to logout',
-          message: e.toString(),
-        ),
-        */
-    }
+  logout() async 
+  {
+    await _authenticationRemoteDataSource.logOut();
+    await _tokensLocalDataSource.clearTokens();
   }
 
   @override

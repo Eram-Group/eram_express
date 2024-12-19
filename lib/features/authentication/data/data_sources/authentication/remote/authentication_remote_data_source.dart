@@ -6,4 +6,5 @@ abstract class AuthenticationRemoteDataSource {
   Future<void> sendOtp(String phoneNumber);
   Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
       OtpVerificationData data);
+Future<void> logOut();
 }

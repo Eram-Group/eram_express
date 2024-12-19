@@ -12,13 +12,13 @@ class listtitleCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: InkWell(
         onTap: () {
-          menuOption.onTap();
+          menuOption.onTap(context);
         },
         child: Container(
           height: 55,
           decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(
-              side: BorderSide(
+              side: const BorderSide(
                 width: 1,
                 strokeAlign: BorderSide.strokeAlignCenter,
                 color: Color(0xFFF3F3F3),
@@ -30,12 +30,12 @@ class listtitleCard extends StatelessWidget {
           child: Row(
             children: [
               menuOption.icon,
-              SizedBox(
+             const SizedBox(
                 width: 10,
               ),
               Text(
                 menuOption.title,
-                style: TextStyle(
+                style:const TextStyle(
                   color: Color(0xFF191D31),
                   fontSize: 14,
                   fontFamily: 'Outfit',

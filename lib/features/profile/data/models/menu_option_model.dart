@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MenuOptionModel {
   final String title;
-  final void Function() onTap;
+  final void Function(BuildContext context) onTap;
   final Widget icon;
 
   MenuOptionModel({

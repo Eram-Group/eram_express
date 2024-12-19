@@ -180,7 +180,6 @@ class CompleteProfileView extends StatelessWidget {
             )
           ],
         );
-   
       },
     );
   }
@@ -225,13 +224,14 @@ class ProfilePictureWidget extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    //logger.debug("image ${profilePictureUrl}");
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
           width: 89,
           height: 89,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: const Color(0xFFEEF1F8),
           ),

@@ -33,8 +33,9 @@ class VerifyOtpResponseModel {
 
   factory VerifyOtpResponseModel.fromMap(Map<String, dynamic> map) {
     return VerifyOtpResponseModel(
-      accessToken: map["accessToken"],
-      refreshToken: map["refreshToken"],
+
+      accessToken: map["access"],
+      refreshToken: map["refresh"],
       customer: CustomerModel.fromMap(map['customer']),
     );
   }

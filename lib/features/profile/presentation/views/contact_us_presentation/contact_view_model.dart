@@ -1,6 +1,7 @@
 import 'package:eram_express/features/profile/presentation/views/support_presentation/support_view.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
+import 'package:eram_express_shared/presentation/widgets/svgIcon.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -8,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../data/models/contact_us_local_model.dart';
 import '../../../data/models/contact_us_model.dart';
 import '../../../data/repositories/profile_repository_impl.dart';
-import '../profile_presentation/profile_view.dart';
+
 import 'contact_view_state.dart';
 
 class ContactViewModel extends Cubit<ContactViewState> {

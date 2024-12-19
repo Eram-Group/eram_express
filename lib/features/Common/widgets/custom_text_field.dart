@@ -1,7 +1,5 @@
+import 'package:eram_express_shared/presentation/widgets/svgIcon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../profile/presentation/views/profile_presentation/profile_view.dart';
 
 //temp to use anaother way instead of statfulll
 class CustomTextField extends StatefulWidget {

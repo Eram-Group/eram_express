@@ -15,7 +15,7 @@ class ProfileViewModel extends Cubit<ProfileViewState> {
       required AuthenticationRepository authenticationRepository})
       : _customerService = customerservice,
         _authenticationRepository = authenticationRepository,
-        super(ProfileViewState());
+        super(ProfileViewState(status: ProfileStatus.initial));
 
   void getCustomerData() async 
   {
@@ -23,10 +23,20 @@ class ProfileViewModel extends Cubit<ProfileViewState> {
     emit(state.copyWith(currentCustomer: currentcustomer));
   }
 
-  void EditProfileClickable() async 
+  void EditProfileClickable(BuildContext context) async 
   {
-    Navigator.of(NavigationService.globalContext).pushNamed(
+    Navigator.of(context).pushNamed(
         EditProfileView.route,
         arguments:EditProfileViewArguments(currentCustomer: state.currentCustomer!));
+  }
+   void logout() async {
+    try{
+   await _authenticationRepository.logout();
+   emit(state.copyWith(status: ProfileStatus.logout,currentCustomer: null));
+    }
+    catch(e)
+    {
+      emit(state.copyWith(status: ProfileStatus.error));
+    }
   }
 }

@@ -118,7 +118,7 @@ class ServiceLocator {
     sl.registerLazySingleton(() => AuthenticationService(
         authenticationRepository: sl(), customerRepository: sl()));
     sl.registerLazySingleton<AuthenticationRemoteDataSource>(
-        () => AuthenticationApiRemoteDataSource(networkService: sl()));
+        () => AuthenticationApiRemoteDataSource(networkService: sl(),tokensDataSource: sl(),notificationService: sl()));
     sl.registerLazySingleton<AuthenticationRepository>(() =>
         AuthenticationRepositoryImpl(
             authenticationRemoteDataSource: sl(),
@@ -138,7 +138,7 @@ class ServiceLocator {
 //  profiledatasource
  sl.registerLazySingleton<ProfileRemoteDataSource>(() =>ProfileApiRemoteDataSource(networkService: sl()));
         
-//profileee
+//profile
  sl.registerLazySingleton<ProfileRepository>(() =>ProfileRepositoryImpl(profileRemoteDataSource:sl() ));
     sl.registerFactory(() => ProfileViewModel(authenticationRepository: sl(),customerservice: sl()));
 //contact us
