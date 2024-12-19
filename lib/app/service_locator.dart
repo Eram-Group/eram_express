@@ -49,8 +49,10 @@ class ServiceLocator {
         networkService: sl(),
       ),
     );
-    sl.registerFactory(() => InitViewModel(
-        authenticationRepository: sl(), configurationsRepository: sl()));
+    sl.registerFactory(
+      () => InitViewModel(
+          authenticationRepository: sl(), notificationService: sl()),
+    );
 
     sl.registerLazySingleton<ConfigurationsRepository>(
       () => ConfigurationsRepositoryImpl(
@@ -130,6 +132,5 @@ class ServiceLocator {
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
 
 //Notification
-   
   }
 }

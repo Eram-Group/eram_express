@@ -1,4 +1,5 @@
 import 'package:eram_express_shared/core/utils/logger.dart';
+import 'package:eram_express_shared/data/configurations/models/device_details_model.dart';
 import 'package:eram_express_shared/notification_service.dart';
 import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
 import '../../../customer/data/models/customer_model.dart';
@@ -20,10 +21,11 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     required NotificationService notificationService,
     required AuthenticationRemoteDataSource authenticationRemoteDataSource,
     required TokensLocalDataSource tokensLocalDataSource,
+  
   })  : _customerRepository = customerRepository,
         _authenticationRemoteDataSource = authenticationRemoteDataSource,
         _tokensLocalDataSource = tokensLocalDataSource,
-        _notificationService=NotificationService();
+        _notificationService=notificationService;
 
   @override
   Future<CustomerModel?> get authenticatedCustomer async {
@@ -64,7 +66,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   verifyOtp(OtpVerificationData data) async {
    
-   String tokenDevice= await _notificationService.getDeviceTokenId();
+   DeviceDetailsModel tokenDevice= await _notificationService.getDeviceDetails();
    logger.debug(tokenDevice.toString());
     final response = await _authenticationRemoteDataSource.verifyOtp(data,tokenDevice);
 
