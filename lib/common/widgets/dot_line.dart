@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class DottedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    double dashHeight = 5; // طول كل شرطه
-    double dashSpace = 3; // المسافة بين الشرطات
+    double dashHeight = 5;
+    double dashSpace = 3; 
     double startY = 0; // بداية الرسم على المحور Y
 
     final paint = Paint()
@@ -18,7 +18,6 @@ class DottedLinePainter extends CustomPainter {
         Offset(0, startY + dashHeight),
         paint,
       );
-      // تحريك المؤشر للأمام بمقدار الشرطة والمسافة بينها
       startY += dashHeight + dashSpace;
     }
   }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008935946269",
+    "project_id": "eramex-3ffe9",
+    "storage_bucket": "eramex-3ffe9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008935946269:android:2cd355c3ce1c6de8db5ef4",
+        "android_client_info": {
+          "package_name": "com.eramgroupsa.expres"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKYnwxbQ7Hsv2wDxlCuULN_GfF0_TjbxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

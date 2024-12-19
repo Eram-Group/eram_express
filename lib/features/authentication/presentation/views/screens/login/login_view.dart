@@ -26,13 +26,11 @@ class LoginView extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<LoginViewModel>()..init(),
       child: Builder(builder: (context) {
-        return 
-        BlocListener<LoginViewModel, LoginViewState>(
-          listenWhen:(currentState,previousState)
-           => currentState.status!=previousState.status,
+        return BlocListener<LoginViewModel, LoginViewState>(
+          listenWhen: (currentState, previousState) =>
+              currentState.status != previousState.status,
           listener: (context, state) {
             if (state.isSuccess) {
-
               Navigator.of(context).pushNamed(
                 OtpView.route,
                 arguments: OtpViewArguments(
@@ -41,9 +39,7 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
               );
-            } 
-            else if (state.isError)
-             {
+            } else if (state.isError) {
               ErrorModal.fromApiError(state.serverException!).show(context);
             }
           },
