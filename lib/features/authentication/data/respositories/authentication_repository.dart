@@ -6,11 +6,12 @@ import '../models/verify_otp_response_model.dart';
 
 abstract class AuthenticationRepository {
   Future<CustomerModel?> get authenticatedCustomer;
-  Future<bool> get isAuthenticated;
+  Future<bool> isAuthenticated();
 
   Future<void> logout();
   Future<void> sendOtp(String phoneNumber);
-  Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(OtpVerificationData data);
+  Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
+      OtpVerificationData data);
   void updateAuthenticatedCustomer(CustomerModel data);
   void savingToken(VerifyOtpResponseModel response);
 }

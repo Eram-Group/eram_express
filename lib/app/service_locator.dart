@@ -110,15 +110,17 @@ class ServiceLocator {
           remoteDataSource: sl(),
         ));
     sl.registerLazySingleton(() => CustomerService(
-
         customerRepository: sl(), authenticationRepository: sl()));
 
 //Authentication
 
     sl.registerLazySingleton(() => AuthenticationService(
         authenticationRepository: sl(), customerRepository: sl()));
-    sl.registerLazySingleton<AuthenticationRemoteDataSource>(
-        () => AuthenticationApiRemoteDataSource(networkService: sl(),tokensDataSource: sl(),notificationService: sl()));
+    sl.registerLazySingleton<AuthenticationRemoteDataSource>(() =>
+        AuthenticationApiRemoteDataSource(
+            networkService: sl(),
+            tokensDataSource: sl(),
+            notificationService: sl()));
     sl.registerLazySingleton<AuthenticationRepository>(() =>
         AuthenticationRepositoryImpl(
             authenticationRemoteDataSource: sl(),
@@ -136,39 +138,38 @@ class ServiceLocator {
     sl.registerFactory(() => CompleteProfileViewModel(customerService: sl()));
 
 //  profiledatasource
- sl.registerLazySingleton<ProfileRemoteDataSource>(() =>ProfileApiRemoteDataSource(networkService: sl()));
-        
+    sl.registerLazySingleton<ProfileRemoteDataSource>(
+        () => ProfileApiRemoteDataSource(networkService: sl()));
+
 //profile
- sl.registerLazySingleton<ProfileRepository>(() =>ProfileRepositoryImpl(profileRemoteDataSource:sl() ));
-    sl.registerFactory(() => ProfileViewModel(authenticationRepository: sl(),customerservice: sl()));
+    sl.registerLazySingleton<ProfileRepository>(
+        () => ProfileRepositoryImpl(profileRemoteDataSource: sl()));
+    sl.registerFactory(() => ProfileViewModel(
+        authenticationRepository: sl(), customerservice: sl()));
 //contact us
-      sl.registerFactory(() => ContactViewModel(profileRepository: sl()));
+    sl.registerFactory(() => ContactViewModel(profileRepository: sl()));
 
-
- //EditProfile
-  sl.registerFactory(()=>EditProfileViewModel(
-    customerService:sl(),
-    authenticationRepository: sl(),
-  ));   
+    //EditProfile
+    sl.registerFactory(() => EditProfileViewModel(
+          customerService: sl(),
+          authenticationRepository: sl(),
+        ));
 
 //terms
-    
+
     sl.registerFactory(() => TermsViewModel(
-         profileRepository:sl(),
-        ));   
-
-
+          profileRepository: sl(),
+        ));
 
 //supportview
-sl.registerFactory(() => SupportViewModel(
-         profileRepository:sl(),
-        ));  
-
-  //  final aboutUsViewModel =
-  sl.registerFactory(() => AboutUsViewModel(
+    sl.registerFactory(() => SupportViewModel(
           profileRepository: sl(),
-        ));  
+        ));
 
+    //  final aboutUsViewModel =
+    sl.registerFactory(() => AboutUsViewModel(
+          profileRepository: sl(),
+        ));
 
 //localization
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
