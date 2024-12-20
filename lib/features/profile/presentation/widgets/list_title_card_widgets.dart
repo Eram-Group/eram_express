@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/menu_option_model.dart';
 
-class listtitleCard extends StatelessWidget {
+class ListTitleCardWidget extends StatelessWidget {
   MenuOptionModel menuOption;
-  listtitleCard({required this.menuOption});
+  ListTitleCardWidget({super.key, required this.menuOption});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
           menuOption.onTap(context);
         },
@@ -30,12 +30,12 @@ class listtitleCard extends StatelessWidget {
           child: Row(
             children: [
               menuOption.icon,
-             const SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Text(
                 menuOption.title,
-                style:const TextStyle(
+                style: const TextStyle(
                   color: Color(0xFF191D31),
                   fontSize: 14,
                   fontFamily: 'Outfit',

@@ -21,16 +21,17 @@ class ProfileView extends StatelessWidget {
 
   List<MenuOptionModel> menuSettings = [
     MenuOptionModel(
-      title: "Language",
-      onTap: (context) {
-        LanguageModal().show(context);
-      },
-      icon: const Icon(Iconsax.global),
-    ),
+        title: "Language",
+        onTap: (context) {
+          LanguageModal().show(context);
+        },
+        icon: const SvgIcon(
+          asset: "language",
+        )),
     MenuOptionModel(
         title: "Notification",
         onTap: (context) {},
-        icon: SvgIcon(
+        icon: const SvgIcon(
           asset: "Notification",
         ))
   ];
@@ -42,16 +43,14 @@ class ProfileView extends StatelessWidget {
         asset: "terms",
       ),
       onTap: (context) {
-        Navigator.of(context)
-            .pushNamed(TermsView.route);
+        Navigator.of(context).pushNamed(TermsView.route);
       },
     ),
     MenuOptionModel(
       title: "Contact Us",
       icon: const SvgIcon(asset: "contact"),
       onTap: (context) {
-        Navigator.of(context)
-            .pushNamed(ContactUsView.route);
+        Navigator.of(context).pushNamed(ContactUsView.route);
       },
     ),
     MenuOptionModel(
@@ -60,8 +59,7 @@ class ProfileView extends StatelessWidget {
         asset: "about",
       ),
       onTap: (context) {
-        Navigator.of(context)
-            .pushNamed(AboutUsView.route);
+        Navigator.of(context).pushNamed(AboutUsView.route);
       },
     ),
   ];
@@ -80,8 +78,7 @@ class ProfileView extends StatelessWidget {
         asset: "last_version",
       ),
       onTap: (context) {
-        Navigator.of(context)
-            .pushNamed(TermsView.route);
+        Navigator.of(context).pushNamed(TermsView.route);
       },
     ),
     MenuOptionModel(
@@ -152,13 +149,13 @@ class ProfileView extends StatelessWidget {
 
 class BuildItems extends StatelessWidget {
   final List<MenuOptionModel> items;
-  BuildItems({required this.items});
+  const BuildItems({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: items
-          .map((item) => listtitleCard(
+          .map((item) => ListTitleCardWidget(
                 menuOption: item,
               ))
           .toList(),

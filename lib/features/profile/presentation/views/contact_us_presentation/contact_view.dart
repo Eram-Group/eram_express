@@ -20,7 +20,7 @@ import 'contact_view_model.dart';
 import 'contact_view_state.dart';
 
 class ContactUsView extends StatelessWidget {
-  ContactUsView({super.key});
+  const ContactUsView({super.key});
   static const String route = "/contact_us";
 
   @override
@@ -46,8 +46,8 @@ class ContactUsView extends StatelessWidget {
                       _buildCommunicationContainer(
                           context, state.contactUsModel!),
                       const Gap(20),
-                     _buildSupportContiner(context, state.contactUsModel!),
-                     // const Gap(20),
+                     _buildSupportContainer(context, state.contactUsModel!),
+                      const Gap(20),
                       Text(context.tt("Follow Us", "تابعنا"), style: AppTextStyles().titleContact(context)),
                       _buildSocialMediaAccounts(
                           context, state.contactUsModel!),
@@ -111,7 +111,7 @@ Widget _buildCommunicationContainer( BuildContext context, ContactUsModel contac
   ));
 }
 
-Widget _buildSupportContiner( BuildContext context, ContactUsModel contantusmodel) {
+Widget _buildSupportContainer( BuildContext context, ContactUsModel contantusmodel) {
   List<ContactUsLocalModel> contactItems = ContactUsItems(context).generateSupportItems();
   return Clickable(
       onTap: contactItems[0].onTap,
