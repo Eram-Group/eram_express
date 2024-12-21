@@ -19,7 +19,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     required LocationService locationService,
   })  : _locationService = locationService,
        _googleMapRepository=googleMapRepository,
-        super(const GoogleMapViewState(status: GoogleMapViewStatus.initial)) ;
+        super( GoogleMapViewState(status: GoogleMapViewStatus.initial)) ;
 
   GoogleMapController? _controller;
   Timer? _debounce;
@@ -43,7 +43,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
           zoom: kDefaultMapZoom,
         );
       } else {
-        emit(const GoogleMapViewState(status: GoogleMapViewStatus.loading));
+        emit( GoogleMapViewState(status: GoogleMapViewStatus.loading));
         kInitialPosition = CameraPosition(
           target: const LatLng(0, 0),
           zoom: kDefaultMapZoom,
@@ -57,7 +57,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     //if (state is GoogleMapViewStateloading) return; //why?
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      emit(const GoogleMapViewState(status: GoogleMapViewStatus.placeDetailsLoading));
+      emit(GoogleMapViewState(status: GoogleMapViewStatus.placeDetailsLoading));
       
      try
      {
@@ -68,7 +68,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
      }
      catch(e)
      {
-       emit(const GoogleMapViewState(
+       emit(GoogleMapViewState(
             status: GoogleMapViewStatus.placeDetailsError,
             errorMessage: "Fail to get place details"));
      }
@@ -92,7 +92,7 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
 
   void getCurrentLocation() async 
   {
-    emit( const GoogleMapViewState(status: GoogleMapViewStatus.loading));
+    emit( GoogleMapViewState(status: GoogleMapViewStatus.loading));
     try
     {
        final locationData = await _locationService.getCurrentLocation();
@@ -104,13 +104,13 @@ class GoogleMapViewController extends Cubit<GoogleMapViewState> {
     }
     catch(e)
     {
-             emit(const GoogleMapViewState(status: GoogleMapViewStatus.error,errorMessage: "Fail to get current location"));
+             emit(GoogleMapViewState(status: GoogleMapViewStatus.error,errorMessage: "Fail to get current location"));
     }
     
   }
 
   void updateMarkerAndCamera(CameraPosition locationData, {bool moveCamera = false}) {
-    emit(const GoogleMapViewState( status: GoogleMapViewStatus.placeDetailsLoading,));
+    emit(GoogleMapViewState( status: GoogleMapViewStatus.placeDetailsLoading,));
     var updatedPosition = locationData.target;
     mapMarkers.removeWhere((marker) => marker.markerId.value == 'myLocation');
     var myLocationMarker = Marker(

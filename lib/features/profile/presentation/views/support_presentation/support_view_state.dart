@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:eram_express/features/profile/data/models/support_type_model.dart';
+
 
 enum SupportViewStatus { initial, loading, loaded, error , supportFormSuccess, supportFormError }
 
@@ -13,7 +14,7 @@ extension SupportViewStateX on SupportViewState {
   bool get isSupportFormError =>  status == SupportViewStatus.supportFormError;
 }
 
-class SupportViewState extends Equatable {
+class SupportViewState {
   final SupportViewStatus status;
   final String? errorMessage;
   final List<SupportTypeModel>? supportTypes;
@@ -21,8 +22,7 @@ class SupportViewState extends Equatable {
   final String? detailReason;
   final File? picture;
   final bool? enabled;
-
-  const SupportViewState({
+  SupportViewState({
     required this.status,
     this.errorMessage,
     this.supportTypes,
@@ -32,22 +32,11 @@ class SupportViewState extends Equatable {
     this.enabled,
   });
 
-  @override
-  List<Object?> get props => [
-        status,
-        errorMessage,
-        supportTypes,
-        selectedReason,
-        detailReason,
-        picture,
-        enabled,
-      ];
-
   SupportViewState copyWith({
     SupportViewStatus? status,
-    String? errorMessage,
-    List<SupportTypeModel>? supportTypes,
-    SupportTypeModel? selectedReason,
+   String ? errorMessage,
+   List<SupportTypeModel>? supportTypes,
+    SupportTypeModel?selectedReason,
     String? detailReason,
     File? picture,
     bool? enabled,
@@ -62,69 +51,29 @@ class SupportViewState extends Equatable {
       enabled: enabled ?? this.enabled,
     );
   }
-}
 
-/*
-
-abstract class SupportViewState  {}
-class SupportViewLoadingState extends SupportViewState {
-
-}
-
-class SupportViewInitialState extends SupportViewState {
-
-}
-
-
-class SupportViewErrorState extends SupportViewState 
-{
-  String errorMessage;
-  SupportViewErrorState({required this.errorMessage});
-
-}
-class SupportFormErrorState extends SupportViewState {
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
   
-  SupportFormErrorState();
-}
-class SupportFormSucecessState extends SupportViewState {
- 
-  SupportFormSucecessState();
-}
-class SupportLoadingState extends SupportViewState {
-  
-  SupportLoadingState();
-}
+    return other is SupportViewState &&
+      other.status == status &&
+      other.errorMessage == errorMessage &&
+      listEquals(other.supportTypes, supportTypes) &&
+      other.selectedReason == selectedReason &&
+      other.detailReason == detailReason &&
+      other.picture == picture &&
+      other.enabled == enabled;
+  }
 
-
-class SupportFormLoad extends SupportViewState {
-  final List<SupportTypeModel> supportTypes;
-  final SupportTypeModel? selectedReason;
-  final String? detailReason;
-  final File? picture;
-  final bool enabled;
-
-  SupportFormLoad({
-    this.supportTypes = const [],
-    this.selectedReason,
-    this.detailReason,
-    this.picture,
-    this.enabled = false,
-  });
-
-  SupportFormLoad copyWith({
-    List<SupportTypeModel>? supportTypes,
-    SupportTypeModel? selectedReason,
-    String? detailReason,
-    File? picture,
-    bool? enabled,
-  }) {
-    return SupportFormLoad(
-      supportTypes: supportTypes ?? this.supportTypes,
-      selectedReason: selectedReason ?? this.selectedReason,
-      detailReason: detailReason ?? this.detailReason,
-      picture: picture ?? this.picture,
-      enabled: enabled ?? this.enabled,
-    );
+  @override
+  int get hashCode {
+    return status.hashCode ^
+      errorMessage.hashCode ^
+      supportTypes.hashCode ^
+      selectedReason.hashCode ^
+      detailReason.hashCode ^
+      picture.hashCode ^
+      enabled.hashCode;
   }
 }
-*/

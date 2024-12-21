@@ -1,39 +1,33 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+
 import 'package:eram_express/features/profile/data/models/about_us_model.dart';
 
-enum AboutUsStatus 
-{
-  initial,
-  loading,
-  loaded,
-  error
-}
+enum AboutUsStatus { initial, loading, loaded, error }
 
-extension  AboutUsViewStateX on  AboutUsViewState {
+extension AboutUsViewStateX on AboutUsViewState {
   bool get isInitial => status == AboutUsStatus.initial;
-  bool get isLoading =>status == AboutUsStatus.loading;
-  bool get isError =>status == AboutUsStatus.error;
-  bool get isLoaded=> status == AboutUsStatus.loaded;
+  bool get isLoading => status == AboutUsStatus.loading;
+  bool get isError => status == AboutUsStatus.error;
+  bool get isLoaded => status == AboutUsStatus.loaded;
 }
 
-class AboutUsViewState extends Equatable {
+class AboutUsViewState {
   final AboutUsStatus status;
   final AboutUsModel? aboutUsModel;
   final String? errorMessage;
-
-  const AboutUsViewState({
+  AboutUsViewState({
     required this.status,
     this.aboutUsModel,
     this.errorMessage,
   });
 
-  @override
-  List<Object?> get props => [status, aboutUsModel, errorMessage];
-
   AboutUsViewState copyWith({
     AboutUsStatus? status,
     AboutUsModel? aboutUsModel,
-    String? errorMessage,
+    String ? errorMessage,
   }) {
     return AboutUsViewState(
       status: status ?? this.status,
@@ -41,4 +35,18 @@ class AboutUsViewState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AboutUsViewState &&
+        other.status == status &&
+        other.aboutUsModel == aboutUsModel &&
+        other.errorMessage == errorMessage;
+  }
+
+  @override
+  int get hashCode =>
+      status.hashCode ^ aboutUsModel.hashCode ^ errorMessage.hashCode;
 }

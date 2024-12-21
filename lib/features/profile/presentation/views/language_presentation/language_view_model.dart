@@ -5,9 +5,14 @@ import '../../../data/models/language_model.dart';
 
 
 class LanguageViewModel extends Cubit<LanguageState> {
-  LanguageViewModel() : super(const LanguageState(null));     // How i can get the current language?
+  LanguageViewModel() : super(LanguageState());    
 
-  void selectLanguage(LanguageModel language) {
-    emit(LanguageState(language));
+  void selectLanguage(LanguageModel language)
+   {
+    //Question    المفروض هنا  اغير الlangue  
+    // في ال local cubit 
+    //فهل ينفع اصلا
+
+    emit(LanguageState(selectedLanguage: language));
   }
 }

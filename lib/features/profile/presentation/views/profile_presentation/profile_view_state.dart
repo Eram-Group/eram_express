@@ -1,4 +1,8 @@
-import 'package:equatable/equatable.dart';
+
+import 'dart:convert';
+
+import 'package:flutter/widgets.dart';
+
 import '../../../../customer/data/models/customer_model.dart';
 
 /// Enum to represent the profile status.
@@ -12,26 +16,34 @@ extension ProfileViewStateX on ProfileViewState {
   bool get isLogOut=> status == ProfileStatus.logout;
 }
 
-/// ProfileViewState class representing the state of the profile view.
-class ProfileViewState extends Equatable {
+class ProfileViewState {
   final ProfileStatus status;
   final CustomerModel? currentCustomer;
-
-  const ProfileViewState({
+  ProfileViewState({
     required this.status,
     this.currentCustomer,
   });
 
-  @override
-  List<Object?> get props => [status, currentCustomer];
-
   ProfileViewState copyWith({
     ProfileStatus? status,
-    CustomerModel? currentCustomer,
+   CustomerModel? currentCustomer,
   }) {
     return ProfileViewState(
       status: status ?? this.status,
       currentCustomer: currentCustomer ?? this.currentCustomer,
     );
   }
+
+  
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is ProfileViewState &&
+      other.status == status &&
+      other.currentCustomer == currentCustomer;
+  }
+
+  @override
+  int get hashCode => status.hashCode ^ currentCustomer.hashCode;
 }

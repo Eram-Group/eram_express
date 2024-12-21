@@ -17,7 +17,7 @@ class ContactViewModel extends Cubit<ContactViewState> {
 
   ContactViewModel({required ProfileRepository profileRepository})
       : _profileRepository = profileRepository,
-        super(const ContactViewState(status: ContactUsStatus.initial));
+        super( ContactViewState(status: ContactUsStatus.initial));
 
   Future<void> getContactUs() async {
     emit(state.copyWith(status: ContactUsStatus.loading));

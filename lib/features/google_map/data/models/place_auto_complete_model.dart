@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class PlaceAutocompleteModel extends Equatable {
+class PlaceAutocompleteModel  {
   final String description;
   final String placeId;
   PlaceAutocompleteModel({
@@ -46,8 +46,6 @@ class PlaceAutocompleteModel extends Equatable {
   @override
   String toString() => 'PlaceAutocompleteModel(description: $description, placeId: $placeId)';
 
-  @override
-  List<Object> get props => [description, placeId];
 }
 
 

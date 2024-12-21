@@ -1,25 +1,27 @@
 import 'dart:convert';
 
-
 class LanguageModel {
   final String language;
   final String flag;
+  final String languageCode;
   LanguageModel({
     required this.language,
     required this.flag,
+    required this.languageCode,
   });
 
 
 
- 
 
   LanguageModel copyWith({
     String? language,
     String? flag,
+    String? languageCode,
   }) {
     return LanguageModel(
       language: language ?? this.language,
       flag: flag ?? this.flag,
+      languageCode: languageCode ?? this.languageCode,
     );
   }
 
@@ -27,6 +29,7 @@ class LanguageModel {
     return {
       'language': language,
       'flag': flag,
+      'languageCode': languageCode,
     };
   }
 
@@ -34,6 +37,7 @@ class LanguageModel {
     return LanguageModel(
       language: map['language'] ?? '',
       flag: map['flag'] ?? '',
+      languageCode: map['languageCode'] ?? '',
     );
   }
 
@@ -42,7 +46,7 @@ class LanguageModel {
   factory LanguageModel.fromJson(String source) => LanguageModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'LanguageModel(language: $language, flag: $flag)';
+  String toString() => 'LanguageModel(language: $language, flag: $flag, languageCode: $languageCode)';
 
   @override
   bool operator ==(Object other) {
@@ -50,9 +54,10 @@ class LanguageModel {
   
     return other is LanguageModel &&
       other.language == language &&
-      other.flag == flag;
+      other.flag == flag &&
+      other.languageCode == languageCode;
   }
 
   @override
-  int get hashCode => language.hashCode ^ flag.hashCode;
+  int get hashCode => language.hashCode ^ flag.hashCode ^ languageCode.hashCode;
 }

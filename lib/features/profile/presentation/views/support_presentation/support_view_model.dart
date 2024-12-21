@@ -11,7 +11,7 @@ class SupportViewModel extends Cubit<SupportViewState> {
 
   SupportViewModel({required ProfileRepository profileRepository})
       : _profileRepository = profileRepository,
-        super(const SupportViewState(status: SupportViewStatus.initial));
+        super(SupportViewState(status: SupportViewStatus.initial));
 
   Future<void> getSupportTypes() async {
     try {

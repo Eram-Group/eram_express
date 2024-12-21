@@ -7,7 +7,7 @@ class TermsViewModel extends Cubit<TermViewState> {
 
   TermsViewModel({required ProfileRepository profileRepository})
       : _profileRepository = profileRepository,
-        super(const TermViewState(status:  TermsStatus.initial));
+        super( TermViewState(status:  TermsStatus.initial));
 
   Future<void> getTerms() async {
     emit(state.copyWith(status: TermsStatus.loading));

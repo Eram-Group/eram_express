@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:eram_express/features/profile/data/models/about_us_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:eram_express/features/profile/data/models/terms_model.dart';
 
 enum TermsStatus { initial, loading, loaded, error }
@@ -13,24 +12,22 @@ extension TermViewStateX  on TermViewState {
 
 
 
-class TermViewState extends Equatable {
+class TermViewState {
   final  TermsStatus  status;
   final TermsModel? termsContent;
   final String? errorMessage;
-
-  const TermViewState({
+  TermViewState({
     required this.status,
     this.termsContent,
     this.errorMessage,
   });
 
-  @override
-  List<Object?> get props => [status, termsContent, errorMessage];
+  
 
   TermViewState copyWith({
-   TermsStatus ? status,
-  TermsModel? termsContent,
-    String? errorMessage,
+    TermsStatus? status,
+    TermsModel? termsContent,
+   String ? errorMessage,
   }) {
     return TermViewState(
       status: status ?? this.status,
@@ -38,4 +35,19 @@ class TermViewState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is TermViewState &&
+      other.status == status &&
+      other.termsContent == termsContent &&
+      other.errorMessage == errorMessage;
+  }
+
+  @override
+  int get hashCode => status.hashCode ^ termsContent.hashCode ^ errorMessage.hashCode;
 }

@@ -6,6 +6,7 @@ import 'package:eram_express_shared/presentation/views/modals/custom_modal.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import '../../../i18n/domain/locale_cubit.dart';
 import '../../data/models/language_model.dart';
 import '../views/language_presentation/language_view_model.dart';
 import '../views/language_presentation/language_view_state.dart';
@@ -14,17 +15,23 @@ import '../widgets/language_item.dart';
 class LanguageModal extends StatelessWidget {
   const LanguageModal({Key? key}) : super(key: key);
 
-  static  List<LanguageModel> languagesApp = [
-    LanguageModel(language: "English", flag: "usa"),
-    LanguageModel(language: "Arabic", flag: "sau"),
+  static List<LanguageModel> languagesApp = [
+    LanguageModel(language: "Arabic", flag: "sau", languageCode: 'ar'),
+    LanguageModel(language: "English", flag: "usa", languageCode: "en"),
   ];
-  Future<LanguageModel?> show(BuildContext context) async =>
-      await showModal<LanguageModel?>(context, (context) => this);
+  Future<LanguageModel?> show(BuildContext context) =>
+      showModal<LanguageModel?>(context, (context) => this);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LanguageViewModel()..selectLanguage(languagesApp[0]), // Read from localcubit bs msh arafaa
+      create: (context) => LanguageViewModel()
+        ..selectLanguage(languagesApp.firstWhere(
+          (language) =>
+              language.languageCode ==
+              context.read<LocaleCubit>().getCurrentLanguage().languageCode,
+          orElse: () => languagesApp.first,
+        )),
       child: Builder(
         builder: (context) {
           return CustomModal(
@@ -53,10 +60,8 @@ class LanguageModal extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ...languagesApp
-                            .map((language) =>
-                                LanguageItemSelector(language: language))
-                            .toList(),
+                        ...languagesApp.map((language) =>
+                            LanguageItemSelector(language: language))
                       ],
                     ),
                   ),
@@ -83,8 +88,7 @@ class LanguageItemSelector extends StatelessWidget {
         return LanguageItem(
           languageoption: language,
           isSelected: isSelected,
-          onTap: () 
-          {
+          onTap: () {
             context.read<LanguageViewModel>().selectLanguage(language);
           },
         );

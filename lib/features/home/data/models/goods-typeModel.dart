@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class GoodModel extends Equatable {
+class GoodModel {
   final int id;
   final String nameAr;
   final String nameEn;
@@ -56,5 +56,21 @@ class GoodModel extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, nameAr, nameEn, image];
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is GoodModel &&
+      other.id == id &&
+      other.nameAr == nameAr &&
+      other.nameEn == nameEn &&
+      other.image == image;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+      nameAr.hashCode ^
+      nameEn.hashCode ^
+      image.hashCode;
+  }
 }
