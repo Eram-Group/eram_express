@@ -23,7 +23,7 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
     required AuthenticationRepository authenticationRepository,
   })  : _customerService = customerService,
         _authenticationRepository = authenticationRepository,
-        super(EditProfileViewState()) {}
+        super(const EditProfileViewState(status: EditProfileStatus.initial)) {}
 
   void setInitialValues(EditProfileViewArguments arguments) {
     username = arguments.currentCustomer.fullName;
@@ -35,11 +35,12 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
   }
 
   void onFullNameChanged(String fullName) {
-    emit(state.copyWith(fullName: fullName));
+    emit(state.copyWith(status: EditProfileStatus.loaded, fullName: fullName));
   }
 
   void onPictureChanged(String profilePicture) {
-    emit(state.copyWith(profilePicture: profilePicture));
+    emit(state.copyWith(
+        status: EditProfileStatus.loaded, profilePicture: profilePicture));
   }
 
   void Function()? profilePictureOnClicked(BuildContext context) =>
@@ -51,7 +52,8 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
   void _profilePictureOnPicked(File pickedImage) {
     logger.debug('Profile picture on picked called');
     logger.debug(pickedImage.toString());
-    emit(state.copyWith(profilePictureFile: pickedImage));
+    emit(state.copyWith(
+        status: EditProfileStatus.loaded, profilePictureFile: pickedImage));
   }
 
   bool enabledButton() {
@@ -60,26 +62,21 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
 
   Future<void> saveButtonOnClicked(BuildContext context) async {
     try {
+      emit(state.copyWith(status: EditProfileStatus.loading));
       logger.debug("fullname:${state.fullName}");
       logger.debug("full:${state.profilePictureFile}");
-      if (await state.profilePictureFile!.exists()) {
-        logger.debug('File exists: ${state.profilePictureFile!.path}');
-      } else {
-        logger.debug(
-            'File does not exist at path: ${state.profilePictureFile!.path}');
-      }
-      logger.debug('File path: ${state.profilePictureFile}');
 
       final response = await _customerService.updateProfile(
         data: UpdateCustomerFormData(
             fullName: state.fullName, profilePicture: state.profilePictureFile),
       );
+
       _authenticationRepository.updateAuthenticatedCustomer(response);
-      Navigator.of(context).pushNamed(ProfileView.route);
+      emit(state.copyWith(status: EditProfileStatus.success));
     } catch (e) {
       logger.debug(e.toString());
-
-      ErrorModal.fromApiError(e as ServerException).show(context);
+      emit(state.copyWith(status: EditProfileStatus.error,serverException: e as ServerException));
+    
     }
   }
 }

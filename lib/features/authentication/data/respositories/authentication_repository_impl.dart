@@ -48,7 +48,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   sendOtp(String phoneNumber) async {
-    final response = await _authenticationRemoteDataSource.sendOtp(phoneNumber);
+   _authenticationRemoteDataSource.sendOtp(phoneNumber);
   }
 
   @override
@@ -60,7 +60,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   void updateAuthenticatedCustomer(CustomerModel data) {
-    logger.debug(_authenticatedCustomer!.fullName);
     _authenticatedCustomer = data;
   }
 

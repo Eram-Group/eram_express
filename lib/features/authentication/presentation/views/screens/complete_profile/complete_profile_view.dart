@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import '../../../../../../app/iconsax_icons.dart';
+import '../../../../../../core/app_colors.dart';
 import '../../../../../Common/widgets/custom_text_field.dart';
 import 'complete_profile_view_model.dart';
 import 'complete_profile_view_state.dart';
@@ -298,8 +299,11 @@ class CircleProfilePictureWidget extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: profilePictureUrl!,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.borderColor,
+                        strokeWidth: 3,
+                      ),
                     ),
                     errorWidget: (context, url, error) => Center(
                       child: SvgPicture.asset(

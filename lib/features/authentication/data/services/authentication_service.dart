@@ -30,7 +30,7 @@ class AuthenticationService {
   }
 
   Future<void> logout({Function()? onLogout}) async {
-    final response = await _authenticationRepository.logout();
+   await _authenticationRepository.logout();
   }
 
   void savingToken(VerifyOtpResponseModel response) async {

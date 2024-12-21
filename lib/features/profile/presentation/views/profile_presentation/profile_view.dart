@@ -1,12 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eram_express/features/authentication/presentation/views/screens/login/login_view.dart';
 import 'package:eram_express/features/profile/presentation/views/contact_us_presentation/contact_view.dart';
 import 'package:eram_express/features/profile/presentation/views/terms_presentation/terms_view.dart';
-import 'package:eram_express_shared/core/iconsax_icons.dart';
 import 'package:eram_express_shared/presentation/widgets/svgIcon.dart';
 import 'package:eram_express_shared/service_locator.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../data/models/menu_option_model.dart';
 import '../../modals/language_modal.dart';
 import '../../widgets/list_title_card_widgets.dart';
@@ -19,11 +17,13 @@ class ProfileView extends StatelessWidget {
   static const String route = "/profile";
   ProfileView({super.key});
 
+//Question -- مش عارفه هنا احط الكلمه العربي والاانجليزي علشان مفيش context
+
   List<MenuOptionModel> menuSettings = [
     MenuOptionModel(
         title: "Language",
         onTap: (context) {
-          LanguageModal().show(context);
+          const LanguageModal().show(context);
         },
         icon: const SvgIcon(
           asset: "language",
@@ -36,9 +36,9 @@ class ProfileView extends StatelessWidget {
         ))
   ];
 
-  List<MenuOptionModel> MenuAboutUs = [
+  List<MenuOptionModel> menuAboutUs = [
     MenuOptionModel(
-      title: "Terms&Condiotions",
+      title: "Terms & Condiotions",
       icon: const SvgIcon(
         asset: "terms",
       ),
@@ -130,7 +130,7 @@ class ProfileView extends StatelessWidget {
                               TypeSettingProfile(
                                 typeSetting: "About Us",
                               ),
-                              BuildItems(items: MenuAboutUs),
+                              BuildItems(items: menuAboutUs),
                               TypeSettingProfile(
                                 typeSetting: "Other",
                               ),
@@ -163,9 +163,13 @@ class BuildItems extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class TypeSettingProfile extends StatelessWidget {
   String typeSetting;
-  TypeSettingProfile({required this.typeSetting});
+  TypeSettingProfile({
+    super.key,
+    required this.typeSetting,
+  });
 
   @override
   Widget build(BuildContext context) {

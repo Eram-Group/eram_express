@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../views/profile_presentation/profile_view_model.dart';
 import '../views/profile_presentation/profile_view_state.dart';
@@ -45,7 +44,7 @@ class ProfileHeader extends StatelessWidget {
                         size: 55,
                         profilePictureUrl: state.currentCustomer!.image,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
