@@ -33,7 +33,7 @@ class GoogleMapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GoogleMapViewController>(
-      create: (context) => sl<GoogleMapViewController>()
+      create: (context) => sl()
         ..setInitialCameraPosition(googleMapViewArguments?.initialAddress),
       child: BlocBuilder<GoogleMapViewController, GoogleMapViewState>(
         //To prevent rebuilding on every action

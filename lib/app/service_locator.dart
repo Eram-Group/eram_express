@@ -30,6 +30,7 @@ import '../features/customer/data/repositories/customer_repository_impl.dart';
 import '../features/customer/data/services/customer_service.dart';
 import '../features/google_map/data/data_sources/google_map_api_remote_data_source.dart';
 import '../features/google_map/data/data_sources/google_map_remote_data_source.dart';
+import '../features/google_map/data/repositories/google_map_reposirtoty.dart';
 import '../features/google_map/data/repositories/google_map_repositiory.dart';
 import '../features/google_map/data/services/locationservice.dart';
 import '../features/google_map/presentation/search_model_view/search_model_view.dart';
@@ -95,7 +96,7 @@ class ServiceLocator {
       () => GoogleMapApiRemoteDataSource(networkService: sl(), dio: sl()),
     );
     sl.registerLazySingleton(() => LocationService());
-    sl.registerLazySingleton(() => GoogleMapRepositoryImpl(
+    sl.registerLazySingleton<GoogleMapRepository>(() => GoogleMapRepositoryImpl(
           googleMapRemoteDataSource: sl(),
         ));
     sl.registerFactory(() => SearchViewController(
