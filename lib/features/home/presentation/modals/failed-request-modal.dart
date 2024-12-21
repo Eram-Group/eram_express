@@ -11,8 +11,7 @@ import '../../../booking/presentation/modals/cancel_order_modal.dart';
 
 class FailedOrderModal extends StatelessWidget {
   const FailedOrderModal({super.key});
-  Future<void> show(BuildContext context) async =>
-      await showModal(context, (context) => this);
+  void show(BuildContext context) => showModal(context, (context) => this);
   @override
   Widget build(BuildContext context) {
     return CustomModal(
@@ -22,7 +21,7 @@ class FailedOrderModal extends StatelessWidget {
       child: Column(
         children: [
           const StatusIconWidget(
-            assetName:  "error",
+            assetName: "error",
           ),
           const Gap(10),
           Text(
@@ -32,24 +31,24 @@ class FailedOrderModal extends StatelessWidget {
           ),
           const Gap(10),
           Text(
-            context.tt("Unfortunately, the request could not be completed. Please try again later.", "للأسف، لم يتم إتمام الطلب. يرجى المحاولة لاحقًا."),
+            context.tt(
+                "Unfortunately, the request could not be completed. Please try again later.",
+                "للأسف، لم يتم إتمام الطلب. يرجى المحاولة لاحقًا."),
             style: AppTextStyles.subHeaderModal,
             textAlign: TextAlign.center,
           ),
           const Gap(20),
-              Center(
-                  child: CustomSmallButton(
-                onTap: () 
-                {
-                  Navigator.pop(context);
-                },
-                padding: const EdgeInsets.all(12),
-                text: context.tt("Back","الرجوع"),
-                colorText: AppColor.blackText,
-                colorBorder: AppColor.lightGrey,
-                color: Colors.white,
-              )
-          )
+          Center(
+              child: CustomSmallButton(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            padding: const EdgeInsets.all(12),
+            text: context.tt("Back", "الرجوع"),
+            colorText: AppColor.blackText,
+            colorBorder: AppColor.lightGrey,
+            color: Colors.white,
+          ))
         ],
       ),
     )));

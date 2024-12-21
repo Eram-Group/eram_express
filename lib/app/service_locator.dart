@@ -41,6 +41,15 @@ import '../features/home/data/repositotys/home_repositoty_impl.dart';
 import '../features/home/presentation/views/home_view_controller.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 import '../features/init/presentation/views/init_view_model.dart';
+import '../features/profile/data/data_sources/profile_api_remote_data_source.dart';
+import '../features/profile/data/data_sources/profile_remote_data_source.dart';
+import '../features/profile/data/repositories/profile_repository_impl.dart';
+import '../features/profile/presentation/views/about_us_presentation/about_us_view_model.dart';
+import '../features/profile/presentation/views/contact_us_presentation/contact_view_model.dart';
+import '../features/profile/presentation/views/edit_profile_view_model.dart';
+import '../features/profile/presentation/views/profile_presentation/profile_view_model.dart';
+import '../features/profile/presentation/views/support_presentation/support_view_model.dart';
+import '../features/profile/presentation/views/terms_presentation/terms_view_model.dart';
 
 class ServiceLocator {
   void init() {
@@ -107,8 +116,11 @@ class ServiceLocator {
 
     sl.registerLazySingleton(() => AuthenticationService(
         authenticationRepository: sl(), customerRepository: sl()));
-    sl.registerLazySingleton<AuthenticationRemoteDataSource>(
-        () => AuthenticationApiRemoteDataSource(networkService: sl()));
+    sl.registerLazySingleton<AuthenticationRemoteDataSource>(() =>
+        AuthenticationApiRemoteDataSource(
+            networkService: sl(),
+            tokensDataSource: sl(),
+            notificationService: sl()));
     sl.registerLazySingleton<AuthenticationRepository>(() =>
         AuthenticationRepositoryImpl(
             authenticationRemoteDataSource: sl(),
@@ -124,6 +136,40 @@ class ServiceLocator {
 
 //completeprofile
     sl.registerFactory(() => CompleteProfileViewModel(customerService: sl()));
+
+//  profiledatasource
+    sl.registerLazySingleton<ProfileRemoteDataSource>(
+        () => ProfileApiRemoteDataSource(networkService: sl()));
+
+//profile
+    sl.registerLazySingleton<ProfileRepository>(
+        () => ProfileRepositoryImpl(profileRemoteDataSource: sl()));
+    sl.registerFactory(() => ProfileViewModel(
+        authenticationRepository: sl(), customerservice: sl()));
+//contact us
+    sl.registerFactory(() => ContactViewModel(profileRepository: sl()));
+
+    //EditProfile
+    sl.registerFactory(() => EditProfileViewModel(
+          customerService: sl(),
+          authenticationRepository: sl(),
+        ));
+
+//terms
+
+    sl.registerFactory(() => TermsViewModel(
+          profileRepository: sl(),
+        ));
+
+//supportview
+    sl.registerFactory(() => SupportViewModel(
+          profileRepository: sl(),
+        ));
+
+    //  final aboutUsViewModel =
+    sl.registerFactory(() => AboutUsViewModel(
+          profileRepository: sl(),
+        ));
 
 //localization
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());

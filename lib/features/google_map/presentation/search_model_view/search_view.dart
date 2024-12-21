@@ -97,7 +97,7 @@ Widget _buildDisplayResult(List<PlaceAutocompleteModel> recommendPlaces) {
           onTap: () {
             context
                 .read<SearchViewController>()
-                .getCoordinatesForAddress(recommendPlaces[index].description);
+                .getCoordinatesForAddress(recommendPlaces[index].description,context);
           },
           child: _buildSearchItemCard(recommendPlaces[index].description),
         );

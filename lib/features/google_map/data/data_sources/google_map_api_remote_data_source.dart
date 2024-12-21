@@ -51,7 +51,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
   @override
   Future<void> validateLocation(
       String lat, String long) async {
-    final response = _networkService.post('$baseUrl/validate-location/', data: {
+    final response = _networkService.post('$baseUrl/location/validate-point/ ', data: {
       "point": {
         "type": "Point",
         "coordinates": [

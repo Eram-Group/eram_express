@@ -13,11 +13,12 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
       : _networkService = networkService;
 
   @override
-  Future<CustomerModel> getAuthenticatedCustomer() async
-  {
+  Future<CustomerModel> getAuthenticatedCustomer() async {
+    logger.debug("enter to get auth");
     final response = await _networkService.get(
       '$baseUrl/customer/me/',
     );
+    logger.debug("print${response.data}");
     return CustomerModel.fromMap(response.data);
   }
 
@@ -30,7 +31,7 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
       if (data.profilePicture != null)
         'image': MultipartFile.fromFileSync(data.profilePicture!.path),
     });
-
+    logger.debug(formData.toString());
     final response = await _networkService.patch(
       '$baseUrl/customer/me/',
       data: formData,
