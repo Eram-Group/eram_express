@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:eram_express/features/customer/data/services/customer_service.dart';
-import 'package:eram_express/features/profile/presentation/views/profile_presentation/profile_view.dart';
 import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
-import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:eram_express_shared/presentation/views/modals/image_picker_modal/image_picker_modal.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +15,7 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
   final AuthenticationRepository _authenticationRepository;
 
   String username = "";
-  String? image;
+  String image = " ";
   EditProfileViewModel({
     required CustomerService customerService,
     required AuthenticationRepository authenticationRepository,
@@ -27,6 +25,11 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
 
   void setInitialValues(EditProfileViewArguments arguments) {
     username = arguments.currentCustomer.fullName;
+    logger.debug(arguments.currentCustomer.image.toString());
+    if (arguments.currentCustomer.image != null) {
+      image = arguments.currentCustomer.image!;
+    }
+    logger.debug(image.toString());
     emit(state.copyWith(
       fullName: arguments.currentCustomer.fullName,
       phoneNumber: arguments.currentCustomer.phoneNumber,
@@ -57,15 +60,15 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
   }
 
   bool enabledButton() {
-    return state.fullName != username ? true : false;
+    return (state.fullName != username ||
+        (state.profilePictureFile != null &&
+            state.profilePictureFile!.path != image));
   }
 
   Future<void> saveButtonOnClicked(BuildContext context) async {
     try {
       emit(state.copyWith(status: EditProfileStatus.loading));
-      logger.debug("fullname:${state.fullName}");
-      logger.debug("full:${state.profilePictureFile}");
-
+    
       final response = await _customerService.updateProfile(
         data: UpdateCustomerFormData(
             fullName: state.fullName, profilePicture: state.profilePictureFile),
@@ -74,9 +77,9 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
       _authenticationRepository.updateAuthenticatedCustomer(response);
       emit(state.copyWith(status: EditProfileStatus.success));
     } catch (e) {
-      logger.debug(e.toString());
-      emit(state.copyWith(status: EditProfileStatus.error,serverException: e as ServerException));
-    
+      emit(state.copyWith(
+          status: EditProfileStatus.error,
+          serverException: e as ServerException));
     }
   }
 }

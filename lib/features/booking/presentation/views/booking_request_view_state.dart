@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:eram_express/features/booking/data/models/booking_request_model.dart';
 
 
-
 enum BookingRequestStatus { initial, loading, loaded, error ,acceptBidding,empty }
 
 extension BookingRequestViewStateX on BookingRequestViewState {
@@ -16,6 +15,7 @@ extension BookingRequestViewStateX on BookingRequestViewState {
 
 // ليه نشيل دايما ال equatble 
 //في اوقات كنت بحتاجها لانه بيحس بالتغيير
+
 class BookingRequestViewState extends Equatable {
   final BookingRequestStatus status;
   final List<BookingRequestModel>? bookingRequests;

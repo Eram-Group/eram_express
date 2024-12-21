@@ -21,15 +21,15 @@ class ContactViewModel extends Cubit<ContactViewState> {
 
   Future<void> getContactUs() async {
     emit(state.copyWith(status: ContactUsStatus.loading));
-    try{
-    final result = await _profileRepository.getContactUs();
-      emit(state.copyWith(status: ContactUsStatus.loaded,contactUsModel: result));
+    try {
+      final result = await _profileRepository.getContactUs();
+      emit(state.copyWith(
+          status: ContactUsStatus.loaded, contactUsModel: result));
+    } catch (e) {
+      emit(state.copyWith(
+          status: ContactUsStatus.error,
+          errorMessage: "Fail to load contact Us"));
     }
-    catch(e)
-    {
-      emit(state.copyWith(status: ContactUsStatus.error,errorMessage: "Fail to load contact Us"));
-    }
-
   }
 }
 
@@ -48,7 +48,8 @@ class ContactUsItems {
     ];
   }
 
-  List<ContactUsLocalModel> generateContactItems(ContactUsModel contactUsModel) {
+  List<ContactUsLocalModel> generateContactItems(
+      ContactUsModel contactUsModel) {
     return [
       getCallUs(contactUsModel.phoneNumber ?? ''),
       getEmail(contactUsModel.email),
@@ -61,7 +62,8 @@ class ContactUsItems {
     ];
   }
 
-  List<ContactUsLocalModel> generateSocialMediaItems(ContactUsModel contactUsModel) {
+  List<ContactUsLocalModel> generateSocialMediaItems(
+      ContactUsModel contactUsModel) {
     return [
       getInstagram(contactUsModel.instagram),
       getFacebook(contactUsModel.facebook),
@@ -98,7 +100,7 @@ class ContactUsItems {
       subtitle: context.tt("Our team is on the line\n Mon-Fri 9-17",
           "فريقنا متاح عبر الخط\nمن الإثنين إلى الجمعة • 9-17)"),
       iconSvg: SvgIcon(
-        asset: 'call_Us',
+        asset: 'call_us',
         size: Responsive.getResponsiveFontSize(context, fontSize: 50),
       ),
     );
@@ -123,7 +125,6 @@ class ContactUsItems {
     );
   }
 
-  
   ContactUsLocalModel getWebsite(String website) {
     return ContactUsLocalModel(
       title: context.tt("website", 'موقعنا'),
@@ -135,7 +136,6 @@ class ContactUsItems {
     );
   }
 
-  
   ContactUsLocalModel getInstagram(String instagram) {
     return ContactUsLocalModel(
       title: context.tt("Instagram", 'انستغرام'),
@@ -149,7 +149,6 @@ class ContactUsItems {
     );
   }
 
-  
   ContactUsLocalModel getFacebook(String facebook) {
     return ContactUsLocalModel(
       title: context.tt("Facebook", 'فيس بوك'),
