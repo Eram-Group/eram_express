@@ -31,7 +31,7 @@ class CustomerApiRemoteDataSource implements CustomerRemoteDataSource {
       if (data.profilePicture != null)
         'image': MultipartFile.fromFileSync(data.profilePicture!.path),
     });
-
+    logger.debug(formData.toString());
     final response = await _networkService.patch(
       '$baseUrl/customer/me/',
       data: formData,

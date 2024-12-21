@@ -26,6 +26,7 @@ class EditProfileView extends StatelessWidget {
 
   EditProfileView(this.arguments, {super.key}) {}
 
+
   Widget _buildProfilePicture(BuildContext context) {
     EditProfileViewModel viewModel = context.read<EditProfileViewModel>();
     return BlocBuilder<EditProfileViewModel, EditProfileViewState>(
@@ -33,6 +34,7 @@ class EditProfileView extends StatelessWidget {
         builder: (context, state) {
           return ProfilePictureWidget(
             profilePictureUrl: state.profilePicture,
+            profilePictureFile: state.profilePictureFile,
             onProfilePictureClick: viewModel.profilePictureOnClicked(context),
             saveButtonLoading: state.saving,
           );

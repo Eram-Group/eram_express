@@ -14,17 +14,15 @@ import 'edit_profile_view_state.dart';
 
 class EditProfileViewModel extends Cubit<EditProfileViewState> {
   final CustomerService _customerService;
-   final AuthenticationRepository _authenticationRepository;
+  final AuthenticationRepository _authenticationRepository;
 
   String username = "";
   String? image;
   EditProfileViewModel({
     required CustomerService customerService,
-     required  AuthenticationRepository authenticationRepository,
-
-  })
-      : _customerService = customerService,
-      _authenticationRepository = authenticationRepository,
+    required AuthenticationRepository authenticationRepository,
+  })  : _customerService = customerService,
+        _authenticationRepository = authenticationRepository,
         super(EditProfileViewState()) {}
 
   void setInitialValues(EditProfileViewArguments arguments) {
@@ -52,7 +50,8 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
 
   void _profilePictureOnPicked(File pickedImage) {
     logger.debug('Profile picture on picked called');
-    emit(state.copyWith(profilePicture: pickedImage.path));
+    logger.debug(pickedImage.toString());
+    emit(state.copyWith(profilePictureFile: pickedImage));
   }
 
   bool enabledButton() {
@@ -60,19 +59,27 @@ class EditProfileViewModel extends Cubit<EditProfileViewState> {
   }
 
   Future<void> saveButtonOnClicked(BuildContext context) async {
-    try{
-    final response = await _customerService.updateProfile(
-      data: UpdateCustomerFormData(
-        fullName: state.fullName,),
-        //profilePicture: state.profilePicture.
-    );
-     _authenticationRepository.updateAuthenticatedCustomer(response);
-     Navigator.of(context).pushNamed(ProfileView.route);
+    try {
+      logger.debug("fullname:${state.fullName}");
+      logger.debug("full:${state.profilePictureFile}");
+      if (await state.profilePictureFile!.exists()) {
+        logger.debug('File exists: ${state.profilePictureFile!.path}');
+      } else {
+        logger.debug(
+            'File does not exist at path: ${state.profilePictureFile!.path}');
+      }
+      logger.debug('File path: ${state.profilePictureFile}');
+
+      final response = await _customerService.updateProfile(
+        data: UpdateCustomerFormData(
+            fullName: state.fullName, profilePicture: state.profilePictureFile),
+      );
+      _authenticationRepository.updateAuthenticatedCustomer(response);
+      Navigator.of(context).pushNamed(ProfileView.route);
+    } catch (e) {
+      logger.debug(e.toString());
+
+      ErrorModal.fromApiError(e as ServerException).show(context);
     }
-    catch(e)
-    {
-            ErrorModal.fromApiError(e as ServerException).show(context);
-    }
-    
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../views/profile_presentation/profile_view_model.dart';
 import '../views/profile_presentation/profile_view_state.dart';
 
@@ -40,9 +41,9 @@ class ProfileHeader extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
+                      CircleProfilePictureWidget(
+                        size: 55,
+                        profilePictureUrl: state.currentCustomer!.image,
                       ),
                       SizedBox(width: 10),
                       Expanded(
@@ -54,8 +55,9 @@ class ProfileHeader extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-
-                                  state.currentCustomer!.fullName.isEmpty? " anonymous" : state.currentCustomer!.fullName,
+                                  state.currentCustomer!.fullName.isEmpty
+                                      ? " anonymous"
+                                      : state.currentCustomer!.fullName,
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium!

@@ -228,40 +228,10 @@ class ProfilePictureWidget extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Container(
-          width: 89,
-          height: 89,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFFEEF1F8),
-          ),
-          child: profilePictureFile != null
-              ? ClipOval(
-                  child: Image.file(
-                    profilePictureFile!,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : profilePictureUrl != null
-                  ? ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl: profilePictureUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) => Center(
-                          child: SvgPicture.asset(
-                            'assets/icons/user.svg',
-                          ),
-                        ),
-                      ),
-                    )
-                  : Center(
-                      child: SvgPicture.asset(
-                        'assets/icons/user.svg',
-                      ),
-                    ),
+        CircleProfilePictureWidget(
+          size: 89,
+          profilePictureUrl: profilePictureUrl,
+          profilePictureFile: profilePictureFile,
         ),
         Positioned(
           bottom: -10,
@@ -291,6 +261,58 @@ class ProfilePictureWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CircleProfilePictureWidget extends StatelessWidget {
+  final double size;
+  final File? profilePictureFile;
+  final String? profilePictureUrl;
+
+  const CircleProfilePictureWidget({
+    Key? key,
+    required this.size,
+    this.profilePictureFile,
+    required this.profilePictureUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(0xFFEEF1F8),
+      ),
+      child: profilePictureFile != null
+          ? ClipOval(
+              child: Image.file(
+                profilePictureFile!,
+                fit: BoxFit.cover,
+              ),
+            )
+          : profilePictureUrl != null
+              ? ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: profilePictureUrl!,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/user.svg',
+                      ),
+                    ),
+                  ),
+                )
+              : Center(
+                  child: SvgPicture.asset(
+                    'assets/icons/user.svg',
+                  ),
+                ),
     );
   }
 }
