@@ -7,7 +7,6 @@ import 'package:eram_express_shared/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../app/service_locator.dart';
 import '../../../booking/presentation/views/all_booking_request_view.dart';
 import '../../../booking/presentation/views/offers_view.dart';
 import '../../../booking/presentation/views/booking_request_view_controller.dart';
@@ -30,20 +29,32 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider<BookingRequestViewController>(
-            create: (context) =>
-                sl<BookingRequestViewController>()..initialListBookingRequest(),
-          ),
-          BlocProvider<HomeViewController>(
-            create: (context) => sl<HomeViewController>()..initialHomeData(),
-          ),
-        ],
-        child: Builder(builder: (context) {
-          return Scaffold(
-              backgroundColor: Colors.white,
-              body: SafeArea(
-                  child: SingleChildScrollView(
+      providers: [
+        BlocProvider<BookingRequestViewController>(
+          create: (context) =>
+              sl<BookingRequestViewController>()..initialListBookingRequest(),
+        ),
+        BlocProvider<HomeViewController>(
+          create: (context) => sl<HomeViewController>()..initialHomeData(),
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: BlocListener<HomeViewController, HomeViewState>(
+            listener: (context, state) {
+              if (state.isRequestCreateSuccess) {
+                const SuccessfulRequestModal().show(context);
+                context
+                    .read<BookingRequestViewController>()
+                    .listBookingRequest();
+              }
+              if (state.isRequestCreateError) {
+                const FailedOrderModal().show(context);
+              }
+            },
+            child: Builder(builder: (context) {
+              return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Column(
@@ -54,25 +65,16 @@ class HomeView extends StatelessWidget {
                           _buildDataContainer(context),
                         ],
                       ),
-                      BlocListener<HomeViewController, HomeViewState>(
-                        listener: (context, state) {
-                          if (state.isRequestCreateSuccess) {
-                            const SuccessfulRequestModal().show(context);
-                            context
-                                .read<BookingRequestViewController>()
-                                .listBookingRequest();
-                          }
-                          if (state.isRequestCreateError) {
-                            const FailedOrderModal().show(context);
-                          }
-                        },
-                        child: _buildBookingRequest(context),
-                      ),
+                      _buildBookingRequest(context), // الجزء الخاص بالحجز
                     ],
                   ),
                 ),
-              )));
-        }));
+              );
+            }),
+          ),
+        ),
+      ),
+    );
   }
 
   // we wait to merge profileFeature to wrap it with ProfileViewModel
@@ -163,8 +165,9 @@ class HomeView extends StatelessWidget {
                 ),
                 const Gap(16),
                 _buildLocationRow(context),
-                _buildLoadTypeField(context),
-                _buildTruckSizeField(context),
+                //_buildLoadTypeField(context),
+                //_buildTruckSizeField(context),
+                _buildCargoRow(context),
                 _buildDateField(context),
                 _buildGoodsField(context),
                 const Gap(8),
@@ -209,6 +212,58 @@ class HomeView extends StatelessWidget {
               selectedValue: destination?.address ?? " ",
               label: destination?.address ?? "Destination",
               iconName: 'destination',
+            );
+          },
+        )),
+      ],
+    );
+  }
+
+  Widget _buildCargoRow(BuildContext context) {
+    final homeViewModel = context.read<HomeViewController>();
+
+    return Row(
+      children: [
+        Expanded(
+            child: BlocSelector<HomeViewController, HomeViewState,
+                CargoCategoryModel?>(
+          bloc: homeViewModel,
+          selector: (state) => state.loadType,
+          builder: (context, loadType) {
+            logger.debug("build Type");
+            return BlocSelector<HomeViewController, HomeViewState, bool>(
+              bloc: homeViewModel,
+              selector: (state) => state.isValidateLoadType ?? false,
+              builder: (context, isValid) {
+                return SelectionCard(
+                    onTap: () => homeViewModel.cargoCategoryOnClicked(context),
+                    selectedValue: context.tt(
+                        loadType?.nameEn ?? " ", loadType?.nameAr ?? " "),
+                    label: context.tt(
+                        loadType?.nameEn ?? "Select the load type",
+                        loadType?.nameAr ?? "اختر نوع الحمولة"),
+                    iconName: 'arrow-down',
+                    isValidate: isValid);
+              },
+            );
+          },
+        )),
+        const Gap(7),
+        Expanded(
+            child: BlocSelector<HomeViewController, HomeViewState,
+                CargoSubCategoryModel?>(
+          bloc: homeViewModel,
+          selector: (state) => state.truckSize,
+          builder: (context, truckSize) {
+            logger.debug("build truck");
+            return SelectionCard(
+              onTap: () => homeViewModel.cargoSubCategoryOnClicked(context),
+              selectedValue: context.tt(
+                  truckSize?.nameEn ?? " ", truckSize?.nameAr ?? " "),
+              label: context.tt(
+                  truckSize?.nameEn ?? "Choose the size of the truck",
+                  truckSize?.nameAr ?? "اختر حجم حمولتك"),
+              iconName: 'sizeTrack',
             );
           },
         )),
