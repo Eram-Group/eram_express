@@ -1,3 +1,4 @@
+import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import '../features/authentication/presentation/views/screens/complete_profile/complete_profile_view.dart';
 import '../features/authentication/presentation/views/screens/login/login_view.dart';
@@ -8,6 +9,7 @@ import '../features/google_map/presentation/search_model_view/search_view.dart';
 import '../features/google_map/presentation/views/google_map_view.dart';
 import '../features/home/presentation/views/home_view.dart';
 import '../features/init/presentation/views/init_view.dart';
+import '../features/nav_bar/bottom_nav_bar.view.dart';
 import '../features/profile/presentation/views/about_us_presentation/about_us_view.dart';
 import '../features/profile/presentation/views/contact_us_presentation/contact_view.dart';
 import '../features/profile/presentation/views/edit_profile_view.dart';
@@ -26,16 +28,18 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   }
 
   if (name == InitView.route) {
-    page = InitView();
+    page = const InitView();
   } else if (name == LoginView.route) {
-    page = LoginView();
+    page = const LoginView();
+  } else if (name == NavigationView.route) {
+    page = const NavigationView();
   } else if (name == OtpView.route) {
     final arguments = settings.arguments as OtpViewArguments;
     page = OtpView(arguments);
   } else if (name == CompleteProfileView.route) {
-    page = CompleteProfileView();
+    page = const CompleteProfileView();
   } else if (name == HomeView.route) {
-    page = HomeView();
+    page = const HomeView();
   } else if (name == GoogleMapView.route) {
     final arguments = settings.arguments as GoogleMapViewArguments?;
     page = GoogleMapView(
@@ -53,8 +57,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     page = AllBookingRequestView(
       arguments: arguments,
     );
-  }
-   else if (name == ProfileView.route) {
+  } else if (name == ProfileView.route) {
     page = ProfileView();
   } else if (name == AboutUsView.route) {
     page = AboutUsView();
@@ -69,12 +72,10 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   } else if (name == EditProfileView.route) {
     final arguments = settings.arguments as EditProfileViewArguments;
     page = EditProfileView(arguments);
-  }
-   else 
-   {
+  } else {
+    //logger.debug(name);
     page = const NotFoundView();
-  
-    } 
+  }
   return _buildPageRoute(settings, page);
 }
 

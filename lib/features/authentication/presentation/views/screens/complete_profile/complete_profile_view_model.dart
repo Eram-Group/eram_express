@@ -55,7 +55,7 @@ class CompleteProfileViewModel extends Cubit<CompleteProfileViewState> {
       emit(state.copyWith(saving: false));
       final navigator = Navigator.of(context);
       await const RegisteredSuccessfullyModal().show(context);
-      navigator.pop();
+      
     } catch (e) 
     {
       ErrorModal.fromApiError(e as ServerException).show(context);

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../nav_bar/bottom_nav_bar.view.dart';
+
 class RegisteredSuccessfullyModal extends StatelessWidget {
   const RegisteredSuccessfullyModal({super.key});
 
@@ -61,7 +63,13 @@ class RegisteredSuccessfullyModal extends StatelessWidget {
             ),
             const Gap(20),
             CustomButton(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  NavigationView.route,
+                  (route) => false,
+                );
+              },
               child: Text(
                 context.tt('Awesome! Let\'s Go', 'رائع! هيا بنا'),
                 style: const TextStyle(

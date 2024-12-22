@@ -5,22 +5,19 @@ import 'package:flutter/widgets.dart';
 
 import '../../data/models/picking_locationModel.dart';
 
-
 class BookingRequestFormData {
   final int? cargoSubcategory;
   final List<int> goods;
   final String bookingDate;
-  final PickingLocationModel pickup;
-  final PickingLocationModel destination;
+  final PickingLocationModel? pickup;
+  final PickingLocationModel? destination;
   BookingRequestFormData({
     this.cargoSubcategory,
     required this.goods,
     required this.bookingDate,
-    required this.pickup,
-    required this.destination,
+    this.pickup,
+    this.destination,
   });
-
- 
 
   BookingRequestFormData copyWith({
     ValueGetter<int?>? cargoSubcategory,
@@ -30,7 +27,8 @@ class BookingRequestFormData {
     PickingLocationModel? destination,
   }) {
     return BookingRequestFormData(
-      cargoSubcategory: cargoSubcategory != null ? cargoSubcategory() : this.cargoSubcategory,
+      cargoSubcategory:
+          cargoSubcategory != null ? cargoSubcategory() : this.cargoSubcategory,
       goods: goods ?? this.goods,
       bookingDate: bookingDate ?? this.bookingDate,
       pickup: pickup ?? this.pickup,
@@ -54,7 +52,6 @@ class BookingRequestFormData {
         "type": "Point",
         "coordinates": [31.1313, 29.9765]
       }
-      
     };
   }
 
@@ -70,7 +67,8 @@ class BookingRequestFormData {
 
   String toJson() => json.encode(toMap());
 
-  factory BookingRequestFormData.fromJson(String source) => BookingRequestFormData.fromMap(json.decode(source));
+  factory BookingRequestFormData.fromJson(String source) =>
+      BookingRequestFormData.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -80,21 +78,21 @@ class BookingRequestFormData {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is BookingRequestFormData &&
-      other.cargoSubcategory == cargoSubcategory &&
-      listEquals(other.goods, goods) &&
-      other.bookingDate == bookingDate &&
-      other.pickup == pickup &&
-      other.destination == destination;
+        other.cargoSubcategory == cargoSubcategory &&
+        listEquals(other.goods, goods) &&
+        other.bookingDate == bookingDate &&
+        other.pickup == pickup &&
+        other.destination == destination;
   }
 
   @override
   int get hashCode {
     return cargoSubcategory.hashCode ^
-      goods.hashCode ^
-      bookingDate.hashCode ^
-      pickup.hashCode ^
-      destination.hashCode;
+        goods.hashCode ^
+        bookingDate.hashCode ^
+        pickup.hashCode ^
+        destination.hashCode;
   }
 }

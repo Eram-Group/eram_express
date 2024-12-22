@@ -5,9 +5,9 @@ import 'package:requests_inspector/requests_inspector.dart';
 import 'app/app.dart';
 import 'app/service_locator.dart';
 import 'features/i18n/domain/locale_cubit.dart';
+import 'features/nav_bar/nav-bar-cubit.dart';
 
-void main()
- {
+void main() {
   SharedServiceLocator().init();
   ServiceLocator().init();
   runApp(MultiBlocProvider(
@@ -15,6 +15,11 @@ void main()
       BlocProvider<LocaleCubit>(
         create: (_) => sl<LocaleCubit>(),
       ),
+      
+      BlocProvider<NavBarCubit>(
+        create: (_) => NavBarCubit(),
+      ),
+      
     ],
     child: const RequestsInspector(
       enabled: true,

@@ -12,6 +12,7 @@ import 'package:gap/gap.dart';
 import '../../../../../../app/iconsax_icons.dart';
 import '../../../../../../core/app_colors.dart';
 import '../../../../../Common/widgets/custom_text_field.dart';
+import '../../../../../nav_bar/bottom_nav_bar.view.dart';
 import 'complete_profile_view_model.dart';
 import 'complete_profile_view_state.dart';
 
@@ -102,7 +103,10 @@ class CompleteProfileView extends StatelessWidget {
           ),
         ),
         Clickable(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  NavigationView.route,
+                  (route) => false,
+                ),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../authentication/presentation/views/screens/login/login_view.dart';
-import '../../../home/presentation/views/home_view.dart';
+import '../../../nav_bar/bottom_nav_bar.view.dart';
 import 'init_view_model.dart';
 
 class InitView extends StatelessWidget {
   static const String route = '/';
 
   const InitView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<InitViewModel>(
@@ -20,7 +19,7 @@ class InitView extends StatelessWidget {
       child: BlocListener<InitViewModel, bool>(
         listener: (context, state) {
           Navigator.of(context).pushNamedAndRemoveUntil(
-            state ? ProfileView.route : LoginView.route,
+            state ? NavigationView.route : LoginView.route,
             (route) => false,
           );
         },
