@@ -68,6 +68,21 @@ class ServiceLocator {
       ),
     );
 
+    //Authentication
+
+    sl.registerLazySingleton(() => AuthenticationService(
+        authenticationRepository: sl(), customerRepository: sl()));
+    sl.registerLazySingleton<AuthenticationRemoteDataSource>(() =>
+        AuthenticationApiRemoteDataSource(
+            networkService: sl(),
+            tokensDataSource: sl(),
+            notificationService: sl()));
+    sl.registerLazySingleton<AuthenticationRepository>(() =>
+        AuthenticationRepositoryImpl(
+            authenticationRemoteDataSource: sl(),
+            tokensLocalDataSource: sl(),
+            customerRepository: sl()));
+
     //home
 
     sl.registerLazySingleton<HomeDataRemoteDataSource>(
@@ -112,21 +127,6 @@ class ServiceLocator {
         ));
     sl.registerLazySingleton(() => CustomerService(
         customerRepository: sl(), authenticationRepository: sl()));
-
-//Authentication
-
-    sl.registerLazySingleton(() => AuthenticationService(
-        authenticationRepository: sl(), customerRepository: sl()));
-    sl.registerLazySingleton<AuthenticationRemoteDataSource>(() =>
-        AuthenticationApiRemoteDataSource(
-            networkService: sl(),
-            tokensDataSource: sl(),
-            notificationService: sl()));
-    sl.registerLazySingleton<AuthenticationRepository>(() =>
-        AuthenticationRepositoryImpl(
-            authenticationRemoteDataSource: sl(),
-            tokensLocalDataSource: sl(),
-            customerRepository: sl()));
 
 //log in
     sl.registerFactory(() => LoginViewModel(

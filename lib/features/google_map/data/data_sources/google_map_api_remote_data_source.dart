@@ -15,7 +15,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     Response response = await _networkService
         .get("${mapUrl}place/autocomplete/json", queryParameters: {
       'input': input,
-      'key': apiKey,
+      'key': mapKey,
       'sessiontoken': sessionToken,
       'components': 'country:$country',
       //TODO
@@ -29,7 +29,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     Response response =
         await _networkService.get("${mapUrl}geocode/json", queryParameters: {
       'address': address,
-      'key': apiKey,
+      'key': mapKey,
       //TODO
       //'language': 'ar',
     });
@@ -41,7 +41,7 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
     Response response =
         await _networkService.get("${mapUrl}geocode/json", queryParameters: {
       'latlng': input,
-      'key': apiKey,
+      'key': mapKey,
       //TODO
       //'language': 'ar',
     });
@@ -49,15 +49,12 @@ class GoogleMapApiRemoteDataSource implements GoogleMapRemoteDataSource {
   }
 
   @override
-  Future<void> validateLocation(
-      String lat, String long) async {
-    final response = _networkService.post('$baseUrl/location/validate-point/ ', data: {
+  Future<void> validateLocation(String lat, String long) async {
+    final response =
+        _networkService.post('$baseUrl/location/validate-point/', data: {
       "point": {
         "type": "Point",
-        "coordinates": [
-          double.parse(long),
-          double.parse(lat)
-        ] // Ensure valid lat/long format
+        "coordinates": [double.parse(long), double.parse(lat)]
       }
     });
   }
