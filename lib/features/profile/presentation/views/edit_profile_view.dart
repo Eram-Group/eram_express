@@ -1,3 +1,5 @@
+import 'package:eram_express/features/nav_bar/nav-bar-cubit.dart';
+import 'package:eram_express/features/nav_bar/nav_bar_state.dart';
 import 'package:eram_express/features/profile/presentation/widgets/customappbar.widgets.dart';
 import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
@@ -51,7 +53,8 @@ class EditProfileView extends StatelessWidget {
         listener: (context, state) {
           if (state.isSuccess) {
             {
-              Navigator.of(context).pushNamed(ProfileView.route);
+              context.read<NavBarCubit>().setTab(NavigationTab.profile);
+              Navigator.of(context).pop();
             }
           } else if (state.isError) {
             ErrorModal.fromApiError(state.serverException!).show(context);

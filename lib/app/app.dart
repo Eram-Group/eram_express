@@ -1,5 +1,5 @@
+import 'package:eram_express_shared/core/api/navigation-service.dart';
 import 'package:eram_express_shared/core/i18n/app_localizations_setup.dart';
-import 'package:eram_express_shared/core/navigation_service.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

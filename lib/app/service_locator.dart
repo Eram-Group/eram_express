@@ -81,7 +81,8 @@ class ServiceLocator {
         AuthenticationRepositoryImpl(
             authenticationRemoteDataSource: sl(),
             tokensLocalDataSource: sl(),
-            customerRepository: sl()));
+            customerRepository: sl(),
+            sharedPreferencesHelper: sl()));
 
     //home
 
@@ -146,7 +147,8 @@ class ServiceLocator {
     sl.registerLazySingleton<ProfileRepository>(
         () => ProfileRepositoryImpl(profileRemoteDataSource: sl()));
     sl.registerFactory(() => ProfileViewModel(
-        authenticationRepository: sl(), customerservice: sl()));
+          authenticationRepository: sl(),
+        ));
 //contact us
     sl.registerFactory(() => ContactViewModel(profileRepository: sl()));
 

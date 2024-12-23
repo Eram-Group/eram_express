@@ -58,9 +58,8 @@ class LoginViewModel extends Cubit<LoginViewState> {
   }
 
   Future<void> countryCodeButtonOnClicked(BuildContext context) async {
-    final countries = await _configurationsRepository.getCountries();
-
     try {
+      final countries = await _configurationsRepository.getCountries();
       final selection = await SelectCountryModal(
         countries: countries,
         selectedCountry: state.selectedCountry!,
@@ -68,7 +67,9 @@ class LoginViewModel extends Cubit<LoginViewState> {
       if (selection != null) {
         emit(state.copyWith(selectedCountry: selection));
       }
-    } catch (e) {}
+    } catch (e) {
+      logger.debug(e.toString());
+    }
   }
 
   Future<void> loginButtonOnClicked(BuildContext context) async {
@@ -89,4 +90,3 @@ class LoginViewModel extends Cubit<LoginViewState> {
     }
   }
 }
-

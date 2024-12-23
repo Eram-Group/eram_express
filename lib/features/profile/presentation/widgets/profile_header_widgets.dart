@@ -74,7 +74,7 @@ class ProfileHeader extends StatelessWidget {
                             GestureDetector(
                               onTap: () => context
                                   .read<ProfileViewModel>()
-                                  .EditProfileClickable(context),
+                                  .editProfileClickable(context),
                               child: Container(
                                 height: 38,
                                 width: 100,

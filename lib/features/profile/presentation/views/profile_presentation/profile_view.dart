@@ -17,8 +17,6 @@ class ProfileView extends StatelessWidget {
   static const String route = "/profile";
   ProfileView({super.key});
 
-//Question -- مش عارفه هنا احط الكلمه العربي والاانجليزي علشان مفيش context
-
   List<MenuOptionModel> menuSettings = [
     MenuOptionModel(
         title: "Language",
