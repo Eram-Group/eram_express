@@ -28,12 +28,12 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   Future<CustomerModel?> get authenticatedCustomer async {
-    /*
     if (_authenticatedCustomer != null) return _authenticatedCustomer;
     final customer = await _customerRepository.getAuthenticatedCustomer();
     if (customer != null) _authenticatedCustomer = customer;
     return customer;
-    */
+
+    /*
     final customer = await getCustomerModel();
     logger.debug("get model from pref ${customer}");
     if (customer == null) {
@@ -45,7 +45,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         saveCustomerModel(customer!);
       }
     }
-    return customer;
+    */
   }
 
   @override
@@ -74,8 +74,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     final response = await _authenticationRemoteDataSource.verifyOtp(data);
     savingToken(response.response);
     saveCustomerModel(response.response.customer);
-    //final customer = await getCustomerModel();
-    //logger.debug(customer.toString());
     return response;
   }
 
@@ -99,11 +97,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   Future<CustomerModel?> getCustomerModel() async {
-    final customeer = await _sharedPreferencesHelper.getModel(
+    final customer = await _sharedPreferencesHelper.getModel(
       'customer',
       (map) => CustomerModel.fromMap(map),
     );
-    logger.debug("customer getting &{customeer}".toString() ?? "null");
-    return customeer;
+    return customer;
   }
 }

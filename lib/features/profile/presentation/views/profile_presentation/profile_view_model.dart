@@ -12,6 +12,7 @@ class ProfileViewModel extends Cubit<ProfileViewState> {
         super(ProfileViewState(status: ProfileStatus.initial));
 
   void getCustomerData() async {
+    emit(state.copyWith(status: ProfileStatus.loading));
     final currentCustomer =
         await _authenticationRepository.authenticatedCustomer;
     emit(state.copyWith(currentCustomer: currentCustomer));

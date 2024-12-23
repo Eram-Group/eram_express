@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import '../../../../customer/data/models/customer_model.dart';
 
 /// Enum to represent the profile status.
-enum ProfileStatus { loaded, logout,initial,error }
+enum ProfileStatus { loaded, logout,initial,error ,loading }
 
 /// Extension to simplify checking the state.
 extension ProfileViewStateX on ProfileViewState {
@@ -14,6 +14,7 @@ extension ProfileViewStateX on ProfileViewState {
   bool get isError => status == ProfileStatus.error;
   bool get isLoaded => status == ProfileStatus.loaded;
   bool get isLogOut=> status == ProfileStatus.logout;
+  bool get isLoading => status == ProfileStatus.loading;
 }
 
 class ProfileViewState {
