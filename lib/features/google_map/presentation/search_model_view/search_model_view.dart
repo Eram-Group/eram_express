@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:async';import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/authentication/data/respositories/authentication_repository_impl.dart';
 import 'package:eram_express/features/customer/data/models/customer_model.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +57,8 @@ class SearchViewController extends Cubit<SearchState> {
     {
       final result = await  _googleMapRepository.getCoordinatesForAddress(address);
       LatLng(result.lat!, result.long!);
-      Navigator.pop(context , LatLng(result.lat!, result.long!));
+          Navigator.pop(context, LatLng(result.lat!, result.long!));
+
     }
     catch(e)
     {

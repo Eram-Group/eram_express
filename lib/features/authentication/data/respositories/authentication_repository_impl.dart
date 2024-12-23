@@ -1,5 +1,4 @@
-import 'package:eram_express_shared/core/utils/logger.dart';
-import 'package:eram_express_shared/shared_preference.dart';
+import 'package:eram_express_shared/notification_service.dart';
 import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
 import '../../../customer/data/models/customer_model.dart';
 import '../../../customer/data/repositories/customer_repository.dart';
@@ -8,23 +7,26 @@ import '../models/verify_otp_response_model.dart';
 import 'authentication_repository.dart';
 import '../data_sources/authentication/remote/authentication_remote_data_source.dart';
 
+
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final CustomerRepository _customerRepository;
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final TokensLocalDataSource _tokensLocalDataSource;
-  final SharedPreferencesHelper _sharedPreferencesHelper;
 
   CustomerModel? _authenticatedCustomer;
+  //final SharedPreferencesHelper _sharedPreferencesHelper;
 
   AuthenticationRepositoryImpl({
     required CustomerRepository customerRepository,
+    required NotificationService notificationService,
+    //required SharedPreferencesHelper sharedPreferencesHelper,
     required AuthenticationRemoteDataSource authenticationRemoteDataSource,
     required TokensLocalDataSource tokensLocalDataSource,
-    required SharedPreferencesHelper sharedPreferencesHelper,
+  
   })  : _customerRepository = customerRepository,
         _authenticationRemoteDataSource = authenticationRemoteDataSource,
-        _sharedPreferencesHelper = sharedPreferencesHelper,
         _tokensLocalDataSource = tokensLocalDataSource;
+          //_sharedPreferencesHelper = sharedPreferencesHelper;
 
   @override
   Future<CustomerModel?> get authenticatedCustomer async {
@@ -71,15 +73,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   verifyOtp(OtpVerificationData data) async {
-    final response = await _authenticationRemoteDataSource.verifyOtp(data);
+   
+
+    final response = await _authenticationRemoteDataSource.verifyOtp(data,);
+
     savingToken(response.response);
-    saveCustomerModel(response.response.customer);
+    //saveCustomerModel(response.response.customer);
     return response;
   }
 
   @override
   void updateAuthenticatedCustomer(CustomerModel data) {
-    saveCustomerModel(data);
+    //saveCustomerModel(data);
     _authenticatedCustomer = data;
   }
 
@@ -90,7 +95,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       response.refreshToken,
     );
   }
-
+/*
   void saveCustomerModel(CustomerModel customer) async {
     await _sharedPreferencesHelper.saveModel(
         "customer", customer, (customer) => customer.toMap());
@@ -103,4 +108,5 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     );
     return customer;
   }
+  */
 }

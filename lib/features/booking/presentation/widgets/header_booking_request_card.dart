@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/core/app_colors.dart';
 import 'package:eram_express_shared/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +68,8 @@ Widget _buildRating(RatingModel rating ,BuildContext context) {
             i < rating.totalRatings ? Iconsax.star1 : Iconsax.star,
             size: i < rating.totalRatings
                 ? 22
-                : 15, // حاسه الاحسن يبقي svg  علشان مقاسات
+                : 15,
+                 // حاسه الاحسن يبقي svg  علشان مقاسات
             color: i < rating.totalRatings ? AppColor.starColor : Colors.black,
           ),
         ),

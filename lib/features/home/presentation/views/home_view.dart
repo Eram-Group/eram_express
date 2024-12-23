@@ -65,7 +65,7 @@ class HomeView extends StatelessWidget {
                           _buildDataContainer(context),
                         ],
                       ),
-                      _buildBookingRequest(context), // الجزء الخاص بالحجز
+                      _buildBookingRequest(context),
                     ],
                   ),
                 ),
@@ -165,8 +165,6 @@ class HomeView extends StatelessWidget {
                 ),
                 const Gap(16),
                 _buildLocationRow(context),
-                //_buildLoadTypeField(context),
-                //_buildTruckSizeField(context),
                 _buildCargoRow(context),
                 _buildDateField(context),
                 _buildGoodsField(context),

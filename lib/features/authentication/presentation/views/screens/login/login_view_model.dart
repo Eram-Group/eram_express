@@ -1,14 +1,10 @@
 import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/data/configurations/repositories/configurations_repository.dart';
-import 'package:eram_express_shared/presentation/views/modals/error_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../objects/login_form_data.dart';
 import '../../../../data/services/authentication_service.dart';
 import '../../modals/select_country_modal.dart';
-import '../otp/otp_view.dart';
 import 'login_view_state.dart';
 
 class LoginViewModel extends Cubit<LoginViewState> {
@@ -24,12 +20,18 @@ class LoginViewModel extends Cubit<LoginViewState> {
 
   Future<void> init() async {
     try {
+      logger.debug("enter in init");
       final countries = await _configurationsRepository.getCountries();
+      logger.debug("before ${state.selectedCountry}".toString());
+
       emit(
         state.copyWith(
+          countries: countries,
           selectedCountry: countries.first,
         ),
       );
+
+      logger.debug("after ${state.selectedCountry}".toString());
     } on ServerException catch (e) {
       LoginViewState(
           status: LogInStatus.countryError,
@@ -42,9 +44,6 @@ class LoginViewModel extends Cubit<LoginViewState> {
   }
 
   bool enabledButton() {
-    logger.debug(state.selectedCountry.toString());
-    logger.debug(state.phoneNumber!);
-
     if (state.selectedCountry != null &&
         state.phoneNumber!.length == state.selectedCountry!.numberLength) {
       return true;
@@ -59,9 +58,8 @@ class LoginViewModel extends Cubit<LoginViewState> {
 
   Future<void> countryCodeButtonOnClicked(BuildContext context) async {
     try {
-      final countries = await _configurationsRepository.getCountries();
       final selection = await SelectCountryModal(
-        countries: countries,
+        countries: state.countries!,
         selectedCountry: state.selectedCountry!,
       ).show(context);
       if (selection != null) {
