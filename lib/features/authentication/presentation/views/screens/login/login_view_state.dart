@@ -28,6 +28,7 @@ class LoginViewState {
   final String ?phoneNumber;
   final CountryModel? selectedCountry;
   final String ?errorMessage ;
+  final List<CountryModel> ?countries;
   final ServerException ? serverException;
   LoginViewState({
      
@@ -36,6 +37,7 @@ class LoginViewState {
     this.selectedCountry,
     this.errorMessage,
     this.serverException,
+    this.countries,
   });
   LoginViewState copyWith
   ({
@@ -44,6 +46,7 @@ class LoginViewState {
   String ?errorMessage ,
   CountryModel? selectedCountry,
   ServerException ? serverException,
+  List<CountryModel> ?countries,
   }) {
     return LoginViewState(
       status:  status ?? this.status,
@@ -51,6 +54,7 @@ class LoginViewState {
       selectedCountry: selectedCountry ?? this.selectedCountry,
       errorMessage: errorMessage?? this.errorMessage,
       serverException: serverException??this.serverException,
+      countries: countries??this.countries,
     );
   }
 }

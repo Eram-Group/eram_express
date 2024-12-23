@@ -1,4 +1,4 @@
-package com.eramgroupsa.express.eram_express
+package com.eramgroupsa.expres
 
 import io.flutter.embedding.android.FlutterActivity
 

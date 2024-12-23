@@ -1,6 +1,7 @@
 import 'package:eram_express/features/authentication/data/models/verify_otp_response_model.dart';
 import 'package:eram_express_shared/core/api/network-service.dart';
 import 'package:eram_express_shared/core/api/server_expection.dart';
+import 'package:eram_express_shared/data/configurations/models/device_details_model.dart';
 
 import '../../../../../../app/api_keys.dart';
 import '../../../../presentation/objects/otp_verification_data.dart';
@@ -24,18 +25,19 @@ class AuthenticationApiRemoteDataSource
 
   @override
   Future<VerifyOtpResponseWrapper<VerifyOtpResponseModel>> verifyOtp(
-      OtpVerificationData data) async {
+      OtpVerificationData data, DeviceDetailsModel deviceDetails) async {
     final response = await _networkService.post(
       '$baseUrl/customer/authenticate/',
       data: {
-        'phone_number': data.phoneNumber,
+        'phoneNumber': data.phoneNumber,
         'otp': data.otp,
+        'device': deviceDetails.toMap(),
       },
     );
 
     if (response.statusCode == 200) {
       return VerifyOtpResponseWrapper(
-        isNewCustomer: true, //  TODo convert it to false
+        isNewCustomer: false,
         response: VerifyOtpResponseModel.fromMap(response.data),
       );
     } else if (response.statusCode == 201) {
@@ -43,11 +45,10 @@ class AuthenticationApiRemoteDataSource
         isNewCustomer: true,
         response: VerifyOtpResponseModel.fromMap(response.data),
       );
-    } else 
-    {
+    } else {
       // هي متحلتش غير لما عملت كده  فازاي ومفروض اني مهندله في الى
       //networkservice
-      
+
       throw ServerException.fromMap(response.data);
     }
   }
