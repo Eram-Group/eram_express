@@ -29,7 +29,7 @@ class AuthenticationApiRemoteDataSource
     final response = await _networkService.post(
       '$baseUrl/customer/authenticate/',
       data: {
-        'phone_number': data.phoneNumber,
+        'phoneNumber': data.phoneNumber,
         'otp': data.otp,
         'device': deviceDetails.toMap(),
       },
