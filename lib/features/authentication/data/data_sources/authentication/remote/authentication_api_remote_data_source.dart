@@ -31,13 +31,7 @@ class AuthenticationApiRemoteDataSource
       data: {
         'phone_number': data.phoneNumber,
         'otp': data.otp,
-        'device': {
-          'registration_id':
-             deviceDetails.registrationId,
-          'device_id':
-             deviceDetails.deviceId,
-          'type': deviceDetails.deviceType,
-        },
+        'device': deviceDetails.toMap(),
       },
     );
 
