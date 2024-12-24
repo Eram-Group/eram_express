@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'dart:async';import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/authentication/data/respositories/authentication_repository_impl.dart';
 import 'package:eram_express/features/customer/data/models/customer_model.dart';
 import 'package:flutter/material.dart';
@@ -53,12 +52,13 @@ class SearchViewController extends Cubit<SearchState> {
     }
   }
 
-  Future<void> getCoordinatesForAddress(String address) async {
+  Future<void> getCoordinatesForAddress(String address ,BuildContext context) async {
     try
     {
       final result = await  _googleMapRepository.getCoordinatesForAddress(address);
       LatLng(result.lat!, result.long!);
-      //Navigator.pop(NavigationService.globalContext, LatLng(result.lat!, result.long!));
+          Navigator.pop(context, LatLng(result.lat!, result.long!));
+
     }
     catch(e)
     {

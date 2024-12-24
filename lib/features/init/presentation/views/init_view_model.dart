@@ -16,7 +16,7 @@ class InitViewModel extends Cubit<bool> {
   Future<void> init() async {
     final results = await Future.wait([
       _notificationService.init(),
-      _authenticationRepository.isAuthenticated,
+      _authenticationRepository.isAuthenticated(),
     ]);
 
     final isAuthenticated = results[1] as bool;

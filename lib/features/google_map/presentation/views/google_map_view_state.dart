@@ -1,7 +1,8 @@
-import 'package:equatable/equatable.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../data/models/addressmodels/place_details_model.dart';
 
+import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../data/models/addressmodels/place_details_model.dart';
 
 enum GoogleMapViewStatus {
   initial,
@@ -19,46 +20,56 @@ extension GoogleMapViewStateX on GoogleMapViewState {
   bool get isLoaded => status == GoogleMapViewStatus.updated;
   bool get isError => status == GoogleMapViewStatus.error;
   bool get isEmpty => status == GoogleMapViewStatus.placeDetailsError;
-  bool get isPlaceDetailsLoaded => status == GoogleMapViewStatus.placeDetailsLoaded;
-  bool get isPlaceDetailsLoading => status == GoogleMapViewStatus.placeDetailsLoading;
-  bool get isPlaceDetailsError =>status == GoogleMapViewStatus.placeDetailsError;
+  bool get isPlaceDetailsLoaded =>
+      status == GoogleMapViewStatus.placeDetailsLoaded;
+  bool get isPlaceDetailsLoading =>
+      status == GoogleMapViewStatus.placeDetailsLoading;
+  bool get isPlaceDetailsError =>
+      status == GoogleMapViewStatus.placeDetailsError;
 }
 
-class GoogleMapViewState extends Equatable {
+class GoogleMapViewState {
   final GoogleMapViewStatus status;
   final Set<Marker>? markers;
   final String? errorMessage;
-  final PlaceDetailsModel? placeDetails; 
-
-  const GoogleMapViewState({
+  final PlaceDetailsModel? placeDetails;
+  GoogleMapViewState({
     required this.status,
     this.markers,
-    this.errorMessage, 
+    this.errorMessage,
     this.placeDetails,
   });
 
+  GoogleMapViewState copyWith({
+    GoogleMapViewStatus? status,
+    Set<Marker>? markers,
+    String? errorMessage,
+   PlaceDetailsModel? placeDetails,
+  }) {
+    return GoogleMapViewState(
+      status: status ?? this.status,
+      markers: markers ?? this.markers,
+      errorMessage: errorMessage ?? this.errorMessage,
+      placeDetails: placeDetails ?? this.placeDetails,
+    );
+  }
+
   @override
-  List<Object?> get props =>[markers];
-}
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
+    return other is GoogleMapViewState &&
+        other.status == status &&
+        setEquals(other.markers, markers) &&
+        other.errorMessage == errorMessage &&
+        other.placeDetails == placeDetails;
+  }
 
-
-
-
-
-
-/*
-class PlaceDetailsLoaded extends GoogleMapViewState {
-  final  PlaceDetailsModel placeDetails;
-  const PlaceDetailsLoaded(this.placeDetails);
   @override
-  List<Object> get props => [placeDetails];
+  int get hashCode {
+    return status.hashCode ^
+        markers.hashCode ^
+        errorMessage.hashCode ^
+        placeDetails.hashCode;
+  }
 }
-
-class PlaceDetailsError extends GoogleMapViewState {
-  final String errorMessage;
-  PlaceDetailsError(this.errorMessage);
-  @override
-  List<Object> get props => [errorMessage];
-}
-*/

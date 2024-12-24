@@ -8,9 +8,10 @@ import 'booking_request_view_state.dart';
 BookingRequestViewState getBookingRequestState(
     BookingRepository bookingRepository) {
   return bookingRepository.cachetBooking == null
-      ? const BookingRequestViewState(status: BookingRequestStatus.initial)
+      ? BookingRequestViewState(status: BookingRequestStatus.initial)
       : bookingRepository.cachetBooking!.isEmpty
-          ? const BookingRequestViewState(status: BookingRequestStatus.empty)
+      //Question ليه بعد ما حطيت الباكدج عايزيني اشيل كل ال const 
+          ?  BookingRequestViewState(status: BookingRequestStatus.empty)
           : BookingRequestViewState(
               status: BookingRequestStatus.loaded,
               bookingRequests: bookingRepository.cachetBooking);

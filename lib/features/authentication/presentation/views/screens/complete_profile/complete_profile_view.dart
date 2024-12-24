@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
 import 'package:eram_express_shared/presentation/widgets/clickable.dart';
@@ -8,6 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import '../../../../../../app/iconsax_icons.dart';
+import '../../../../../../core/app_colors.dart';
+import '../../../../../Common/widgets/custom_text_field.dart';
+import '../../../../../nav_bar/bottom_nav_bar.view.dart';
 import 'complete_profile_view_model.dart';
 import 'complete_profile_view_state.dart';
 
@@ -62,25 +67,10 @@ class CompleteProfileView extends StatelessWidget {
         BlocBuilder<CompleteProfileViewModel, CompleteProfileViewState>(
           bloc: viewModel,
           builder: (context, state) {
-            return TextField(
+            return CustomTextField(
               onChanged: viewModel.onFullNameChanged(),
-              decoration: InputDecoration(
-                hintText:
-                    context.tt('Enter your full name', 'ادخل اسمك الكامل'),
-                hintStyle: const TextStyle(
-                  color: Color(0xFFB0B0B0),
-                  fontFamily: 'Outfit',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  height: 1.8,
-                ),
-                enabled: !state.saving,
-                border: _textFieldBorder(),
-                enabledBorder: _textFieldBorder(),
-                focusedBorder: _textFieldBorder(
-                  color: const Color(0xFF194595),
-                ),
-              ),
+              hintText: context.tt('Enter your full name', 'ادخل اسمك الكامل'),
+              isEnabled: !state.saving,
             );
           },
         ),
@@ -113,7 +103,10 @@ class CompleteProfileView extends StatelessWidget {
           ),
         ),
         Clickable(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  NavigationView.route,
+                  (route) => false,
+                ),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -217,6 +210,117 @@ class CompleteProfileView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class ProfilePictureWidget extends StatelessWidget {
+  final File? profilePictureFile;
+  final String? profilePictureUrl;
+  final bool saveButtonLoading;
+  final void Function()? onProfilePictureClick;
+
+  const ProfilePictureWidget({
+    Key? key,
+    this.profilePictureFile,
+    this.profilePictureUrl,
+    required this.saveButtonLoading,
+    required this.onProfilePictureClick,
+  });
+  @override
+  Widget build(BuildContext context) {
+    //logger.debug("image ${profilePictureUrl}");
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        CircleProfilePictureWidget(
+          size: 89,
+          profilePictureUrl: profilePictureUrl,
+          profilePictureFile: profilePictureFile,
+        ),
+        Positioned(
+          bottom: -10,
+          right: -10,
+          child: Clickable(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: saveButtonLoading
+                  ? const Color.fromARGB(255, 105, 129, 176)
+                  : const Color(0xFF194595),
+              border: Border.all(
+                color: Colors.white,
+                width: 1.5,
+              ),
+            ),
+            onTap: onProfilePictureClick,
+            child: Center(
+              child: Icon(
+                Iconsax.camera,
+                color: saveButtonLoading
+                    ? Colors.white.withOpacity(0.5)
+                    : Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CircleProfilePictureWidget extends StatelessWidget {
+  final double size;
+  final File? profilePictureFile;
+  final String? profilePictureUrl;
+
+  const CircleProfilePictureWidget({
+    Key? key,
+    required this.size,
+    this.profilePictureFile,
+    required this.profilePictureUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(0xFFEEF1F8),
+      ),
+      child: profilePictureFile != null
+          ? ClipOval(
+              child: Image.file(
+                profilePictureFile!,
+                fit: BoxFit.cover,
+              ),
+            )
+          : profilePictureUrl != null
+              ? ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: profilePictureUrl!,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.borderColor,
+                        strokeWidth: 3,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/user.svg',
+                      ),
+                    ),
+                  ),
+                )
+              : Center(
+                  child: SvgPicture.asset(
+                    'assets/icons/user.svg',
+                  ),
+                ),
     );
   }
 }

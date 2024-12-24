@@ -1,5 +1,3 @@
-import 'package:eram_express_shared/core/utils/logger.dart';
-import 'package:eram_express_shared/data/configurations/models/device_details_model.dart';
 import 'package:eram_express_shared/notification_service.dart';
 import 'package:eram_express_shared/tokens/local/tokens_local_data_source.dart';
 import '../../../customer/data/models/customer_model.dart';
@@ -9,74 +7,84 @@ import '../models/verify_otp_response_model.dart';
 import 'authentication_repository.dart';
 import '../data_sources/authentication/remote/authentication_remote_data_source.dart';
 
+
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final CustomerRepository _customerRepository;
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final TokensLocalDataSource _tokensLocalDataSource;
-  final NotificationService _notificationService;
+
   CustomerModel? _authenticatedCustomer;
+  //final SharedPreferencesHelper _sharedPreferencesHelper;
 
   AuthenticationRepositoryImpl({
     required CustomerRepository customerRepository,
     required NotificationService notificationService,
+    //required SharedPreferencesHelper sharedPreferencesHelper,
     required AuthenticationRemoteDataSource authenticationRemoteDataSource,
     required TokensLocalDataSource tokensLocalDataSource,
   
   })  : _customerRepository = customerRepository,
         _authenticationRemoteDataSource = authenticationRemoteDataSource,
-        _tokensLocalDataSource = tokensLocalDataSource,
-        _notificationService=notificationService;
+        _tokensLocalDataSource = tokensLocalDataSource;
+          //_sharedPreferencesHelper = sharedPreferencesHelper;
 
   @override
   Future<CustomerModel?> get authenticatedCustomer async {
     if (_authenticatedCustomer != null) return _authenticatedCustomer;
-    try {
+    final customer = await _customerRepository.getAuthenticatedCustomer();
+    if (customer != null) _authenticatedCustomer = customer;
+    return customer;
+
+    /*
+    final customer = await getCustomerModel();
+    logger.debug("get model from pref ${customer}");
+    if (customer == null) {
+      logger.debug("enter to get cunstomer endpoint");
       final customer = await _customerRepository.getAuthenticatedCustomer();
-      if (customer != null) _authenticatedCustomer = customer;
-      return customer;
-    } catch (e) {
-      return null;
+      if (customer != null) {
+        _authenticatedCustomer = customer;
+
+        saveCustomerModel(customer!);
+      }
+    }
+    */
+  }
+
+  @override
+  Future<bool> isAuthenticated() async {
+    final tokens = await _tokensLocalDataSource.accessToken;
+    if (tokens != null) {
+      return true;
+    } else {
+      return false;
     }
   }
 
   @override
-  Future<bool> get isAuthenticated async =>
-      (await authenticatedCustomer) != null;
-
-  @override
   logout() async {
-    try {
-      await _tokensLocalDataSource.clearTokens();
-      _authenticatedCustomer = null;
-    } catch (e) {
-      /*
-        AppError(
-          title: 'Failed to logout',
-          message: e.toString(),
-        ),
-        */
-    }
+    await _authenticationRemoteDataSource.logOut();
+    await _tokensLocalDataSource.clearTokens();
   }
 
   @override
   sendOtp(String phoneNumber) async {
-    final response = await _authenticationRemoteDataSource.sendOtp(phoneNumber);
+    _authenticationRemoteDataSource.sendOtp(phoneNumber);
   }
 
   @override
   verifyOtp(OtpVerificationData data) async {
    
-   DeviceDetailsModel tokenDevice= await _notificationService.getDeviceDetails();
-   logger.debug(tokenDevice.toString());
-    final response = await _authenticationRemoteDataSource.verifyOtp(data,tokenDevice);
+
+    final response = await _authenticationRemoteDataSource.verifyOtp(data,);
 
     savingToken(response.response);
+    //saveCustomerModel(response.response.customer);
     return response;
   }
 
   @override
   void updateAuthenticatedCustomer(CustomerModel data) {
-    logger.debug(_authenticatedCustomer!.fullName);
+    //saveCustomerModel(data);
     _authenticatedCustomer = data;
   }
 
@@ -86,8 +94,19 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       response.accessToken,
       response.refreshToken,
     );
-
-    final customer = response.customer;
-    _authenticatedCustomer = customer;
   }
+/*
+  void saveCustomerModel(CustomerModel customer) async {
+    await _sharedPreferencesHelper.saveModel(
+        "customer", customer, (customer) => customer.toMap());
+  }
+
+  Future<CustomerModel?> getCustomerModel() async {
+    final customer = await _sharedPreferencesHelper.getModel(
+      'customer',
+      (map) => CustomerModel.fromMap(map),
+    );
+    return customer;
+  }
+  */
 }

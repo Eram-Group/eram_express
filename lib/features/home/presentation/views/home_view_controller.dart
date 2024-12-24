@@ -17,8 +17,6 @@ import '../modals/pick_data-modal.dart';
 import 'home_view_state.dart';
 
 class HomeViewController extends Cubit<HomeViewState> {
-
-  
   final HomeRepository _homeRepository;
   final BookingRepository _bookingRepository;
   HomeViewController({
@@ -130,27 +128,26 @@ class HomeViewController extends Cubit<HomeViewState> {
       goodIds.add(good.id);
     });
 
+    logger.debug(goodIds.toString());
+    logger.debug(state.truckSize!.id.toString());
+    logger.debug(state.pickupDate.toString());
     BookingRequestFormData formData = BookingRequestFormData(
-        cargoSubcategory: state.truckSize?.id,
-        goods: goodIds,
-        bookingDate: state.pickupDate!,
-        pickup: state.pickup!,
-        destination: state.destination!);
+      cargoSubcategory: state.truckSize?.id,
+      goods: goodIds,
+      bookingDate: state.pickupDate!,
+    );
+    // pickup:
+    //destination: state.destination!);
     try {
       await _bookingRepository.bookingRequest(formData);
-      emit(state.copyWith(
-        status: HomeBookingRequestStatus.requestCreateSuccess,
-        pickup: null,
-        destination: null,
-        loadType: null,
-        truckSize: null,
-        pickupDate: null,
-        selectGoods: null,
-        selectGoodsString: null,
-        errorMessage: null,
-      ));
+      emit(state.resetFields().copyWith(
+            status: HomeBookingRequestStatus.requestCreateSuccess,
+            homeModel: state.homeModel,
+          ));
+      //logger.debug(st);
     } on ServerException catch (e) {
       //emit(state)
+      logger.debug(e.toString());
       emit(state.copyWith(
         status: HomeBookingRequestStatus.requestCreateError,
         //errorMessage: e.errors[0].code  ask backend to make it accept the language."

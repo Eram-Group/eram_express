@@ -1,4 +1,5 @@
 import 'package:eram_express/app/service_locator.dart';
+import 'package:eram_express/features/nav_bar/bottom_nav_bar.view.dart';
 import 'package:eram_express_shared/core/api/server_expection.dart';
 import 'package:eram_express_shared/core/i18n/context_extension.dart';
 import 'package:eram_express_shared/core/utils/logger.dart';
@@ -36,10 +37,12 @@ class OtpView extends StatelessWidget {
               ErrorModal.fromApiError(state.serverException!).show(context);
             } else if (state.isSuccess) {
               if (state.isNewCustomer!) {
-                Navigator.of(context).pushNamed(CompleteProfileView.route);
+                Navigator.of(context).pushNamedAndRemoveUntil(CompleteProfileView.route,
+                  (route) => false,
+                );
               } else {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  HomeView.route,
+                  NavigationView.route,
                   (route) => false,
                 );
               }

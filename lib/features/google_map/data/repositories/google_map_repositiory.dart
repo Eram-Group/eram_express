@@ -32,12 +32,15 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
   @override
   Future<PlaceDetailsModel> getPlaceDetails(String lat, String long) async
   {
-    
+   
+
+
    try
    {
         await _googleMapRemoteDataSource.validateLocation(lat, long);
         final places =  await _googleMapRemoteDataSource.getPlaceDetails(lat, long);
-      if (places.statusCode == 200) {
+      if (places.statusCode == 200) 
+      {
         logger.debug("Request successful");
         List<PlaceDetailsModel> placeDetailsList =(places.data['results'] as List) .map((item) => PlaceDetailsModel.fromMap(item)) .toList();
         return placeDetailsList[0];
@@ -51,7 +54,6 @@ class GoogleMapRepositoryImpl extends GoogleMapRepository {
    {
           throw "these location  move outside our service area ";
 
-    //throw    //e.errors[0].code
    }
    
   }

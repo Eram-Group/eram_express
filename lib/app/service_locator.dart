@@ -30,6 +30,7 @@ import '../features/customer/data/repositories/customer_repository_impl.dart';
 import '../features/customer/data/services/customer_service.dart';
 import '../features/google_map/data/data_sources/google_map_api_remote_data_source.dart';
 import '../features/google_map/data/data_sources/google_map_remote_data_source.dart';
+import '../features/google_map/data/repositories/google_map_reposirtoty.dart';
 import '../features/google_map/data/repositories/google_map_repositiory.dart';
 import '../features/google_map/data/services/locationservice.dart';
 import '../features/google_map/presentation/search_model_view/search_model_view.dart';
@@ -41,6 +42,15 @@ import '../features/home/data/repositotys/home_repositoty_impl.dart';
 import '../features/home/presentation/views/home_view_controller.dart';
 import '../features/i18n/domain/locale_cubit.dart';
 import '../features/init/presentation/views/init_view_model.dart';
+import '../features/profile/data/data_sources/profile_api_remote_data_source.dart';
+import '../features/profile/data/data_sources/profile_remote_data_source.dart';
+import '../features/profile/data/repositories/profile_repository_impl.dart';
+import '../features/profile/presentation/views/about_us_presentation/about_us_view_model.dart';
+import '../features/profile/presentation/views/contact_us_presentation/contact_view_model.dart';
+import '../features/profile/presentation/views/edit_profile_view_model.dart';
+import '../features/profile/presentation/views/profile_presentation/profile_view_model.dart';
+import '../features/profile/presentation/views/support_presentation/support_view_model.dart';
+import '../features/profile/presentation/views/terms_presentation/terms_view_model.dart';
 
 class ServiceLocator {
   void init() {
@@ -59,6 +69,24 @@ class ServiceLocator {
         remoteDataSource: sl(),
       ),
     );
+
+    //Authentication
+    sl.registerLazySingleton(() => AuthenticationService(
+        authenticationRepository: sl(), customerRepository: sl()));
+    sl.registerLazySingleton<AuthenticationRemoteDataSource>(() =>
+        AuthenticationApiRemoteDataSource(
+            networkService: sl(),
+            tokensDataSource: sl(),
+            notificationService: sl()));
+
+    sl.registerLazySingleton<AuthenticationRepository>(() =>
+        AuthenticationRepositoryImpl(
+            authenticationRemoteDataSource: sl(),
+            tokensLocalDataSource: sl(),
+            customerRepository: sl(),
+            notificationService: sl(),
+            //sharedPreferencesHelper: sl()
+            ));
 
     //home
 
@@ -88,7 +116,7 @@ class ServiceLocator {
       () => GoogleMapApiRemoteDataSource(networkService: sl(), dio: sl()),
     );
     sl.registerLazySingleton(() => LocationService());
-    sl.registerLazySingleton(() => GoogleMapRepositoryImpl(
+    sl.registerLazySingleton<GoogleMapRepository>(() => GoogleMapRepositoryImpl(
           googleMapRemoteDataSource: sl(),
         ));
     sl.registerFactory(() => SearchViewController(
@@ -105,19 +133,6 @@ class ServiceLocator {
     sl.registerLazySingleton(() => CustomerService(
         customerRepository: sl(), authenticationRepository: sl()));
 
-//Authentication
-
-    sl.registerLazySingleton(() => AuthenticationService(
-        authenticationRepository: sl(), customerRepository: sl()));
-    sl.registerLazySingleton<AuthenticationRemoteDataSource>(
-        () => AuthenticationApiRemoteDataSource(networkService: sl()));
-    sl.registerLazySingleton<AuthenticationRepository>(() =>
-        AuthenticationRepositoryImpl(
-            authenticationRemoteDataSource: sl(),
-            tokensLocalDataSource: sl(),
-            customerRepository: sl(),
-            notificationService: sl()));
-
 //log in
     sl.registerFactory(() => LoginViewModel(
         configurationsRepository: sl(), authenticationService: sl()));
@@ -128,9 +143,43 @@ class ServiceLocator {
 //completprofile
     sl.registerFactory(() => CompleteProfileViewModel(customerService: sl()));
 
+//  profiledatasource
+    sl.registerLazySingleton<ProfileRemoteDataSource>(
+        () => ProfileApiRemoteDataSource(networkService: sl()));
+
+//profile
+    sl.registerLazySingleton<ProfileRepository>(
+        () => ProfileRepositoryImpl(profileRemoteDataSource: sl()));
+    sl.registerFactory(() => ProfileViewModel(
+          authenticationRepository: sl(),
+        ));
+//contact us
+    sl.registerFactory(() => ContactViewModel(profileRepository: sl()));
+
+    //EditProfile
+    sl.registerFactory(() => EditProfileViewModel(
+          customerService: sl(),
+          authenticationRepository: sl(),
+        ));
+
+//terms
+
+    sl.registerFactory(() => TermsViewModel(
+          profileRepository: sl(),
+        ));
+
+//supportview
+    sl.registerFactory(() => SupportViewModel(
+          profileRepository: sl(),
+        ));
+
+    //  final aboutUsViewModel =
+    sl.registerFactory(() => AboutUsViewModel(
+          profileRepository: sl(),
+        ));
+
 //localization
     sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
 
-//Notification
   }
 }

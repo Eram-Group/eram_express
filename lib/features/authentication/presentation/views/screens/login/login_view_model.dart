@@ -65,7 +65,9 @@ class LoginViewModel extends Cubit<LoginViewState> {
       if (selection != null) {
         emit(state.copyWith(selectedCountry: selection));
       }
-    } catch (e) {}
+    } catch (e) {
+      logger.debug(e.toString());
+    }
   }
 
   Future<void> loginButtonOnClicked(BuildContext context) async {

@@ -12,7 +12,7 @@ class SearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.read<GoogleMapViewController>().searchButtonClick(context);
+        context.read<GoogleMapViewController>().searchButtonClick();
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(

@@ -4,22 +4,22 @@ import '../../data/models/cargo-subcategoryModel.dart';
 import '../../data/models/goods-typeModel.dart';
 import '../../data/models/picking_locationModel.dart';
 
-
 enum HomeBookingRequestStatus {
-initial,
+  initial,
   requestCreateError,
   requestCreateSuccess,
 }
 
 extension HomeViewStateX on HomeViewState {
-  bool get isInitial=>status==HomeBookingRequestStatus.initial;
-  bool get isRequestCreateError =>status == HomeBookingRequestStatus.requestCreateError;
-  bool get isRequestCreateSuccess =>status == HomeBookingRequestStatus.requestCreateSuccess;
+  bool get isInitial => status == HomeBookingRequestStatus.initial;
+  bool get isRequestCreateError =>
+      status == HomeBookingRequestStatus.requestCreateError;
+  bool get isRequestCreateSuccess =>
+      status == HomeBookingRequestStatus.requestCreateSuccess;
 }
 
-
 class HomeViewState {
- final HomeBookingRequestStatus status;
+  final HomeBookingRequestStatus status;
   final PickingLocationModel? pickup;
   final PickingLocationModel? destination;
   final CargoCategoryModel? loadType;
@@ -46,8 +46,7 @@ class HomeViewState {
   });
 
   HomeViewState copyWith(
-{
-      final PickingLocationModel? pickup,
+      {final PickingLocationModel? pickup,
       final PickingLocationModel? destination,
       HomeBookingRequestStatus? status,
       CargoCategoryModel? loadType,
@@ -62,7 +61,7 @@ class HomeViewState {
       String? errorMessage,
       bool? isValidateLoadType}) {
     return HomeViewState(
-      status: status??this.status,
+      status: status ?? this.status,
       pickup: pickup ?? this.pickup,
       destination: destination ?? this.destination,
       loadType: loadType ?? this.loadType,
@@ -73,6 +72,22 @@ class HomeViewState {
       selectGoodsString: selectGoodsString ?? this.selectGoodsString,
       errorMessage: errorMessage ?? this.errorMessage,
       isValidateLoadType: isValidateLoadType ?? this.isValidateLoadType,
+    );
+  }
+
+  HomeViewState resetFields() {
+    return HomeViewState(
+      status: this.status, 
+      pickup: null,
+      destination: null,
+      loadType: null,
+      truckSize: null,
+      pickupDate: null,
+      selectGoods: null,
+      selectGoodsString: null,
+      errorMessage: null,
+      isValidateLoadType: this.isValidateLoadType,
+       homeModel: this.homeModel,  
     );
   }
 }
