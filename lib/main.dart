@@ -1,3 +1,4 @@
+import 'package:eram_express/app/navigation.dart';
 import 'package:eram_express/features/nav_bar/nav-bar-cubit.dart';
 import 'package:eram_express_shared/service_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,9 +24,10 @@ Future<void> main() async {
           create: (_) => NavBarCubit(),
         ),
       ],
-      child: const RequestsInspector(
+      child: RequestsInspector(
         enabled: true,
-        child: App(),
+        navigatorKey: NavigationService.navigatorKey,
+        child: const App(),
       ),
     ),
   );
