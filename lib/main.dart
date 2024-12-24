@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:requests_inspector/requests_inspector.dart';
 import 'app/app.dart';
+import 'app/navigation.dart';
 import 'app/service_locator.dart';
 import 'features/i18n/domain/locale_cubit.dart';
 
